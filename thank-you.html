@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Redirecting...</title>
+    <script>
+        (function () {
+            var to = 'order-success.html';
+            var params = new URLSearchParams(window.location.search);
+            var id = params.get('id') || params.get('orderId');
+            if (id) to += '?id=' + encodeURIComponent(id);
+            window.location.replace(to);
+        })();
+    </script>
+</head>
+<body style="font-family:sans-serif;text-align:center;padding:3rem;color:#555;">
+    <p>This page has moved. Taking you there...</p>
+    <p><a href="order-success.html">Click here if you are not redirected</a></p>
+</body>
+</html>

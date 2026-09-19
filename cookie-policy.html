@@ -1,0 +1,337 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Policy - Trendaryo | Every Storage Key, On the Record</title>
+    <meta name="description" content="The Trendaryo cookie and storage ledger: every key this site writes to your device, what it holds, who writes it and whether it is ever sent to a server - plus a one-click wipe button.">
+    <meta name="keywords" content="cookie policy, localStorage, storage ledger, no tracking cookies, trendaryo cookies">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Trendaryo">
+    <link rel="canonical" href="https://trendaryo.com/cookie-policy.html">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://trendaryo.com/cookie-policy.html">
+    <meta property="og:title" content="Cookie Policy - Trendaryo">
+    <meta property="og:description" content="No mystery trackers: every storage key this site writes, what it holds and a one-click wipe button.">
+    <meta property="og:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://trendaryo.com/cookie-policy.html">
+    <meta property="twitter:title" content="Cookie Policy - Trendaryo">
+    <meta property="twitter:description" content="No mystery trackers: every storage key this site writes, what it holds and a one-click wipe button.">
+    <meta property="twitter:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon-crown-star.svg">
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="performance.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ==================================================================
+           TRENDARYO - COOKIE & STORAGE POLICY (Command Deck edition)
+           Same design system as shop.html: dark cosmic glass, Orbitron +
+           Rajdhani, accents #00f0ff / #ff00aa / #00ff88 / #ffd700.
+           Content architecture: 7 numbered sections (see body comments).
+           ================================================================== */
+        :root { --primary: #0a0a0a; --bg-deep: #0a0a2a; --accent: #00f0ff; --accent-2: #ff00aa; --accent-3: #00ff88; --accent-4: #ffd700; --danger: #ff4444; --text: #ffffff; --muted: rgba(255, 255, 255, 0.66); --muted-2: rgba(255, 255, 255, 0.45); --glass: rgba(255, 255, 255, 0.05); --glass-2: rgba(255, 255, 255, 0.03); --glass-border: rgba(255, 255, 255, 0.1); --glass-border-2: rgba(255, 255, 255, 0.18); --card-grad: linear-gradient(168deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.02)); --shadow-lift: 0 18px 44px rgba(0, 0, 0, 0.48); --glow-cyan: 0 0 26px rgba(0, 240, 255, 0.28); --r-sm: 10px; --r-md: 16px; --r-lg: 22px; --r-pill: 999px; --ease: cubic-bezier(0.22, 1, 0.36, 1); --font-d: 'Orbitron', sans-serif; --font-b: 'Rajdhani', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-b); background: var(--bg-deep); color: #fff; overflow-x: hidden; }
+        #three-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+        .page-offset { padding-top: 150px; }
+        a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+        .deck { position: relative; overflow: hidden; padding: 3rem 1.5rem 2.25rem; }
+        .deck-neb { position: absolute; border-radius: 50%; filter: blur(110px); pointer-events: none; z-index: 0; animation: nebDrift 16s ease-in-out infinite alternate; }
+        .deck-neb-1 { width: 430px; height: 430px; top: -150px; left: -110px; background: radial-gradient(circle, rgba(0, 240, 255, 0.22), transparent 70%); }
+        .deck-neb-2 { width: 520px; height: 520px; bottom: -220px; right: -130px; background: radial-gradient(circle, rgba(255, 0, 170, 0.16), transparent 70%); animation-delay: -8s; }
+        @keyframes nebDrift { from { transform: scale(1) translateY(0); } to { transform: scale(1.16) translateY(-34px); } }
+        .deck-inner { position: relative; z-index: 1; max-width: 1140px; margin: 0 auto; }
+        .deck-live { display: inline-flex; align-items: center; gap: 0.55rem; padding: 0.42rem 0.95rem; border-radius: var(--r-pill); background: rgba(0, 240, 255, 0.08); border: 1px solid rgba(0, 240, 255, 0.3); font-family: var(--font-d); font-size: 0.64rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); }
+        .deck-live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-3); box-shadow: 0 0 12px var(--accent-3); animation: livePulse 2.2s ease-in-out infinite; }
+        @keyframes livePulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.78); } }
+        .deck-title { font-family: var(--font-d); font-weight: 900; font-size: clamp(2rem, 5.2vw, 3.9rem); line-height: 1.03; margin: 0.9rem 0 0.7rem; max-width: 18ch; background: linear-gradient(120deg, #fff 8%, var(--accent) 46%, var(--accent-2) 88%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 26px rgba(0, 240, 255, 0.2)); }
+        .deck-sub { color: var(--muted); font-size: 1.06rem; line-height: 1.7; max-width: 62ch; }
+        .deck-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1.3rem; }
+        .deck-btn { padding: 0.78rem 1.5rem; border-radius: var(--r-pill); border: 1px solid rgba(0, 240, 255, 0.45); background: linear-gradient(135deg, rgba(0, 240, 255, 0.18), rgba(255, 0, 170, 0.18)); color: #fff; font-family: var(--font-d); font-size: 0.72rem; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: transform 0.25s var(--ease), box-shadow 0.25s ease; }
+        .deck-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0, 240, 255, 0.28); }
+        .deck-btn--solid { background: linear-gradient(135deg, var(--accent), var(--accent-3)); border-color: transparent; color: #00202a; }
+        .deck-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(152px, 1fr)); gap: 0.85rem; margin-top: 1.5rem; }
+        .deck-stat { position: relative; padding: 0.95rem 1.05rem; border-radius: var(--r-md); background: var(--card-grad); border: 1px solid var(--glass-border); overflow: hidden; }
+        .deck-stat::after { content: ''; position: absolute; inset: 0 0 auto 0; height: 2px; background: linear-gradient(90deg, var(--accent), rgba(0, 240, 255, 0)); }
+        .deck-stat:nth-child(2n)::after { background: linear-gradient(90deg, var(--accent-2), rgba(255, 0, 170, 0)); }
+        .deck-stat:nth-child(3n)::after { background: linear-gradient(90deg, var(--accent-3), rgba(0, 255, 136, 0)); }
+        .deck-stat-val { font-family: var(--font-d); font-size: 1.38rem; font-weight: 900; letter-spacing: -0.5px; }
+        .deck-stat-lab { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1.4px; color: var(--muted-2); margin-top: 0.15rem; }
+        .deck-stat-sub { font-size: 0.76rem; color: var(--muted); margin-top: 0.4rem; line-height: 1.4; }
+        /* - Section shells + heads (same as shop.html) - */
+        .legal-shell { max-width: 1140px; margin: 0 auto; padding: 0 1.5rem; }
+        .sec { margin: 4rem 0; position: relative; }
+        .sec-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1.25rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+        .sec-head-txt { max-width: 760px; }
+        .sec-kicker { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--font-d); font-size: 0.66rem; font-weight: 700; letter-spacing: 2.4px; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; }
+        .sec-kicker::before { content: ''; width: 22px; height: 1px; background: linear-gradient(90deg, transparent, var(--accent)); }
+        .sec-title { font-family: var(--font-d); font-size: clamp(1.3rem, 2.6vw, 1.95rem); font-weight: 900; line-height: 1.15; background: linear-gradient(135deg, #fff 15%, var(--accent) 60%, var(--accent-2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .sec-sub { color: var(--muted); line-height: 1.65; font-size: 0.97rem; margin-top: 0.5rem; }
+        .sec-sub a { color: var(--accent); }
+        .sec-note { font-size: 0.76rem; color: var(--muted-2); }
+        .summary-box h2 { font-family: var(--font-d); letter-spacing: 1px; }
+        .summary-box a { color: var(--accent); }
+        .ledger-scroll { overflow-x: auto; border: 1px solid var(--glass-border); border-radius: var(--r-lg); background: var(--glass-2); }
+        table.ledger { width: 100%; border-collapse: collapse; min-width: 760px; font-size: 0.95rem; }
+        .ledger th { font-family: var(--font-d); font-size: 0.64rem; letter-spacing: 1.6px; text-transform: uppercase; color: var(--accent); text-align: left; padding: 1rem 1.1rem; border-bottom: 1px solid var(--glass-border-2); white-space: nowrap; }
+        .ledger td { padding: 1rem 1.1rem; border-bottom: 1px solid var(--glass-border); vertical-align: top; color: var(--muted); line-height: 1.6; }
+        .ledger tr:last-child td { border-bottom: 0; }
+        .ledger td b { color: #fff; font-weight: 700; display: block; margin-bottom: 0.2rem; font-size: 1rem; }
+        .ledger td code, .key-pill { font-family: Consolas, monospace; color: var(--accent-3); font-size: 0.78rem; }
+        .key-pill { display: inline-block; margin-top: 0.85rem; padding: 0.28rem 0.7rem; border-radius: 6px; background: rgba(0, 0, 0, 0.35); border: 1px solid var(--glass-border-2); }
+        .pill { display: inline-block; padding: 0.18rem 0.6rem; border-radius: var(--r-pill); border: 1px solid var(--glass-border-2); background: rgba(255, 255, 255, 0.05); font-family: var(--font-d); font-size: 0.62rem; letter-spacing: 1px; color: rgba(255, 255, 255, 0.85); white-space: nowrap; }
+        .pill--no { color: var(--accent-3); border-color: rgba(0, 255, 136, 0.35); }
+        .pill--yes { color: var(--accent-4); border-color: rgba(255, 215, 0, 0.35); }
+        .pgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.25rem; }
+        .pcard { padding: 1.5rem 1.4rem; border-radius: var(--r-lg); background: var(--card-grad); border: 1px solid var(--glass-border); transition: border-color 0.3s ease, transform 0.3s var(--ease), box-shadow 0.3s ease; }
+        .pcard:hover { border-color: rgba(0, 240, 255, 0.4); transform: translateY(-4px); box-shadow: var(--shadow-lift); }
+        .pc-ico { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(0, 240, 255, 0.08); border: 1px solid rgba(0, 240, 255, 0.25); color: var(--accent); font-size: 1.05rem; }
+        .pcard--pink .pc-ico { color: var(--accent-2); border-color: rgba(255, 0, 170, 0.3); background: rgba(255, 0, 170, 0.07); }
+        .pcard--green .pc-ico { color: var(--accent-3); border-color: rgba(0, 255, 136, 0.3); background: rgba(0, 255, 136, 0.07); }
+        .pcard--gold .pc-ico { color: var(--accent-4); border-color: rgba(255, 215, 0, 0.3); background: rgba(255, 215, 0, 0.07); }
+        .pcard h3 { font-family: var(--font-d); font-size: 0.95rem; font-weight: 800; letter-spacing: 0.6px; margin: 0.8rem 0 0.5rem; color: #fff; }
+        .pcard p { color: var(--muted); font-size: 0.92rem; line-height: 1.65; }
+        .pcard p a { color: var(--accent); }
+        .note-strip { margin-top: 1.25rem; padding: 1rem 1.25rem; border-radius: var(--r-md); border: 1px dashed rgba(255, 215, 0, 0.4); background: rgba(255, 215, 0, 0.05); color: rgba(255, 255, 255, 0.8); font-size: 0.9rem; line-height: 1.6; }
+        .note-strip a { color: var(--accent); }
+        /* - The wipe card - */
+        .wipe-card { text-align: center; padding: 2.25rem 1.5rem; border-radius: var(--r-lg); border: 1px solid rgba(255, 68, 68, 0.35); background: linear-gradient(168deg, rgba(255, 68, 68, 0.08), rgba(255, 68, 68, 0.02)); }
+        .wipe-card h3 { font-family: var(--font-d); font-size: 1.1rem; font-weight: 900; letter-spacing: 0.5px; margin-bottom: 0.5rem; }
+        .wipe-card p { color: var(--muted); max-width: 560px; margin: 0 auto 1.4rem; line-height: 1.65; font-size: 0.94rem; }
+        .wipe-btn { padding: 0.85rem 1.9rem; border: 0; border-radius: var(--r-pill); background: linear-gradient(135deg, var(--danger), #ff8800); color: #fff; font-family: var(--font-d); font-size: 0.72rem; font-weight: 900; letter-spacing: 1.2px; text-transform: uppercase; cursor: pointer; transition: transform 0.25s var(--ease), box-shadow 0.25s ease; }
+        .wipe-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(255, 68, 68, 0.3); }
+        .wipe-btn[disabled] { opacity: 0.55; cursor: wait; }
+        .wipe-out { display: block; margin-top: 1rem; font-family: var(--font-d); font-size: 0.78rem; font-weight: 700; letter-spacing: 1px; color: var(--accent-3); min-height: 1.2em; }
+        .mount-pad { min-height: 1px; }
+        @media (max-width: 900px) {
+            .page-offset { padding-top: 120px; }
+            .deck { padding: 1.75rem 1.25rem 1.5rem; }
+            .sec { margin: 2.75rem 0; }
+        }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }
+    </style>
+</head>
+<body>
+    <canvas id="three-canvas"></canvas>
+
+    <main class="page-offset">
+
+    <!-- 00 · DECK HERO -->
+    <section class="deck" aria-labelledby="ckTitle">
+        <div class="deck-neb deck-neb-1"></div>
+        <div class="deck-neb deck-neb-2"></div>
+        <div class="deck-inner">
+            <span class="deck-live"><span class="deck-live-dot"></span>Storage ledger · Complete</span>
+            <h1 class="deck-title" id="ckTitle">Every cookie, on the record.</h1>
+            <p class="deck-sub">Trendaryo is a static-first store. There is no consent banner to click because there is almost nothing to consent to - no advertising cookies, no cross-site trackers. Everything this site can store on your device is listed below, with its purpose and its expiry. That is the whole list.</p>
+            <div class="deck-actions">
+                <a class="deck-btn deck-btn--solid" href="#ledger">See the storage ledger</a>
+                <a class="deck-btn" href="#wipe">Clear my local data</a>
+                <a class="deck-btn" href="privacy.html">Read the privacy policy</a>
+            </div>
+            <div class="deck-stats">
+                <div class="deck-stat"><div class="deck-stat-val">11</div><div class="deck-stat-lab">Storage keys, all listed</div><div class="deck-stat-sub">Count them - the table below is complete.</div></div>
+                <div class="deck-stat"><div class="deck-stat-val">0</div><div class="deck-stat-lab">Advertising cookies</div><div class="deck-stat-sub">No ad networks, no pixels.</div></div>
+                <div class="deck-stat"><div class="deck-stat-val">0</div><div class="deck-stat-lab">Cross-site trackers</div><div class="deck-stat-sub">Nothing here follows you elsewhere.</div></div>
+                <div class="deck-stat"><div class="deck-stat-val">1</div><div class="deck-stat-lab">Click to erase</div><div class="deck-stat-sub">The wipe button clears everything locally.</div></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="legal-shell">
+
+    <!-- 00b · THE SHORT VERSION -->
+    <section class="sec" id="quickread">
+        <div class="summary-box">
+            <h2>The short version</h2>
+            <ul>
+                <li>This store keeps your <strong>cart, wishlist, recently-viewed and reviews in your browser</strong> (localStorage), not on a server.</li>
+                <li>There are <strong>no advertising or tracking cookies</strong> - the only cookie-like data is your signed-in session when you choose to sign in.</li>
+                <li>Every storage key is named in the ledger below - including what it holds and whether a server ever sees it.</li>
+                <li>The <strong>wipe button</strong> below clears every local key in one click. Your account (if you have one) is unaffected.</li>
+                <li>Questions? <a href="mailto:privacy@trendaryo.com">privacy@trendaryo.com</a> answers within 24 hours.</li>
+            </ul>
+        </div>
+        <span class="last-updated">Last updated: 1 January 2024 · This page supersedes every earlier version.</span>
+    </section>
+
+    <!-- 01 · MECHANICS -->
+    <section class="sec" id="mechanics" aria-labelledby="mecTitle">
+        <div class="sec-head">
+            <div class="sec-head-txt">
+                <span class="sec-kicker">Section 01 · The two mechanisms</span>
+                <h2 class="sec-title" id="mecTitle">Cookies vs localStorage</h2>
+                <p class="sec-sub">Two different storage mechanisms, two very different levels of invasiveness. This site leans almost entirely on the gentle one.</p>
+            </div>
+        </div>
+        <div class="pgrid">
+            <div class="pcard">
+                <div class="pc-ico">🍪</div>
+                <h3>Cookies</h3>
+                <p>Small text files that your browser sends back to a server on <em>every</em> request - the classic mechanics behind sessions and, infamously, cross-site advertising. Trendaryo sets <strong>no advertising or tracking cookies</strong>. When you sign in, your session is handled by Firebase Auth tokens, which exist to keep you signed in and nothing else.</p>
+            </div>
+            <div class="pcard pcard--green">
+                <div class="pc-ico">🗄️</div>
+                <h3>localStorage</h3>
+                <p>A larger store that <strong>stays on your device</strong> and is only read by the pages that wrote it. This is where Trendaryo keeps almost everything - and it's why there is no consent banner on this site: nothing here needs one, because nothing leaves your device until you press Pay.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 02 · THE STORAGE LEDGER -->
+    <section class="sec" id="ledger" aria-labelledby="ledTitle">
+        <div class="sec-head">
+            <div class="sec-head-txt">
+                <span class="sec-kicker">Section 02 · What this site writes to your device</span>
+                <h2 class="sec-title" id="ledTitle">The storage ledger</h2>
+                <p class="sec-sub">Eleven entries, as written by this site's code. Keys that belong to one feature family share a row - and no key is omitted. If a future feature adds a key, it appears here first.</p>
+            </div>
+            <span class="sec-note">Verify it yourself: browser DevTools → Application → Local Storage</span>
+        </div>
+        <div class="ledger-scroll">
+            <table class="ledger">
+                <thead><tr><th>Key</th><th>Holds</th><th>Written by</th><th>Server sees it?</th><th>Expiry</th></tr></thead>
+                <tbody>
+                    <tr><td><code>trendaryo_cart</code></td><td>Items in your cart</td><td>Cart dock, shop page, checkout</td><td><span class="pill pill--yes">Only at checkout</span></td><td>Until you clear it</td></tr>
+                    <tr><td><code>wishlist</code> <code>compare_list</code></td><td>Saved products and compare shortlist</td><td>Wishlist page, compare page, product cards</td><td><span class="pill pill--no">Never</span></td><td>Until you clear it</td></tr>
+                    <tr><td><code>trendaryo_recent</code></td><td>Last viewed product IDs (capped list)</td><td>Shop "continue where you left off" rail</td><td><span class="pill pill--no">Never</span></td><td>Until you clear it</td></tr>
+                    <tr><td><code>trendaryo_orders</code></td><td>Your order history cache, incl. seeded demo orders</td><td>Orders, track-order, order-success pages</td><td><span class="pill pill--no">Never</span></td><td>Until you clear it</td></tr>
+                    <tr><td><code>trendaryo_search_history</code></td><td>Your recent searches, for local autocomplete</td><td>Header search</td><td><span class="pill pill--no">Never</span></td><td>Until you clear it</td></tr>
+                    <tr><td><code>trendaryo_reviews</code></td><td>Your ratings and review drafts</td><td>Product pages</td><td><span class="pill pill--yes">Only when you post</span></td><td>Until you clear it</td></tr>
+                    <tr><td><code>trendaryo_theme</code></td><td>Light / dark preference</td><td>Theme toggle</td><td><span class="pill pill--no">Never</span></td><td>Until you clear it</td></tr>
+                    <tr><td><code>trendaryo_newsletter</code></td><td>Emails subscribed to the list</td><td>Footer newsletter form</td><td><span class="pill pill--yes">At signup</span></td><td>Until you clear it</td></tr>
+                    <tr><td><code>trendaryo_analytics</code> <code>trendaryo_errors</code></td><td>Page-level counts and error reports, for QA</td><td>Analytics engine</td><td><span class="pill pill--yes">On next sync</span></td><td>Until you clear it</td></tr>
+                    <tr><td><code>trendaryo_access_token</code> <code>auth_token</code> <code>user</code></td><td>Your signed-in session (Firebase Auth)</td><td>Account menu, checkout</td><td><span class="pill pill--yes">With signed-in requests</span></td><td>When you sign out</td></tr>
+                    <tr><td><code>adminToken</code></td><td>Admin console session - not used on customer pages</td><td>Admin pages only</td><td><span class="pill pill--yes">Admin API</span></td><td>When you sign out</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="note-strip">About the demo orders: if you have never placed an order, <code>trendaryo_orders</code> holds two seeded samples so the orders and tracking pages don't look broken to a first-time visitor. They contain no real personal data - the shipping name is literally "Demo Customer".</div>
+    </section>
+
+    <!-- 03 · THIRD PARTIES -->
+    <section class="sec" id="thirdparties" aria-labelledby="tpTitle">
+        <div class="sec-head">
+            <div class="sec-head-txt">
+                <span class="sec-kicker">Section 03 · Requests that leave this site</span>
+                <h2 class="sec-title" id="tpTitle">Third-party services</h2>
+                <p class="sec-sub">Four services receive a request from your browser when you use Trendaryo. None of them is an ad network.</p>
+            </div>
+        </div>
+        <div class="pgrid">
+            <div class="pcard"><div class="pc-ico">🔤</div><h3>Google Fonts</h3><p>Your browser fetches the Orbitron and Rajdhani font files from Google's CDN. Google sees the request - your IP and user agent, as with any web asset - and this site sets no cookies for it.</p></div>
+            <div class="pcard pcard--green"><div class="pc-ico">🖼️</div><h3>Unsplash</h3><p>Product and hero photography loads from Unsplash's CDN under the same rules: a plain image request, no identifiers attached by us.</p></div>
+            <div class="pcard pcard--pink"><div class="pc-ico">🔑</div><h3>Firebase Auth</h3><p>Handles sign-in sessions when you choose to sign in. It sees your email and a hashed credential - and nothing about your browsing. Guest shoppers never touch it.</p></div>
+            <div class="pcard pcard--gold"><div class="pc-ico">💳</div><h3>Payment processor</h3><p>Only at checkout. Card details travel directly from your browser to the processor over TLS; our servers receive a result code, never a card number.</p></div>
+        </div>
+    </section>
+
+    <!-- 04 · BROWSER CONTROLS -->
+    <section class="sec" id="browsers" aria-labelledby="brwTitle">
+        <div class="sec-head">
+            <div class="sec-head-txt">
+                <span class="sec-kicker">Section 04 · The manual route</span>
+                <h2 class="sec-title" id="brwTitle">Browser controls</h2>
+                <p class="sec-sub">If you'd rather use your browser's own tools, every mainstream one can clear site data - here's where the switch lives.</p>
+            </div>
+        </div>
+        <div class="tl-list">
+            <div class="tl-row"><div class="tl-when">Chrome</div><div class="tl-what"><b>Settings → Privacy → Clear browsing data</b><p>Or Settings → Privacy → Third-party cookies / Site settings → View permissions and data stored across sites → pick trendaryo.com.</p></div></div>
+            <div class="tl-row tl-row--green"><div class="tl-when">Firefox</div><div class="tl-what"><b>Settings → Privacy &amp; Security → Cookies and Site Data</b><p>"Manage Data" lets you remove storage per site - search for trendaryo and remove it.</p></div></div>
+            <div class="tl-row tl-row--gold"><div class="tl-when">Safari</div><div class="tl-what"><b>Preferences → Privacy → Manage Website Data</b><p>Per-site removal, including local storage, in one panel.</p></div></div>
+            <div class="tl-row tl-row--pink"><div class="tl-when">DevTools</div><div class="tl-what"><b>Application → Storage → Local Storage</b><p>The power route: see exactly which keys from Section 02 exist on your device before you clear anything. The ledger makes no claims you can't check.</p></div></div>
+        </div>
+    </section>
+
+    <!-- 05 · THE WIPE BUTTON -->
+    <section class="sec" id="wipe" aria-labelledby="wipeTitle">
+        <div class="sec-head">
+            <div class="sec-head-txt">
+                <span class="sec-kicker">Section 05 · Erase in one click</span>
+                <h2 class="sec-title" id="wipeTitle">The wipe button</h2>
+                <p class="sec-sub">The honest way to prove Section 02 was complete: press it, refresh, and check DevTools - the keys are gone.</p>
+            </div>
+        </div>
+        <div class="wipe-card">
+            <h3>Clear this site's local data</h3>
+            <p>Removes every key from the ledger above: your cart, wishlist, recently viewed, order cache, search history, reviews, theme and newsletter flag. <strong>You will be signed out</strong> if you were signed in - sign back in from the account menu afterwards. Your account itself is untouched; this only clears what lives in this browser.</p>
+            <button class="wipe-btn" id="wipeBtn" type="button">Wipe my local data</button>
+            <span class="wipe-out" id="wipeOut" aria-live="polite"></span>
+        </div>
+    </section>
+
+    <!-- 06 · DO NOT TRACK -->
+    <section class="sec" id="dnt" aria-labelledby="dntTitle">
+        <div class="sec-head">
+            <div class="sec-head-txt">
+                <span class="sec-kicker">Section 06 · A signal with nothing to do</span>
+                <h2 class="sec-title" id="dntTitle">Do Not Track</h2>
+            </div>
+        </div>
+        <div class="note-strip">Your browser's Do Not Track signal asks every site to stop tracking you. On Trendaryo it changes nothing - there are no trackers to switch off. That's not compliance theatre; it's the design of the store. The same promise the <a href="privacy.html">privacy policy</a> makes in Section 03.</div>
+    </section>
+
+    <!-- 07 · FAQ + TRUST + CTA -->
+    <section class="sec" id="faq" aria-labelledby="faqTitle">
+        <div class="sec-head">
+            <div class="sec-head-txt">
+                <span class="sec-kicker">Section 07 · Asked and answered</span>
+                <h2 class="sec-title" id="faqTitle">The questions this page gets</h2>
+            </div>
+        </div>
+        <div id="faqRoot" class="mount-pad"></div>
+        <div id="trustRoot" class="mount-pad"></div>
+        <div id="ctaRoot" class="mount-pad"></div>
+    </section>
+
+    </div><!-- /legal-shell -->
+    </main>
+
+    <script src="components.js"></script>
+    <script src="page-helpers.js"></script>
+    <script>
+    (function () {
+        var UI = window.TrendaryoUI;
+        if (!UI) return;
+        var faq = document.getElementById('faqRoot');
+        if (faq && UI.faq) faq.innerHTML = UI.faq([
+            { q: 'Do you use cookies at all?', a: 'Only session tokens when you sign in (handled by Firebase Auth), plus whatever your browser and its settings store on their own. No advertising or analytics cookies are set by Trendaryo pages.' },
+            { q: 'Why is there no cookie banner?', a: 'Because a banner exists to ask permission for tracking and ad cookies - and there are none here to permit. The interactive state runs on localStorage, listed in full in Section 02.' },
+            { q: 'Where do the demo orders come from?', a: 'The orders store seeds two sample orders in your browser the first time the orders or tracking pages open, so they don\'t look broken. They contain no real personal data, and the wipe button above removes them.' },
+            { q: 'Does clearing storage delete my account?', a: 'No. Your account, orders and saved addresses live server-side under the privacy policy. The wipe button only clears this browser - you\'ll be signed out and your local cart empties, nothing more.' },
+            { q: 'Who do I ask about any of this?', a: 'privacy@trendaryo.com - a person reads it, replies within 24 hours, and can tell you exactly what a given key holds.' }
+        ], false);
+        var ts = document.getElementById('trustRoot');
+        if (ts && UI.trustStrip) ts.innerHTML = UI.trustStrip();
+        var cta = document.getElementById('ctaRoot');
+        if (cta && UI.ctaBand) cta.innerHTML = UI.ctaBand({
+            title: 'Nothing left to hide.',
+            text: 'The ledger is complete, the wipe button works, and the privacy desk answers within 24 hours. Back to the shelf when you\'re ready.',
+            cta: 'Open the Shortlist',
+            href: 'shop.html'
+        });
+        /* The wipe button - clears every key in the ledger, plus session tokens */
+        var KEYS = ['trendaryo_cart', 'wishlist', 'compare_list', 'trendaryo_recent', 'trendaryo_orders', 'trendaryo_search_history', 'trendaryo_reviews', 'trendaryo_theme', 'trendaryo_newsletter', 'trendaryo_analytics', 'trendaryo_errors'];
+        var btn = document.getElementById('wipeBtn'), out = document.getElementById('wipeOut');
+        if (btn && out) btn.addEventListener('click', function () {
+            var wiped = 0, i, k;
+            for (i = 0; i < KEYS.length; i++) {
+                try { if (localStorage.getItem(KEYS[i]) !== null) { localStorage.removeItem(KEYS[i]); wiped++; } } catch (e) { /* storage blocked */ }
+            }
+            for (i = 0; i < 6; i++) {
+                k = ['trendaryo_access_token', 'auth_token', 'accessToken', 'user', 'user_id', 'adminToken'][i];
+                try { if (localStorage.getItem(k) !== null) { localStorage.removeItem(k); wiped++; } } catch (e) { /* storage blocked */ }
+            }
+            try { if (window.firebase && window.firebase.auth) window.firebase.auth().signOut(); } catch (e) { /* sdk absent */ }
+            out.textContent = 'Done - ' + wiped + ' key' + (wiped === 1 ? '' : 's') + ' wiped. Refresh to see the clean slate.';
+            btn.disabled = true;
+            setTimeout(function () { btn.disabled = false; out.textContent = ''; }, 6000);
+        });
+    })();
+    </script>
+    <script src="bg.js"></script>
+</body>
+</html>

@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Trendaryo Help Center - Get answers to common questions, track orders, manage returns, and contact customer support. 24/7 assistance available.">
+    <meta name="keywords" content="help center, customer support, FAQ, order tracking, returns, contact support">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Trendaryo">
+    <link rel="canonical" href="https://trendaryo.com/help-center.html">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://trendaryo.com/help-center.html">
+    <meta property="og:title" content="Help Center - Trendaryo | Customer Support & FAQ">
+    <meta property="og:description" content="Trendaryo Help Center - Get answers to common questions, track orders, manage returns, and contact customer support. 24/7 assistance available.">
+    <meta property="og:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://trendaryo.com/help-center.html">
+    <meta property="twitter:title" content="Help Center - Trendaryo | Customer Support & FAQ">
+    <meta property="twitter:description" content="Trendaryo Help Center - Get answers to common questions, track orders, manage returns, and contact customer support. 24/7 assistance available.">
+    <meta property="twitter:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
+    
+    <title>Help Center - Trendaryo | Customer Support & FAQ</title>
+    <link rel="stylesheet" href="responsive.css">
+    <script src="performance.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="bg.js"></script>
+    <style>
+        :root { --accent: #00f0ff; --accent-2: #ff00aa; --accent-3: #00ff88; --glass: rgba(255,255,255,0.05); --glass-border: rgba(255,255,255,0.1); }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { padding-top: 150px; font-family: 'Rajdhani', sans-serif; background: #0a0a2a; color: #fff; overflow-x: hidden; transition: background 1s ease-in-out; min-height: 100vh; padding-bottom: 3rem; }
+        #three-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none;}
+
+        .help-container { max-width: 1200px; margin: 0 auto; padding: 2rem; padding-bottom: 4rem; }
+        
+        .help-header { text-align: center; margin-bottom: 3rem; padding: 2rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px; }
+        .help-title { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent-2)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; }
+        .help-subtitle { color: rgba(255,255,255,0.9); font-size: 1.15rem; }
+        
+        .help-search { display: flex; gap: 1rem; margin-bottom: 2rem; }
+        .help-search-input { flex: 1; padding: 1rem 1.5rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 50px; color: #fff; font-size: 1rem; transition: all 0.3s ease; }
+        .help-search-input:focus { outline: none; border-color: var(--accent); background: rgba(0,240,255,0.05); box-shadow: 0 0 20px rgba(0,240,255,0.2); }
+        .help-suggestions { position: absolute; top: 100%; left: 0; right: 0; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 12px; max-height: 300px; overflow-y: auto; z-index: 1000; display: none; }
+        .suggestion-item { padding: 0.75rem 1rem; cursor: pointer; transition: background 0.2s ease; }
+        .suggestion-item:hover { background: rgba(0,240,255,0.1); }
+        
+        .help-search-button { padding: 1rem 2rem; background: linear-gradient(135deg, var(--accent), var(--accent-2)); border: none; border-radius: 50px; color: #fff; font-family: 'Orbitron', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; }
+        .help-search-button:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,240,255,0.5); }
+        
+        .help-categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
+        
+        .help-category { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; text-align: center; cursor: pointer; transition: all 0.3s ease; }
+        .help-category:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 20px 40px rgba(0,240,255,0.2); }
+        
+        .category-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+        .category-title { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; font-weight: 700; color: #fff; }
+        .category-description { color: rgba(255,255,255,0.9); font-size: 1rem; }
+        
+        .help-articles { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        
+        .help-article { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; transition: all 0.3s ease; }
+        .help-article:hover { transform: translateY(-3px); border-color: var(--accent); box-shadow: 0 15px 30px rgba(0,240,255,0.2); }
+        
+        .article-title { font-family: 'Orbitron', sans-serif; font-size: 1.3rem; font-weight: 700; color: #fff; margin-bottom: 1rem; }
+        .article-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .article-category { padding: 0.5rem 1rem; background: var(--accent-2); border-radius: 20px; color: #fff; font-size: 0.8rem; font-weight: 600; }
+        .article-date { color: rgba(255,255,255,0.75); font-size: 0.9rem; }
+        
+        .article-excerpt { color: rgba(255,255,255,0.9); font-size: 1.05rem; line-height: 1.7; margin-bottom: 1.5rem; }
+        .article-link { color: var(--accent); text-decoration: none; font-weight: 600; transition: color 0.3s ease; }
+        .article-link:hover { color: var(--accent-2); }
+        
+        .contact-section { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px; padding: 3rem; margin-bottom: 2rem; }
+        
+        .contact-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        
+        .contact-option { background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); border-radius: 12px; padding: 2rem; text-align: center; transition: all 0.3s ease; }
+        .contact-option:hover { background: rgba(0,240,255,0.1); border-color: var(--accent); }
+        
+        .contact-icon { font-size: 2rem; margin-bottom: 1rem; }
+        .contact-title { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 700; color: #fff; }
+        .contact-description { color: rgba(255,255,255,0.9); font-size: 1.05rem; margin-bottom: 0.5rem; }
+        
+        .contact-button { padding: 0.75rem 1.5rem; background: linear-gradient(135deg, var(--accent), var(--accent-2)); border: none; border-radius: 8px; color: #fff; font-family: 'Orbitron', sans-serif; font-size: 0.9rem; font-weight: 600; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; }
+        .contact-button:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,240,255,0.5); }
+        
+        .faq-section { margin-bottom: 3rem; }
+        
+        .faq-item { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 12px; margin-bottom: 1rem; }
+        .faq-question { padding: 1.5rem; cursor: pointer; transition: all 0.3s ease; display: flex; justify-content: space-between; align-items: center; }
+        .faq-question:hover { background: rgba(0,240,255,0.05); }
+        .faq-question-text { color: #fff; font-weight: 600; }
+        .faq-toggle { color: var(--accent); font-size: 1.2rem; transition: transform 0.3s ease; }
+        
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .faq-answer.active { max-height: 500px; }
+        .faq-answer-content { color: rgba(255,255,255,0.9); line-height: 1.7; padding: 1rem; }
+        
+        .live-chat { position: fixed; bottom: 2rem; right: 2rem; width: 350px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; z-index: 9999; transition: all 0.3s ease; display: none; }
+        .live-chat.active { display: block; }
+        .live-chat.minimized { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .live-chat-header { padding: 1rem; background: var(--accent); color: #000; display: flex; justify-content: space-between; align-items: center; }
+        .live-chat-title { font-family: 'Orbitron', sans-serif; font-size: 0.9rem; font-weight: 700; }
+        .live-chat-status { width: 8px; height: 8px; background: #00ff00; border-radius: 50%; }
+        .live-chat-status.online { background: #00ff88; }
+        .live-chat-close { background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; }
+        
+        .chat-messages { height: 300px; overflow-y: auto; padding: 1rem; }
+        .chat-message { margin-bottom: 1rem; }
+        .chat-bubble { background: rgba(255,255,255,0.1); border-radius: 12px; padding: 1rem; max-width: 70%; }
+        .chat-bubble.user { background: var(--accent); align-self: flex-end; }
+        .chat-bubble.support { background: var(--accent-2); align-self: flex-start; }
+        .chat-message-content { color: #fff; word-wrap: break-word; }
+        .chat-time { font-size: 0.8rem; color: rgba(255,255,255,0.75); margin-bottom: 0.5rem; }
+        
+        .chat-input-container { display: flex; gap: 0.5rem; padding: 1rem; background: rgba(255,255,255,0.1); }
+        .chat-input { flex: 1; padding: 0.75rem; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 8px; color: #fff; font-size: 1rem; }
+        .chat-send-button { padding: 0.75rem 1rem; background: var(--accent); border: none; border-radius: 8px; color: #000; font-family: 'Orbitron', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+        
+        @media (max-width: 768px) {
+            body { padding-top: 120px; }
+            .live-chat { width: 300px; right: 1rem; }
+            .help-categories { grid-template-columns: 1fr; }
+            .help-articles { grid-template-columns: 1fr; }
+            .contact-options { grid-template-columns: 1fr; }
+        }
+    </style>
+<script src="bg.js"></script>
+</head>
+<body>
+    <div id="header-container" data-type="full"></div>
+    <canvas id="three-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;"></canvas>
+    
+    <div class="help-container">
+        <div class="help-header">
+            <h1 class="help-title">Help Center</h1>
+            <p class="help-subtitle">We're here to help you 24/7</p>
+            
+            <div class="help-search">
+                <input type="text" class="help-search-input" placeholder="Search for help articles..." id="helpSearch">
+                <button class="help-search-button">Search</button>
+            </div>
+        </div>
+        
+        <div class="help-categories">
+            <div class="help-category" onclick="filterArticles('getting-started')">
+                <div class="category-icon">🚀</div>
+                <h3 class="category-title">Getting Started</h3>
+                <p class="category-description">New to Trendaryo? Start here!</p>
+            </div>
+            
+            <div class="help-category" onclick="filterArticles('orders')">
+                <div class="category-icon">📦</div>
+                <h3 class="category-title">Orders & Shipping</h3>
+                <p class="category-description">Track orders, shipping info, returns</p>
+            </div>
+            
+            <div class="help-category" onclick="filterArticles('payments')">
+                <div class="category-icon">💳</div>
+                <h3 class="category-title">Payments & Billing</h3>
+                <p class="category-description">Payment methods, billing, gift cards</p>
+            </div>
+            
+            <div class="help-category" onclick="filterArticles('account')">
+                <div class="category-icon">👤</div>
+                <h3 class="category-title">Account Management</h3>
+                <p class="category-description">Profile, addresses, settings</p>
+            </div>
+            
+            <div class="help-category" onclick="filterArticles('products')">
+                <div class="category-icon">📱</div>
+                <h3 class="category-title">Products</h3>
+                <p class="category-description">Product info, variants, comparisons</p>
+            </div>
+            
+            <div class="help-category" onclick="filterArticles('technical')">
+                <div class="category-icon">⚙</div>
+                <h3 class="category-title">Technical Support</h3>
+                <p class="category-description">Site issues, browser help</p>
+            </div>
+        </div>
+        
+        <div class="help-articles" id="helpArticles">
+            <!-- Articles will be loaded here -->
+        </div>
+        
+        <div class="contact-section">
+            <h2 class="category-title" style="text-align: center; margin-bottom: 2rem;">Still Need Help?</h2>
+            
+            <div class="contact-options">
+                <div class="contact-option" onclick="startLiveChat()">
+                    <div class="contact-icon">💬</div>
+                    <h3 class="contact-title">Live Chat</h3>
+                    <p class="contact-description">Chat with our support team instantly</p>
+                    <button class="contact-button">Start Chat</button>
+                </div>
+                
+                <div class="contact-option" onclick="createTicket()">
+                    <div class="contact-icon">📧</div>
+                    <h3 class="contact-title">Create Ticket</h3>
+                    <p class="contact-description">Submit a support request</p>
+                    <button class="contact-button">Create Ticket</button>
+                </div>
+                
+                <div class="contact-option" onclick="callSupport()">
+                    <div class="contact-icon">📞</div>
+                    <h3 class="contact-title">Call Us</h3>
+                    <p class="contact-description">Mon-Fri, 9am-6pm EST</p>
+                    <button class="contact-button">Call Now</button>
+                </div>
+                
+                <div class="contact-option" onclick="emailSupport()">
+                    <div class="contact-icon">✉</div>
+                    <h3 class="contact-title">Email Support</h3>
+                    <p class="contact-description">Get help via email</p>
+                    <button class="contact-button">Send Email</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Live Chat Widget -->
+        <div class="live-chat" id="liveChat">
+            <div class="live-chat-header">
+                <div class="live-chat-title">Live Support</div>
+                <div class="live-chat-status online"></div>
+                <button class="live-chat-close" onclick="minimizeChat()">−</button>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+                <div class="chat-bubble support">
+                    <div class="chat-message-content">
+                        <div class="chat-time">10:30 AM</div>
+                        <p>Hello! Welcome to Trendaryo Support. How can I help you today?</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chat-input-container">
+                <input type="text" class="chat-input" placeholder="Type your message..." id="chatInput">
+                <button class="chat-send-button" onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock help articles data
+        const helpArticles = {
+            'getting-started': [
+                {
+                    id: 1,
+                    title: 'How to Create an Account',
+                    category: 'getting-started',
+                    excerpt: 'Step-by-step guide to creating your Trendaryo account',
+                    content: 'Creating an account is quick and easy. Follow our simple registration process to get started with shopping...',
+                    date: '2024-01-15',
+                    readTime: '5 min read'
+                },
+                {
+                    id: 2,
+                    title: 'How to Track Your Order',
+                    category: 'orders',
+                    excerpt: 'Learn how to track your package from order confirmation to delivery...',
+                    content: 'Use your order number to track real-time shipping updates and delivery status...',
+                    date: '2024-01-14',
+                    readTime: '3 min read'
+                },
+                {
+                    id: 3,
+                    title: 'Payment Methods Accepted',
+                    category: 'payments',
+                    excerpt: 'We accept various payment methods including credit cards, PayPal, and digital wallets...',
+                    content: 'Learn about all the payment options available at Trendaryo...',
+                    date: '2024-01-13',
+                    readTime: '4 min read'
+                },
+                {
+                    id: 4,
+                    title: 'Returns and Exchanges',
+                    category: 'orders',
+                    excerpt: 'Our hassle-free return policy makes it easy to return or exchange items...',
+                    content: 'Learn about our 30-day return policy and how to initiate a return...',
+                    date: '2024-01-12',
+                    readTime: '6 min read'
+                }
+            ],
+            'orders': [
+                {
+                    id: 5,
+                    title: 'Order Confirmation Emails',
+                    category: 'orders',
+                    excerpt: 'Understanding your order confirmation emails and what each status means...',
+                    content: 'Learn about order status emails, tracking numbers, and delivery estimates...',
+                    date: '2024-01-11',
+                    readTime: '7 min read'
+                },
+                {
+                    id: 6,
+                    title: 'Shipping Options and Costs',
+                    category: 'orders',
+                    excerpt: 'Explore our shipping methods, costs, and delivery timeframes...',
+                    content: 'Standard, express, and international shipping options available...',
+                    date: '2024-01-10',
+                    readTime: '8 min read'
+                }
+            ],
+            'account': [
+                {
+                    id: 7,
+                    title: 'Managing Your Profile',
+                    category: 'account',
+                    excerpt: 'Update your personal information, manage addresses, and notification preferences...',
+                    content: 'Learn how to keep your account information up to date...',
+                    date: '2024-01-09',
+                    readTime: '5 min read'
+                },
+                {
+                    id: 8,
+                    title: 'Saved Addresses and Payment Methods',
+                    category: 'account',
+                    excerpt: 'Save multiple shipping addresses and payment methods for faster checkout...',
+                    content: 'How to add, edit, and delete addresses in your account...',
+                    date: '2024-01-08',
+                    readTime: '6 min read'
+                }
+            ],
+            'products': [
+                {
+                    id: 9,
+                    title: 'Product Information and Variants',
+                    category: 'products',
+                    excerpt: 'Understanding product variants, sizing, and detailed specifications...',
+                    content: 'Learn about our product variants, size charts, and technical specifications...',
+                    date: '2024-01-07',
+                    readTime: '10 min read'
+                },
+                {
+                    id: 10,
+                    title: 'Using the Wishlist',
+                    category: 'products',
+                    excerpt: 'Save your favorite items and create shareable wishlists...',
+                    content: 'Learn how to add items to your wishlist, share with friends, and get notified...',
+                    date: '2024-01-06',
+                    readTime: '9 min read'
+                }
+            ],
+            'technical': [
+                {
+                    id: 11,
+                    title: 'Browser Compatibility',
+                    category: 'technical',
+                    excerpt: 'Ensuring Trendaryo works perfectly on all modern browsers...',
+                    content: 'Learn about supported browsers, recommended settings, and troubleshooting tips...',
+                    date: '2024-01-05',
+                    readTime: '12 min read'
+                },
+                {
+                    id: 12,
+                    title: 'Mobile App Features',
+                    category: 'technical',
+                    excerpt: 'Getting the most out of our mobile app with PWA features...',
+                    content: 'Learn about offline browsing, push notifications, and mobile-specific features...',
+                    date: '2024-01-04',
+                    readTime: '15 min read'
+                }
+            ]
+        };
+        
+        let currentCategory = 'all';
+        let searchTerm = '';
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderArticles();
+        });
+        
+            function renderArticles() {
+            const articlesContainer = document.getElementById('helpArticles');
+            const searchInput = document.getElementById('helpSearch');
+            
+            let articlesToRender = helpArticles[currentCategory] || [];
+            
+            if (searchTerm) {
+                articlesToRender = helpArticles[currentCategory].filter(article => 
+                    article.title.toLowerCase().includes(searchTerm) ||
+                    article.excerpt.toLowerCase().includes(searchTerm) ||
+                    article.content.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            if (articlesToRender.length === 0) {
+                articlesContainer.innerHTML = `
+                    <div style="text-align: center; padding: 4rem 2rem;">
+                        <div style="font-size: 3rem; color: rgba(255,255,255,0.6); margin-bottom: 1rem;">
+                            📚 No articles found for "${searchTerm}"
+                        </div>
+                        <button class="add-to-cart" onclick="clearSearch()">Clear Search</button>
+                    </div>
+                `;
+            } else {
+                articlesContainer.innerHTML = articlesToRender.map(article => `
+                    <div class="help-article" onclick="openArticle(${article.id})">
+                        <div class="article-meta">
+                            <div class="article-category">${article.category}</div>
+                            <div class="article-date">${article.date}</div>
+                        </div>
+                        
+                        <h3 class="article-title">${article.title}</h3>
+                        <div class="article-excerpt">${article.excerpt}</div>
+                        <div class="article-link">
+                            <a href="#" class="article-link">Read More →</a>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+        
+        function filterArticles(category) {
+            currentCategory = category;
+            searchTerm = '';
+            document.getElementById('helpSearch').value = '';
+            renderArticles();
+            
+            // Update active category styling
+            document.querySelectorAll('.help-category').forEach(cat => {
+                cat.classList.remove('active');
+                if (cat.textContent.toLowerCase().includes(category.toLowerCase()) || 
+                    (category === 'all' && cat.textContent === 'All')) {
+                    cat.classList.add('active');
+                }
+            });
+        }
+        
+        function clearSearch() {
+            document.getElementById('helpSearch').value = '';
+            searchTerm = '';
+            currentCategory = 'all';
+            renderArticles();
+        }
+        
+        function openArticle(articleId) {
+            const article = helpArticles[currentCategory].find(a => a.id === articleId);
+            if (article) {
+                // In a real app, this would open a full article page
+                console.log('Opening article:', articleId);
+                alert(`Opening article: ${article.title}. In a real implementation, this would navigate to the full article page.`);
+            }
+        }
+        
+        function startLiveChat() {
+            const chatWidget = document.getElementById('liveChat');
+            chatWidget.classList.add('active');
+            chatWidget.classList.remove('minimized');
+            
+            // Simulate connecting to support
+            setTimeout(() => {
+                const messagesContainer = document.getElementById('chatMessages');
+                messagesContainer.innerHTML = `
+                    <div class="chat-bubble support">
+                        <div class="chat-message-content">
+                            <div class="chat-time">10:32 AM</div>
+                            <p>Connected to Trendaryo Support! An agent will be with you shortly.</p>
+                        </div>
+                    </div>
+                `;
+            }, 2000);
+        }
+        
+        function minimizeChat() {
+            const chatWidget = document.getElementById('liveChat');
+            chatWidget.classList.add('minimized');
+            chatWidget.classList.remove('active');
+        }
+        
+        function createTicket() {
+            // In a real app, this would open a ticket creation form
+            alert('Ticket creation feature coming soon! For now, please email support@trendaryo.com');
+        }
+        
+        function callSupport() {
+            // In a real app, this would initiate a phone call
+            alert('Please call our support team at: 1-800-TRENDARYO during business hours (9am-6pm EST)');
+        }
+        
+        function emailSupport() {
+            // In a real app, this would open email client
+            alert('Please email us at: support@trendaryo.com');
+        }
+        
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                const messagesContainer = document.getElementById('chatMessages');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'chat-bubble user';
+                messageDiv.innerHTML = `
+                    <div class="chat-message-content">
+                        <div class="chat-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                        <p>${message}</p>
+                    </div>
+                `;
+                
+                messagesContainer.appendChild(messageDiv);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                input.value = '';
+                
+                // Simulate support response
+                setTimeout(() => {
+                    const responseDiv = document.createElement('div');
+                    responseDiv.className = 'chat-bubble support';
+                    responseDiv.innerHTML = `
+                        <div class="chat-message-content">
+                            <div class="chat-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                            <p>Thank you for contacting Trendaryo Support! A support agent will assist you shortly.</p>
+                        </div>
+                    `;
+                    
+                    messagesContainer.appendChild(responseDiv);
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                }, 3000);
+            }
+        }
+        
+        // Search functionality
+        document.getElementById('helpSearch').addEventListener('input', function(e) {
+            searchTerm = e.target.value;
+            renderArticles();
+        });
+    </script>
+    <div id="footer-container"></div>
+    <script src="components.js"></script>
+    
+    <!-- Help Topics -->
+    <section style="max-width: 1200px; margin: 3rem auto 5rem; padding: 2rem;">
+        <h2 style="font-family: 'Orbitron', sans-serif; text-align: center; margin-bottom: 2rem;">Browse Help Topics</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+            <a href="faq.html" style="padding: 2rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; text-decoration: none; color: #fff; text-align: center; transition: all 0.3s;">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">❓</div>
+                <h3 style="font-family: 'Orbitron', sans-serif; margin-bottom: 0.5rem;">FAQ</h3>
+                <p style="color: rgba(255,255,255,0.85); font-size: 0.95rem;">Common questions answered</p>
+            </a>
+            <a href="shipping.html" style="padding: 2rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; text-decoration: none; color: #fff; text-align: center; transition: all 0.3s;">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">📦</div>
+                <h3 style="font-family: 'Orbitron', sans-serif; margin-bottom: 0.5rem;">Shipping</h3>
+                <p style="color: rgba(255,255,255,0.85); font-size: 0.95rem;">Delivery information</p>
+            </a>
+            <a href="returns.html" style="padding: 2rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; text-decoration: none; color: #fff; text-align: center; transition: all 0.3s;">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">🔄</div>
+                <h3 style="font-family: 'Orbitron', sans-serif; margin-bottom: 0.5rem;">Returns</h3>
+                <p style="color: rgba(255,255,255,0.85); font-size: 0.95rem;">Return & exchange policy</p>
+            </a>
+            <a href="track-order.html" style="padding: 2rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; text-decoration: none; color: #fff; text-align: center; transition: all 0.3s;">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">🚚</div>
+                <h3 style="font-family: 'Orbitron', sans-serif; margin-bottom: 0.5rem;">Track Order</h3>
+                <p style="color: rgba(255,255,255,0.85); font-size: 0.95rem;">Check delivery status</p>
+            </a>
+            <a href="contact.html" style="padding: 2rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; text-decoration: none; color: #fff; text-align: center; transition: all 0.3s;">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">💬</div>
+                <h3 style="font-family: 'Orbitron', sans-serif; margin-bottom: 0.5rem;">Contact Us</h3>
+                <p style="color: rgba(255,255,255,0.85); font-size: 0.95rem;">Get in touch</p>
+            </a>
+            <a href="account.html" style="padding: 2rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; text-decoration: none; color: #fff; text-align: center; transition: all 0.3s;">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">👤</div>
+                <h3 style="font-family: 'Orbitron', sans-serif; margin-bottom: 0.5rem;">My Account</h3>
+                <p style="color: rgba(255,255,255,0.85); font-size: 0.95rem;">Manage your profile</p>
+            </a>
+            <a href="privacy.html" style="padding: 2rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; text-decoration: none; color: #fff; text-align: center; transition: all 0.3s;">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">🔒</div>
+                <h3 style="font-family: 'Orbitron', sans-serif; margin-bottom: 0.5rem;">Privacy</h3>
+                <p style="color: rgba(255,255,255,0.85); font-size: 0.95rem;">Your data protection</p>
+            </a>
+            <a href="terms.html" style="padding: 2rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; text-decoration: none; color: #fff; text-align: center; transition: all 0.3s;">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">📄</div>
+                <h3 style="font-family: 'Orbitron', sans-serif; margin-bottom: 0.5rem;">Terms</h3>
+                <p style="color: rgba(255,255,255,0.85); font-size: 0.95rem;">Terms of service</p>
+            </a>
+            <a href="size-guide.html" style="padding: 2rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; text-decoration: none; color: #fff; text-align: center; transition: all 0.3s;">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">📏</div>
+                <h3 style="font-family: 'Orbitron', sans-serif; margin-bottom: 0.5rem;">Size Guide</h3>
+                <p style="color: rgba(255,255,255,0.85); font-size: 0.95rem;">Find your perfect fit</p>
+            </a>
+            <a href="gift-cards.html" style="padding: 2rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; text-decoration: none; color: #fff; text-align: center; transition: all 0.3s;">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">🎁</div>
+                <h3 style="font-family: 'Orbitron', sans-serif; margin-bottom: 0.5rem;">Gift Cards</h3>
+                <p style="color: rgba(255,255,255,0.85); font-size: 0.95rem;">Perfect gift option</p>
+            </a>
+            <a href="affiliate.html" style="padding: 2rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; text-decoration: none; color: #fff; text-align: center; transition: all 0.3s;">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">💰</div>
+                <h3 style="font-family: 'Orbitron', sans-serif; margin-bottom: 0.5rem;">Affiliate</h3>
+                <p style="color: rgba(255,255,255,0.85); font-size: 0.95rem;">Earn with us</p>
+            </a>
+            <a href="blog.html" style="padding: 2rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; text-decoration: none; color: #fff; text-align: center; transition: all 0.3s;">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">📝</div>
+                <h3 style="font-family: 'Orbitron', sans-serif; margin-bottom: 0.5rem;">Blog</h3>
+                <p style="color: rgba(255,255,255,0.85); font-size: 0.95rem;">Latest news & tips</p>
+            </a>
+        </div>
+    </section>
+    <!-- Self-Healing System -->
+<script>
+window.onerror = function(msg, url, lineNo, columnNo, error) {
+  console.log('Error caught:', msg);
+  const errorDiv = document.createElement('div');
+  errorDiv.style.cssText = 'position:fixed; bottom:20px; right:20px; background:#f3f4f6; padding:10px; border-radius:5px; z-index:9999; border:1px solid #ccc;';
+  errorDiv.innerHTML = '⚠️ Something went wrong. Retrying...';
+  document.body.appendChild(errorDiv);
+  setTimeout(() => errorDiv.remove(), 3000);
+  return false;
+};
+</script>
+</body>
+</html>

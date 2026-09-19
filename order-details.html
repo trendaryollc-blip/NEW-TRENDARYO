@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details - Trendaryo</title>
+    <meta name="robots" content="noindex, follow">
+    <link rel="canonical" href="https://trendaryo.com/order-details.html">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon-crown-star.svg">
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="performance.js"></script>
+    <script src="bg.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0a0a0a; --bg-deep: #0a0a2a;
+            --accent: #00f0ff; --accent-2: #ff00aa; --accent-3: #00ff88; --accent-4: #ffd700;
+            --danger: #ff4444;
+            --text: #ffffff; --muted: rgba(255,255,255,0.66); --muted-2: rgba(255,255,255,0.45);
+            --glass: rgba(255,255,255,0.05); --glass-2: rgba(255,255,255,0.03);
+            --glass-border: rgba(255,255,255,0.1); --glass-border-2: rgba(255,255,255,0.18);
+            --card-grad: linear-gradient(168deg, rgba(255,255,255,0.075), rgba(255,255,255,0.02));
+            --r-sm: 10px; --r-md: 16px; --r-lg: 22px; --r-pill: 999px;
+            --ease: cubic-bezier(0.22, 1, 0.36, 1);
+            --font-d: 'Orbitron', sans-serif; --font-b: 'Rajdhani', sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-b); background: var(--bg-deep); color: #fff; overflow-x: hidden; min-height: 100vh; }
+        #three-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+        .page-offset { padding-top: 190px; padding-bottom: 3rem; }
+        a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+        .od-shell { max-width: 900px; margin: 0 auto; padding: 0 2.5rem; }
+
+        /* ── Header ── */
+        .od-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+        .od-title { font-family: var(--font-d); font-size: clamp(1.2rem, 2.5vw, 1.7rem); font-weight: 900; background: linear-gradient(135deg, #fff 15%, var(--accent) 60%, var(--accent-2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .od-back { padding: 0.7rem 1.2rem; border-radius: var(--r-md); border: 1px solid var(--glass-border-2); background: transparent; color: rgba(255,255,255,0.8); font-family: var(--font-b); font-weight: 700; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.25s; }
+        .od-back:hover { border-color: var(--accent); background: rgba(0,240,255,0.08); color: var(--accent); }
+
+        /* ── Card ── */
+        .od-card { background: var(--card-grad); border: 1px solid var(--glass-border); border-radius: var(--r-lg); padding: 2rem; margin-bottom: 1.5rem; }
+
+        /* ── Order Header ── */
+        .od-order-head { display: flex; justify-content: space-between; align-items: center; padding-bottom: 1.5rem; border-bottom: 1px solid var(--glass-border); margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
+        .od-order-id { font-family: var(--font-d); font-size: 1.3rem; font-weight: 800; color: var(--accent); }
+        .od-status { padding: 0.4rem 0.9rem; border-radius: var(--r-pill); font-size: 0.72rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+        .od-status-pending { background: rgba(255,215,0,0.15); color: var(--accent-4); border: 1px solid rgba(255,215,0,0.3); }
+        .od-status-processing { background: rgba(0,240,255,0.12); color: var(--accent); border: 1px solid rgba(0,240,255,0.3); }
+        .od-status-shipped { background: rgba(0,255,136,0.12); color: var(--accent-3); border: 1px solid rgba(0,255,136,0.3); }
+        .od-status-delivered { background: rgba(0,255,136,0.12); color: var(--accent-3); border: 1px solid rgba(0,255,136,0.3); }
+        .od-status-cancelled { background: rgba(255,68,68,0.12); color: var(--danger); border: 1px solid rgba(255,68,68,0.3); }
+
+        /* ── Info Grid ── */
+        .od-section-title { font-family: var(--font-d); font-size: 0.85rem; font-weight: 800; margin-bottom: 1rem; color: var(--accent); }
+        .od-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.25rem; margin-bottom: 2rem; }
+        .od-info-item { display: flex; flex-direction: column; gap: 0.3rem; }
+        .od-info-label { color: var(--muted-2); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1.2px; }
+        .od-info-value { font-weight: 700; font-size: 1rem; }
+
+        /* ── Items Table ── */
+        .od-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+        .od-table th { text-align: left; padding: 0.8rem; background: rgba(0,0,0,0.2); color: var(--muted-2); font-family: var(--font-d); font-size: 0.6rem; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; }
+        .od-table td { padding: 0.8rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.92rem; }
+        .od-table tr:last-child td { border-bottom: none; }
+        .od-price { color: var(--accent); font-weight: 700; }
+
+        /* ── Totals ── */
+        .od-totals { display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem; padding-top: 1rem; border-top: 2px solid var(--glass-border); }
+        .od-total-row { display: flex; justify-content: space-between; min-width: 280px; font-size: 0.95rem; }
+        .od-total-grand { font-family: var(--font-d); font-size: 1.3rem; font-weight: 900; color: var(--accent-3); padding-top: 0.5rem; border-top: 1px solid var(--glass-border); }
+
+        /* ── Address ── */
+        .od-address { background: rgba(0,0,0,0.2); padding: 1.25rem; border-radius: var(--r-md); border: 1px solid var(--glass-border); line-height: 1.7; }
+        .od-address strong { color: #fff; }
+        .od-address p { color: var(--muted); margin-bottom: 0.2rem; }
+
+        /* ── Actions ── */
+        .od-actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem; }
+        .od-btn { padding: 0.7rem 1.2rem; border-radius: var(--r-md); font-family: var(--font-d); font-size: 0.62rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.25s; border: 0; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; }
+        .od-btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent-3)); color: #00202a; }
+        .od-btn-primary:hover { box-shadow: 0 0 20px rgba(0,240,255,0.4); transform: translateY(-1px); }
+        .od-btn-secondary { background: transparent; border: 1px solid var(--glass-border-2); color: rgba(255,255,255,0.8); }
+        .od-btn-secondary:hover { border-color: rgba(255,255,255,0.5); color: #fff; }
+
+        /* ── Loading / Error ── */
+        .od-loading { text-align: center; padding: 4rem 2rem; color: var(--muted); }
+
+        /* ── Responsive ── */
+        @media (max-width: 900px) { .page-offset { padding-top: 130px; } .od-shell { padding: 0 1.5rem; } }
+        @media (max-width: 600px) { .od-shell { padding: 0 1rem; } .od-info-grid { grid-template-columns: 1fr 1fr; } .od-table { font-size: 0.85rem; } .od-table th, .od-table td { padding: 0.5rem; } }
+        @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--accent), var(--accent-2)); border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <canvas id="three-canvas"></canvas>
+    <div id="header-container"></div>
+    <script src="components.js"></script>
+
+    <main class="page-offset">
+        <div class="od-shell">
+            <div class="od-header">
+                <h1 class="od-title">Order Details</h1>
+                <a href="orders.html" class="od-back">← Back to Orders</a>
+            </div>
+            <div id="orderContent">
+                <div class="od-loading">Loading order details...</div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-container"></div>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="firebase-auth-helper.js"></script>
+    <script src="api-client.js"></script>
+    <script src="products-data.js"></script>
+    <script src="backend-bridge.js"></script>
+    <script src="page-helpers.js"></script>
+    <script src="order-manager.js"></script>
+    <script>
+        function orderDate(value) {
+            if (!value) return new Date();
+            if (value && typeof value === 'object' && value._seconds) return new Date(value._seconds * 1000);
+            if (value && typeof value === 'object' && value.toDate) return value.toDate();
+            var d = new Date(value);
+            return isNaN(d.getTime()) ? new Date() : d;
+        }
+
+        async function loadOrderDetails() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var orderId = urlParams.get('orderId');
+            var local = window.TrendaryoOrders ? TrendaryoOrders.find(orderId) : null;
+            var order = null;
+
+            if (local) {
+                var subtotal = (local.items || []).reduce(function (s, it) { return s + (it.price || 0) * (it.qty || 1); }, 0);
+                var ship = subtotal >= 50 ? 0 : 9.99;
+                var taxAmt = subtotal * 0.08;
+                order = {
+                    id: local.id, status: local.status || 'processing', createdAt: local.date, paymentStatus: 'Paid',
+                    items: (local.items || []).map(function (it) { return { name: it.name, price: it.price, quantity: it.qty || 1 }; }),
+                    subtotal: subtotal, shipping: ship, tax: taxAmt, total: local.total || (subtotal + ship + taxAmt),
+                    shippingAddress: { fullName: (local.shipping || {}).name, street: (local.shipping || {}).address, city: (local.shipping || {}).city, state: (local.shipping || {}).state || '', zipCode: (local.shipping || {}).zip || '', country: (local.shipping || {}).country || '', email: (local.shipping || {}).email || '', phone: (local.shipping || {}).phone || '' }
+                };
+            } else if (orderId && window.OrderManager) {
+                var result = await window.OrderManager.getOrderById(orderId);
+                var api = result && result.success ? result.data : null;
+                if (api) {
+                    var apiItems = api.items;
+                    if (typeof apiItems === 'string') { try { apiItems = JSON.parse(apiItems); } catch (e) { apiItems = []; } }
+                    if (!Array.isArray(apiItems)) apiItems = [];
+                    var addr = api.shippingAddress;
+                    if (typeof addr === 'string') { try { addr = JSON.parse(addr); } catch (e) { addr = {}; } }
+                    addr = addr || {};
+                    var itemsTotal = apiItems.reduce(function (s, it) { return s + (Number(it.price) || 0) * (Number(it.quantity) || 1); }, 0);
+                    order = {
+                        id: api.orderNumber || api.id,
+                        status: api.status || 'processing',
+                        createdAt: api.createdAt,
+                        paymentStatus: api.paymentStatus || (String(api.paymentMethod) === 'cod' ? 'COD' : 'Paid'),
+                        items: apiItems.map(function (it) { return { name: it.name, price: Number(it.price) || 0, quantity: Number(it.quantity) || 1 }; }),
+                        subtotal: Number(api.subtotal) || itemsTotal,
+                        shipping: Number(api.shipping) || 0,
+                        tax: Number(api.tax) || 0,
+                        total: Number(api.total) || itemsTotal,
+                        shippingAddress: { fullName: addr.fullName || addr.name || api.customerName || '', street: addr.street || addr.address || '', city: addr.city || '', state: addr.state || '', zipCode: addr.zipCode || addr.zip || '', country: addr.country || '', email: addr.email || '', phone: addr.phone || '' }
+                    };
+                }
+            }
+
+            if (!order) {
+                document.getElementById('orderContent').innerHTML = '<div class="od-card" style="text-align:center;"><p style="color:var(--danger);font-size:1.1rem;margin-bottom:0.8rem;">Order not found</p><p style="color:var(--muted);margin-bottom:1.5rem;">Check the order number and try again. Try: TRD-DEMO-4821</p><a href="orders.html" class="od-btn od-btn-secondary">← Back to Orders</a></div>';
+                return;
+            }
+            var addr = order.shippingAddress;
+            var itemsHtml = '';
+            for (var i = 0; i < order.items.length; i++) {
+                var it = order.items[i];
+                itemsHtml += '<tr><td style="font-weight:600;">' + (it.name || 'Unknown Product') + '</td><td>$' + (it.price || 0).toFixed(2) + '</td><td>x' + (it.quantity || 1) + '</td><td class="od-price">$' + ((it.price || 0) * (it.quantity || 1)).toFixed(2) + '</td></tr>';
+            }
+            var html = '<div class="od-card"><div class="od-order-head"><div class="od-order-id">Order #' + String(order.id || orderId).substring(0, 8).toUpperCase() + '</div><span class="od-status od-status-' + order.status + '">' + order.status.toUpperCase() + '</span></div><div class="od-section-title">Order Information</div><div class="od-info-grid"><div class="od-info-item"><span class="od-info-label">Order Date</span><span class="od-info-value">' + orderDate(order.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) + '</span></div><div class="od-info-item"><span class="od-info-label">Order Time</span><span class="od-info-value">' + orderDate(order.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) + '</span></div><div class="od-info-item"><span class="od-info-label">Payment</span><span class="od-info-value">' + order.paymentStatus + '</span></div><div class="od-info-item"><span class="od-info-label">Total Items</span><span class="od-info-value">' + order.items.length + '</span></div></div><div class="od-section-title">Order Items</div><table class="od-table"><thead><tr><th>Product</th><th>Price</th><th>Qty</th><th>Subtotal</th></tr></thead><tbody>' + itemsHtml + '</tbody></table><div class="od-totals"><div class="od-total-row"><span>Subtotal</span><span class="od-price">$' + order.subtotal.toFixed(2) + '</span></div><div class="od-total-row"><span>Shipping</span><span class="od-price">$' + order.shipping.toFixed(2) + '</span></div><div class="od-total-row"><span>Tax</span><span class="od-price">$' + order.tax.toFixed(2) + '</span></div><div class="od-total-row od-total-grand"><span>Total</span><span>$' + order.total.toFixed(2) + '</span></div></div></div><div class="od-card"><div class="od-section-title">Shipping Address</div><div class="od-address"><strong>' + (addr.fullName || 'N/A') + '</strong><p>' + (addr.street || 'N/A') + '</p><p>' + (addr.city || 'N/A') + ', ' + (addr.state || 'N/A') + ' ' + (addr.zipCode || '') + '</p><p>' + (addr.country || 'N/A') + '</p>' + (addr.email ? '<p style="margin-top:0.8rem;color:var(--accent);">' + addr.email + '</p>' : '') + (addr.phone ? '<p style="color:var(--accent);">' + addr.phone + '</p>' : '') + '</div><div class="od-actions"><a href="track-order.html?orderId=' + order.id + '" class="od-btn od-btn-primary">Track Order</a><button class="od-btn od-btn-secondary" onclick="window.print()">Print</button><a href="orders.html" class="od-btn od-btn-secondary">← Back to Orders</a></div></div>';
+            document.getElementById('orderContent').innerHTML = html;
+        }
+        window.addEventListener('load', async function () {
+            if (typeof initFirebase === 'function') {
+                try { await initFirebase(); } catch (e) { console.error('Firebase init error:', e); }
+            }
+            loadOrderDetails();
+        });
+    </script>
+    <script>
+        function hidePreloader() { var p = document.getElementById('preloader'); if (p) p.classList.add('hidden'); }
+        if (document.readyState === 'complete') { setTimeout(hidePreloader, 600); } else { window.addEventListener('load', function () { setTimeout(hidePreloader, 600); }); }
+        setTimeout(hidePreloader, 1500);
+    </script>
+</body>
+</html>

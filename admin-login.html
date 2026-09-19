@@ -1,0 +1,199 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Admin sign-in - Trendaryo Command Deck</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon-crown-star.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin/admin.css">
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            background:
+                radial-gradient(1200px 500px at 20% -10%, rgba(0, 240, 255, 0.07), transparent 60%),
+                radial-gradient(900px 500px at 90% 110%, rgba(255, 0, 170, 0.05), transparent 60%),
+                var(--bg);
+        }
+        .login-card { width: 100%; max-width: 400px; }
+        .login-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; }
+        .login-brand svg { color: var(--accent); }
+        .login-brand b { font-size: 15px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+        .login-brand span { display: block; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-mute); }
+        .login-note {
+            display: flex; gap: 10px; align-items: flex-start;
+            padding: 10px 12px; border-radius: 4px; margin-bottom: 16px;
+            background: rgba(255, 176, 32, 0.08); border: 1px solid rgba(255, 176, 32, 0.25);
+            font-size: 12px; line-height: 1.55; color: var(--text-dim);
+        }
+        .login-note svg { width: 14px; height: 14px; color: var(--warn); flex: 0 0 14px; margin-top: 2px; }
+        .login-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 18px; font-size: 12px; color: var(--text-mute); }
+        .login-foot a { display: inline-flex; align-items: center; gap: 5px; }
+        .login-foot a:hover { color: var(--accent); }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="login-brand">
+            <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 18h20"/><path d="m3 18 1.5-9 4.5 4L12 5l3 8 4.5-4L21 18"/></svg>
+            <div><b>Trendaryo</b><span>Command Deck</span></div>
+        </div>
+        <div class="panel">
+            <div class="panel__body">
+                <h1 style="font-size:20px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px;">Admin sign-in</h1>
+                <p class="t-body" style="margin-bottom:18px;">Access the store command deck.</p>
+
+                <div class="login-note">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>
+                    <div>Admin accounts are managed through Firebase Auth. Only users with the admin role in Firestore can access the command deck.</div>
+                </div>
+
+                <form id="lgForm" autocomplete="off">
+                    <div class="field"><label class="field__label" for="lgEmail">Admin email</label><input class="input" id="lgEmail" type="email" autocomplete="username" required></div>
+                    <div class="field"><label class="field__label" for="lgPass">Password</label><div class="input-ai"><input class="input" id="lgPass" type="password" autocomplete="current-password" required><button class="ai-btn" type="button" id="lgEye" aria-label="Show password" style="color:var(--text-dim);"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button></div></div>
+                    <div id="lgErr" class="field__error" style="display:none;margin-bottom:10px;"></div>
+                    <button class="btn btn--primary btn--lg btn--block" type="submit" id="lgGo">Sign in to the deck</button>
+                </form>
+            </div>
+        </div>
+        <div class="login-foot">
+<a href="index.html">← Back to the store</a>
+            <span>Role verified by the server via Firebase Auth</span>
+        </div>
+    </div>
+
+    <script>
+    (function () {
+        /* Already signed in? straight to the deck. */
+        if (localStorage.getItem('adminToken') && localStorage.getItem('userRole') === 'admin') {
+            location.replace('admin.html');
+            return;
+        }
+
+        /* Firebase SDK for admin login */
+        var firebaseScript1 = document.createElement('script');
+        firebaseScript1.src = 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js';
+        document.head.appendChild(firebaseScript1);
+
+        var firebaseScript2 = document.createElement('script');
+        firebaseScript2.src = 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js';
+        document.head.appendChild(firebaseScript2);
+
+        var firebaseScript3 = document.createElement('script');
+        firebaseScript3.src = 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js';
+        document.head.appendChild(firebaseScript3);
+
+        var firebaseScript4 = document.createElement('script');
+        firebaseScript4.src = 'firebase-config.js';
+        document.head.appendChild(firebaseScript4);
+
+        var eye = document.getElementById('lgEye');
+        eye.addEventListener('click', function () {
+            var inp = document.getElementById('lgPass');
+            var show = inp.type === 'password';
+            inp.type = show ? 'text' : 'password';
+            eye.style.color = show ? 'var(--accent)' : 'var(--text-dim)';
+        });
+
+        document.getElementById('lgForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            var email = document.getElementById('lgEmail').value.trim().toLowerCase();
+            var pass = document.getElementById('lgPass').value;
+            var err = document.getElementById('lgErr');
+            var btn = document.getElementById('lgGo');
+            err.style.display = 'none';
+
+            if (!email || !pass) {
+                err.textContent = 'Please enter email and password.';
+                err.style.display = 'block';
+                return;
+            }
+
+            btn.textContent = 'Signing in...';
+            btn.disabled = true;
+
+            try {
+                /* Wait for Firebase to initialize */
+                var attempts = 0;
+                while ((!window.firebase || !window.firebase.auth) && attempts < 50) {
+                    await new Promise(function(r) { setTimeout(r, 100); });
+                    attempts++;
+                }
+
+                if (!window.firebase || !window.firebase.auth) {
+                    throw new Error('Firebase not loaded. Please refresh and try again.');
+                }
+
+                var fbApp = await initFirebase();
+                var auth = fbApp.auth;
+                var db = fbApp.db;
+
+                if (!auth) {
+                    throw new Error('Firebase Auth not initialized');
+                }
+
+                var userCredential = await auth.signInWithEmailAndPassword(email, pass);
+                var user = userCredential.user;
+
+                /* Server-verified admin check - role is read from Firestore
+                   by the API, never from the client. */
+                var token = await user.getIdToken(true);
+                var meRes;
+                try {
+                    meRes = await fetch('/api/auth/me', { headers: { Authorization: 'Bearer ' + token } });
+                } catch (e) {
+                    throw new Error('Backend unavailable - cannot verify admin role.');
+                }
+                if (!meRes.ok) {
+                    throw new Error('Backend rejected the session. Please refresh and try again.');
+                }
+                var meBody = await meRes.json();
+                var me = meBody && meBody.data;
+
+                if (!me || me.role !== 'admin' || me.status !== 'active') {
+                    await auth.signOut();
+                    throw new Error('Access denied. This account does not have admin privileges.');
+                }
+
+                /* Set admin session */
+                localStorage.setItem('adminToken', 'admin_' + btoa(email + ':' + Date.now()));
+                localStorage.setItem('userRole', 'admin');
+                localStorage.setItem('adminEmail', email);
+                localStorage.setItem('adminLoginTime', new Date().toISOString());
+                localStorage.setItem('user_id', user.uid);
+                localStorage.setItem('user', JSON.stringify({
+                    id: user.uid,
+                    email: user.email,
+                    name: user.displayName || email,
+                    role: 'admin'
+                }));
+
+                location.replace('admin.html');
+            } catch (error) {
+                var message = 'Login failed';
+                if (error.code === 'auth/user-not-found') {
+                    message = 'No account found with this email';
+                } else if (error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+                    message = 'Invalid email or password';
+                } else if (error.code === 'auth/too-many-requests') {
+                    message = 'Too many failed attempts. Please try again later.';
+                } else if (error.message) {
+                    message = error.message;
+                }
+                err.textContent = message;
+                err.style.display = 'block';
+                btn.textContent = 'Sign in to the deck';
+                btn.disabled = false;
+            }
+        });
+    })();
+    </script>
+</body>
+</html>

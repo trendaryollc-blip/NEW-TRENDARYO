@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Trendaryo Admin - Command Deck</title>
+    <meta name="description" content="Trendaryo admin command deck - products, orders, customers, marketing and the AI studio.">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon-crown-star.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin/admin.css">
+    <style>
+        /* App-shell extensions on top of admin/admin.css */
+        .topbar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 24px;
+            height: var(--topbar-h);
+            background: var(--surface);
+            border-bottom: 1px solid var(--line);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .topbar__title h1 { font-size: var(--t-lg); font-weight: 650; letter-spacing: -0.01em; line-height: 1.2; }
+        .topbar__actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+        .tl-hamburger { display: none; }
+        .tl-view { padding: 24px 28px 72px; max-width: 1440px; }
+        .tl-scrim { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6); z-index: 55; }
+        .tl-scrim.is-open { display: block; }
+        .tl-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(2px); z-index: 150; }
+        .tl-chat { display: flex; flex-direction: column; gap: 10px; max-height: 340px; overflow-y: auto; padding-right: 4px; }
+        .tl-msg { max-width: 88%; border-radius: 8px; padding: 10px 12px; font-size: var(--t-base); line-height: 1.55; }
+        .tl-msg--admin { align-self: flex-end; background: rgba(0, 240, 255, 0.12); border: 1px solid rgba(0, 240, 255, 0.3); color: var(--text); }
+        .tl-msg--ai { align-self: flex-start; background: var(--surface-2); border: 1px solid var(--line); }
+        .tl-msg__text { word-break: break-word; }
+        @media (max-width: 1024px) {
+            .sidebar { transform: translateX(-100%); transition: transform 200ms var(--ease); }
+            .sidebar.is-open { transform: none; box-shadow: var(--shadow-lg); }
+            .tl-hamburger { display: inline-flex; }
+            .tl-view { padding: 20px 16px 72px; }
+        }
+    </style>
+</head>
+<body>
+<!--
+        TRENDARYO ADMIN - COMMAND DECK
+        Single-page app. Modules register into window.TrendaryoAdminViews;
+        core/app.js builds the shell and routes #/hash to each module.
+        Data layer: admin/backend-sync.js hydrates the modules from the
+        Firestore-backed API and enforces a server-verified admin session.
+    -->
+
+    <script src="config.js"></script>
+    <script src="products-data.js"></script>
+    <script src="page-helpers.js"></script>
+    <script src="api-client.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="admin/core/format.js"></script>
+    <script src="admin/core/icons.js"></script>
+    <script src="admin/core/store.js"></script>
+    <script src="admin/core/ai.js"></script>
+    <script src="admin/core/app.js"></script>
+    <script src="admin/views/overview.js"></script>
+    <script src="admin/views/catalog.js"></script>
+    <script src="admin/views/ops.js"></script>
+    <script src="admin/views/system.js"></script>
+    <script src="admin/backend-sync.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script>
+        (function () {
+            function boot() {
+                if (window.TrendaryoAdminApp && typeof window.TrendaryoAdminApp.start === 'function') {
+                    window.TrendaryoAdminApp.start();
+                } else {
+                    setTimeout(boot, 60);
+                }
+            }
+            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+            else boot();
+        })();
+    </script>
+</body>
+</html>

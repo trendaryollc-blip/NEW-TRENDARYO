@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cancel Order - Trendaryo</title>
+    <meta name="robots" content="noindex, follow">
+    <link rel="canonical" href="https://trendaryo.com/order-cancel.html">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon-crown-star.svg">
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="performance.js"></script>
+    <script src="bg.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0a0a0a; --bg-deep: #0a0a2a;
+            --accent: #00f0ff; --accent-2: #ff00aa; --accent-3: #00ff88;
+            --danger: #ff4444;
+            --text: #ffffff; --muted: rgba(255,255,255,0.66); --muted-2: rgba(255,255,255,0.45);
+            --glass: rgba(255,255,255,0.05);
+            --glass-border: rgba(255,255,255,0.1); --glass-border-2: rgba(255,255,255,0.18);
+            --card-grad: linear-gradient(168deg, rgba(255,255,255,0.075), rgba(255,255,255,0.02));
+            --r-sm: 10px; --r-md: 16px; --r-lg: 22px; --r-pill: 999px;
+            --ease: cubic-bezier(0.22, 1, 0.36, 1);
+            --font-d: 'Orbitron', sans-serif; --font-b: 'Rajdhani', sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-b); background: var(--bg-deep); color: #fff; overflow-x: hidden; }
+        #three-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+        .page-offset { padding-top: 190px; padding-bottom: 3rem; }
+        a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+        .oc-shell { max-width: 600px; margin: 0 auto; padding: 0 2.5rem; }
+
+        .oc-card { background: var(--card-grad); border: 1px solid var(--glass-border); border-radius: var(--r-lg); padding: 2.5rem; box-shadow: 0 25px 50px rgba(0,0,0,0.3); }
+        .oc-header { text-align: center; margin-bottom: 2rem; }
+        .oc-title { font-family: var(--font-d); font-size: 1.6rem; font-weight: 900; background: linear-gradient(135deg, #fff, var(--accent)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.4rem; }
+        .oc-sub { color: var(--muted); font-size: 0.95rem; line-height: 1.6; }
+
+        .oc-info { background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: var(--r-md); padding: 1.25rem; margin-bottom: 1.5rem; }
+        .oc-info h3 { font-family: var(--font-d); font-size: 0.75rem; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem; }
+        .oc-info p { color: var(--muted); margin-bottom: 0.2rem; font-size: 0.92rem; }
+        .oc-info strong { color: #fff; }
+
+        .oc-field { margin-bottom: 1.25rem; }
+        .oc-label { display: block; margin-bottom: 0.4rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--muted-2); }
+        .oc-input, .oc-textarea { width: 100%; padding: 0.75rem 0.9rem; border-radius: var(--r-md); border: 1px solid var(--glass-border-2); background: rgba(255,255,255,0.05); color: #fff; font-family: var(--font-b); font-size: 0.95rem; outline: none; transition: border-color 0.25s, box-shadow 0.25s; }
+        .oc-input:focus, .oc-textarea:focus { border-color: rgba(0,240,255,0.6); box-shadow: 0 0 18px rgba(0,240,255,0.12); }
+        .oc-input::placeholder, .oc-textarea::placeholder { color: var(--muted-2); }
+        .oc-textarea { min-height: 100px; resize: vertical; }
+
+        .oc-reasons { display: grid; gap: 0.6rem; margin-bottom: 1.25rem; }
+        .oc-reason { display: flex; align-items: center; gap: 0.75rem; padding: 0.8rem 1rem; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); border-radius: var(--r-md); cursor: pointer; transition: all 0.25s; }
+        .oc-reason:hover { background: rgba(0,240,255,0.04); border-color: rgba(0,240,255,0.2); }
+        .oc-reason.selected { background: rgba(0,240,255,0.08); border-color: var(--accent); }
+        .oc-reason input[type="radio"] { accent-color: var(--accent); }
+        .oc-reason label { flex: 1; color: rgba(255,255,255,0.9); cursor: pointer; font-size: 0.92rem; }
+
+        .oc-btn { width: 100%; padding: 0.85rem; border-radius: var(--r-md); font-family: var(--font-d); font-size: 0.68rem; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; cursor: pointer; transition: all 0.25s; border: 0; margin-bottom: 0.8rem; }
+        .oc-btn-cancel { background: linear-gradient(135deg, var(--accent-2), var(--danger)); color: #fff; }
+        .oc-btn-cancel:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(255,0,170,0.4); }
+        .oc-btn-cancel:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .oc-btn-keep { background: transparent; border: 2px solid var(--accent); color: var(--accent); }
+        .oc-btn-keep:hover { background: var(--accent); color: #000; }
+
+        .oc-msg { padding: 0.8rem 1rem; border-radius: var(--r-md); margin-bottom: 1.25rem; text-align: center; display: none; font-size: 0.92rem; }
+        .oc-msg.success { display: block; background: rgba(0,255,136,0.08); border: 1px solid var(--accent-3); color: var(--accent-3); }
+        .oc-msg.error { display: block; background: rgba(255,0,170,0.08); border: 1px solid var(--accent-2); color: var(--accent-2); }
+
+        @media (max-width: 600px) { .oc-shell { padding: 0 1rem; } .oc-card { padding: 1.5rem; } }
+        @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--accent), var(--accent-2)); border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <canvas id="three-canvas"></canvas>
+    <div id="header-container"></div>
+    <script src="components.js"></script>
+
+    <main class="page-offset">
+        <div class="oc-shell">
+            <div class="oc-card">
+                <div class="oc-header">
+                    <h1 class="oc-title">Cancel Order</h1>
+                    <p class="oc-sub">We're sorry to see you go. Please let us know why you're cancelling.</p>
+                </div>
+
+                <div class="oc-msg" id="successMessage">Order cancelled successfully. You will receive a confirmation email shortly.</div>
+                <div class="oc-msg" id="errorMessage">Unable to cancel order. Please contact customer support.</div>
+
+                <form id="cancelOrderForm">
+                    <div class="oc-info" id="orderInfo">
+                        <h3>Order Details</h3>
+                        <p><strong>Order Number:</strong> <span id="orderNumber">Loading...</span></p>
+                        <p><strong>Status:</strong> <span id="orderStatus">Loading...</span></p>
+                        <p><strong>Total:</strong> <span id="orderTotal">Loading...</span></p>
+                    </div>
+
+                    <div class="oc-field"><label class="oc-label">Order Number</label><input type="text" id="orderNumberInput" class="oc-input" placeholder="e.g., TRD-2024-001" required></div>
+                    <div class="oc-field"><label class="oc-label">Email Address</label><input type="email" id="email" class="oc-input" placeholder="you@example.com" required></div>
+
+                    <div class="oc-field">
+                        <label class="oc-label">Reason for Cancellation</label>
+                        <div class="oc-reasons">
+                            <div class="oc-reason"><input type="radio" id="reason1" name="reason" value="found-cheaper"><label for="reason1">Found the same product cheaper elsewhere</label></div>
+                            <div class="oc-reason"><input type="radio" id="reason2" name="reason" value="no-longer-needed"><label for="reason2">No longer need the item</label></div>
+                            <div class="oc-reason"><input type="radio" id="reason3" name="reason" value="shipping-delay"><label for="reason3">Shipping takes too long</label></div>
+                            <div class="oc-reason"><input type="radio" id="reason4" name="reason" value="wrong-item"><label for="reason4">Ordered wrong item by mistake</label></div>
+                            <div class="oc-reason"><input type="radio" id="reason5" name="reason" value="quality-concerns"><label for="reason5">Concerns about product quality</label></div>
+                            <div class="oc-reason"><input type="radio" id="reason6" name="reason" value="other"><label for="reason6">Other reason</label></div>
+                        </div>
+                    </div>
+
+                    <div class="oc-field"><label class="oc-label">Additional Comments (Optional)</label><textarea id="comments" class="oc-textarea" placeholder="Any additional details about your cancellation..."></textarea></div>
+
+                    <button type="submit" class="oc-btn oc-btn-cancel" id="cancelButton"><span id="buttonText">Cancel Order</span></button>
+                    <button type="button" class="oc-btn oc-btn-keep" onclick="window.location.href='account.html'">Keep My Order</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-container"></div>
+    <script>
+        var urlParams = new URLSearchParams(window.location.search);
+        var orderNumber = urlParams.get('order');
+        var emailParam = urlParams.get('email');
+        if (orderNumber) document.getElementById('orderNumberInput').value = orderNumber;
+        if (emailParam) document.getElementById('email').value = emailParam;
+
+        document.querySelectorAll('.oc-reason').forEach(function (option) {
+            option.addEventListener('click', function () {
+                document.querySelectorAll('.oc-reason').forEach(function (o) { o.classList.remove('selected'); });
+                this.classList.add('selected');
+                this.querySelector('input[type="radio"]').checked = true;
+            });
+        });
+
+        document.getElementById('cancelOrderForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var reason = document.querySelector('input[name="reason"]:checked');
+            var successMessage = document.getElementById('successMessage');
+            var errorMessage = document.getElementById('errorMessage');
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+            if (!reason) { errorMessage.textContent = 'Please select a reason for cancellation.'; errorMessage.style.display = 'block'; return; }
+            var btn = document.getElementById('cancelButton');
+            btn.disabled = true;
+            document.getElementById('buttonText').textContent = 'Cancelling...';
+            setTimeout(function () {
+                successMessage.style.display = 'block';
+                btn.disabled = false;
+                document.getElementById('buttonText').textContent = 'Cancel Order';
+            }, 1500);
+        });
+    </script>
+    <script>
+        function hidePreloader() { var p = document.getElementById('preloader'); if (p) p.classList.add('hidden'); }
+        if (document.readyState === 'complete') { setTimeout(hidePreloader, 600); } else { window.addEventListener('load', function () { setTimeout(hidePreloader, 600); }); }
+        setTimeout(hidePreloader, 1500);
+    </script>
+</body>
+</html>

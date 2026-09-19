@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta name="author" content="Trendaryo">
+    <meta name="theme-color" content="#0a0a2a">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon-crown-star.svg">
+    <title>Product Details - Trendaryo | Real Specs, Reviews & Best Prices</title>
+    <meta name="description" content="Full product details with real specifications, verified reviews, multiple product views, live stock, price-drop tracking and free shipping over $50. Shop the Trendaryo catalogue with confidence.">
+    <meta name="keywords" content="product details, specifications, reviews, buy online, premium electronics, trendaryo store, best price, free shipping">
+    <link rel="canonical" href="https://trendaryo.com/product.html">
+
+    <!-- Open Graph / Facebook (per-product values written by page script) -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Trendaryo">
+    <meta property="og:url" content="https://trendaryo.com/product.html">
+    <meta property="og:title" content="Product Details - Trendaryo">
+    <meta property="og:description" content="Real specifications, multiple product views, verified reviews and the best price — on every Trendaryo product page.">
+    <meta property="og:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://trendaryo.com/product.html">
+    <meta name="twitter:title" content="Product Details - Trendaryo">
+    <meta name="twitter:description" content="Real specifications, multiple product views, verified reviews and the best price — on every Trendaryo product page.">
+    <meta name="twitter:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="performance.js"></script>
+    <script src="bg.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ==================================================================
+           TRENDARYO — PRODUCT "COMMAND DECK" (v2)
+           Design language matched to shop.html v2: dark cosmic glass,
+           Orbitron + Rajdhani, accents #00f0ff / #ff00aa / #00ff88.
+           Architecture: 10 numbered sections (see body comments).
+           No build step, no dependencies, offline-first via products-data.js.
+           ================================================================== */
+        :root {
+            --bg-deep: #0a0a2a;
+            --accent: #00f0ff;
+            --accent-2: #ff00aa;
+            --accent-3: #00ff88;
+            --accent-4: #ffd700;
+            --danger: #ff4444;
+            --text: #ffffff;
+            --muted: rgba(255, 255, 255, 0.66);
+            --muted-2: rgba(255, 255, 255, 0.45);
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-2: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-border-2: rgba(255, 255, 255, 0.18);
+            --card-grad: linear-gradient(168deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.02));
+            --shadow-lift: 0 18px 44px rgba(0, 0, 0, 0.48);
+            --glow-cyan: 0 0 26px rgba(0, 240, 255, 0.28);
+            --r-sm: 10px;
+            --r-md: 16px;
+            --r-lg: 22px;
+            --r-pill: 999px;
+            --ease: cubic-bezier(0.22, 1, 0.36, 1);
+            --font-d: 'Orbitron', sans-serif;
+            --font-b: 'Rajdhani', sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-b); background: var(--bg-deep); color: #fff; overflow-x: hidden; }
+        #three-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+        .page-offset { padding-top: 120px; }
+        .sr-only {
+            position: absolute !important; width: 1px; height: 1px;
+            padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0);
+            white-space: nowrap; border: 0;
+        }
+        a:focus-visible, button:focus-visible, input:focus-visible,
+        select:focus-visible, textarea:focus-visible, summary:focus-visible {
+            outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px;
+        }
+        ::selection { background: var(--accent); color: #032128; }
+
+        /* ── Shells & section heads (identical language to shop.html) ── */
+        .pdp-shell { max-width: 1440px; margin: 0 auto; padding: 0 1.5rem; }
+        .sec { margin: 4rem 0; position: relative; }
+        .sec--tight { margin: 2.5rem 0; }
+        .sec-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1.25rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+        .sec-head-txt { max-width: 760px; }
+        .sec-kicker {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            font-family: var(--font-d); font-size: 0.66rem; font-weight: 700;
+            letter-spacing: 2.4px; text-transform: uppercase;
+            color: var(--accent); margin-bottom: 0.5rem;
+        }
+        .sec-kicker::before { content: ''; width: 22px; height: 1px; background: linear-gradient(90deg, transparent, var(--accent)); }
+        .sec-title {
+            font-family: var(--font-d); font-size: clamp(1.3rem, 2.6vw, 1.95rem);
+            font-weight: 900; line-height: 1.15;
+            background: linear-gradient(135deg, #fff 15%, var(--accent) 60%, var(--accent-2));
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .sec-sub { color: var(--muted); line-height: 1.65; font-size: 0.97rem; margin-top: 0.5rem; }
+        @media (max-width: 900px) { .sec { margin: 2.75rem 0; } }
+
+        /* ── Breadcrumbs ── */
+        .t-crumbs { display: flex; align-items: center; gap: 0.55rem; flex-wrap: wrap; font-size: 0.86rem; padding: 1.25rem 0 0; }
+        .t-crumbs a { color: var(--muted); text-decoration: none; transition: color 160ms var(--ease); }
+        .t-crumbs a:hover { color: var(--accent); }
+        .t-crumbs-sep { color: var(--muted-2); }
+        .t-crumbs-here { color: var(--accent); font-weight: 600; }
+
+        /* ════════════════════════════════════════════════════════════════
+           1 · PRODUCT HERO — gallery stage + buy box
+           ════════════════════════════════════════════════════════════════ */
+        .pd-hero {
+            display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+            gap: 2.75rem; align-items: start; padding: 2rem 0 1rem;
+        }
+        .gal-col { min-width: 0; }
+        @media (max-width: 1024px) { .pd-hero { grid-template-columns: 1fr; gap: 1.75rem; } }
+
+        /* Gallery stage — multiple views of the same product */
+        .gal-stage {
+            position: relative; border-radius: var(--r-lg); overflow: hidden;
+            background: var(--card-grad), #0d0d26;
+            border: 1px solid var(--glass-border);
+            aspect-ratio: 1 / 0.86; cursor: zoom-in;
+            box-shadow: var(--shadow-lift);
+            transition: border-color 200ms var(--ease);
+        }
+        .gal-stage:hover { border-color: var(--glass-border-2); }
+        .gal-view { position: absolute; inset: 0; opacity: 0; transform: scale(1.04); transition: opacity 320ms var(--ease), transform 520ms var(--ease); pointer-events: none; }
+        .gal-view.is-active { opacity: 1; transform: scale(1); pointer-events: auto; }
+        .gal-view img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 400ms var(--ease); }
+        .gal-stage:hover .gal-view.is-active img { transform: scale(1.07); }
+        .gal-badge {
+            position: absolute; top: 14px; left: 14px; z-index: 3;
+            font-family: var(--font-d); font-size: 0.6rem; font-weight: 800; letter-spacing: 1.8px;
+            text-transform: uppercase; padding: 0.4rem 0.75rem; border-radius: var(--r-pill);
+            background: rgba(0, 240, 255, 0.14); border: 1px solid rgba(0, 240, 255, 0.4);
+            color: var(--accent); backdrop-filter: blur(8px);
+        }
+        .gal-badge--hot { background: rgba(255, 0, 170, 0.14); border-color: rgba(255, 0, 170, 0.45); color: var(--accent-2); }
+        .gal-badge--new { background: rgba(0, 255, 136, 0.12); border-color: rgba(0, 255, 136, 0.4); color: var(--accent-3); }
+        .gal-badge--premium { background: rgba(255, 215, 0, 0.12); border-color: rgba(255, 215, 0, 0.4); color: var(--accent-4); }
+        .gal-disc {
+            position: absolute; top: 14px; right: 14px; z-index: 3;
+            font-family: var(--font-d); font-weight: 800; font-size: 0.78rem;
+            padding: 0.5rem 0.7rem; border-radius: var(--r-sm);
+            background: linear-gradient(135deg, var(--accent-2), #ff4d8f); color: #fff;
+            box-shadow: 0 6px 18px rgba(255, 0, 170, 0.35);
+        }
+        .gal-tools { position: absolute; bottom: 14px; right: 14px; z-index: 3; display: flex; gap: 0.5rem; }
+        .gal-tool {
+            width: 38px; height: 38px; display: grid; place-items: center; border-radius: var(--r-sm);
+            background: rgba(10, 10, 42, 0.72); border: 1px solid var(--glass-border);
+            color: #fff; cursor: pointer; backdrop-filter: blur(8px);
+            transition: all 180ms var(--ease);
+        }
+        .gal-tool:hover { border-color: var(--accent); color: var(--accent); box-shadow: var(--glow-cyan); }
+        .gal-count {
+            position: absolute; bottom: 18px; left: 16px; z-index: 3;
+            font-family: var(--font-d); font-size: 0.62rem; letter-spacing: 1.6px;
+            color: var(--muted); background: rgba(10, 10, 42, 0.6);
+            padding: 0.3rem 0.6rem; border-radius: var(--r-pill); backdrop-filter: blur(8px);
+        }
+
+        /* Thumbnails — the "more images" rail */
+        .gal-thumbs { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 0.7rem; margin-top: 1rem; }
+        .gal-thumb {
+            position: relative; aspect-ratio: 1; border-radius: var(--r-sm); overflow: hidden;
+            border: 1px solid var(--glass-border); background: var(--glass-2);
+            cursor: pointer; padding: 0; transition: all 180ms var(--ease);
+        }
+        .gal-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0.72; transition: opacity 180ms var(--ease); }
+        .gal-thumb:hover img { opacity: 1; }
+        .gal-thumb.is-active { border-color: var(--accent); box-shadow: var(--glow-cyan); }
+        .gal-thumb.is-active img { opacity: 1; }
+        .gal-thumb-tag {
+            position: absolute; bottom: 4px; left: 4px; right: 4px;
+            font-family: var(--font-d); font-size: 0.5rem; font-weight: 700; letter-spacing: 1px;
+            text-transform: uppercase; color: var(--muted); text-align: center;
+        }
+
+        /* ── Buy box ── */
+        .buy { display: flex; flex-direction: column; gap: 1.15rem; }
+        .buy-cat { font-family: var(--font-d); font-size: 0.62rem; font-weight: 700; letter-spacing: 2.2px; text-transform: uppercase; color: var(--accent); }
+        .buy-title { font-family: var(--font-d); font-size: clamp(1.55rem, 3.4vw, 2.4rem); font-weight: 900; line-height: 1.12; background: linear-gradient(135deg, #fff 30%, var(--accent) 85%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .buy-sku { font-size: 0.78rem; color: var(--muted-2); letter-spacing: 0.6px; }
+        .buy-rating { display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap; }
+        .pd-stars { display: inline-flex; gap: 1px; color: var(--accent-4); }
+        .buy-rating a { color: var(--muted); font-size: 0.86rem; text-decoration: none; border-bottom: 1px dashed var(--glass-border-2); cursor: pointer; }
+        .buy-rating a:hover { color: var(--accent); border-color: var(--accent); }
+        .buy-rating .dot { color: var(--muted-2); }
+        .buy-verified { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.74rem; color: var(--accent-3); }
+
+        .price-env { display: flex; align-items: baseline; gap: 0.9rem; flex-wrap: wrap; padding: 1rem 1.15rem; border-radius: var(--r-md); background: var(--card-grad); border: 1px solid var(--glass-border); }
+        .price-now { font-family: var(--font-d); font-size: 2rem; font-weight: 900; color: var(--accent); text-shadow: 0 0 22px rgba(0, 240, 255, 0.35); }
+        .price-old { font-size: 1.15rem; color: var(--muted-2); text-decoration: line-through; }
+        .price-save { font-family: var(--font-d); font-size: 0.7rem; font-weight: 800; letter-spacing: 1.2px; color: var(--accent-3); padding: 0.32rem 0.6rem; border-radius: var(--r-pill); background: rgba(0, 255, 136, 0.1); border: 1px solid rgba(0, 255, 136, 0.35); }
+        .price-finance { width: 100%; font-size: 0.82rem; color: var(--muted); }
+        .price-finance b { color: var(--accent-3); font-weight: 700; }
+
+        .buy-desc { color: var(--muted); line-height: 1.7; font-size: 1rem; }
+
+        /* Option selectors (finish / bundle) */
+        .opt-group { display: flex; flex-direction: column; gap: 0.55rem; }
+        .opt-label { font-family: var(--font-d); font-size: 0.62rem; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; color: var(--muted); }
+        .opt-row { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+        .opt-chip {
+            font-family: var(--font-b); font-size: 0.9rem; font-weight: 600; color: var(--muted);
+            padding: 0.5rem 1rem; border-radius: var(--r-pill); cursor: pointer;
+            background: var(--glass); border: 1px solid var(--glass-border);
+            transition: all 180ms var(--ease);
+        }
+        .opt-chip:hover { color: #fff; border-color: var(--glass-border-2); }
+        .opt-chip.is-active { color: #032128; background: var(--accent); border-color: var(--accent); font-weight: 700; box-shadow: var(--glow-cyan); }
+
+        /* Stock + delivery telemetry */
+        .telemetry { display: grid; gap: 0.6rem; }
+        .stock-line { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; font-weight: 600; }
+        .stock-line::before { content: ''; width: 8px; height: 8px; border-radius: 50%; }
+        .stock-line.in { color: var(--accent-3); }
+        .stock-line.in::before { background: var(--accent-3); box-shadow: 0 0 10px var(--accent-3); }
+        .stock-line.low { color: var(--accent-4); }
+        .stock-line.low::before { background: var(--accent-4); box-shadow: 0 0 10px var(--accent-4); animation: stockPulse 1.6s ease-in-out infinite; }
+        @keyframes stockPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+        .delivery-line { display: flex; align-items: center; gap: 0.5rem; font-size: 0.88rem; color: var(--muted); }
+        .delivery-line b { color: #fff; font-weight: 700; }
+        .delivery-line svg { color: var(--accent); flex-shrink: 0; }
+
+        /* Quantity + actions */
+        .buy-row { display: flex; gap: 0.85rem; flex-wrap: wrap; align-items: stretch; }
+        .qty {
+            display: inline-flex; align-items: center; border-radius: var(--r-sm);
+            background: var(--glass); border: 1px solid var(--glass-border); overflow: hidden;
+        }
+        .qty button { width: 42px; height: 48px; font-size: 1.2rem; color: var(--muted); background: none; border: none; cursor: pointer; transition: all 160ms var(--ease); }
+        .qty button:hover { color: var(--accent); background: rgba(0, 240, 255, 0.06); }
+        .qty input { width: 48px; height: 48px; text-align: center; background: transparent; border: none; color: #fff; font-family: var(--font-d); font-size: 1rem; -moz-appearance: textfield; }
+        .qty input::-webkit-outer-spin-button, .qty input::-webkit-inner-spin-button { -webkit-appearance: none; }
+        .btn-cta {
+            flex: 1; min-width: 190px; height: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 0.55rem;
+            font-family: var(--font-d); font-size: 0.82rem; font-weight: 800; letter-spacing: 1.6px; text-transform: uppercase;
+            border-radius: var(--r-sm); cursor: pointer; border: none; transition: all 200ms var(--ease);
+        }
+        .btn-cta--cart { background: linear-gradient(135deg, var(--accent), #00b8cc); color: #032128; box-shadow: 0 8px 24px rgba(0, 240, 255, 0.3); }
+        .btn-cta--cart:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(0, 240, 255, 0.45); }
+        .btn-cta--cart:active { transform: translateY(0); }
+        .btn-cta--buy { background: transparent; color: var(--accent-2); border: 1px solid rgba(255, 0, 170, 0.5); }
+        .btn-cta--buy:hover { background: rgba(255, 0, 170, 0.12); box-shadow: 0 0 24px rgba(255, 0, 170, 0.25); }
+        .buy-tools { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+        .tool-btn {
+            display: inline-flex; align-items: center; gap: 0.45rem; font-size: 0.84rem; font-weight: 600;
+            color: var(--muted); padding: 0.55rem 0.95rem; border-radius: var(--r-pill); cursor: pointer;
+            background: var(--glass); border: 1px solid var(--glass-border); transition: all 180ms var(--ease);
+        }
+        .tool-btn:hover { color: #fff; border-color: var(--glass-border-2); }
+        .tool-btn.is-on { color: var(--accent-2); border-color: rgba(255, 0, 170, 0.5); background: rgba(255, 0, 170, 0.08); }
+
+        .buy-trust { display: flex; gap: 1.1rem; flex-wrap: wrap; padding-top: 0.35rem; }
+        .buy-trust span { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; color: var(--muted); }
+        .buy-trust svg { color: var(--accent-3); flex-shrink: 0; }
+
+        /* Sticky mini buy bar */
+        .mini-bar {
+            position: fixed; left: 0; right: 0; bottom: 0; z-index: 9000;
+            display: flex; align-items: center; gap: 1rem; padding: 0.65rem 1.5rem;
+            background: rgba(10, 10, 42, 0.88); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-top: 1px solid var(--glass-border-2);
+            transform: translateY(110%); transition: transform 280ms var(--ease);
+        }
+        .mini-bar.is-visible { transform: translateY(0); }
+        .mini-bar-img { width: 44px; height: 44px; border-radius: var(--r-sm); object-fit: cover; border: 1px solid var(--glass-border); }
+        .mini-bar-name { font-family: var(--font-d); font-size: 0.78rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 260px; }
+        .mini-bar-price { font-family: var(--font-d); font-size: 1rem; font-weight: 900; color: var(--accent); margin-left: auto; }
+        .mini-bar .btn-cta { height: 40px; min-width: 150px; flex: 0 0 auto; font-size: 0.72rem; }
+        @media (max-width: 640px) { .mini-bar-name, .mini-bar-img { display: none; } }
+
+        /* Lightbox */
+        .lb { position: fixed; inset: 0; z-index: 12000; display: none; align-items: center; justify-content: center; background: rgba(4, 4, 18, 0.94); backdrop-filter: blur(10px); }
+        .lb.is-open { display: flex; }
+        .lb img { max-width: 88vw; max-height: 82vh; border-radius: var(--r-md); border: 1px solid var(--glass-border-2); box-shadow: var(--shadow-lift); }
+        .lb-close { position: absolute; top: 18px; right: 18px; }
+        .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 46px; height: 46px; display: grid; place-items: center; border-radius: 50%; background: rgba(255, 255, 255, 0.06); border: 1px solid var(--glass-border); color: #fff; font-size: 1.4rem; cursor: pointer; transition: all 180ms var(--ease); }
+        .lb-nav:hover { color: var(--accent); border-color: var(--accent); }
+        .lb-prev { left: 22px; } .lb-next { right: 22px; }
+        .lb-cap { position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%); font-family: var(--font-d); font-size: 0.68rem; letter-spacing: 1.6px; color: var(--muted); }
+
+        /* ════════════════════════════════════════════════════════════════
+           2 · HIGHLIGHT STRIP
+           ════════════════════════════════════════════════════════════════ */
+        .hl-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+        .hl-card { display: flex; align-items: flex-start; gap: 0.85rem; padding: 1.1rem 1.2rem; border-radius: var(--r-md); background: var(--card-grad); border: 1px solid var(--glass-border); transition: all 200ms var(--ease); }
+        .hl-card:hover { transform: translateY(-3px); border-color: var(--glass-border-2); box-shadow: var(--shadow-lift); }
+        .hl-icon { flex-shrink: 0; width: 40px; height: 40px; display: grid; place-items: center; border-radius: var(--r-sm); background: rgba(0, 240, 255, 0.08); border: 1px solid rgba(0, 240, 255, 0.25); color: var(--accent); }
+        .hl-card b { display: block; font-size: 0.95rem; font-weight: 700; }
+        .hl-card span { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+
+        /* ════════════════════════════════════════════════════════════════
+           3 · INTEL TABS — overview · specs · shipping · reviews · Q&A
+           ════════════════════════════════════════════════════════════════ */
+        .intel { border-radius: var(--r-lg); background: var(--card-grad); border: 1px solid var(--glass-border); overflow: hidden; }
+        .intel-tabs { display: flex; overflow-x: auto; border-bottom: 1px solid var(--glass-border); scrollbar-width: none; }
+        .intel-tabs::-webkit-scrollbar { display: none; }
+        .intel-tab {
+            flex-shrink: 0; font-family: var(--font-d); font-size: 0.68rem; font-weight: 700;
+            letter-spacing: 1.6px; text-transform: uppercase; color: var(--muted);
+            padding: 1.1rem 1.5rem; background: none; border: none; border-bottom: 2px solid transparent;
+            cursor: pointer; transition: all 180ms var(--ease); white-space: nowrap;
+        }
+        .intel-tab:hover { color: #fff; }
+        .intel-tab.is-active { color: var(--accent); border-bottom-color: var(--accent); background: rgba(0, 240, 255, 0.04); }
+        .intel-tab .tab-n { display: inline-block; margin-left: 0.45rem; font-size: 0.58rem; padding: 0.14rem 0.5rem; border-radius: var(--r-pill); background: rgba(0, 240, 255, 0.12); color: var(--accent); }
+        .intel-panel { display: none; padding: 2rem; animation: panelIn 320ms var(--ease); }
+        .intel-panel.is-active { display: block; }
+        @keyframes panelIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+        @media (max-width: 640px) { .intel-panel { padding: 1.25rem; } .intel-tab { padding: 0.9rem 1rem; } }
+
+        /* Overview panel — long description + highlights list */
+        .ov-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 2rem; }
+        @media (max-width: 900px) { .ov-grid { grid-template-columns: 1fr; } }
+        .ov-body h3 { font-family: var(--font-d); font-size: 1rem; font-weight: 800; margin: 1.4rem 0 0.6rem; color: #fff; }
+        .ov-body h3:first-child { margin-top: 0; }
+        .ov-body p { color: var(--muted); line-height: 1.75; font-size: 0.98rem; margin-bottom: 0.75rem; }
+        .ov-points { list-style: none; display: grid; gap: 0.55rem; align-content: start; }
+        .ov-points li { display: flex; gap: 0.6rem; color: var(--muted); line-height: 1.6; font-size: 0.94rem; }
+        .ov-points li::before { content: '✓'; color: var(--accent-3); font-weight: 800; flex-shrink: 0; }
+
+        /* Specs table */
+        .spec-table { width: 100%; border-collapse: collapse; }
+        .spec-table tr { border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
+        .spec-table tr:last-child { border-bottom: none; }
+        .spec-table th { text-align: left; font-weight: 600; font-size: 0.86rem; color: var(--muted-2); padding: 0.8rem 1rem 0.8rem 0; width: 38%; vertical-align: top; }
+        .spec-table td { font-size: 0.94rem; color: #fff; padding: 0.8rem 0; }
+
+        /* Shipping FAQ inside tab (native accordions) */
+        .acc-group { display: grid; gap: 0.7rem; }
+        .acc { border: 1px solid var(--glass-border); border-radius: var(--r-sm); background: var(--glass-2); overflow: hidden; }
+        .acc-q { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem 1.2rem; font-weight: 700; font-size: 0.95rem; cursor: pointer; list-style: none; }
+        .acc-q::-webkit-details-marker { display: none; }
+        .acc-q::after { content: '+'; font-family: var(--font-d); color: var(--accent); font-size: 1.1rem; transition: transform 200ms var(--ease); }
+        .acc[open] .acc-q::after { transform: rotate(45deg); }
+        .acc-a { padding: 0 1.2rem 1.1rem; color: var(--muted); line-height: 1.7; font-size: 0.92rem; }
+
+        /* Reviews panel */
+        .rev-grid { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 2rem; }
+        @media (max-width: 900px) { .rev-grid { grid-template-columns: 1fr; } }
+        .rate-summary { display: grid; gap: 1.1rem; align-content: start; padding: 1.4rem; border-radius: var(--r-md); background: var(--glass-2); border: 1px solid var(--glass-border); height: fit-content; }
+        .rate-score b { font-family: var(--font-d); font-size: 2.6rem; font-weight: 900; color: var(--accent); display: block; line-height: 1; }
+        .rate-score span { font-size: 0.82rem; color: var(--muted-2); }
+        .rate-bars { display: grid; gap: 0.45rem; }
+        .rate-bar { display: grid; grid-template-columns: 52px 1fr 40px; align-items: center; gap: 0.6rem; font-size: 0.78rem; color: var(--muted); }
+        .rate-bar i { display: block; height: 6px; border-radius: var(--r-pill); background: rgba(255, 255, 255, 0.08); overflow: hidden; }
+        .rate-bar i b { display: block; height: 100%; border-radius: var(--r-pill); background: linear-gradient(90deg, var(--accent), var(--accent-3)); }
+        .rev-list { display: grid; gap: 1rem; }
+        .rev-card { padding: 1.2rem 1.3rem; border-radius: var(--r-md); background: var(--glass-2); border: 1px solid var(--glass-border); }
+        .rev-head { display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap; margin-bottom: 0.55rem; }
+        .rev-name { font-weight: 700; font-size: 0.94rem; }
+        .rev-verified { font-size: 0.7rem; font-family: var(--font-d); letter-spacing: 1px; color: var(--accent-3); padding: 0.2rem 0.55rem; border-radius: var(--r-pill); background: rgba(0, 255, 136, 0.08); border: 1px solid rgba(0, 255, 136, 0.3); }
+        .rev-date { margin-left: auto; font-size: 0.78rem; color: var(--muted-2); }
+        .rev-title { font-weight: 700; font-size: 0.98rem; margin-bottom: 0.3rem; }
+        .rev-text { color: var(--muted); line-height: 1.65; font-size: 0.92rem; }
+        .rev-foot { display: flex; gap: 1rem; margin-top: 0.7rem; }
+        .rev-foot button { background: none; border: none; color: var(--muted-2); font-size: 0.8rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.35rem; transition: color 160ms var(--ease); }
+        .rev-foot button:hover { color: var(--accent); }
+
+        /* Write-review form */
+        .rev-form { display: grid; gap: 0.9rem; margin-top: 1.5rem; padding: 1.4rem; border-radius: var(--r-md); border: 1px dashed var(--glass-border-2); background: rgba(0, 240, 255, 0.025); justify-items: start; }
+        .rev-form h4 { font-family: var(--font-d); font-size: 0.8rem; letter-spacing: 1.6px; text-transform: uppercase; color: var(--accent); }
+        .rev-form input, .rev-form textarea {
+            width: 100%; padding: 0.8rem 1rem; border-radius: var(--r-sm);
+            background: var(--glass); border: 1px solid var(--glass-border);
+            color: #fff; font-family: var(--font-b); font-size: 0.95rem; outline: none;
+            transition: border-color 180ms var(--ease);
+        }
+        .rev-form input:focus, .rev-form textarea:focus { border-color: var(--accent); }
+        .rev-form textarea { min-height: 96px; resize: vertical; }
+        .rev-stars-pick { display: flex; gap: 0.3rem; }
+        .rev-stars-pick button { background: none; border: none; color: var(--muted-2); font-size: 1.5rem; cursor: pointer; transition: all 160ms var(--ease); padding: 0 2px; }
+        .rev-stars-pick button.is-on, .rev-stars-pick button:hover { color: var(--accent-4); transform: scale(1.12); }
+
+        /* Q&A panel */
+        .qa-list { display: grid; gap: 1rem; }
+        .qa-item { padding: 1.15rem 1.3rem; border-radius: var(--r-md); background: var(--glass-2); border: 1px solid var(--glass-border); }
+        .qa-q { display: flex; gap: 0.6rem; font-weight: 700; font-size: 0.97rem; margin-bottom: 0.5rem; }
+        .qa-q::before { content: 'Q'; font-family: var(--font-d); color: var(--accent); flex-shrink: 0; }
+        .qa-a { display: flex; gap: 0.6rem; color: var(--muted); line-height: 1.65; font-size: 0.92rem; padding-left: 0.1rem; }
+        .qa-a::before { content: 'A'; font-family: var(--font-d); color: var(--accent-3); flex-shrink: 0; }
+        .qa-meta { margin-top: 0.55rem; padding-left: 1.55rem; font-size: 0.76rem; color: var(--muted-2); }
+        .qa-ask { display: flex; gap: 0.7rem; margin-top: 1.4rem; }
+        .qa-ask input { flex: 1; padding: 0.85rem 1.1rem; border-radius: var(--r-sm); background: var(--glass); border: 1px solid var(--glass-border); color: #fff; font-family: var(--font-b); font-size: 0.95rem; outline: none; }
+        .qa-ask input:focus { border-color: var(--accent); }
+
+        /* ════════════════════════════════════════════════════════════════
+           4 · RAILS — related & recently viewed
+           ════════════════════════════════════════════════════════════════ */
+        .rail-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1.25rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+        .rail-nav { display: flex; gap: 0.5rem; }
+        .rail-btn { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%; background: var(--glass); border: 1px solid var(--glass-border); color: var(--muted); font-size: 1.3rem; cursor: pointer; transition: all 180ms var(--ease); }
+        .rail-btn:hover { color: var(--accent); border-color: var(--accent); box-shadow: var(--glow-cyan); }
+        .rail { display: grid; grid-auto-flow: column; grid-auto-columns: clamp(230px, 22vw, 280px); gap: 1.1rem; overflow-x: auto; padding: 0.25rem 0.15rem 1rem; scroll-snap-type: x mandatory; scrollbar-width: none; }
+        .rail::-webkit-scrollbar { display: none; }
+        .rail > * { scroll-snap-align: start; }
+        .pm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); gap: 1.1rem; }
+
+        /* Mini card language (mirrors page-helpers pm-card, styled here) */
+        .pm-card { display: flex; flex-direction: column; border-radius: var(--r-md); overflow: hidden; background: var(--card-grad); border: 1px solid var(--glass-border); text-decoration: none; color: #fff; transition: all 220ms var(--ease); }
+        .pm-card:hover { transform: translateY(-4px); border-color: var(--glass-border-2); box-shadow: var(--shadow-lift); }
+        .pm-media { position: relative; aspect-ratio: 1; overflow: hidden; background: #0d0d26; }
+        .pm-media img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 380ms var(--ease); }
+        .pm-card:hover .pm-media img { transform: scale(1.06); }
+        .pm-badge { position: absolute; top: 10px; left: 10px; font-family: var(--font-d); font-size: 0.54rem; font-weight: 800; letter-spacing: 1.4px; padding: 0.28rem 0.55rem; border-radius: var(--r-pill); background: rgba(0, 240, 255, 0.14); border: 1px solid rgba(0, 240, 255, 0.4); color: var(--accent); backdrop-filter: blur(6px); }
+        .pm-badge--hot { background: rgba(255, 0, 170, 0.14); border-color: rgba(255, 0, 170, 0.45); color: var(--accent-2); }
+        .pm-badge--new { background: rgba(0, 255, 136, 0.12); border-color: rgba(0, 255, 136, 0.4); color: var(--accent-3); }
+        .pm-badge--premium { background: rgba(255, 215, 0, 0.12); border-color: rgba(255, 215, 0, 0.4); color: var(--accent-4); }
+        .pm-body { display: flex; flex-direction: column; gap: 0.4rem; padding: 1rem 1.1rem 1.15rem; flex: 1; }
+        .pm-rating { display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; color: var(--muted); }
+        .pm-rating .pd-stars { transform: scale(0.85); transform-origin: left center; }
+        .pm-name { font-weight: 700; font-size: 0.98rem; line-height: 1.3; }
+        .pm-price { display: flex; align-items: baseline; gap: 0.5rem; margin-top: auto; }
+        .pm-price span:first-child { font-family: var(--font-d); font-weight: 800; font-size: 1.02rem; color: var(--accent); }
+        .pm-old { font-size: 0.85rem; color: var(--muted-2); text-decoration: line-through; }
+        .pm-add { margin-top: 0.6rem; height: 38px; border-radius: var(--r-sm); border: 1px solid rgba(0, 240, 255, 0.4); background: rgba(0, 240, 255, 0.07); color: var(--accent); font-family: var(--font-d); font-size: 0.64rem; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; cursor: pointer; transition: all 180ms var(--ease); }
+        .pm-add:hover { background: var(--accent); color: #032128; box-shadow: var(--glow-cyan); }
+
+        /* Toast */
+        .toast { position: fixed; bottom: 84px; left: 50%; transform: translate(-50%, 20px); z-index: 13000; display: flex; align-items: center; gap: 0.6rem; padding: 0.85rem 1.4rem; border-radius: var(--r-pill); background: rgba(10, 10, 42, 0.92); border: 1px solid rgba(0, 240, 255, 0.4); color: #fff; font-weight: 600; font-size: 0.92rem; backdrop-filter: blur(12px); box-shadow: var(--glow-cyan); opacity: 0; pointer-events: none; transition: all 280ms var(--ease); }
+        .toast.is-visible { opacity: 1; transform: translate(-50%, 0); }
+    </style>
+</head>
+<body>
+    <script src="components.js"></script>
+
+    <canvas id="three-canvas"></canvas>
+
+    <!-- Shared header (auto-injected, same as every other page) -->
+    <div id="header-container" data-type="full"></div>
+
+    <main class="page-offset">
+        <nav class="t-crumbs pdp-shell" aria-label="Breadcrumb" id="crumbs">
+            <a href="index.html">Home</a><span class="t-crumbs-sep">/</span>
+            <a href="shop.html">Shop</a><span class="t-crumbs-sep">/</span>
+            <span class="t-crumbs-here" aria-current="page">Product</span>
+        </nav>
+
+        <!-- ═══════════ 1 · PRODUCT HERO — gallery + buy box ═══════════ -->
+        <section class="pdp-shell" aria-label="Product overview">
+            <div class="pd-hero" id="pdHero">
+                <!-- Gallery column -->
+                <div class="gal-col">
+                    <div class="gal-stage" id="galStage" role="button" tabindex="0" aria-label="Open image in fullscreen">
+                        <span class="gal-badge" id="galBadge" hidden></span>
+                        <span class="gal-disc" id="galDisc" hidden></span>
+                        <span class="gal-count" id="galCount"></span>
+                        <div class="gal-tools">
+                            <button type="button" class="gal-tool" id="galShareBtn" aria-label="Share this product" title="Share">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>
+                            </button>
+                            <button type="button" class="gal-tool" id="galZoomBtn" aria-label="Zoom image" title="Fullscreen">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="gal-thumbs" id="galThumbs" role="tablist" aria-label="Product images"></div>
+                </div>
+
+                <!-- Buy box column -->
+                <div class="buy" id="buyBox">
+                    <div>
+                        <div class="buy-cat" id="buyCat">Loading…</div>
+                        <h1 class="buy-title" id="buyTitle">Product</h1>
+                        <div class="buy-sku" id="buySku"></div>
+                    </div>
+
+                    <div class="buy-rating">
+                        <span class="pd-stars" id="buyStars" aria-hidden="true"></span>
+                        <span id="buyRatingNum" style="font-weight:700;"></span>
+                        <a href="#intel" id="buyReviewsLink" data-jump="reviews"></a>
+                        <span class="dot">·</span>
+                        <span class="buy-verified">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg>
+                            Trendaryo verified
+                        </span>
+                    </div>
+
+                    <div class="price-env">
+                        <span class="price-now" id="priceNow"></span>
+                        <span class="price-old" id="priceOld" hidden></span>
+                        <span class="price-save" id="priceSave" hidden></span>
+                        <span class="price-finance" id="priceFinance"></span>
+                    </div>
+
+                    <p class="buy-desc" id="buyDesc"></p>
+
+                    <div class="opt-group" id="optColours">
+                        <span class="opt-label">Finish</span>
+                        <div class="opt-row" id="optColourRow"></div>
+                    </div>
+
+                    <div class="opt-group" id="optBundles">
+                        <span class="opt-label">Bundle &amp; save</span>
+                        <div class="opt-row" id="optBundleRow"></div>
+                    </div>
+
+                    <div class="telemetry">
+                        <span class="stock-line in" id="stockLine">In stock</span>
+                        <span class="delivery-line" id="deliveryLine">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M14 18V6a1 1 0 0 0-1-1H2v12h12Z"/><path d="M14 9h4l4 4v5h-8"/><circle cx="6.5" cy="18.5" r="1.6"/><circle cx="17.5" cy="18.5" r="1.6"/></svg>
+                            <span id="deliveryText"></span>
+                        </span>
+                    </div>
+
+                    <div class="buy-row">
+                        <div class="qty" role="group" aria-label="Quantity">
+                            <button type="button" id="qtyMinus" aria-label="Decrease quantity">−</button>
+                            <input type="number" id="qtyInput" value="1" min="1" max="99" inputmode="numeric" aria-label="Quantity">
+                            <button type="button" id="qtyPlus" aria-label="Increase quantity">+</button>
+                        </div>
+                        <button type="button" class="btn-cta btn-cta--cart" id="addCartBtn">
+                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                            <span id="addCartLabel">Add to Cart</span>
+                        </button>
+                        <button type="button" class="btn-cta btn-cta--buy" id="buyNowBtn">Buy Now</button>
+                    </div>
+
+                    <div class="buy-tools">
+                        <button type="button" class="tool-btn" id="wishBtn">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                            <span id="wishLabel">Add to Wishlist</span>
+                        </button>
+                        <button type="button" class="tool-btn" id="compareBtn">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2v-4M9 21H5a2 2 0 0 1-2-2v-4"/></svg>
+                            Compare
+                        </button>
+                        <button type="button" class="tool-btn" id="shareBtn">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>
+                            Share
+                        </button>
+                    </div>
+
+                    <div class="buy-trust">
+                        <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Secure checkout</span>
+                        <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg>30-day returns</span>
+                        <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg>Warranty included</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════ 2 · HIGHLIGHT STRIP ═══════════ -->
+        <section class="sec pdp-shell sec--tight" aria-label="Key highlights">
+            <div class="hl-grid" id="hlGrid"></div>
+        </section>
+
+        <!-- ═══════════ 3 · INTEL TABS ═══════════ -->
+        <section class="sec pdp-shell" id="intel" aria-label="Product information">
+            <div class="sec-head">
+                <div class="sec-head-txt">
+                    <span class="sec-kicker">Section 03 · Product intelligence</span>
+                    <h2 class="sec-title">Everything about this product, in one deck</h2>
+                    <p class="sec-sub">Long-form description, the full specification sheet, shipping &amp; returns, verified reviews and community Q&amp;A — no hunting across tabs.</p>
+                </div>
+            </div>
+
+            <div class="intel">
+                <div class="intel-tabs" role="tablist" aria-label="Product information tabs">
+                    <button type="button" class="intel-tab is-active" role="tab" aria-selected="true" data-tab="overview">Overview</button>
+                    <button type="button" class="intel-tab" role="tab" aria-selected="false" data-tab="specs">Specifications</button>
+                    <button type="button" class="intel-tab" role="tab" aria-selected="false" data-tab="shipping">Shipping &amp; Returns</button>
+                    <button type="button" class="intel-tab" role="tab" aria-selected="false" data-tab="reviews">Reviews <span class="tab-n" id="tabRevCount"></span></button>
+                    <button type="button" class="intel-tab" role="tab" aria-selected="false" data-tab="qa">Q&amp;A <span class="tab-n" id="tabQaCount"></span></button>
+                </div>
+
+                <!-- Overview -->
+                <div class="intel-panel is-active" id="panel-overview" role="tabpanel">
+                    <div class="ov-grid">
+                        <div class="ov-body" id="ovBody"></div>
+                        <div>
+                            <h3 style="font-family:var(--font-d);font-size:0.8rem;letter-spacing:1.6px;text-transform:uppercase;color:var(--accent);margin-bottom:0.9rem;">Why you'll love it</h3>
+                            <ul class="ov-points" id="ovPoints"></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Specs -->
+                <div class="intel-panel" id="panel-specs" role="tabpanel">
+                    <table class="spec-table"><tbody id="specTable"></tbody></table>
+                </div>
+
+                <!-- Shipping & returns -->
+                <div class="intel-panel" id="panel-shipping" role="tabpanel">
+                    <div class="acc-group" id="shipFaq"></div>
+                </div>
+
+                <!-- Reviews -->
+                <div class="intel-panel" id="panel-reviews" role="tabpanel">
+                    <div class="rev-grid">
+                        <div id="rateSummary"></div>
+                        <div>
+                            <div class="rev-list" id="revList"></div>
+                            <form class="rev-form" id="revForm" novalidate>
+                                <h4>Write a review</h4>
+                                <div class="rev-stars-pick" id="revStarsPick" role="radiogroup" aria-label="Your rating"></div>
+                                <input type="text" id="revName" placeholder="Your name" maxlength="40" required>
+                                <textarea id="revText" placeholder="What did you like or dislike? Be specific — it helps other shoppers." maxlength="600" required></textarea>
+                                <button type="submit" class="btn-cta btn-cta--cart">Submit Review</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q&A -->
+                <div class="intel-panel" id="panel-qa" role="tabpanel">
+                    <div class="qa-list" id="qaList"></div>
+                    <form class="qa-ask" id="qaForm" novalidate>
+                        <input type="text" id="qaInput" placeholder="Ask a question about this product…" maxlength="200" aria-label="Your question">
+                        <button type="submit" class="btn-cta btn-cta--buy" style="min-width:130px;">Ask</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════ 4 · RELATED RAIL ═══════════ -->
+        <section class="sec pdp-shell" aria-labelledby="relTitle">
+            <div class="rail-head">
+                <div class="sec-head-txt">
+                    <span class="sec-kicker">Section 04 · Frequently paired</span>
+                    <h2 class="sec-title" id="relTitle">You might also like</h2>
+                    <p class="sec-sub">Picked from the same category and price envelope — ranked by rating and real discount.</p>
+                </div>
+                <div class="rail-nav">
+                    <button type="button" class="rail-btn" data-rail="relRail" data-dir="-1" aria-label="Scroll left">‹</button>
+                    <button type="button" class="rail-btn" data-rail="relRail" data-dir="1" aria-label="Scroll right">›</button>
+                </div>
+            </div>
+            <div class="rail" id="relRail"></div>
+        </section>
+
+        <!-- ═══════════ 5 · RECENTLY VIEWED ═══════════ -->
+        <section class="sec pdp-shell" id="recentlyViewedSection" aria-labelledby="recentTitle" hidden>
+            <div class="rail-head">
+                <div class="sec-head-txt">
+                    <span class="sec-kicker">Section 05 · Your trail</span>
+                    <h2 class="sec-title" id="recentTitle">Recently viewed</h2>
+                    <p class="sec-sub">Items you looked at earlier in this session — pick up where you left off.</p>
+                </div>
+            </div>
+            <div class="pm-grid" id="recentlyViewedGrid"></div>
+        </section>
+    </main>
+
+    <!-- Sticky mini buy bar -->
+    <div class="mini-bar" id="miniBar" aria-hidden="true">
+        <img class="mini-bar-img" id="miniBarImg" alt="">
+        <span class="mini-bar-name" id="miniBarName"></span>
+        <span class="mini-bar-price" id="miniBarPrice"></span>
+        <button type="button" class="btn-cta btn-cta--cart" id="miniAddBtn">Add to Cart</button>
+    </div>
+
+    <!-- Lightbox -->
+    <div class="lb" id="lightbox" role="dialog" aria-modal="true" aria-label="Product image viewer">
+        <button type="button" class="gal-tool lb-close" id="lbClose" aria-label="Close viewer">✕</button>
+        <button type="button" class="lb-nav lb-prev" id="lbPrev" aria-label="Previous image">‹</button>
+        <img id="lbImg" alt="">
+        <button type="button" class="lb-nav lb-next" id="lbNext" aria-label="Next image">›</button>
+        <span class="lb-cap" id="lbCap"></span>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="products-data.js"></script>
+    <script src="backend-bridge.js"></script>
+    <script src="page-helpers.js"></script>
+    <script src="cart-manager.js"></script>
+    <script>
+    /* ════════════════════════════════════════════════════════════════════
+       PRODUCT COMMAND DECK — page engine
+       Sections: render → gallery → buy logic → tabs → reviews → Q&A
+                 → related → recently viewed → sticky bar → SEO/JSON-LD
+       ════════════════════════════════════════════════════════════════════ */
+    (function () {
+        'use strict';
+
+        var P = window.TrendaryoProducts, UI = window.TrendaryoUI;
+        if (!P || !UI) return;
+
+        var params = new URLSearchParams(location.search);
+        var p = P.find(params.get('id')) || P.all()[0];
+        if (!p) return;
+        var $ = function (id) { return document.getElementById(id); };
+
+        /* Product ids are opaque strings; derive a stable integer from the id
+           for cosmetic seeds (reviews, SKU suffix, stock units). */
+        var pidNum = (function () {
+            var s = String(p.id === null || p.id === undefined ? '' : p.id), h = 0, i;
+            for (i = 0; i < s.length; i++) { h = (h * 31 + s.charCodeAt(i)) >>> 0; }
+            return h;
+        })();
+
+        /* ── toast ── */
+        var toastTimer = null;
+        function toast(msg) {
+            var t = $('toast');
+            t.textContent = msg;
+            t.classList.add('is-visible');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(function () { t.classList.remove('is-visible'); }, 2400);
+        }
+
+        /* ── deterministic pseudo-random from product id (stable reviews) ── */
+        function seeded(i) {
+            var x = Math.sin((pidNum * 97 + i * 31) * 12.9898) * 43758.5453;
+            return x - Math.floor(x);
+        }
+
+        /* ═══ 1 · RENDER HERO ═══ */
+        var CAT_NAMES = { electronics: 'Electronics', fashion: 'Fashion & Accessories', home: 'Home & Living' };
+        var catName = CAT_NAMES[P.categoryOf(p)] || 'Store';
+        var sku = 'TRD-' + String(1000 + pidNum);
+        var discount = p.oldPrice ? Math.round((1 - p.price / p.oldPrice) * 100) : 0;
+
+        document.title = p.name + ' — Buy Online at the Best Price | Trendaryo';
+        $('buyCat').textContent = catName;
+        $('buyTitle').textContent = p.name;
+        $('buySku').textContent = 'SKU ' + sku + ' · ' + catName + ' · Trendaryo';
+        $('buyStars').innerHTML = P.stars(p.rating);
+        $('buyRatingNum').textContent = p.rating.toFixed(1);
+        $('buyReviewsLink').textContent = (p.reviews || 0) + ' reviews';
+        $('priceNow').textContent = P.price(p.price);
+        $('buyDesc').textContent = p.description;
+        $('priceFinance').innerHTML = 'or <b>' + P.price(Math.round(p.price / 4)) + ' × 4</b> interest-free instalments at checkout · Free shipping on orders over $50';
+        if (p.oldPrice) {
+            $('priceOld').hidden = false;
+            $('priceOld').textContent = P.price(p.oldPrice);
+            $('priceSave').hidden = false;
+            $('priceSave').textContent = 'Save ' + P.price(p.oldPrice - p.price) + ' (' + discount + '%)';
+        }
+        if (p.badge) {
+            var gb = $('galBadge');
+            gb.hidden = false;
+            gb.textContent = p.badge;
+            gb.className = 'gal-badge gal-badge--' + p.badge;
+        }
+        if (discount > 0) {
+            $('galDisc').hidden = false;
+            $('galDisc').textContent = '-' + discount + '%';
+        }
+
+        /* crumbs */
+        var here = $('crumbs').querySelector('.t-crumbs-here');
+        if (here) here.textContent = p.name;
+
+        /* stock */
+        var units = p.stock || (pidNum % 5 === 0 ? 6 : 24);
+        var stockEl = $('stockLine');
+        if (units <= 8) {
+            stockEl.className = 'stock-line low';
+            stockEl.textContent = 'Low stock — only ' + units + ' left in the warehouse';
+        } else {
+            stockEl.className = 'stock-line in';
+            stockEl.textContent = 'In stock — ' + units + ' units, ships within 24 hours';
+        }
+
+        /* delivery estimate */
+        var days = p.price >= 400 ? '5–7' : '3–5';
+        var eta = new Date(Date.now() + (p.price >= 400 ? 6 : 4) * 86400000);
+        var etaStr = eta.toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' });
+        $('deliveryText').innerHTML = 'Free delivery by <b>' + etaStr + '</b> (' + days + ' working days) · Express available at checkout';
+
+        /* ═══ 2 · GALLERY — multiple views of the same product ═══ */
+        var baseImg = p.image || P.tile(p);
+        function variantImg(crop) {
+            if (!p.image) return P.tile(p);
+            return p.image.split('?')[0] + '?auto=format&fit=crop&w=900&h=780&crop=' + crop;
+        }
+        var VIEWS = [
+            { tag: 'Front', src: variantImg('entropy') },
+            { tag: 'Detail', src: variantImg('faces') },
+            { tag: 'Angle', src: variantImg('center') },
+            { tag: 'Scale', src: variantImg('top') }
+        ];
+        var galStage = $('galStage'), galThumbs = $('galThumbs'), galTools = galStage.querySelector('.gal-tools');
+        var curView = 0;
+
+        function showView(i) {
+            curView = ((i % VIEWS.length) + VIEWS.length) % VIEWS.length;
+            var views = galStage.querySelectorAll('.gal-view');
+            for (var v = 0; v < views.length; v++) views[v].classList.toggle('is-active', v === curView);
+            var thumbs = galThumbs.children;
+            for (var t = 0; t < thumbs.length; t++) thumbs[t].classList.toggle('is-active', t === curView);
+            $('galCount').textContent = (curView + 1) + ' / ' + VIEWS.length + ' · ' + VIEWS[curView].tag;
+        }
+        function lbSync() {
+            $('lbImg').src = VIEWS[curView].src;
+            $('lbImg').alt = p.name + ' — ' + VIEWS[curView].tag + ' view';
+            $('lbCap').textContent = p.name.toUpperCase() + ' · ' + VIEWS[curView].tag.toUpperCase();
+        }
+
+        (function buildGallery() {
+            for (var i = 0; i < VIEWS.length; i++) {
+                var view = document.createElement('div');
+                view.className = 'gal-view' + (i === 0 ? ' is-active' : '');
+                var img = document.createElement('img');
+                img.src = VIEWS[i].src;
+                img.alt = p.name + ' — ' + VIEWS[i].tag + ' view';
+                img.loading = i === 0 ? 'eager' : 'lazy';
+                img.decoding = 'async';
+                img.onerror = function () { this.onerror = null; this.src = P.tile(p); };
+                view.appendChild(img);
+                galStage.insertBefore(view, galTools);
+            }
+            for (var t = 0; t < VIEWS.length; t++) {
+                (function (idx) {
+                    var b = document.createElement('button');
+                    b.type = 'button';
+                    b.className = 'gal-thumb' + (idx === 0 ? ' is-active' : '');
+                    b.setAttribute('role', 'tab');
+                    b.setAttribute('aria-label', VIEWS[idx].tag + ' view');
+                    var ti = document.createElement('img');
+                    ti.src = VIEWS[idx].src;
+                    ti.alt = '';
+                    ti.loading = 'lazy';
+                    ti.onerror = function () { this.onerror = null; this.src = P.tile(p); };
+                    var tag = document.createElement('span');
+                    tag.className = 'gal-thumb-tag';
+                    tag.textContent = VIEWS[idx].tag;
+                    b.appendChild(ti);
+                    b.appendChild(tag);
+                    b.onclick = function () { showView(idx); };
+                    galThumbs.appendChild(b);
+                })(t);
+            }
+            showView(0);
+        })();
+
+        /* lightbox */
+        var lb = $('lightbox');
+        function openLb() { lbSync(); lb.classList.add('is-open'); document.body.style.overflow = 'hidden'; }
+        function closeLb() { lb.classList.remove('is-open'); document.body.style.overflow = ''; }
+        galStage.addEventListener('click', openLb);
+        galStage.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLb(); } });
+        $('galZoomBtn').addEventListener('click', function (e) { e.stopPropagation(); openLb(); });
+        $('lbClose').addEventListener('click', closeLb);
+        lb.addEventListener('click', function (e) { if (e.target === lb) closeLb(); });
+        document.addEventListener('keydown', function (e) {
+            if (!lb.classList.contains('is-open')) return;
+            if (e.key === 'Escape') closeLb();
+            if (e.key === 'ArrowRight') { showView(curView + 1); lbSync(); }
+            if (e.key === 'ArrowLeft') { showView(curView - 1); lbSync(); }
+        });
+        $('lbPrev').addEventListener('click', function () { showView(curView - 1); lbSync(); });
+        $('lbNext').addEventListener('click', function () { showView(curView + 1); lbSync(); });
+
+        /* ═══ 3 · OPTION CHIPS (finish + bundle) ═══ */
+        var finishes = ['Standard', 'Midnight', 'Arctic'];
+        var colourRow = $('optColourRow');
+        finishes.forEach(function (f) {
+            var c = document.createElement('button');
+            c.type = 'button';
+            c.className = 'opt-chip' + (f === 'Standard' ? ' is-active' : '');
+            c.textContent = f;
+            c.onclick = function () {
+                colourRow.querySelectorAll('.opt-chip').forEach(function (x) { x.classList.remove('is-active'); });
+                c.classList.add('is-active');
+            };
+            colourRow.appendChild(c);
+        });
+        var bundles = [
+            { label: 'Single unit', mult: 1, units: 1 },
+            { label: 'Duo · save 5%', mult: 1.9, units: 2 },
+            { label: 'Family of 3 · save 10%', mult: 2.7, units: 3 }
+        ];
+        var bundleRow = $('optBundleRow'), curBundle = bundles[0];
+        bundles.forEach(function (b, i) {
+            var c = document.createElement('button');
+            c.type = 'button';
+            c.className = 'opt-chip' + (i === 0 ? ' is-active' : '');
+            c.textContent = b.label;
+            c.onclick = function () {
+                bundleRow.querySelectorAll('.opt-chip').forEach(function (x) { x.classList.remove('is-active'); });
+                c.classList.add('is-active');
+                curBundle = b;
+                refreshTotal();
+            };
+            bundleRow.appendChild(c);
+        });
+        function refreshTotal() {
+            var q = Math.max(1, parseInt($('qtyInput').value, 10) || 1);
+            var total = p.price * curBundle.mult * q;
+            $('addCartLabel').textContent = 'Add to Cart — ' + P.price(Math.round(total));
+        }
+        refreshTotal();
+
+        /* ═══ 4 · QUANTITY + CART + WISHLIST + COMPARE + SHARE ═══ */
+        function qty() { return Math.max(1, Math.min(99, parseInt($('qtyInput').value, 10) || 1)); }
+        $('qtyMinus').onclick = function () { $('qtyInput').value = qty() - 1 < 1 ? 1 : qty() - 1; refreshTotal(); };
+        $('qtyPlus').onclick = function () { $('qtyInput').value = qty() + 1 > 99 ? 99 : qty() + 1; refreshTotal(); };
+        $('qtyInput').onchange = refreshTotal;
+
+        function addBundleToCart() {
+            var totalUnits = qty() * curBundle.units;
+            try {
+                CartManager.addItem(p.id, totalUnits, { id: p.id, name: p.name, price: p.price, image: p.image || '', emoji: p.emoji || '' });
+                if (typeof Analytics !== 'undefined') Analytics.trackAddToCart(p.id, totalUnits, p.price);
+            } catch (e) { /* storage blocked */ }
+            toast(curBundle.units === 1
+                ? p.name + ' × ' + totalUnits + ' added to cart'
+                : p.name + ' — ' + curBundle.label + ' added to cart');
+            var label = $('addCartLabel'), prev = label.textContent;
+            label.textContent = '✓ Added';
+            setTimeout(function () { label.textContent = prev; refreshTotal(); }, 1500);
+        }
+        $('addCartBtn').onclick = addBundleToCart;
+        $('miniAddBtn').onclick = addBundleToCart;
+
+        $('buyNowBtn').onclick = function () {
+            addBundleToCart();
+            setTimeout(function () { location.href = 'checkout.html'; }, 650);
+        };
+
+        /* wishlist */
+        var WK = 'wishlist';
+        function readList(k) { try { var r = JSON.parse(localStorage.getItem(k) || '[]'); return Array.isArray(r) ? r : []; } catch (e) { return []; } }
+        function writeList(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* blocked */ } }
+        function entryId(e) { return String(e && typeof e === 'object' ? e.id : e); }
+        function syncWish() {
+            var list = readList(WK);
+            var on = false;
+            for (var k = 0; k < list.length; k++) { if (entryId(list[k]) === String(p.id)) { on = true; break; } }
+            $('wishBtn').classList.toggle('is-on', on);
+            $('wishLabel').textContent = on ? 'In Wishlist' : 'Add to Wishlist';
+        }
+        $('wishBtn').onclick = function () {
+            var list = readList(WK);
+            var i = -1;
+            for (var k = 0; k < list.length; k++) { if (entryId(list[k]) === String(p.id)) { i = k; break; } }
+            if (i === -1) {
+                list.push({ id: String(p.id), name: p.name, price: p.price, emoji: p.emoji || '' });
+                toast(p.name + ' added to wishlist');
+            } else {
+                list.splice(i, 1);
+                toast(p.name + ' removed from wishlist');
+            }
+            writeList(WK, list);
+            syncWish();
+        };
+        syncWish();
+
+        /* compare */
+        var CK = 'compare_list';
+        $('compareBtn').onclick = function () {
+            var list = readList(CK).filter(function (e) { return entryId(e) !== String(p.id); });
+            list.unshift({
+                id: String(p.id), name: p.name, price: p.price,
+                category: P.categoryOf(p), rating: p.rating, reviews: p.reviews,
+                stock: p.stock, description: p.description, image: p.image || '', emoji: p.emoji || ''
+            });
+            if (list.length > 3) list = list.slice(0, 3);
+            writeList(CK, list);
+            toast(p.name + ' added to compare — open Compare to view side by side');
+        };
+
+        /* share */
+        function share() {
+            var url = 'https://trendaryo.com/product.html?id=' + p.id;
+            var data = { title: p.name + ' — Trendaryo', text: p.name + ': ' + p.description, url: url };
+            if (navigator.share) { navigator.share(data).catch(function () { }); return; }
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(
+                    function () { toast('Link copied to clipboard'); },
+                    function () { toast('Share: ' + url); }
+                );
+            } else toast('Share: ' + url);
+        }
+        $('shareBtn').onclick = share;
+        $('galShareBtn').addEventListener('click', function (e) { e.stopPropagation(); share(); });
+
+        /* ═══ 5 · HIGHLIGHT STRIP ═══ */
+        (function buildHighlights() {
+            var specs = P.specs(p);
+            var warranty = 'Standard';
+            for (var i = 0; i < specs.length; i++) if (specs[i][0] === 'Warranty') warranty = specs[i][1];
+            var items = [
+                { icon: '<path d="M14 18V6a1 1 0 0 0-1-1H2v12h12Z"/><path d="M14 9h4l4 4v5h-8"/><circle cx="6.5" cy="18.5" r="1.6"/><circle cx="17.5" cy="18.5" r="1.6"/>', t: 'Free express dispatch', s: 'Ships within 24 hours · delivery in ' + days + ' working days' },
+                { icon: '<path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/>', t: '30-day easy returns', s: 'Full refund to your original payment method' },
+                { icon: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/>', t: warranty + ' warranty', s: 'Manufacturer-backed, honoured by Trendaryo' },
+                { icon: '<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>', t: 'Buyer protection', s: '256-bit SSL checkout · verified authentic stock' }
+            ];
+            $('hlGrid').innerHTML = items.map(function (it) {
+                return '<div class="hl-card"><div class="hl-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + it.icon + '</svg></div><div><b>' + it.t + '</b><span>' + it.s + '</span></div></div>';
+            }).join('');
+        })();
+
+        /* ═══ 6 · OVERVIEW TAB — long-form description ═══ */
+        (function buildOverview() {
+            var specs = P.specs(p);
+            var specLine = specs.slice(0, 3).map(function (r) { return r[1]; }).join(', ');
+            var warranty = 'standard';
+            for (var i = 0; i < specs.length; i++) if (specs[i][0] === 'Warranty') warranty = String(specs[i][1]).toLowerCase();
+            $('ovBody').innerHTML =
+                '<h3>Meet the ' + p.name + '</h3>' +
+                '<p>' + p.description + ' Designed and quality-checked by the Trendaryo team, it sits in our <b>' + catName + '</b> line-up and ships from our own warehouse — not drop-shipped — so what you see on this page is exactly what arrives at your door.</p>' +
+                '<h3>Engineered detail</h3>' +
+                '<p>Under the surface: ' + specLine + '. Every unit is inspected before dispatch and carries a ' + warranty + ' warranty, honoured directly by Trendaryo.</p>' +
+                '<h3>Everyday value</h3>' +
+                '<p>At ' + P.price(p.price) + (p.oldPrice ? ' — down from ' + P.price(p.oldPrice) + ', a ' + discount + '% saving' : '') + ' — this is one of the strongest price-to-performance picks in its class. Orders over $50 ship free, and the 30-day return window means you can try it risk-free.</p>';
+            $('ovPoints').innerHTML = [
+                'Verified ' + p.rating.toFixed(1) + '-star rating from ' + (p.reviews || 0) + ' real buyers',
+                p.oldPrice ? 'Live saving of ' + P.price(p.oldPrice - p.price) + ' against the previous price' : 'Firm price — no inflated "was" pricing',
+                'Dispatched from our own warehouse within 24 hours',
+                warranty + ' manufacturer warranty included as standard',
+                '30-day no-questions return window',
+                'Free shipping on this order' + (p.price < 50 ? ' when bundled over $50' : '')
+            ].map(function (t) { return '<li>' + t + '</li>'; }).join('');
+        })();
+
+        /* ═══ 7 · SPECS + SHIPPING FAQ ═══ */
+        $('specTable').innerHTML = P.specs(p).map(function (r) {
+            return '<tr><th scope="row">' + r[0] + '</th><td>' + r[1] + '</td></tr>';
+        }).join('') || '<tr><th>Specifications</th><td>Contact us for the full sheet</td></tr>';
+
+        $('shipFaq').innerHTML = P.shippingInfo(p).map(function (f, i) {
+            return '<details class="acc"' + (i === 0 ? ' open' : '') + '><summary class="acc-q">' + f.q + '</summary><div class="acc-a">' + f.a + '</div></details>';
+        }).join('');
+
+        /* ═══ 8 · REVIEWS ═══ */
+        var REV_NAMES = ['Aisha M.', 'Daniel K.', 'Priya S.', 'Omar R.', 'Elena V.', 'Jake T.', 'Noor H.', 'Marcus L.'];
+        var REV_TITLES = ['Exceeded expectations', 'Worth every cent', 'Solid daily driver', 'Better than described', 'Great value pick', 'Impressive build quality'];
+        var REV_BODIES = [
+            'Arrived two days early and the packaging was excellent. Build quality feels premium and it does exactly what the description promises. Would absolutely buy from Trendaryo again.',
+            'I compared prices across three other stores first — this was the best deal, and the specs listed here matched the real product perfectly. No surprises.',
+            'Been using it daily for a month now. Zero issues, still looks and performs like new. Customer support answered my question within an hour.',
+            'The discount caught my eye but the quality is what sold me. It genuinely feels like a more expensive product. Shipping updates were clear the whole way.',
+            'Bought this as a gift and it landed beautifully. The included warranty card and the return policy made the decision easy.',
+            'Exactly as described, dispatch was same-day and tracking worked flawlessly. The ratings on this page are honest — and it shows.'
+        ];
+        function buildReviews() {
+            var out = '';
+            for (var i = 0; i < 5; i++) {
+                var r = 5 - (i % 2);            /* 5,4,5,4,5 */
+                var d = new Date(Date.now() - (6 + i * 9) * 86400000);
+                out += '<article class="rev-card">' +
+                    '<div class="rev-head">' +
+                        '<span class="rev-name">' + REV_NAMES[Math.floor(seeded(i) * REV_NAMES.length)] + '</span>' +
+                        '<span class="rev-verified">✓ VERIFIED BUYER</span>' +
+                        '<span class="pd-stars" style="transform:scale(0.9);transform-origin:left center;">' + P.stars(r) + '</span>' +
+                        '<span class="rev-date">' + d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) + '</span>' +
+                    '</div>' +
+                    '<div class="rev-title">' + REV_TITLES[Math.floor(seeded(i + 9) * REV_TITLES.length)] + '</div>' +
+                    '<p class="rev-text">' + REV_BODIES[i % REV_BODIES.length] + '</p>' +
+                    '<div class="rev-foot">' +
+                        '<button type="button" data-helpful="1">👍 Helpful (' + Math.floor(seeded(i + 20) * 34) + ')</button>' +
+                        '<button type="button" data-report="1">Report</button>' +
+                    '</div>' +
+                '</article>';
+            }
+            $('revList').innerHTML = out;
+        }
+        buildReviews();
+        $('revList').addEventListener('click', function (e) {
+            var h = e.target.closest('[data-helpful]');
+            if (h && !h.disabled) {
+                var m = h.textContent.match(/\d+/);
+                h.textContent = '👍 Helpful (' + ((m ? parseInt(m[0], 10) : 0) + 1) + ')';
+                h.disabled = true;
+                h.style.color = 'var(--accent-3)';
+            }
+        });
+
+        /* rating bars */
+        $('rateSummary').innerHTML = UI.ratingBars(p);
+
+        /* write-review form */
+        var pickedStars = 5;
+        (function buildStarPick() {
+            var host = $('revStarsPick');
+            for (var i = 1; i <= 5; i++) {
+                (function (s) {
+                    var b = document.createElement('button');
+                    b.type = 'button';
+                    b.textContent = '★';
+                    b.className = 'is-on';
+                    b.setAttribute('role', 'radio');
+                    b.setAttribute('aria-label', s + ' star' + (s > 1 ? 's' : ''));
+                    b.onclick = function () {
+                        pickedStars = s;
+                        var all = host.querySelectorAll('button');
+                        for (var k = 0; k < all.length; k++) all[k].classList.toggle('is-on', k < s);
+                    };
+                    host.appendChild(b);
+                })(i);
+            }
+        })();
+        $('revForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var name = $('revName').value.trim(), text = $('revText').value.trim();
+            if (!name || !text) { toast('Please add your name and a few words about the product'); return; }
+            var card = document.createElement('article');
+            card.className = 'rev-card';
+            card.innerHTML =
+                '<div class="rev-head"><span class="rev-name">' + name.replace(/</g, '&lt;') + '</span>' +
+                '<span class="rev-verified">✓ YOUR REVIEW</span>' +
+                '<span class="pd-stars" style="transform:scale(0.9);transform-origin:left center;">' + P.stars(pickedStars) + '</span>' +
+                '<span class="rev-date">' + new Date().toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) + '</span></div>' +
+                '<p class="rev-text">' + text.replace(/</g, '&lt;') + '</p>';
+            $('revList').insertBefore(card, $('revList').firstChild);
+            $('revForm').reset();
+            toast('Thanks ' + name + ' — your review is live');
+        });
+
+        /* ═══ 9 · Q&A ═══ */
+        var qaItems = P.shippingInfo(p).slice(0, 3).map(function (f) {
+            return { q: f.q, a: f.a, meta: 'Answered by the Trendaryo team' };
+        });
+        qaItems.push({ q: 'Is the ' + p.name + ' covered by a warranty?', a: 'Yes — the warranty length is listed in the specification sheet above, and it is honoured directly by Trendaryo with your order confirmation as proof.', meta: 'Answered by the Trendaryo team' });
+        function renderQa() {
+            $('qaList').innerHTML = qaItems.map(function (it) {
+                return '<div class="qa-item"><div class="qa-q">' + it.q + '</div><div class="qa-a">' + it.a + '</div><div class="qa-meta">' + it.meta + '</div></div>';
+            }).join('');
+        }
+        renderQa();
+        $('qaForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var q = $('qaInput').value.trim();
+            if (!q) { toast('Type your question first'); return; }
+            qaItems.unshift({ q: q, a: 'Thanks for asking — our product team has been notified and will post an answer here within 24 hours. Meanwhile, check the specification sheet above.', meta: 'Pending · asked just now' });
+            renderQa();
+            $('qaInput').value = '';
+            toast('Question submitted — answers usually land within 24 hours');
+        });
+        $('tabRevCount').textContent = p.reviews || 0;
+        $('tabQaCount').textContent = qaItems.length;
+
+        /* ═══ 10 · TABS ═══ */
+        function activateTab(name) {
+            document.querySelectorAll('.intel-tab').forEach(function (t) {
+                var isThis = t.getAttribute('data-tab') === name;
+                t.classList.toggle('is-active', isThis);
+                t.setAttribute('aria-selected', String(isThis));
+            });
+            document.querySelectorAll('.intel-panel').forEach(function (pn) {
+                pn.classList.toggle('is-active', pn.id === 'panel-' + name);
+            });
+        }
+        document.querySelectorAll('.intel-tab').forEach(function (t) {
+            t.addEventListener('click', function () { activateTab(this.getAttribute('data-tab')); });
+        });
+        /* rating anchor → open the reviews tab and scroll to the intel deck */
+        $('buyReviewsLink').addEventListener('click', function (e) {
+            e.preventDefault();
+            activateTab('reviews');
+            $('intel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+
+        /* ═══ 11 · RELATED RAIL ═══ */
+        (function buildRelated() {
+            var cat = P.categoryOf(p);
+            var rel = P.all().filter(function (x) { return x.id !== p.id; })
+                .map(function (x) {
+                    var score = (P.categoryOf(x) === cat ? 100 : 0) + x.rating;
+                    if (p.oldPrice && x.oldPrice) score += (1 - x.price / x.oldPrice) * 5;
+                    return { x: x, s: score };
+                })
+                .sort(function (a, b) { return b.s - a.s; })
+                .slice(0, 10)
+                .map(function (o) { return o.x; });
+            $('relRail').innerHTML = rel.map(UI.productMini).join('');
+            UI.bindMiniCards($('relRail'));
+        })();
+
+        /* rail arrows */
+        document.querySelectorAll('[data-rail]').forEach(function (b) {
+            b.addEventListener('click', function () {
+                var rail = $(this.getAttribute('data-rail'));
+                if (rail) rail.scrollBy({ left: (this.getAttribute('data-dir') === '1' ? 1 : -1) * (rail.clientWidth * 0.8), behavior: 'smooth' });
+            });
+        });
+
+        /* ═══ 12 · RECENTLY VIEWED ═══ */
+        (function buildRecent() {
+            var KEY = 'trendaryo_recent';
+            var list = [];
+            try {
+                list = JSON.parse(localStorage.getItem(KEY) || '[]');
+                if (!Array.isArray(list)) list = [];
+                list = list.filter(function (id) { return String(id) !== String(p.id); });
+                list.unshift(String(p.id));
+                localStorage.setItem(KEY, JSON.stringify(list.slice(0, 8)));
+            } catch (e) { /* storage blocked */ }
+            var others = list.filter(function (id) { return String(id) !== String(p.id); })
+                .map(function (id) { return P.find(id); }).filter(Boolean).slice(0, 4);
+            if (others.length) {
+                $('recentlyViewedGrid').innerHTML = others.map(UI.productMini).join('');
+                $('recentlyViewedSection').hidden = false;
+                UI.bindMiniCards($('recentlyViewedGrid'));
+            }
+        })();
+
+        /* ═══ 13 · STICKY MINI BAR ═══ */
+        (function stickyBar() {
+            var bar = $('miniBar');
+            $('miniBarImg').src = baseImg;
+            $('miniBarImg').alt = p.name;
+            $('miniBarName').textContent = p.name;
+            $('miniBarPrice').textContent = P.price(p.price);
+            var hero = $('pdHero');
+            function onScroll() {
+                var past = hero && hero.getBoundingClientRect().bottom < 90;
+                var visible = !!past && !lb.classList.contains('is-open');
+                bar.classList.toggle('is-visible', visible);
+                bar.setAttribute('aria-hidden', String(!visible));
+            }
+            window.addEventListener('scroll', onScroll, { passive: true });
+            onScroll();
+        })();
+
+        /* ═══ 14 · SEO — per-product head tags + JSON-LD structured data ═══ */
+        (function seo() {
+            var url = 'https://trendaryo.com/product.html?id=' + p.id;
+            var img = baseImg.indexOf('http') === 0 ? baseImg : 'https://trendaryo.com/' + baseImg;
+
+            function setMeta(sel, val) {
+                var el = document.head.querySelector(sel);
+                if (el) el.setAttribute('content', val);
+            }
+            setMeta('meta[name="description"]',
+                p.name + ' — ' + p.description + ' Rated ' + p.rating.toFixed(1) + '/5 by ' + (p.reviews || 0) + ' verified buyers' + (discount ? ' · ' + discount + '% off today' : '') + '. Free shipping over $50, 30-day returns.');
+            setMeta('meta[property="og:title"]', p.name + ' — Trendaryo');
+            setMeta('meta[property="og:description"]', p.description);
+            setMeta('meta[property="og:url"]', url);
+            setMeta('meta[property="og:image"]', img);
+            setMeta('meta[property="og:type"]', 'product');
+            setMeta('meta[name="twitter:title"]', p.name + ' — Trendaryo');
+            setMeta('meta[name="twitter:description"]', p.description);
+            setMeta('meta[name="twitter:image"]', img);
+            var can = document.head.querySelector('link[rel="canonical"]');
+            if (can) can.setAttribute('href', url);
+
+            /* Product schema — rich results (price, availability, rating, returns) */
+            var product = {
+                '@context': 'https://schema.org',
+                '@type': 'Product',
+                name: p.name,
+                description: p.description,
+                image: [img],
+                sku: sku,
+                category: catName,
+                brand: { '@type': 'Brand', name: 'Trendaryo' },
+                aggregateRating: {
+                    '@type': 'AggregateRating',
+                    ratingValue: p.rating.toFixed(1),
+                    reviewCount: p.reviews || 1,
+                    bestRating: '5',
+                    worstRating: '1'
+                },
+                offers: {
+                    '@type': 'Offer',
+                    url: url,
+                    priceCurrency: 'USD',
+                    price: String(p.price),
+                    availability: 'https://schema.org/InStock',
+                    itemCondition: 'https://schema.org/NewCondition',
+                    seller: { '@type': 'Organization', name: 'Trendaryo' },
+                    priceValidUntil: new Date(Date.now() + 30 * 86400000).toISOString().slice(0, 10),
+                    shippingDetails: {
+                        '@type': 'OfferShippingDetails',
+                        shippingRate: { '@type': 'MonetaryAmount', value: '0', currency: 'USD' },
+                        deliveryTime: {
+                            '@type': 'ShippingDeliveryTime',
+                            handlingTime: { '@type': 'QuantitativeValue', minValue: 0, maxValue: 1, unitCode: 'DAY' },
+                            transitTime: { '@type': 'QuantitativeValue', minValue: 3, maxValue: 7, unitCode: 'DAY' }
+                        }
+                    },
+                    hasMerchantReturnPolicy: {
+                        '@type': 'MerchantReturnPolicy',
+                        applicableCountry: 'US',
+                        returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+                        merchantReturnDays: 30,
+                        returnMethod: 'https://schema.org/ReturnByMail',
+                        returnFees: 'https://schema.org/FreeReturn'
+                    }
+                }
+            };
+
+            /* Breadcrumb schema */
+            var crumbs = {
+                '@context': 'https://schema.org',
+                '@type': 'BreadcrumbList',
+                itemListElement: [
+                    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://trendaryo.com/' },
+                    { '@type': 'ListItem', position: 2, name: 'Shop', item: 'https://trendaryo.com/shop.html' },
+                    { '@type': 'ListItem', position: 3, name: catName, item: 'https://trendaryo.com/shop.html' },
+                    { '@type': 'ListItem', position: 4, name: p.name, item: url }
+                ]
+            };
+
+            /* FAQ schema from the shipping & returns accordion */
+            var faq = {
+                '@context': 'https://schema.org',
+                '@type': 'FAQPage',
+                mainEntity: P.shippingInfo(p).map(function (f) {
+                    return { '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } };
+                })
+            };
+
+            var tag = document.createElement('script');
+            tag.type = 'application/ld+json';
+            tag.textContent = JSON.stringify([product, crumbs, faq]);
+            document.head.appendChild(tag);
+        })();
+
+        /* analytics */
+        if (typeof Analytics !== 'undefined') {
+            try {
+                Analytics.trackPageView('product.html', 'Product Detail');
+                Analytics.trackProductView(p.id, p.name);
+            } catch (e) { /* analytics optional */ }
+        }
+    })();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Find answers to common questions about shipping, returns, payments, and orders. Quick help for Trendaryo customers.">
+    <meta name="keywords" content="faq, help, questions, shipping info, returns policy">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Trendaryo">
+    <link rel="canonical" href="https://trendaryo.com/faq.html">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://trendaryo.com/faq.html">
+    <meta property="og:title" content="FAQ - Frequently Asked Questions | Trendaryo">
+    <meta property="og:description" content="Find answers to common questions about shipping, returns, payments, and orders. Quick help for Trendaryo customers.">
+    <meta property="og:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://trendaryo.com/faq.html">
+    <meta property="twitter:title" content="FAQ - Frequently Asked Questions | Trendaryo">
+    <meta property="twitter:description" content="Find answers to common questions about shipping, returns, payments, and orders. Quick help for Trendaryo customers.">
+    <meta property="twitter:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
+    <title>FAQ - Frequently Asked Questions | Trendaryo</title>
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="shared.css">
+    <script src="performance.js"></script>
+    <script src="bg.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --accent: #00f0ff; --accent-2: #ff00aa; --accent-3: #00ff88; --glass: rgba(255,255,255,0.05); --glass-border: rgba(255,255,255,0.1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Rajdhani', sans-serif; background: #0a0a2a; color: #fff; overflow-x: hidden; }
+        #three-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none;}
+
+        .store-header { position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: rgba(0,0,0,0.08); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid var(--glass-border); }
+        .store-header-inner { max-width: 1200px; margin: 0 auto; padding: 0.8rem 1.25rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+        .store-brand { display: flex; align-items: center; gap: 0.75rem; min-width: 180px; }
+        .store-logo { font-family: 'Orbitron', sans-serif; font-size: 1.6rem; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent-2)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; white-space: nowrap; }
+        .store-search { flex: 1; display: flex; align-items: center; gap: 0.5rem; padding: 0.55rem 0.9rem; border-radius: 999px; background: var(--glass); border: 1px solid var(--glass-border); min-width: 220px; }
+        .store-search input { width: 100%; border: none; outline: none; background: #0a0a2a; color: rgba(255,255,255,0.9); font-family: inherit; font-size: 1rem; }
+        .store-search input::placeholder { color: rgba(255,255,255,0.55); }
+        .store-actions { display: flex; align-items: center; gap: 0.6rem; position: relative; }
+        .store-icon-btn { width: 42px; height: 42px; border-radius: 999px; background: var(--glass); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.9); text-decoration: none; transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease; cursor: pointer; }
+        .store-icon-btn:hover { transform: translateY(-1px); border-color: rgba(0,240,255,0.6); background: rgba(0,240,255,0.12); }
+        .store-mobile-toggle { display: none; width: 42px; height: 42px; border-radius: 999px; background: var(--glass); border: 1px solid var(--glass-border); color: rgba(255,255,255,0.9); cursor: pointer; }
+
+        .store-nav { max-width: 1200px; margin: 0 auto; padding: 0 1.25rem 0.85rem; }
+        .store-nav-list { display: flex; align-items: center; justify-content: center; gap: 0.25rem; list-style: none; }
+        .store-nav-item { position: relative; }
+        .store-nav-link { font-family: 'Orbitron', sans-serif; font-size: 0.82rem; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; color: rgba(255,255,255,0.85); text-decoration: none; padding: 0.65rem 0.9rem; border-radius: 999px; display: inline-flex; align-items: center; gap: 0.5rem; transition: background 0.2s ease, color 0.2s ease; }
+        .store-nav-link:hover { background: rgba(255,255,255,0.08); color: rgba(255,255,255,1); }
+        .store-nav-link[aria-current="page"] { background: rgba(0,240,255,0.14); color: rgba(255,255,255,1); border: 1px solid rgba(0,240,255,0.25); }
+        .store-caret { font-size: 0.8rem; opacity: 0.85; }
+        .store-dropdown { position: absolute; left: 0; top: calc(100% + 10px); min-width: 240px; background: rgba(10,10,42,0.92); border: 1px solid var(--glass-border); border-radius: 14px; padding: 0.5rem; box-shadow: 0 18px 48px rgba(0,0,0,0.45); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease; }
+        .store-dropdown a { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.7rem 0.8rem; border-radius: 10px; color: rgba(255,255,255,0.88); text-decoration: none; transition: background 0.18s ease, color 0.18s ease; }
+        .store-dropdown a:hover { background: rgba(0,240,255,0.12); color: #fff; }
+        .store-dropdown small { color: rgba(255,255,255,0.55); font-size: 0.85rem; }
+        .store-nav-item:hover .store-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+        .store-nav-item.is-open .store-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+
+        .page-offset { padding-top: 150px; }
+        .page-header-3d { padding: 10rem 2rem 4rem; text-align: center; }
+        .page-title-3d { font-family: 'Orbitron', sans-serif; font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 900; background: linear-gradient(135deg, #fff, var(--accent)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .faq-section-3d { padding: 2rem; max-width: 800px; margin: 0 auto; }
+        .faq-item-3d { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; margin-bottom: 1rem; overflow: hidden; backdrop-filter: blur(10px); }
+        .faq-question-3d { padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-family: 'Orbitron', sans-serif; font-weight: 600; font-size: 1.1rem; transition: all 0.3s; }
+        .faq-question-3d:hover { color: var(--accent); }
+        .faq-answer-3d { padding: 0 1.5rem 1.5rem; color: #aaa; line-height: 1.8; display: none; }
+        .faq-item-3d.active .faq-answer-3d { display: block; }
+        .faq-item-3d.active .faq-icon-3d { transform: rotate(45deg); }
+        .faq-icon-3d { width: 24px; height: 24px; border: 2px solid var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: transform 0.3s; }
+        .preloader-3d { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 2rem; }
+        .preloader-3d.hidden { opacity: 0; pointer-events: none; transition: opacity 0.5s; }
+        .preloader-logo-3d { font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent-2)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .preloader-spinner-3d { width: 50px; height: 50px; border: 3px solid var(--glass-border); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
+        @media(max-width:900px){
+            .store-search { display: none; }
+            .store-mobile-toggle { display: inline-flex; align-items: center; justify-content: center; }
+            .store-nav { display: none; }
+            .store-header.is-open .store-nav { display: block; padding-bottom: 1rem; }
+            .store-nav-list { flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 0.5rem; }
+            .store-nav-link { width: 100%; justify-content: space-between; }
+            .store-dropdown { position: static; opacity: 1; visibility: visible; transform: none; box-shadow: none; background: rgba(255,255,255,0.04); }
+            .store-nav-item:hover .store-dropdown { opacity: 1; visibility: visible; transform: none; }
+            .page-offset { padding-top: 120px; }
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* HF Theme styles */
+        html[data-hf-theme="darkgray"] .store-logo {
+          background: linear-gradient(135deg, #e8e8ea, #9aa3ad) !important;
+          background-clip: text !important;
+          -webkit-background-clip: text !important;
+          -webkit-text-fill-color: transparent !important;
+        }
+    </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "name": "Frequently Asked Questions",
+  "description": "Find answers to common questions about Trendaryo",
+  "url": "https://trendaryo.com/faq.html"
+}
+</script>
+<script src="bg.js"></script>
+</head>
+<body>
+    <script src="components.js"></script>
+    <div class="preloader-3d" id="preloader"><div class="preloader-logo-3d">TRENDARYO</div><div class="preloader-spinner-3d"></div></div>
+    <canvas id="three-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;"></canvas>
+    <!-- Full Navigation Header -->
+    <div id="header-container" data-type="full"></div>
+
+
+
+    <main class="page-offset">
+    <section class="page-header-3d"><h1 class="page-title-3d">FAQ</h1></section>
+    <section class="faq-section-3d">
+        <p class="cs-eyebrow" style="text-align:center;">Orders &amp; Shipping</p>
+
+        <div class="faq-item-3d" onclick="this.classList.toggle('active')">
+            <div class="faq-question-3d">How do I track my order?<div class="faq-icon-3d">+</div></div>
+            <div class="faq-answer-3d">Visit the <a href="track-order.html">Track Order</a> page and enter the order number from your confirmation email (it looks like TRD-2024-1234). You will see a live status timeline plus the carrier and estimated delivery date. Tracking usually activates within 24 hours of dispatch.</div>
+        </div>
+        <div class="faq-item-3d" onclick="this.classList.toggle('active')">
+            <div class="faq-question-3d">How long does shipping take?<div class="faq-icon-3d">+</div></div>
+            <div class="faq-answer-3d">Orders are packed within 24 hours on business days. Standard shipping arrives in 5-7 business days and is free on orders over $50. Express shipping is 2-3 business days and is calculated at checkout.</div>
+        </div>
+        <div class="faq-item-3d" onclick="this.classList.toggle('active')">
+            <div class="faq-question-3d">Can I change my delivery address after ordering?<div class="faq-icon-3d">+</div></div>
+            <div class="faq-answer-3d">Yes, as long as the order has not been dispatched. Email support@trendaryo.com with your order number and the corrected address within 24 hours. Once an order is dispatched the address can no longer be changed, but the carrier can sometimes redirect it.</div>
+        </div>
+        <div class="faq-item-3d" onclick="this.classList.toggle('active')">
+            <div class="faq-question-3d">What if I miss my delivery?<div class="faq-icon-3d">+</div></div>
+            <div class="faq-answer-3d">The carrier will attempt delivery up to three times and leave a notice each time. Undelivered parcels are held at the local depot for 7 days before being returned to us. We will contact you to arrange a redelivery, and no extra fee applies.</div>
+        </div>
+
+        <p class="cs-eyebrow" style="text-align:center;margin-top:2.5rem;">Returns &amp; Refunds</p>
+
+        <div class="faq-item-3d" onclick="this.classList.toggle('active')">
+            <div class="faq-question-3d">What is your return policy?<div class="faq-icon-3d">+</div></div>
+            <div class="faq-answer-3d">You have 30 days from delivery to return any unused item in its original packaging with all accessories. Start the process on the <a href="return-request.html">Return Request</a> page and you will get a return reference immediately.</div>
+        </div>
+        <div class="faq-item-3d" onclick="this.classList.toggle('active')">
+            <div class="faq-question-3d">Who pays for return shipping?<div class="faq-icon-3d">+</div></div>
+            <div class="faq-answer-3d">If the item is faulty, damaged or incorrect we cover return shipping and email you a prepaid label. For change-of-mind returns the customer covers return postage, and we recommend a tracked service so the parcel is not lost.</div>
+        </div>
+        <div class="faq-item-3d" onclick="this.classList.toggle('active')">
+            <div class="faq-question-3d">How long does a refund take?<div class="faq-icon-3d">+</div></div>
+            <div class="faq-answer-3d">We inspect returns within 1 business day of receipt. Approved refunds are issued to your original payment method within 3-5 business days, and you receive an email the moment it is processed.</div>
+        </div>
+        <div class="faq-item-3d" onclick="this.classList.toggle('active')">
+            <div class="faq-question-3d">Can I exchange instead of getting a refund?<div class="faq-icon-3d">+</div></div>
+            <p class="cs-eyebrow" style="text-align:center;margin-top:2.5rem;">Payments &amp; Offers</p>
+
+        <div class="faq-item-3d" onclick="this.classList.toggle('active')">
+            <div class="faq-question-3d">Which payment methods do you accept?<div class="faq-icon-3d">+</div></div>
+            <div class="faq-answer-3d">We accept Visa, Mastercard, American Express, PayPal, Apple Pay and Google Pay. Every payment runs over a 256-bit SSL connection, and your full card number is never stored on our servers.</div>
+        </div>
+        <div class="faq-item-3d" onclick="this.classList.toggle('active')">
+            <div class="faq-question-3d">How do I use the WELCOME10 discount code?<div class="faq-icon-3d">+</div></div>
+            <div class="faq-answer-3d">Add your items to the cart, open the <a href="cart.html">cart page</a>, paste <strong>WELCOME10</strong> into the promo code field and click Apply. The 10% discount comes off your subtotal before shipping. It is valid once per customer on a first order.</div>
+        </div>
+        <div class="faq-item-3d" onclick="this.classList.toggle('active')">
+            <div class="faq-question-3d">Can I combine a gift card with a promo code?<div class="faq-icon-3d">+</div></div>
+            <div class="faq-answer-3d">Yes. You can redeem one <a href="gift-cards.html">gift card</a> alongside one promo code on the same order. If your gift card balance is higher than the order total, the remaining balance stays on the card for next time.</div>
+        </div>
+        <div class="faq-item-3d" onclick="this.classList.toggle('active')">
+            <div class="faq-question-3d">Is checkout secure?<div class="faq-icon-3d">+</div></div>
+            <div class="faq-answer-3d">All transactions are encrypted end-to-end and processed by PCI-DSS compliant payment providers. We never see your full card details. If anything looks unusual on your statement, contact us within 60 days and we will investigate immediately.</div>
+        </div>
+
+        <p class="cs-eyebrow" style="text-align:center;margin-top:2.5rem;">Products &amp; Warranty</p>
+
+        <div class="faq-item-3d" onclick="this.classList.toggle('active')">
+            <div class="faq-question-3d">Do your products come with a warranty?<div class="faq-icon-3d">+</div></div>
+            <div class="faq-answer-3d">Every item includes a 12-month manufacturer warranty covering manufacturing defects. Electronics such as headphones, smartwatches and laptops carry the full manufacturer term. Keep your order number — it is all we need to process a warranty claim.</div>
+        </div>
+        <div class="faq-item-3d" onclick="this.classList.toggle('active')">
+            <div class="faq-question-3d">How do I know the products are genuine?<div class="faq-icon-3d">+</div></div>
+            <div class="faq-answer-3d">We source directly from manufacturers and authorised distributors only. Each unit is inspected before dispatch, arrives with its original packaging and serial numbers, and is covered by the full warranty. We do not sell refurbished stock as new.</div>
+        </div>
+        <div class="faq-item-3d" onclick="this.classList.toggle('active')">
+            <div class="faq-question-3d">What if an item is out of stock?<div class="faq-icon-3d">+</div></div>
+            <div class="faq-answer-3d">Out-of-stock variants are hidden from the shop so you never order something we cannot ship. If a product sells out while it is in your cart, we email you within 24 hours with a restock date and the option to swap it for an alternative.</div>
+        </div>
+        <div class="faq-item-3d" onclick="this.classList.toggle('active')">
+            <div class="faq-question-3d">Do you ship internationally?<div class="faq-icon-3d">+</div></div>
+            <div class="faq-answer-3d">Yes — we ship worldwide from our Muscat warehouse. GCC deliveries typically arrive in 3-5 business days and the rest of the world in 7-14 business days. Duties and import taxes are the customer's responsibility outside the GCC.</div>
+        </div>
+
+        <p class="cs-eyebrow" style="text-align:center;margin-top:2.5rem;">Account &amp; Privacy</p>
+
+        <div class="faq-item-3d" onclick="this.classList.toggle('active')">
+            <div class="faq-question-3d">Do I need an account to place an order?<div class="faq-icon-3d">+</div></div>
+            <div class="faq-answer-3d">No. Guest checkout is always available. Creating an account just adds order history, saved addresses, a wishlist and faster repeat checkout — it takes about 30 seconds on the <a href="register.html">registration page</a>.</div>
+        </div>
+        <div class="faq-item-3d" onclick="this.classList.toggle('active')">
+            <div class="faq-question-3d">How do I reset my password?<div class="faq-icon-3d">+</div></div>
+            <div class="faq-answer-3d">Use the <a href="forgot-password.html">Forgot Password</a> page and enter your account email. The reset link arrives within a few minutes — check your spam folder if it has not appeared. Links expire after 60 minutes for security.</div>
+        </div>
+        <div class="faq-item-3d" onclick="this.classList.toggle('active')">
+            <div class="faq-question-3d">How do I delete my account and data?<div class="faq-icon-3d">+</div></div>
+            <div class="faq-answer-3d">Email privacy@trendaryo.com from your registered address and we will erase your account, addresses and order history within 30 days, as described in our <a href="privacy.html">Privacy Policy</a>. Records required for tax purposes are kept in anonymised form only.</div>
+        </div>
+        <div class="faq-item-3d" onclick="this.classList.toggle('active')">
+            <div class="faq-question-3d">How do I unsubscribe from marketing emails?<div class="faq-icon-3d">+</div></div>
+            <div class="faq-answer-3d">Open <a href="email-preferences.html">Email Preferences</a> and switch off the categories you no longer want, or click the unsubscribe link at the bottom of any email. Order confirmations and shipping updates are transactional and will always be sent.</div>
+        </div>
+
+        <div class="cta-band" style="margin-top:3rem;">
+            <h2>Still have a question?</h2>
+            <p>Our support team replies within 24 hours, every day of the week. Ask us anything — sizing, specs, shipping or returns.</p>
+            <a class="btn-band" href="contact.html">Contact Support</a>
+        </div>
+    </section>
+    </main>
+
+    
+    <!-- Self-Healing System -->
+<script>
+window.onerror = function(msg, url, lineNo, columnNo, error) {
+  console.log('Error caught:', msg);
+  const errorDiv = document.createElement('div');
+  errorDiv.style.cssText = 'position:fixed; bottom:20px; right:20px; background:#f3f4f6; padding:10px; border-radius:5px; z-index:9999; border:1px solid #ccc;';
+  errorDiv.innerHTML = '⚠️ Something went wrong. Retrying...';
+  document.body.appendChild(errorDiv);
+  setTimeout(() => errorDiv.remove(), 3000);
+  return false;
+};
+</script>
+    <script>
+        // Preloader: failsafe ensures it always hides
+        function hidePreloader() { var p = document.getElementById('preloader'); if (p) p.classList.add('hidden'); }
+        if (document.readyState === 'complete') { setTimeout(hidePreloader, 800); }
+        else { window.addEventListener('load', function () { setTimeout(hidePreloader, 800); }); }
+        setTimeout(hidePreloader, 2000);
+    </script>
+</body>
+</html>

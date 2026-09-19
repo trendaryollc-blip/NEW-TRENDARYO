@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predictive Analytics - Admin - Trendaryo</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="responsive-universal.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(0, 240, 255, 0.05);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2em;
+            background: linear-gradient(135deg, #00f0ff, #ff00aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            color: #00f0ff;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        .btn:hover {
+            background: rgba(0, 240, 255, 0.2);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+        }
+
+        .btn.primary {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: rgba(0, 255, 136, 0.3);
+            color: #00ff88;
+        }
+
+        .btn.primary:hover {
+            background: rgba(0, 255, 136, 0.3);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            color: #00f0ff;
+            cursor: pointer;
+            font-family: 'Rajdhani', sans-serif;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn:hover {
+            color: #ff00aa;
+        }
+
+        .tab-btn.active {
+            border-bottom-color: #00f0ff;
+            color: #00f0ff;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section {
+            background: rgba(0, 240, 255, 0.05);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3em;
+            color: #00f0ff;
+            margin-bottom: 20px;
+        }
+
+        .chart-container {
+            background: rgba(0, 240, 255, 0.05);
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            border-radius: 5px;
+            padding: 20px;
+            min-height: 300px;
+            position: relative;
+        }
+
+        .prediction-card {
+            background: rgba(0, 240, 255, 0.05);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .prediction-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .prediction-title {
+            color: #00f0ff;
+            font-weight: bold;
+        }
+
+        .confidence-badge {
+            background: rgba(0, 255, 136, 0.2);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            color: #00ff88;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 0.85em;
+        }
+
+        .prediction-value {
+            font-size: 1.5em;
+            color: #ff00aa;
+            margin: 10px 0;
+        }
+
+        .prediction-meta {
+            font-size: 0.9em;
+            color: #808080;
+        }
+
+        .recommendation {
+            background: rgba(0, 240, 255, 0.05);
+            border-left: 3px solid #00f0ff;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 3px;
+        }
+
+        .recommendation-title {
+            color: #00f0ff;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .recommendation-text {
+            color: #e0e0e0;
+            font-size: 0.9em;
+        }
+
+        .at-risk-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .at-risk-item {
+            background: rgba(255, 0, 85, 0.05);
+            border: 1px solid rgba(255, 0, 85, 0.2);
+            border-radius: 5px;
+            padding: 12px;
+        }
+
+        .at-risk-name {
+            color: #ff0055;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .at-risk-meta {
+            font-size: 0.85em;
+            color: #808080;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: rgba(0, 240, 255, 0.1);
+            padding: 12px;
+            text-align: left;
+            color: #00f0ff;
+            font-weight: bold;
+            border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+        }
+
+        tr:hover {
+            background: rgba(0, 240, 255, 0.05);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #00f0ff;
+        }
+
+        .spinner {
+            border: 3px solid rgba(0, 240, 255, 0.2);
+            border-top: 3px solid #00f0ff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .header-actions {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .prediction-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🔮 Predictive Analytics</h1>
+            <div class="header-actions">
+                <button class="btn" onclick="goBack()">← Back</button>
+                <button class="btn primary" onclick="refreshPredictions()">🔄 Refresh</button>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('forecast')">Sales Forecast</button>
+            <button class="tab-btn" onclick="switchTab('churn')">Churn Risk</button>
+            <button class="tab-btn" onclick="switchTab('demand')">Demand</button>
+            <button class="tab-btn" onclick="switchTab('clv')">Customer LTV</button>
+        </div>
+
+        <!-- Sales Forecast Tab -->
+        <div id="forecast" class="tab-content active">
+            <div class="section">
+                <div class="section-title">Sales Forecast (Next 12 Months)</div>
+                <div class="chart-container" id="forecastChart">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Forecast Details</div>
+                <div id="forecastDetails">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Churn Risk Tab -->
+        <div id="churn" class="tab-content">
+            <div class="section">
+                <div class="section-title">Customers at Risk of Churn</div>
+                <div id="churnRiskList">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Churn Prevention Recommendations</div>
+                <div id="churnRecommendations">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demand Forecast Tab -->
+        <div id="demand" class="tab-content">
+            <div class="section">
+                <div class="section-title">Product Demand Forecast</div>
+                <div class="table-container" id="demandTable">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Inventory Recommendations</div>
+                <div id="inventoryRecommendations">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customer LTV Tab -->
+        <div id="clv" class="tab-content">
+            <div class="section">
+                <div class="section-title">Customer Lifetime Value Predictions</div>
+                <div class="table-container" id="clvTable">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">High-Value Customer Segments</div>
+                <div id="clvSegments">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin-manager.js"></script>
+    <script src="analytics-engine.js"></script>
+    <script>
+        // Check admin access
+        function checkAdminAccess() {
+            if (!window.AdminManager.isAdmin()) {
+                alert('Access denied. Admin privileges required.');
+                window.location.href = 'admin-login.html';
+            }
+        }
+
+        // Switch tab
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            if (tabName === 'forecast') {
+                loadSalesForecast();
+            } else if (tabName === 'churn') {
+                loadChurnPredictions();
+            } else if (tabName === 'demand') {
+                loadDemandForecast();
+            } else if (tabName === 'clv') {
+                loadCLVPredictions();
+            }
+        }
+
+        // Load sales forecast
+        async function loadSalesForecast() {
+            try {
+                const forecast = await window.AnalyticsEngine.forecastSales(12);
+                displaySalesForecast(forecast);
+            } catch (error) {
+                console.error('Error loading sales forecast:', error);
+                document.getElementById('forecastChart').innerHTML = 
+                    '<div style="color: #ff0055;">Error loading forecast data</div>';
+            }
+        }
+
+        // Display sales forecast
+        function displaySalesForecast(data) {
+            const chart = document.getElementById('forecastChart');
+            chart.innerHTML = `
+                <div style="width: 100%; text-align: center; color: #00f0ff;">
+                    <p>Sales Forecast Chart</p>
+                    <p>Trend: ${data.trend}</p>
+                    <p>Confidence: ${(data.confidence * 100).toFixed(1)}%</p>
+                </div>
+            `;
+
+            const details = document.getElementById('forecastDetails');
+            details.innerHTML = `
+                <div class="prediction-card">
+                    <div class="prediction-header">
+                        <div class="prediction-title">12-Month Forecast</div>
+                        <div class="confidence-badge">Confidence: ${(data.confidence * 100).toFixed(1)}%</div>
+                    </div>
+                    <div class="prediction-meta">Trend: ${data.trend}</div>
+                    <div class="prediction-meta">Seasonality Detected: ${data.seasonality.length > 0 ? 'Yes' : 'No'}</div>
+                    ${data.seasonality.length > 0 ? `
+                        <div class="recommendation">
+                            <div class="recommendation-title">Seasonal Patterns</div>
+                            <div class="recommendation-text">${data.seasonality.join(', ')}</div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        // Load churn predictions
+        async function loadChurnPredictions() {
+            try {
+                const churn = await window.AnalyticsEngine.predictChurn();
+                displayChurnPredictions(churn);
+            } catch (error) {
+                console.error('Error loading churn predictions:', error);
+            }
+        }
+
+        // Display churn predictions
+        function displayChurnPredictions(data) {
+            const list = document.getElementById('churnRiskList');
+            if (!data.atRiskCustomers || data.atRiskCustomers.length === 0) {
+                list.innerHTML = '<p style="color: #00ff88;">No customers at high risk of churn</p>';
+            } else {
+                list.innerHTML = `
+                    <div class="at-risk-list">
+                        ${data.atRiskCustomers.slice(0, 10).map(customer => `
+                            <div class="at-risk-item">
+                                <div class="at-risk-name">${customer.name}</div>
+                                <div class="at-risk-meta">Churn Risk: ${customer.churnProbability}%</div>
+                                <div class="at-risk-meta">Last Order: ${customer.lastOrderDate}</div>
+                                <div class="at-risk-meta">LTV: ${window.AnalyticsEngine.formatCurrency(customer.ltv)}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            const recommendations = document.getElementById('churnRecommendations');
+            recommendations.innerHTML = (data.recommendations || []).map(rec => `
+                <div class="recommendation">
+                    <div class="recommendation-title">${rec.title}</div>
+                    <div class="recommendation-text">${rec.description}</div>
+                </div>
+            `).join('');
+        }
+
+        // Load demand forecast
+        async function loadDemandForecast() {
+            try {
+                const demand = await window.AnalyticsEngine.predictDemand();
+                displayDemandForecast(demand);
+            } catch (error) {
+                console.error('Error loading demand forecast:', error);
+            }
+        }
+
+        // Display demand forecast
+        function displayDemandForecast(data) {
+            const table = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Current Stock</th>
+                            <th>Predicted Demand</th>
+                            <th>Recommended Stock</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${(data.predictions || []).map(pred => `
+                            <tr>
+                                <td>${pred.productName}</td>
+                                <td>${pred.currentStock}</td>
+                                <td>${pred.predictedDemand}</td>
+                                <td>${pred.recommendedStock}</td>
+                                <td>${pred.status}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            document.getElementById('demandTable').innerHTML = table;
+
+            const recommendations = document.getElementById('inventoryRecommendations');
+            recommendations.innerHTML = (data.recommendations || []).map(rec => `
+                <div class="recommendation">
+                    <div class="recommendation-title">${rec.product}</div>
+                    <div class="recommendation-text">${rec.action}</div>
+                </div>
+            `).join('');
+        }
+
+        // Load CLV predictions
+        async function loadCLVPredictions() {
+            try {
+                const clv = await window.AnalyticsEngine.predictCLV();
+                displayCLVPredictions(clv);
+            } catch (error) {
+                console.error('Error loading CLV predictions:', error);
+            }
+        }
+
+        // Display CLV predictions
+        function displayCLVPredictions(data) {
+            const table = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Customer</th>
+                            <th>Current LTV</th>
+                            <th>Predicted LTV</th>
+                            <th>Growth Potential</th>
+                            <th>Segment</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${(data.predictions || []).map(pred => `
+                            <tr>
+                                <td>${pred.customerName}</td>
+                                <td>${window.AnalyticsEngine.formatCurrency(pred.currentLTV)}</td>
+                                <td>${window.AnalyticsEngine.formatCurrency(pred.predictedLTV)}</td>
+                                <td>${pred.growthPotential}%</td>
+                                <td>${pred.segment}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            document.getElementById('clvTable').innerHTML = table;
+
+            const segments = document.getElementById('clvSegments');
+            segments.innerHTML = Object.entries(data.segments || {}).map(([segment, customers]) => `
+                <div class="prediction-card">
+                    <div class="prediction-title">${segment}</div>
+                    <div class="prediction-value">${customers.length} customers</div>
+                    <div class="prediction-meta">Avg LTV: ${window.AnalyticsEngine.formatCurrency(customers.avgLTV || 0)}</div>
+                </div>
+            `).join('');
+        }
+
+        // Refresh predictions
+        function refreshPredictions() {
+            window.AnalyticsEngine.clearCache();
+            const activeTab = document.querySelector('.tab-btn.active').textContent.toLowerCase();
+            if (activeTab.includes('sales')) loadSalesForecast();
+            else if (activeTab.includes('churn')) loadChurnPredictions();
+            else if (activeTab.includes('demand')) loadDemandForecast();
+            else if (activeTab.includes('ltv')) loadCLVPredictions();
+        }
+
+        // Go back
+        function goBack() {
+            window.location.href = 'admin-dashboard-enhanced.html';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAdminAccess();
+            loadSalesForecast();
+        });
+    </script>
+</body>
+</html>

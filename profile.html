@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Settings - Trendaryo</title>
+    <meta name="robots" content="noindex, follow">
+    <link rel="canonical" href="https://trendaryo.com/profile.html">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon-crown-star.svg">
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="performance.js"></script>
+    <script src="bg.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0a0a0a; --bg-deep: #0a0a2a;
+            --accent: #00f0ff; --accent-2: #ff00aa; --accent-3: #00ff88;
+            --text: #ffffff; --muted: rgba(255,255,255,0.66); --muted-2: rgba(255,255,255,0.45);
+            --glass: rgba(255,255,255,0.05);
+            --glass-border: rgba(255,255,255,0.1); --glass-border-2: rgba(255,255,255,0.18);
+            --card-grad: linear-gradient(168deg, rgba(255,255,255,0.075), rgba(255,255,255,0.02));
+            --r-sm: 10px; --r-md: 16px; --r-lg: 22px; --r-pill: 999px;
+            --ease: cubic-bezier(0.22, 1, 0.36, 1);
+            --font-d: 'Orbitron', sans-serif; --font-b: 'Rajdhani', sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-b); background: var(--bg-deep); color: #fff; overflow-x: hidden; }
+        #three-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+        .page-offset { padding-top: 190px; padding-bottom: 3rem; }
+        a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+        .pf-shell { max-width: 700px; margin: 0 auto; padding: 0 2.5rem; }
+
+        .pf-hero { text-align: center; margin-bottom: 2.5rem; }
+        .pf-title { font-family: var(--font-d); font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 900; background: linear-gradient(135deg, #fff, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.3rem; }
+        .pf-sub { color: var(--muted); font-size: 0.95rem; }
+
+        .pf-card { background: var(--card-grad); border: 1px solid var(--glass-border); border-radius: var(--r-lg); padding: 2rem; margin-bottom: 1.5rem; }
+        .pf-card-title { font-family: var(--font-d); font-size: 0.85rem; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: var(--accent); margin-bottom: 1.25rem; }
+        .pf-field { margin-bottom: 1.25rem; }
+        .pf-label { display: block; margin-bottom: 0.4rem; font-size: 0.72rem; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--muted-2); }
+        .pf-input { width: 100%; padding: 0.75rem 0.9rem; border-radius: var(--r-md); border: 1px solid var(--glass-border-2); background: rgba(255,255,255,0.05); color: #fff; font-family: var(--font-b); font-size: 0.95rem; outline: none; transition: border-color 0.25s, box-shadow 0.25s; }
+        .pf-input:focus { border-color: rgba(0,240,255,0.6); box-shadow: 0 0 18px rgba(0,240,255,0.12); }
+        .pf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .pf-btn { padding: 0.85rem 1.5rem; border-radius: var(--r-md); font-family: var(--font-d); font-size: 0.68rem; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; cursor: pointer; transition: all 0.25s; border: 0; }
+        .pf-btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent-3)); color: #00202a; }
+        .pf-btn-primary:hover { box-shadow: 0 0 20px rgba(0,240,255,0.4); transform: translateY(-1px); }
+        .pf-btn-secondary { background: transparent; border: 1px solid var(--glass-border-2); color: rgba(255,255,255,0.8); }
+        .pf-btn-secondary:hover { border-color: rgba(255,255,255,0.5); color: #fff; }
+        .pf-success { background: rgba(0,255,136,0.08); border: 1px solid var(--accent-3); color: var(--accent-3); padding: 0.7rem 1rem; border-radius: var(--r-md); margin-bottom: 1rem; display: none; font-size: 0.92rem; }
+        .pf-success.show { display: block; }
+        .pf-actions { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 1.5rem; }
+
+        @media (max-width: 768px) { .pf-shell { padding: 0 1.5rem; } .pf-row { grid-template-columns: 1fr; } }
+        @media (max-width: 600px) { .pf-shell { padding: 0 1rem; } }
+        @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--accent), var(--accent-2)); border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <canvas id="three-canvas"></canvas>
+    <div id="header-container"></div>
+    <script src="components.js"></script>
+
+    <main class="page-offset">
+        <div class="pf-shell">
+            <div class="pf-hero">
+                <h1 class="pf-title">Profile Settings</h1>
+                <p class="pf-sub">Manage your personal information and security.</p>
+            </div>
+
+            <div class="pf-card">
+                <div class="pf-card-title">Personal Information</div>
+                <div class="pf-success" id="profile-success"></div>
+                <form id="profile-form">
+                    <div class="pf-row">
+                        <div class="pf-field"><label class="pf-label">First Name</label><input type="text" id="firstName" class="pf-input" required></div>
+                        <div class="pf-field"><label class="pf-label">Last Name</label><input type="text" id="lastName" class="pf-input" required></div>
+                    </div>
+                    <div class="pf-field"><label class="pf-label">Email</label><input type="email" id="email" class="pf-input"></div>
+                    <div class="pf-field"><label class="pf-label">Phone</label><input type="tel" id="phone" class="pf-input"></div>
+                    <button type="submit" class="pf-btn pf-btn-primary">Save Changes</button>
+                </form>
+            </div>
+
+            <div class="pf-card">
+                <div class="pf-card-title">Change Password</div>
+                <div class="pf-success" id="password-success"></div>
+                <form id="password-form">
+                    <div class="pf-field"><label class="pf-label">Current Password</label><input type="password" id="currentPassword" class="pf-input" required></div>
+                    <div class="pf-field"><label class="pf-label">New Password</label><input type="password" id="newPassword" class="pf-input" required minlength="6"></div>
+                    <div class="pf-field"><label class="pf-label">Confirm New Password</label><input type="password" id="confirmPassword" class="pf-input" required></div>
+                    <button type="submit" class="pf-btn pf-btn-primary">Update Password</button>
+                </form>
+            </div>
+
+            <div class="pf-card">
+                <div class="pf-card-title">Account Actions</div>
+                <div class="pf-actions">
+                    <a href="account.html" class="pf-btn pf-btn-secondary">Dashboard</a>
+                    <a href="orders.html" class="pf-btn pf-btn-secondary">My Orders</a>
+                    <a href="wishlist.html" class="pf-btn pf-btn-secondary">Wishlist</a>
+                    <button class="pf-btn pf-btn-secondary" onclick="logout()">Logout</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-container"></div>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="api-client.js"></script>
+    <script src="js/profile-integration.js"></script>
+    <script>
+        function loadProfile() {
+            var user = JSON.parse(localStorage.getItem('user') || '{}');
+            if (!user.email) { window.location.href = 'login.html'; return; }
+            document.getElementById('firstName').value = user.firstName || (user.name ? user.name.split(' ')[0] : '');
+            document.getElementById('lastName').value = user.lastName || (user.name ? user.name.split(' ').slice(1).join(' ') : '');
+            document.getElementById('email').value = user.email || '';
+            document.getElementById('phone').value = user.phone || '';
+        }
+        document.getElementById('profile-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            var user = JSON.parse(localStorage.getItem('user') || '{}');
+            user.firstName = document.getElementById('firstName').value;
+            user.lastName = document.getElementById('lastName').value;
+            user.email = document.getElementById('email').value;
+            user.phone = document.getElementById('phone').value;
+            user.name = user.firstName + ' ' + user.lastName;
+            localStorage.setItem('user', JSON.stringify(user));
+            var s = document.getElementById('profile-success');
+            s.textContent = 'Profile updated successfully!'; s.classList.add('show');
+            setTimeout(function () { s.classList.remove('show'); }, 3000);
+        });
+        document.getElementById('password-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (document.getElementById('newPassword').value !== document.getElementById('confirmPassword').value) { alert('Passwords do not match'); return; }
+            var s = document.getElementById('password-success');
+            s.textContent = 'Password updated successfully!'; s.classList.add('show');
+            setTimeout(function () { s.classList.remove('show'); }, 3000);
+            document.getElementById('password-form').reset();
+        });
+        function logout() {
+            if (window.handleLogout) { window.handleLogout(); }
+            else { localStorage.removeItem('token'); localStorage.removeItem('user'); localStorage.removeItem('user_id'); localStorage.removeItem('auth_token'); window.location.href = 'index.html'; }
+        }
+        loadProfile();
+    </script>
+    <script>
+        function hidePreloader() { var p = document.getElementById('preloader'); if (p) p.classList.add('hidden'); }
+        if (document.readyState === 'complete') { setTimeout(hidePreloader, 600); } else { window.addEventListener('load', function () { setTimeout(hidePreloader, 600); }); }
+        setTimeout(hidePreloader, 1500);
+    </script>
+</body>
+</html>

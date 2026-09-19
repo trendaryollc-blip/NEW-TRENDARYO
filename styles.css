@@ -1,0 +1,26 @@
+/* Main Styles */
+:root {
+  --accent: #00f0ff;
+  --accent-2: #ff00aa;
+  --accent-3: #00ff88;
+  --glass: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Rajdhani', sans-serif;
+  background: #0a0a2a;
+  color: #fff;
+  overflow-x: hidden;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+}

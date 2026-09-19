@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Join the Trendaryo Affiliate Program and earn commissions promoting premium products. High conversion rates, competitive payouts, and dedicated support.">
+    <meta name="keywords" content="affiliate program, earn money, partner program, commission, referral program">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Trendaryo">
+    <link rel="canonical" href="https://trendaryo.com/affiliate.html">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://trendaryo.com/affiliate.html">
+    <meta property="og:title" content="Affiliate Program - Trendaryo | Earn Money Promoting Products">
+    <meta property="og:description" content="Join the Trendaryo Affiliate Program and earn commissions promoting premium products. High conversion rates, competitive payouts, and dedicated support.">
+    <meta property="og:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://trendaryo.com/affiliate.html">
+    <meta property="twitter:title" content="Affiliate Program - Trendaryo | Earn Money Promoting Products">
+    <meta property="twitter:description" content="Join the Trendaryo Affiliate Program and earn commissions promoting premium products. High conversion rates, competitive payouts, and dedicated support.">
+    <meta property="twitter:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
+    
+    <title>Affiliate Program - Trendaryo | Earn Money Promoting Products</title>
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="shared.css">
+    <script src="performance.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="bg.js"></script>
+    <style>
+        :root { --accent: #00f0ff; --accent-2: #ff00aa; --accent-3: #00ff88; --glass: rgba(255,255,255,0.05); --glass-border: rgba(255,255,255,0.1); }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Rajdhani', sans-serif; background: #0a0a2a; color: #fff; overflow-x: hidden; transition: background 1s ease-in-out; }
+        #three-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none;}
+
+        .store-header { position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: rgba(0,0,0,0.08); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid var(--glass-border); }
+        .store-header-inner { max-width: 1200px; margin: 0 auto; padding: 0.8rem 1.25rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+        .store-brand { display: flex; align-items: center; gap: 0.75rem; min-width: 180px; }
+        .store-logo { font-family: 'Orbitron', sans-serif; font-size: 1.6rem; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent-2)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; white-space: nowrap; }
+
+        .page-offset { padding-top: 180px; }
+        
+        .affiliate-container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        
+        .hero-section { text-align: center; padding: 4rem 2rem; background: rgba(255,255,255,0.05) !important; backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 20px; margin-bottom: 3rem; position: relative; overflow: hidden; box-shadow: none !important; }
+        .hero-section::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%); animation: shimmer 4s linear infinite; }
+        @keyframes shimmer {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .hero-title { font-family: 'Orbitron', sans-serif; font-size: 3rem; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent-2)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; position: relative; z-index: 1; }
+        .hero-subtitle { font-size: 1.3rem; color: rgba(255,255,255,0.85); margin-bottom: 2rem; position: relative; z-index: 1; }
+        .cta-button { padding: 1.2rem 3rem; background: linear-gradient(135deg, var(--accent), var(--accent-2)); border: none; border-radius: 50px; color: #000; font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s ease; position: relative; z-index: 1; text-decoration: none; display: inline-block; }
+        .cta-button:hover { background: rgba(255,255,255,0.1); color: #fff; border: 2px solid #fff; transform: scale(1.05); box-shadow: 0 15px 30px rgba(255,255,255,0.3); }
+        
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 3rem; }
+        
+        .feature-card { background: rgba(255,255,255,0.05) !important; backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; text-align: center; transition: all 0.3s ease; box-shadow: none !important; }
+        .feature-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,240,255,0.2); border-color: var(--accent); }
+        
+        .feature-icon { font-size: 3rem; margin-bottom: 1rem; color: var(--accent); }
+        .feature-title { font-family: 'Orbitron', sans-serif; font-size: 1.3rem; font-weight: 700; color: #fff; margin-bottom: 1rem; }
+        .feature-description { color: rgba(255,255,255,0.8); font-size: 1rem; line-height: 1.6; }
+        
+        .commission-section { background: rgba(255,255,255,0.05) !important; backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 3rem; margin-bottom: 3rem; box-shadow: none !important; }
+        .commission-title { font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 700; color: var(--accent); text-align: center; margin-bottom: 2rem; }
+        .commission-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; }
+        .commission-item { text-align: center; padding: 1.5rem; background: rgba(255,255,255,0.05) !important; backdrop-filter: blur(10px); border: 1px solid var(--accent); border-radius: 12px; box-shadow: none !important; }
+        .commission-percentage { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; font-weight: 900; color: var(--accent); margin-bottom: 0.5rem; }
+        .commission-label { color: rgba(255,255,255,0.8); font-size: 1rem; }
+        
+        .how-it-works { background: rgba(255,255,255,0.05) !important; backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 3rem; margin-bottom: 3rem; box-shadow: none !important; }
+        .section-title { font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 700; color: #fff; text-align: center; margin-bottom: 2rem; }
+        .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
+        .step-item { text-align: center; padding: 2rem; }
+        .step-number { width: 60px; height: 60px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Orbitron', sans-serif; font-size: 1.5rem; font-weight: 900; color: #fff; margin: 0 auto 1rem; }
+        .step-title { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; font-weight: 700; color: #fff; margin-bottom: 1rem; }
+        .step-description { color: rgba(255,255,255,0.8); font-size: 1rem; line-height: 1.6; }
+        
+        .signup-section { background: rgba(255,255,255,0.05) !important; backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 3rem; text-align: center; margin-bottom: 3rem; box-shadow: none !important; }
+        .signup-title { font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 900; background: linear-gradient(135deg, var(--accent-3), var(--accent)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; }
+        .signup-description { color: rgba(255,255,255,0.85); font-size: 1.1rem; margin-bottom: 2rem; }
+        .signup-form { max-width: 500px; margin: 0 auto; }
+        .form-group { margin-bottom: 1.5rem; text-align: left; }
+        .form-label { display: block; margin-bottom: 0.5rem; color: rgba(255,255,255,0.9); font-weight: 500; font-size: 1rem; }
+        .form-input { width: 100%; padding: 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; color: #fff; font-size: 1rem; transition: all 0.3s ease; }
+        .form-input:focus { outline: none; border-color: var(--accent); background: rgba(255,255,255,0.08); }
+        .form-input::placeholder { color: rgba(255,255,255,0.7); }
+        .submit-button { width: 100%; padding: 1.2rem; background: linear-gradient(135deg, var(--accent), var(--accent-2)); border: none; border-radius: 12px; color: #000; font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; }
+        .submit-button:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,240,255,0.4); }
+        
+        .faq-section { background: rgba(255,255,255,0.05) !important; backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 3rem; box-shadow: none !important; }
+        .faq-item { margin-bottom: 2rem; }
+        .faq-question { background: rgba(255,255,255,0.05) !important; backdrop-filter: blur(10px); border: 1px solid var(--accent); border-radius: 12px; padding: 1.5rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s ease; box-shadow: none !important; }
+        .faq-question:hover { background: rgba(255,255,255,0.08) !important; }
+        .faq-question-text { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 600; color: #fff; }
+        .faq-toggle { color: var(--accent); font-size: 1.2rem; transition: transform 0.3s ease; }
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .faq-answer.active { max-height: 500px; margin-top: 1rem; }
+        .faq-answer-content { color: rgba(255,255,255,0.8); font-size: 1rem; line-height: 1.6; padding: 0 1rem; }
+        
+        .success-message, .error-message { padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; text-align: center; display: none; }
+        .success-message { background: rgba(0,255,136,0.1); border: 1px solid var(--accent-3); color: var(--accent-3); }
+        .error-message { background: rgba(255,0,170,0.1); border: 1px solid var(--accent-2); color: var(--accent-2); }
+        
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2rem; }
+            .hero-subtitle { font-size: 1.1rem; }
+            .features-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+            .commission-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+            .steps-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+        }
+    </style>
+<script src="bg.js"></script>
+</head>
+<body>
+    <canvas id="three-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;"></canvas>
+    
+    <!-- Full Navigation Header -->
+    <div id="header-container" data-type="full"></div>
+
+    <main class="page-offset">
+        <div class="affiliate-container">
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <h1 class="hero-title">Join the Trendaryo Affiliate Program</h1>
+                <p class="hero-subtitle">Earn generous commissions promoting premium fashion, tech, and lifestyle products</p>
+                <a href="#signup" class="cta-button">Start Earning Today</a>
+            </section>
+            
+            <!-- Features Section -->
+            <section class="features-section">
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">💰</div>
+                        <h3 class="feature-title">Competitive Commissions</h3>
+                        <p class="feature-description">Earn up to 15% commission on every sale through your referral links</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h3 class="feature-title">Real-Time Analytics</h3>
+                        <p class="feature-description">Track your clicks, conversions, and earnings with our advanced dashboard</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🎯</div>
+                        <h3 class="feature-title">30-Day Cookies</h3>
+                        <p class="feature-description">Get credit for sales up to 30 days after someone clicks your link</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🎁</div>
+                        <h3 class="feature-title">Exclusive Promotions</h3>
+                        <p class="feature-description">Access special deals and promotions to share with your audience</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Commission Structure -->
+            <section class="commission-section">
+                <h2 class="commission-title">Commission Structure</h2>
+                <div class="commission-grid">
+                    <div class="commission-item">
+                        <div class="commission-percentage">10%</div>
+                        <div class="commission-label">Standard Products</div>
+                    </div>
+                    <div class="commission-item">
+                        <div class="commission-percentage">15%</div>
+                        <div class="commission-label">Premium Products</div>
+                    </div>
+                    <div class="commission-item">
+                        <div class="commission-percentage">5%</div>
+                        <div class="commission-label">Gift Cards</div>
+                    </div>
+                    <div class="commission-item">
+                        <div class="commission-percentage">2%</div>
+                        <div class="commission-label">Sub-affiliates</div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- How It Works -->
+            <section class="how-it-works">
+                <h2 class="section-title">How It Works</h2>
+                <div class="steps-grid">
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <h3 class="step-title">Sign Up</h3>
+                        <p class="step-description">Create your free affiliate account in seconds and get your unique referral links</p>
+                    </div>
+                    
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <h3 class="step-title">Promote</h3>
+                        <p class="step-description">Share your links on social media, blogs, websites, or with friends</p>
+                    </div>
+                    
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <h3 class="step-title">Earn</h3>
+                        <p class="step-description">Receive commissions when someone makes a purchase through your links</p>
+                    </div>
+                    
+                    <div class="step-item">
+                        <div class="step-number">4</div>
+                        <h3 class="step-title">Get Paid</h3>
+                        <p class="step-description">Monthly payouts via PayPal, bank transfer, or store credit</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Sign Up Section -->
+            <section id="signup" class="signup-section">
+                <h2 class="signup-title">Start Your Journey</h2>
+                <p class="signup-description">Join thousands of affiliates earning money with Trendaryo</p>
+                
+                <div class="success-message" id="success-message">
+                    🎉 Application received! We'll review your application and get back to you within 3-5 business days.
+                </div>
+                
+                <div class="error-message" id="error-message">
+                    ❌ There was an error submitting your application. Please try again.
+                </div>
+                
+                <form class="signup-form" onsubmit="submitAffiliateApplication(event)">
+                    <div class="form-group">
+                        <label class="form-label" for="fullName">Full Name</label>
+                        <input type="text" id="fullName" class="form-input" placeholder="John Doe" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="email">Email Address</label>
+                        <input type="email" id="email" class="form-input" placeholder="john@example.com" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="website">Website/Blog/Social Media</label>
+                        <input type="url" id="website" class="form-input" placeholder="https://your-website.com" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="audience">How will you promote Trendaryo?</label>
+                        <input type="text" id="audience" class="form-input" placeholder="e.g., Fashion blog, Instagram influencer, Tech reviewer" required>
+                    </div>
+                    
+                    <button type="submit" class="submit-button">Submit Application</button>
+                </form>
+            </section>
+            
+            <!-- FAQ Section -->
+            <section class="faq-section">
+                <h2 class="section-title">Frequently Asked Questions</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(1)">
+                        <span class="faq-question-text">How much can I earn as an affiliate?</span>
+                        <span class="faq-toggle" id="faq-toggle-1">+</span>
+                    </div>
+                    <div class="faq-answer" id="faq-answer-1">
+                        <div class="faq-answer-content">
+                            Your earnings depend on the products you promote and your sales volume. Standard products earn 10% commission, premium products earn 15%, and you can earn 2% from sub-affiliates you refer. There's no limit to your earning potential!
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(2)">
+                        <span class="faq-question-text">When and how do I get paid?</span>
+                        <span class="faq-toggle" id="faq-toggle-2">+</span>
+                    </div>
+                    <div class="faq-answer" id="faq-answer-2">
+                        <div class="faq-answer-content">
+                            We process payments monthly via PayPal, bank transfer, or store credit. Minimum payout is $50. Payments are processed within 30 days after the end of each month.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(3)">
+                        <span class="faq-question-text">How long do cookies last?</span>
+                        <span class="faq-toggle" id="faq-toggle-3">+</span>
+                    </div>
+                    <div class="faq-answer" id="faq-answer-3">
+                        <div class="faq-answer-content">
+                            Our tracking cookies last for 30 days. This means if someone clicks your link and makes a purchase within 30 days, you'll get credit for the sale.
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+    <script src="components.js"></script>
+    
+
+    <!-- Self-Healing System -->
+<script>
+window.onerror = function(msg, url, lineNo, columnNo, error) {
+  console.log('Error caught:', msg);
+  const errorDiv = document.createElement('div');
+  errorDiv.style.cssText = 'position:fixed; bottom:20px; right:20px; background:#f3f4f6; padding:10px; border-radius:5px; z-index:9999; border:1px solid #ccc;';
+  errorDiv.innerHTML = '⚠️ Something went wrong. Retrying...';
+  document.body.appendChild(errorDiv);
+  setTimeout(() => errorDiv.remove(), 3000);
+  return false;
+};
+</script>
+</body>
+</html>

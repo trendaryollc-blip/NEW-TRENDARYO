@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Buy Trendaryo gift cards for any occasion. Digital gift cards delivered instantly. Perfect for birthdays, holidays, and special events.">
+    <meta name="keywords" content="gift cards, digital gift cards, birthday gifts, holiday gifts, present ideas">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Trendaryo">
+    <link rel="canonical" href="https://trendaryo.com/gift-cards.html">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://trendaryo.com/gift-cards.html">
+    <meta property="og:title" content="Gift Cards - Trendaryo | Digital Gift Cards">
+    <meta property="og:description" content="Buy Trendaryo gift cards for any occasion. Digital gift cards delivered instantly. Perfect for birthdays, holidays, and special events.">
+    <meta property="og:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://trendaryo.com/gift-cards.html">
+    <meta property="twitter:title" content="Gift Cards - Trendaryo | Digital Gift Cards">
+    <meta property="twitter:description" content="Buy Trendaryo gift cards for any occasion. Digital gift cards delivered instantly. Perfect for birthdays, holidays, and special events.">
+    <meta property="twitter:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
+    
+    <title>Gift Cards - Trendaryo | Digital Gift Cards</title>
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="shared.css">
+    <script src="performance.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="bg.js"></script>
+    <style>
+        :root { --accent: #00f0ff; --accent-2: #ff00aa; --accent-3: #00ff88; --glass: rgba(255,255,255,0.05); --glass-border: rgba(255,255,255,0.1); }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Rajdhani', sans-serif; background: #0a0a2a; color: #fff; overflow-x: hidden; transition: background 1s ease-in-out; }
+        #three-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none;}
+
+        .store-header { position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: rgba(0,0,0,0.08); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid var(--glass-border); }
+        .store-header-inner { max-width: 1200px; margin: 0 auto; padding: 0.8rem 1.25rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+        .store-brand { display: flex; align-items: center; gap: 0.75rem; min-width: 180px; }
+        .store-logo { font-family: 'Orbitron', sans-serif; font-size: 1.6rem; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent-2)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; white-space: nowrap; }
+
+        .page-offset { padding-top: 180px; }
+        
+        .gift-cards-container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        
+        .page-header { text-align: center; margin-bottom: 3rem; padding: 2rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px; }
+        .page-header h1 { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent-2)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; }
+        .page-header p { color: rgba(255,255,255,0.8); font-size: 1.2rem; line-height: 1.6; }
+        
+        .tabs-container { display: flex; justify-content: center; margin-bottom: 3rem; }
+        .tab-button { padding: 1rem 2rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 12px; color: rgba(255,255,255,0.85); font-family: 'Orbitron', sans-serif; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin: 0 0.5rem; }
+        .tab-button.active { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #000; border-color: transparent; box-shadow: 0 5px 20px rgba(0,240,255,0.3); }
+        .tab-button:hover:not(.active) { border-color: var(--accent); color: var(--accent); background: rgba(0,240,255,0.05); }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        .gift-cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 3rem; }
+        
+        .gift-card { background: var(--glass); border: 1px solid var(--glass-border); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 20px; padding: 2rem; text-align: center; position: relative; overflow: hidden; transition: all 0.3s ease; cursor: pointer; }
+        .gift-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(0,240,255,0.05) 0%, transparent 70%); animation: shimmer 3s infinite; }
+        .gift-card:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 20px 40px rgba(0,240,255,0.3); border-color: var(--accent); }
+        
+        @keyframes shimmer {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .gift-card-amount { font-family: 'Orbitron', sans-serif; font-size: 3rem; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent-2)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem; position: relative; z-index: 1; }
+        .gift-card-price { font-family: 'Orbitron', sans-serif; font-size: 1.5rem; font-weight: 700; color: rgba(255,255,255,0.95); margin-bottom: 1rem; position: relative; z-index: 1; }
+        .gift-card-description { color: rgba(255,255,255,0.85); font-size: 1rem; margin-bottom: 1.5rem; position: relative; z-index: 1; }
+        .buy-button { padding: 1rem 2rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 12px; color: rgba(255,255,255,0.95); font-family: 'Orbitron', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; position: relative; z-index: 1; }
+        .buy-button:hover { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #000; transform: scale(1.05); box-shadow: 0 5px 20px rgba(0,240,255,0.5); border-color: transparent; }
+        
+        .redeem-section { max-width: 600px; margin: 0 auto; padding: 3rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px; }
+        .redeem-section h2 { font-family: 'Orbitron', sans-serif; font-size: 1.8rem; font-weight: 700; color: #fff; margin-bottom: 1.5rem; text-align: center; }
+        
+        .form-group { margin-bottom: 1.5rem; }
+        .form-label { display: block; margin-bottom: 0.5rem; color: rgba(255,255,255,0.9); font-weight: 500; font-size: 1rem; }
+        .form-input { width: 100%; padding: 1rem; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 12px; color: #fff; font-size: 1rem; transition: all 0.3s ease; }
+        .form-input:focus { outline: none; border-color: var(--accent); background: rgba(0,240,255,0.05); box-shadow: 0 0 0 3px rgba(0,240,255,0.1); }
+        .form-input::placeholder { color: rgba(255,255,255,0.4); }
+        
+        .redeem-button { width: 100%; padding: 1.2rem; background: linear-gradient(135deg, var(--accent-3), var(--accent)); border: none; border-radius: 12px; color: #000; font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; }
+        .redeem-button:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,255,136,0.5); }
+        .redeem-button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        
+        .success-message, .error-message { padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; text-align: center; display: none; }
+        .success-message { background: rgba(0,255,136,0.1); border: 1px solid var(--accent-3); color: var(--accent-3); }
+        .error-message { background: rgba(255,0,170,0.1); border: 1px solid var(--accent-2); color: var(--accent-2); }
+        
+        .balance-display { text-align: center; padding: 2rem; background: rgba(0,255,136,0.1); border: 1px solid var(--accent-3); border-radius: 16px; margin-bottom: 2rem; }
+        .balance-amount { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; font-weight: 900; color: var(--accent-3); margin-bottom: 0.5rem; }
+        .balance-label { color: rgba(255,255,255,0.8); font-size: 1rem; }
+        
+        @media (max-width: 768px) {
+            .gift-cards-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+            .tabs-container { flex-direction: column; align-items: center; }
+            .tab-button { margin: 0.5rem 0; width: 200px; }
+            .page-header h1 { font-size: 2rem; }
+        }
+    </style>
+<script src="bg.js"></script>
+</head>
+<body>
+    <canvas id="three-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;"></canvas>
+    
+    <!-- Full Navigation Header -->
+    <div id="header-container" data-type="full"></div>
+
+    <main class="page-offset">
+        <div class="gift-cards-container">
+            <div class="page-header">
+                <h1>Gift Cards</h1>
+                <p>The perfect gift for every occasion. Give the gift of choice with Trendaryo gift cards.</p>
+            </div>
+            
+            <div class="tabs-container">
+                <button class="tab-button active" onclick="switchTab('buy')">Buy Gift Card</button>
+                <button class="tab-button" onclick="switchTab('redeem')">Redeem Gift Card</button>
+                <button class="tab-button" onclick="switchTab('balance')">Check Balance</button>
+            </div>
+            
+            <!-- Buy Gift Card Tab -->
+            <div id="buy-tab" class="tab-content active">
+                <div class="gift-cards-grid">
+                    <div class="gift-card" onclick="selectGiftCard(25)">
+                        <div class="gift-card-amount">$25</div>
+                        <div class="gift-card-price">$25.00</div>
+                        <div class="gift-card-description">Perfect for a small treat</div>
+                        <button class="buy-button">Buy Now</button>
+                    </div>
+                    
+                    <div class="gift-card" onclick="selectGiftCard(50)">
+                        <div class="gift-card-amount">$50</div>
+                        <div class="gift-card-price">$50.00</div>
+                        <div class="gift-card-description">Our most popular choice</div>
+                        <button class="buy-button">Buy Now</button>
+                    </div>
+                    
+                    <div class="gift-card" onclick="selectGiftCard(100)">
+                        <div class="gift-card-amount">$100</div>
+                        <div class="gift-card-price">$100.00</div>
+                        <div class="gift-card-description">For something special</div>
+                        <button class="buy-button">Buy Now</button>
+                    </div>
+                    
+                    <div class="gift-card" onclick="selectGiftCard(250)">
+                        <div class="gift-card-amount">$250</div>
+                        <div class="gift-card-price">$250.00</div>
+                        <div class="gift-card-description">The ultimate gift</div>
+                        <button class="buy-button">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Redeem Gift Card Tab -->
+            <div id="redeem-tab" class="tab-content">
+                <div class="redeem-section">
+                    <h2>Redeem Your Gift Card</h2>
+                    
+                    <div class="success-message" id="redeem-success">
+                        🎉 Gift card redeemed successfully! $<span id="redeemed-amount">0</span> has been added to your account.
+                    </div>
+                    
+                    <div class="error-message" id="redeem-error">
+                        ❌ Invalid or expired gift card. Please check the code and try again.
+                    </div>
+                    
+                    <form id="redeem-form">
+                        <div class="form-group">
+                            <label class="form-label" for="gift-card-code">Gift Card Code</label>
+                            <input 
+                                type="text" 
+                                id="gift-card-code" 
+                                class="form-input" 
+                                placeholder="Enter your gift card code (e.g., TRENDARYO-XXXX-XXXX)"
+                                required
+                                maxlength="25"
+                            >
+                        </div>
+                        
+                        <button type="submit" class="redeem-button" id="redeem-btn">
+                            Redeem Gift Card
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Check Balance Tab -->
+            <div id="balance-tab" class="tab-content">
+                <div class="redeem-section">
+                    <h2>Check Your Gift Card Balance</h2>
+                    
+                    <div class="balance-display" id="balance-display" style="display: none;">
+                        <div class="balance-amount">$<span id="balance-amount">0.00</span></div>
+                        <div class="balance-label">Available Balance</div>
+                    </div>
+                    
+                    <form id="balance-form">
+                        <div class="form-group">
+                            <label class="form-label" for="balance-code">Gift Card Code</label>
+                            <input 
+                                type="text" 
+                                id="balance-code" 
+                                class="form-input" 
+                                placeholder="Enter your gift card code"
+                                required
+                                maxlength="25"
+                            >
+                        </div>
+                        
+                        <button type="submit" class="redeem-button">
+                            Check Balance
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="gc-section" style="max-width:1100px;margin:3rem auto 0;">
+            <div id="gc-steps"></div>
+        </div>
+
+        <div class="gc-section" style="max-width:1100px;margin:2.5rem auto 0;">
+            <div id="gc-occasions"></div>
+        </div>
+
+        <div class="gc-section" style="max-width:860px;margin:2.5rem auto 0;">
+            <div id="gc-faq"></div>
+        </div>
+
+        <div id="gc-cta" style="max-width:1000px;margin:2.5rem auto 0;"></div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+    <script src="components.js"></script>
+    <script src="products-data.js"></script>
+    <script src="backend-bridge.js"></script>
+    <script src="page-helpers.js"></script>
+    <script>
+    (function () {
+        var UI = window.TrendaryoUI;
+        if (!UI) return;
+        var steps = document.getElementById('gc-steps');
+        var occ = document.getElementById('gc-occasions');
+        var faq = document.getElementById('gc-faq');
+        var cta = document.getElementById('gc-cta');
+        if (steps && UI.steps) steps.innerHTML = '<h2 class="gc-h2">How Trendaryo Gift Cards Work</h2>' + UI.steps([
+            { title: 'Choose an amount', text: 'Pick a value between $25 and $500 — or enter a custom amount on the Buy tab above.' },
+            { title: 'Send it instantly', text: 'Gift cards are delivered by email within minutes, with a personal message and a unique code.' },
+            { title: 'They spend it freely', text: 'The code works on every product, never expires, and can be combined with sales and promo codes.' }
+        ]);
+        if (occ) occ.innerHTML = '<h2 class="gc-h2">Perfect For</h2><div class="gc-occ-grid">'
+            + '<div class="gc-occ"><span>🎂</span><strong>Birthdays</strong></div>'
+            + '<div class="gc-occ"><span>🎄</span><strong>Holidays</strong></div>'
+            + '<div class="gc-occ"><span>🎓</span><strong>Graduations</strong></div>'
+            + '<div class="gc-occ"><span>💍</span><strong>Anniversaries</strong></div>'
+            + '<div class="gc-occ"><span>🏆</span><strong>Rewards & prizes</strong></div>'
+            + '<div class="gc-occ"><span>🤝</span><strong>Corporate gifting</strong></div>'
+            + '</div>';
+        if (faq && UI.faq) faq.innerHTML = '<h2 class="gc-h2">Gift Card FAQ</h2>' + UI.faq([
+            { q: 'Do gift cards expire?', a: 'Never. Trendaryo gift cards have no expiration date and no hidden maintenance fees.' },
+            { q: 'Can I use a gift card with a promo code?', a: 'Yes. Apply your promo code first, then the gift card covers the remaining balance — they stack perfectly.' },
+            { q: 'What happens if the order is less than the card?', a: 'The remaining balance stays on the card for future purchases. Your code keeps working until the balance hits zero.' },
+            { q: 'Can I get a refund on a gift card?', a: 'Unused gift cards can be refunded within 14 days of purchase as long as none of the balance has been spent.' },
+            { q: 'Lost the email with the code?', a: 'Contact support with the purchase email address and we will re-issue the code within 24 hours.' }
+        ], false);
+        if (cta && UI.ctaBand) cta.innerHTML = UI.ctaBand({
+            title: 'Still deciding on the amount?',
+            text: 'You can always add value later — or pair a gift card with one of our best-sellers for the perfect present.',
+            cta: 'Browse Best-Sellers', href: 'shop.html'
+        });
+    })();
+    </script>
+
+    <!-- Self-Healing System -->
+<script>
+window.onerror = function(msg, url, lineNo, columnNo, error) {
+  console.log('Error caught:', msg);
+  const errorDiv = document.createElement('div');
+  errorDiv.style.cssText = 'position:fixed; bottom:20px; right:20px; background:#f3f4f6; padding:10px; border-radius:5px; z-index:9999; border:1px solid #ccc;';
+  errorDiv.innerHTML = '⚠️ Something went wrong. Retrying...';
+  document.body.appendChild(errorDiv);
+  setTimeout(() => errorDiv.remove(), 3000);
+  return false;
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Discover Trendaryo's Luxury Nebula - premium quality products and exclusive collections.">
+    <title>Luxury Nebula - Trendaryo's Premium Collection</title>
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="responsive-universal.css">
+    <link rel="stylesheet" href="shared.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --accent: #00f0ff; --accent-2: #ff00aa; --accent-3: #00ff88; --glass: rgba(255,255,255,0.05); --glass-border: rgba(255,255,255,0.1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Rajdhani', sans-serif; color: #fff; background: #0a0a2a; overflow-x: hidden; }
+        html { background: #0a0a2a; }
+        #three-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+
+        .page-offset { padding-top: 210px; }
+        .section-wrap { max-width: 1200px; margin: 0 auto; }
+        .section-pad { padding: 3.5rem 1.25rem; }
+        .section-title { font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: clamp(1.6rem, 3.5vw, 2.4rem); margin-bottom: 0.65rem; }
+        .section-subtitle { color: rgba(255,255,255,0.75); font-size: 1.05rem; max-width: 720px; }
+
+        .hero { padding: 4rem 1.25rem; text-align: center; }
+        .hero-content { max-width: 900px; margin: 0 auto; }
+        .hero-icon { font-size: 5rem; margin-bottom: 1.5rem; animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+
+        .hero-title { font-family: 'Orbitron', sans-serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 900; background: linear-gradient(135deg, #ffd700, #ff00aa); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; }
+        .hero-subtitle { color: rgba(255,255,255,0.8); font-size: 1.2rem; margin-bottom: 2rem; line-height: 1.7; }
+
+        .cta-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 3rem; }
+        .btn-primary { display: inline-block; padding: 1rem 2.5rem; border-radius: 999px; background: linear-gradient(135deg, #ffd700, #ff00aa); color: #000; font-family: 'Orbitron', sans-serif; font-weight: 900; text-decoration: none; transition: all 0.3s; box-shadow: 0 0 30px rgba(255, 215, 0, 0.4); }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 0 50px rgba(255, 215, 0, 0.7); }
+        .btn-secondary { display: inline-block; padding: 1rem 2.5rem; border-radius: 999px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-family: 'Orbitron', sans-serif; font-weight: 900; text-decoration: none; transition: all 0.3s; }
+        .btn-secondary:hover { background: rgba(255,255,255,0.12); border-color: #ffd700; }
+
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-top: 2rem; }
+        .feature-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 18px; padding: 2.5rem; text-align: center; transition: all 0.3s; }
+        .feature-card:hover { transform: translateY(-8px); border-color: #ffd700; }
+        .feature-icon { font-size: 3rem; margin-bottom: 1rem; }
+        .feature-title { font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 1.2rem; margin-bottom: 0.75rem; color: #ffd700; }
+        .feature-desc { color: rgba(255,255,255,0.7); line-height: 1.6; }
+
+        .collection-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .collection-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 18px; padding: 2rem; text-align: center; transition: all 0.3s; }
+        .collection-card:hover { transform: translateY(-8px); border-color: #ffd700; }
+        .collection-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+        .collection-name { font-family: 'Orbitron', sans-serif; font-weight: 900; color: #ffd700; margin-bottom: 0.5rem; }
+        .collection-desc { color: rgba(255,255,255,0.7); font-size: 0.9rem; }
+
+        .stats-section { background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 0, 170, 0.1)); border: 1px solid rgba(255, 215, 0, 0.2); border-radius: 20px; padding: 3rem; text-align: center; margin-top: 3rem; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 2rem; margin-top: 2rem; }
+        .stat-item { }
+        .stat-number { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; font-weight: 900; color: #ffd700; margin-bottom: 0.5rem; }
+        .stat-label { color: rgba(255,255,255,0.7); font-size: 0.95rem; }
+
+        @media (max-width: 900px) {
+            .page-offset { padding-top: 180px; }
+            .cta-buttons { flex-direction: column; align-items: center; }
+            .btn-primary, .btn-secondary { width: 100%; max-width: 300px; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="three-canvas"></canvas>
+    
+    <main class="page-offset">
+        <section class="hero">
+            <div class="hero-content">
+                <div class="hero-icon">💎</div>
+                <h1 class="hero-title">Luxury Nebula</h1>
+                <p class="hero-subtitle">Premium quality that feels as good as it looks. No compromises. Exclusively curated for those who demand the finest.</p>
+                
+                <div class="cta-buttons">
+                    <a href="shop.html" class="btn-primary">Explore Luxury</a>
+                    <a href="index.html" class="btn-secondary">Back to Home</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-pad">
+            <div class="section-wrap">
+                <h2 class="section-title" style="text-align: center;">The Luxury Promise</h2>
+                <p class="section-subtitle" style="text-align: center; margin: 0 auto 2rem;">What defines our premium collection</p>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">✨</div>
+                        <div class="feature-title">Handcrafted Excellence</div>
+                        <div class="feature-desc">Each piece meticulously crafted by master artisans with decades of expertise.</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🏆</div>
+                        <div class="feature-title">Award-Winning Design</div>
+                        <div class="feature-desc">Recognized globally for innovation, aesthetics, and timeless elegance.</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💎</div>
+                        <div class="feature-title">Premium Materials</div>
+                        <div class="feature-desc">Only the finest materials sourced from around the world. No compromises.</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔐</div>
+                        <div class="feature-title">Authenticity Guaranteed</div>
+                        <div class="feature-desc">Every item comes with certificate of authenticity and lifetime verification.</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">👑</div>
+                        <div class="feature-title">Exclusive Collections</div>
+                        <div class="feature-desc">Limited edition pieces available only to our VIP members.</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎁</div>
+                        <div class="feature-title">White Glove Service</div>
+                        <div class="feature-desc">Personalized concierge service and premium packaging for every order.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-pad">
+            <div class="section-wrap">
+                <h2 class="section-title" style="text-align: center;">Luxury Collections</h2>
+                <p class="section-subtitle" style="text-align: center; margin: 0 auto 2rem;">Curated selections for the discerning customer</p>
+                
+                <div class="collection-grid">
+                    <div class="collection-card">
+                        <div class="collection-icon">⌚</div>
+                        <div class="collection-name">Timepieces</div>
+                        <div class="collection-desc">Swiss-made watches with precision engineering and timeless design.</div>
+                    </div>
+                    <div class="collection-card">
+                        <div class="collection-icon">👜</div>
+                        <div class="collection-name">Accessories</div>
+                        <div class="collection-desc">Designer bags, belts, and accessories from world-renowned brands.</div>
+                    </div>
+                    <div class="collection-card">
+                        <div class="collection-icon">👗</div>
+                        <div class="collection-name">Fashion</div>
+                        <div class="collection-desc">Haute couture and designer clothing from exclusive fashion houses.</div>
+                    </div>
+                    <div class="collection-card">
+                        <div class="collection-icon">🎧</div>
+                        <div class="collection-name">Audio</div>
+                        <div class="collection-desc">Premium audio equipment with studio-quality sound reproduction.</div>
+                    </div>
+                    <div class="collection-card">
+                        <div class="collection-icon">💻</div>
+                        <div class="collection-name">Technology</div>
+                        <div class="collection-desc">Cutting-edge tech with luxury finishes and premium materials.</div>
+                    </div>
+                    <div class="collection-card">
+                        <div class="collection-icon">💍</div>
+                        <div class="collection-name">Jewelry</div>
+                        <div class="collection-desc">Fine jewelry featuring precious metals and certified gemstones.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-pad">
+            <div class="section-wrap">
+                <h2 class="section-title" style="text-align: center;">VIP Membership Benefits</h2>
+                <p class="section-subtitle" style="text-align: center; margin: 0 auto 2rem;">Exclusive privileges for our most valued customers</p>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+                    <div style="background: var(--glass); border: 1px solid var(--glass-border); border-radius: 18px; padding: 2rem;">
+                        <h3 style="font-family: 'Orbitron', sans-serif; font-weight: 900; color: #ffd700; margin-bottom: 1rem;">🎯 Priority Access</h3>
+                        <p style="color: rgba(255,255,255,0.8); line-height: 1.7;">First access to new collections, limited editions, and exclusive launches before public release.</p>
+                    </div>
+                    <div style="background: var(--glass); border: 1px solid var(--glass-border); border-radius: 18px; padding: 2rem;">
+                        <h3 style="font-family: 'Orbitron', sans-serif; font-weight: 900; color: #ffd700; margin-bottom: 1rem;">💳 Premium Rewards</h3>
+                        <p style="color: rgba(255,255,255,0.8); line-height: 1.7;">Earn 5x points on every purchase, redeemable for exclusive items and experiences.</p>
+                    </div>
+                    <div style="background: var(--glass); border: 1px solid var(--glass-border); border-radius: 18px; padding: 2rem;">
+                        <h3 style="font-family: 'Orbitron', sans-serif; font-weight: 900; color: #ffd700; margin-bottom: 1rem;">🎁 Personal Stylist</h3>
+                        <p style="color: rgba(255,255,255,0.8); line-height: 1.7;">Dedicated personal stylist to curate selections tailored to your preferences.</p>
+                    </div>
+                    <div style="background: var(--glass); border: 1px solid var(--glass-border); border-radius: 18px; padding: 2rem;">
+                        <h3 style="font-family: 'Orbitron', sans-serif; font-weight: 900; color: #ffd700; margin-bottom: 1rem;">🚚 Concierge Service</h3>
+                        <p style="color: rgba(255,255,255,0.8); line-height: 1.7;">24/7 concierge support, priority shipping, and white-glove delivery service.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-pad">
+            <div class="section-wrap">
+                <div class="stats-section">
+                    <h2 class="section-title" style="text-align: center; margin-bottom: 0;">Luxury by the Numbers</h2>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-number">500+</div>
+                            <div class="stat-label">Premium Brands</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">10K+</div>
+                            <div class="stat-label">Luxury Items</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">25K+</div>
+                            <div class="stat-label">VIP Members</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">99.8%</div>
+                            <div class="stat-label">Satisfaction</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 2.5rem;">
+                        <a href="shop.html" class="btn-primary">Shop Luxury Collection</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section style="max-width:1150px;margin:0 auto;padding:3rem 1.5rem 1rem;">
+            <h2 class="gc-h2">The Luxury Edit</h2>
+            <p style="text-align:center;color:rgba(255,255,255,0.65);max-width:560px;margin:0 auto 2rem;">Our most refined pieces — premium materials, flawless finish, and the details money notices.</p>
+            <div class="pm-grid" id="show-luxury"></div>
+        </section>
+    </main>
+
+    <script src="components.js"></script>
+    <script src="products-data.js"></script>
+    <script src="backend-bridge.js"></script>
+    <script src="page-helpers.js"></script>
+    <script>
+    (function () {
+        var UI = window.TrendaryoUI, P = window.TrendaryoProducts;
+        var mount = document.getElementById('show-luxury');
+        if (!mount || !UI || !P) return;
+        mount.innerHTML = [6, 19, 17, 25, 15].map(function (id) { return UI.productMini(P.find(id)); }).join('');
+        UI.bindMiniCards(mount);
+    })();
+    </script>
+    <script src="bg.js"></script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+# TRENDARYO Robots.txt
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://trendaryo.com/sitemap.xml
+
+# Block admin pages from indexing
+Disallow: /admin-login.html
+Disallow: /admin-dashboard.html
+Disallow: /admin-control-panel.html
+Disallow: /admin-products.html
+Disallow: /admin-orders.html
+Disallow: /admin-customers.html
+Disallow: /account-management.html
+Disallow: /advanced-analytics.html
+Disallow: /kpi-dashboard.html
+Disallow: /predictive-analytics.html
+Disallow: /custom-reports.html
+Disallow: /self-healing-dashboard.html
+
+# Block test pages
+Disallow: /firebase-auth-test.html
+Disallow: /*-test.html
+
+# Block internal development & setup pages
+Disallow: /firebase-setup.html
+Disallow: /firestore-setup.html
+Disallow: /firebase-code-snippets.html
+Disallow: /firebase-snippets-fixed.html
+Disallow: /firebase-code-snippets.txt
+
+# Block documentation files
+Disallow: /*.md

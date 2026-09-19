@@ -1,0 +1,377 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - Trendaryo | What We Collect, Why, and What We Never Do</title>
+    <meta name="description" content="The Trendaryo privacy ledger: every data point we collect, why it exists, how long we keep it and how to have it erased - written in plain words, with nothing hidden and nothing sold.">
+    <meta name="keywords" content="privacy policy, data protection, data ledger, localStorage, no data selling, trendaryo privacy">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Trendaryo">
+    <link rel="canonical" href="https://trendaryo.com/privacy.html">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://trendaryo.com/privacy.html">
+    <meta property="og:title" content="Privacy Policy - Trendaryo">
+    <meta property="og:description" content="Every data point we collect, why it exists and how to have it erased - the same honesty the shelf shows, applied to your data.">
+    <meta property="og:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://trendaryo.com/privacy.html">
+    <meta property="twitter:title" content="Privacy Policy - Trendaryo">
+    <meta property="twitter:description" content="Every data point we collect, why it exists and how to have it erased - the same honesty the shelf shows, applied to your data.">
+    <meta property="twitter:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon-crown-star.svg">
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="performance.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ==================================================================
+           TRENDARYO - PRIVACY POLICY (Command Deck edition)
+           Same design system as shop.html: dark cosmic glass, Orbitron +
+           Rajdhani, accents #00f0ff / #ff00aa / #00ff88 / #ffd700.
+           Content architecture: 9 numbered sections (see body comments).
+           ================================================================== */
+        :root { --primary: #0a0a0a; --bg-deep: #0a0a2a; --accent: #00f0ff; --accent-2: #ff00aa; --accent-3: #00ff88; --accent-4: #ffd700; --danger: #ff4444; --text: #ffffff; --muted: rgba(255, 255, 255, 0.66); --muted-2: rgba(255, 255, 255, 0.45); --glass: rgba(255, 255, 255, 0.05); --glass-2: rgba(255, 255, 255, 0.03); --glass-border: rgba(255, 255, 255, 0.1); --glass-border-2: rgba(255, 255, 255, 0.18); --card-grad: linear-gradient(168deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.02)); --shadow-lift: 0 18px 44px rgba(0, 0, 0, 0.48); --glow-cyan: 0 0 26px rgba(0, 240, 255, 0.28); --r-sm: 10px; --r-md: 16px; --r-lg: 22px; --r-pill: 999px; --ease: cubic-bezier(0.22, 1, 0.36, 1); --font-d: 'Orbitron', sans-serif; --font-b: 'Rajdhani', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-b); background: var(--bg-deep); color: #fff; overflow-x: hidden; }
+        #three-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+        .page-offset { padding-top: 150px; }
+        a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+        /* - Deck hero (same family as shop.html) - */
+        .deck { position: relative; overflow: hidden; padding: 3rem 1.5rem 2.25rem; }
+        .deck-neb { position: absolute; border-radius: 50%; filter: blur(110px); pointer-events: none; z-index: 0; animation: nebDrift 16s ease-in-out infinite alternate; }
+        .deck-neb-1 { width: 430px; height: 430px; top: -150px; left: -110px; background: radial-gradient(circle, rgba(0, 240, 255, 0.22), transparent 70%); }
+        .deck-neb-2 { width: 520px; height: 520px; bottom: -220px; right: -130px; background: radial-gradient(circle, rgba(255, 0, 170, 0.16), transparent 70%); animation-delay: -8s; }
+        @keyframes nebDrift { from { transform: scale(1) translateY(0); } to { transform: scale(1.16) translateY(-34px); } }
+        .deck-inner { position: relative; z-index: 1; max-width: 1140px; margin: 0 auto; }
+        .deck-live { display: inline-flex; align-items: center; gap: 0.55rem; padding: 0.42rem 0.95rem; border-radius: var(--r-pill); background: rgba(0, 240, 255, 0.08); border: 1px solid rgba(0, 240, 255, 0.3); font-family: var(--font-d); font-size: 0.64rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); }
+        .deck-live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-3); box-shadow: 0 0 12px var(--accent-3); animation: livePulse 2.2s ease-in-out infinite; }
+        @keyframes livePulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.78); } }
+        .deck-title { font-family: var(--font-d); font-weight: 900; font-size: clamp(2rem, 5.2vw, 3.9rem); line-height: 1.03; margin: 0.9rem 0 0.7rem; max-width: 18ch; background: linear-gradient(120deg, #fff 8%, var(--accent) 46%, var(--accent-2) 88%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 26px rgba(0, 240, 255, 0.2)); }
+        .deck-sub { color: var(--muted); font-size: 1.06rem; line-height: 1.7; max-width: 62ch; }
+        .deck-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1.3rem; }
+        .deck-btn { padding: 0.78rem 1.5rem; border-radius: var(--r-pill); border: 1px solid rgba(0, 240, 255, 0.45); background: linear-gradient(135deg, rgba(0, 240, 255, 0.18), rgba(255, 0, 170, 0.18)); color: #fff; font-family: var(--font-d); font-size: 0.72rem; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: transform 0.25s var(--ease), box-shadow 0.25s ease; }
+        .deck-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0, 240, 255, 0.28); }
+        .deck-btn--solid { background: linear-gradient(135deg, var(--accent), var(--accent-3)); border-color: transparent; color: #00202a; }
+        .deck-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(152px, 1fr)); gap: 0.85rem; margin-top: 1.5rem; }
+        .deck-stat { position: relative; padding: 0.95rem 1.05rem; border-radius: var(--r-md); background: var(--card-grad); border: 1px solid var(--glass-border); overflow: hidden; }
+        .deck-stat::after { content: ''; position: absolute; inset: 0 0 auto 0; height: 2px; background: linear-gradient(90deg, var(--accent), rgba(0, 240, 255, 0)); }
+        .deck-stat:nth-child(2n)::after { background: linear-gradient(90deg, var(--accent-2), rgba(255, 0, 170, 0)); }
+        .deck-stat:nth-child(3n)::after { background: linear-gradient(90deg, var(--accent-3), rgba(0, 255, 136, 0)); }
+        .deck-stat-val { font-family: var(--font-d); font-size: 1.38rem; font-weight: 900; letter-spacing: -0.5px; }
+        .deck-stat-lab { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1.4px; color: var(--muted-2); margin-top: 0.15rem; }
+        .deck-stat-sub { font-size: 0.76rem; color: var(--muted); margin-top: 0.4rem; line-height: 1.4; }
+        /* - Section shells + heads (same as shop.html) - */
+        .legal-shell { max-width: 1140px; margin: 0 auto; padding: 0 1.5rem; }
+        .sec { margin: 4rem 0; position: relative; }
+        .sec-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1.25rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+        .sec-head-txt { max-width: 760px; }
+        .sec-kicker { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--font-d); font-size: 0.66rem; font-weight: 700; letter-spacing: 2.4px; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; }
+        .sec-kicker::before { content: ''; width: 22px; height: 1px; background: linear-gradient(90deg, transparent, var(--accent)); }
+        .sec-title { font-family: var(--font-d); font-size: clamp(1.3rem, 2.6vw, 1.95rem); font-weight: 900; line-height: 1.15; background: linear-gradient(135deg, #fff 15%, var(--accent) 60%, var(--accent-2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .sec-sub { color: var(--muted); line-height: 1.65; font-size: 0.97rem; margin-top: 0.5rem; }
+        .sec-sub a { color: var(--accent); }
+        .sec-note { font-size: 0.76rem; color: var(--muted-2); }
+        .summary-box h2 { font-family: var(--font-d); letter-spacing: 1px; }
+        .summary-box a { color: var(--accent); }
+        /* - Ledger table - */
+        .ledger-scroll { overflow-x: auto; border: 1px solid var(--glass-border); border-radius: var(--r-lg); background: var(--glass-2); }
+        table.ledger { width: 100%; border-collapse: collapse; min-width: 640px; font-size: 0.95rem; }
+        .ledger th { font-family: var(--font-d); font-size: 0.64rem; letter-spacing: 1.6px; text-transform: uppercase; color: var(--accent); text-align: left; padding: 1rem 1.1rem; border-bottom: 1px solid var(--glass-border-2); white-space: nowrap; }
+        .ledger td { padding: 1rem 1.1rem; border-bottom: 1px solid var(--glass-border); vertical-align: top; color: var(--muted); line-height: 1.6; }
+        .ledger tr:last-child td { border-bottom: 0; }
+        .ledger td b { color: #fff; font-weight: 700; display: block; margin-bottom: 0.2rem; font-size: 1rem; }
+        .pill { display: inline-block; padding: 0.18rem 0.6rem; border-radius: var(--r-pill); border: 1px solid var(--glass-border-2); background: rgba(255, 255, 255, 0.05); font-family: var(--font-d); font-size: 0.62rem; letter-spacing: 1px; color: rgba(255, 255, 255, 0.85); white-space: nowrap; }
+        /* - Glass cards - */
+        .pgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.25rem; }
+        .pcard { padding: 1.5rem 1.4rem; border-radius: var(--r-lg); background: var(--card-grad); border: 1px solid var(--glass-border); transition: border-color 0.3s ease, transform 0.3s var(--ease), box-shadow 0.3s ease; }
+        .pcard:hover { border-color: rgba(0, 240, 255, 0.4); transform: translateY(-4px); box-shadow: var(--shadow-lift); }
+        .pc-ico { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(0, 240, 255, 0.08); border: 1px solid rgba(0, 240, 255, 0.25); color: var(--accent); font-size: 1.05rem; }
+        .pcard--pink .pc-ico { color: var(--accent-2); border-color: rgba(255, 0, 170, 0.3); background: rgba(255, 0, 170, 0.07); }
+        .pcard--green .pc-ico { color: var(--accent-3); border-color: rgba(0, 255, 136, 0.3); background: rgba(0, 255, 136, 0.07); }
+        .pcard--gold .pc-ico { color: var(--accent-4); border-color: rgba(255, 215, 0, 0.3); background: rgba(255, 215, 0, 0.07); }
+        .pcard h3 { font-family: var(--font-d); font-size: 0.95rem; font-weight: 800; letter-spacing: 0.6px; margin: 0.8rem 0 0.5rem; color: #fff; }
+        .pcard p { color: var(--muted); font-size: 0.92rem; line-height: 1.65; }
+        .pcard p a { color: var(--accent); }
+        .key-pill { display: inline-block; margin-top: 0.85rem; padding: 0.28rem 0.7rem; border-radius: 6px; background: rgba(0, 0, 0, 0.35); border: 1px solid var(--glass-border-2); font-family: Consolas, monospace; font-size: 0.74rem; color: var(--accent-3); }
+        /* - Retention rows - */
+        .tl-list { display: grid; gap: 0.75rem; }
+        .tl-row { display: grid; grid-template-columns: 150px 1fr; gap: 1.25rem; align-items: start; padding: 1.15rem 1.35rem; border-radius: var(--r-md); background: var(--glass-2); border: 1px solid var(--glass-border); }
+        .tl-when { font-family: var(--font-d); font-weight: 800; font-size: 0.82rem; color: var(--accent); padding-top: 0.15rem; white-space: nowrap; }
+        .tl-row--green .tl-when { color: var(--accent-3); }
+        .tl-row--pink .tl-when { color: var(--accent-2); }
+        .tl-row--gold .tl-when { color: var(--accent-4); }
+        .tl-what b { color: #fff; display: block; margin-bottom: 0.2rem; font-size: 1rem; }
+        .tl-what p { color: var(--muted); font-size: 0.92rem; line-height: 1.6; }
+        /* - Rights cards - */
+        .rgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; }
+        .rcard { display: flex; gap: 1rem; padding: 1.3rem 1.4rem; border-radius: var(--r-md); background: var(--glass-2); border: 1px solid var(--glass-border); transition: border-color 0.3s ease, transform 0.3s var(--ease); }
+        .rcard:hover { border-color: rgba(255, 0, 170, 0.35); transform: translateY(-3px); }
+        .rcard-num { font-family: var(--font-d); font-weight: 900; font-size: 1.05rem; color: var(--accent-2); flex-shrink: 0; }
+        .rcard h3 { font-size: 1.02rem; font-weight: 700; color: #fff; margin-bottom: 0.3rem; }
+        .rcard p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+        .rcard .how { display: block; margin-top: 0.6rem; font-size: 0.8rem; color: var(--accent); }
+        .rcard .how a { color: var(--accent); }
+        .note-strip { margin-top: 1.25rem; padding: 1rem 1.25rem; border-radius: var(--r-md); border: 1px dashed rgba(255, 215, 0, 0.4); background: rgba(255, 215, 0, 0.05); color: rgba(255, 255, 255, 0.8); font-size: 0.9rem; line-height: 1.6; }
+        .mount-pad { min-height: 1px; }
+        @media (max-width: 900px) {
+            .page-offset { padding-top: 120px; }
+            .deck { padding: 1.75rem 1.25rem 1.5rem; }
+            .sec { margin: 2.75rem 0; }
+            .tl-row { grid-template-columns: 1fr; gap: 0.4rem; }
+            .rcard { flex-direction: column; gap: 0.4rem; }
+        }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }
+    </style>
+</head>
+<body>
+    <canvas id="three-canvas"></canvas>
+
+    <main class="page-offset">
+
+    <!-- 00 · DECK HERO -->
+    <section class="deck" aria-labelledby="pvTitle">
+        <div class="deck-neb deck-neb-1"></div>
+        <div class="deck-neb deck-neb-2"></div>
+        <div class="deck-inner">
+            <span class="deck-live"><span class="deck-live-dot"></span>Policy v2 · In force now</span>
+            <h1 class="deck-title" id="pvTitle">Your data, on the record.</h1>
+            <p class="deck-sub">Trendaryo exists to shrink choice, not to widen surveillance. The same rule that keeps the shelf small keeps this policy honest: if a data point doesn't buy you anything, we don't collect it. What follows is the complete ledger - every category we hold, why it exists and when it leaves.</p>
+            <div class="deck-actions">
+                <a class="deck-btn deck-btn--solid" href="#ledger">Jump to the ledger</a>
+                <a class="deck-btn" href="index.html#pipeline">How we pick products</a>
+                <a class="deck-btn" href="cookie-policy.html">The storage ledger</a>
+            </div>
+            <div class="deck-stats">
+                <div class="deck-stat"><div class="deck-stat-val">0</div><div class="deck-stat-lab">Data points sold, ever</div><div class="deck-stat-sub">Revenue comes from products - not from you.</div></div>
+                <div class="deck-stat"><div class="deck-stat-val">0</div><div class="deck-stat-lab">Advertising cookies</div><div class="deck-stat-sub">Nothing here follows you to other sites.</div></div>
+                <div class="deck-stat"><div class="deck-stat-val">30d</div><div class="deck-stat-lab">Maximum erase time</div><div class="deck-stat-sub">Deletion requests complete inside a month.</div></div>
+                <div class="deck-stat"><div class="deck-stat-val">11</div><div class="deck-stat-lab">Storage keys, all named</div><div class="deck-stat-sub">Every one is listed on the Cookie Policy page.</div></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="legal-shell">
+
+    <!-- 00b · THE SHORT VERSION -->
+    <section class="sec" id="quickread">
+        <div class="summary-box">
+            <h2>The short version</h2>
+            <ul>
+                <li>We collect only what an order or an account needs to work - nothing speculative.</li>
+                <li>We <strong>never sell or rent</strong> your data, and the shelf has no paid placements to sell either.</li>
+                <li>Your cart, wishlist and recently-viewed live in <strong>your browser</strong> - the server first sees your cart when you press Pay.</li>
+                <li>Access, correction, export and deletion: one email to <a href="mailto:privacy@trendaryo.com">privacy@trendaryo.com</a>, answered within 30 days.</li>
+                <li>Marketing email is opt-in and switches off in one click - order confirmations always come through.</li>
+            </ul>
+        </div>
+        <span class="last-updated">Last updated: 1 January 2024 · This page supersedes every earlier version.</span>
+    </section>
+
+    <!-- 01 · THE DATA LEDGER -->
+    <section class="sec" id="ledger" aria-labelledby="ledTitle">
+        <div class="sec-head">
+            <div class="sec-head-txt">
+                <span class="sec-kicker">Section 01 · What we hold and why</span>
+                <h2 class="sec-title" id="ledTitle">The data ledger</h2>
+                <p class="sec-sub">Six categories, one table. If a field isn't on this list, we don't collect it - and if one of these stops earning its place, it leaves the list, exactly like a product that loses its standing leaves the shelf.</p>
+            </div>
+            <span class="sec-note">Same rule as the shelf: nothing speculative gets in</span>
+        </div>
+        <div class="ledger-scroll">
+            <table class="ledger">
+                <thead><tr><th>Data</th><th>Why it exists</th><th>Where it lives</th><th>Kept for</th></tr></thead>
+                <tbody>
+                    <tr><td><b>Order details</b>name, delivery address, phone, email, items, totals</td><td>Fulfilment, returns and the tax record the law requires</td><td>Order database</td><td><span class="pill">7 years</span></td></tr>
+                    <tr><td><b>Account profile</b>email, display name, saved addresses</td><td>Faster checkout and your order history</td><td>Account database</td><td><span class="pill">Until deletion</span></td></tr>
+                    <tr><td><b>Payment metadata</b>brand, last four digits, transaction ID, status</td><td>Receipts, refunds and chargeback defence</td><td>Payment processor + order record</td><td><span class="pill">7 years</span></td></tr>
+                    <tr><td><b>Support conversations</b>messages and the order numbers they reference</td><td>Actually answering you - and spotting product faults early</td><td>Support inbox</td><td><span class="pill">24 months</span></td></tr>
+                    <tr><td><b>Browser storage</b>cart, wishlist, recently viewed, your reviews</td><td>Making the site remember what you chose</td><td>Your device only - never uploaded</td><td><span class="pill">Until you clear it</span></td></tr>
+                    <tr><td><b>Security telemetry</b>IP address and timestamp on sign-in</td><td>Fraud and abuse prevention</td><td>Security log</td><td><span class="pill">12 months, then aggregate</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- 02 · LOCAL-FIRST -->
+    <section class="sec" id="local" aria-labelledby="locTitle">
+        <div class="sec-head">
+            <div class="sec-head-txt">
+                <span class="sec-kicker">Section 02 · What stays on your device</span>
+                <h2 class="sec-title" id="locTitle">Local-first, by design</h2>
+                <p class="sec-sub">Most of what this site "remembers" about you never leaves your browser. The shop page calls these rails your own history - here is exactly where that history lives and which feature reads it.</p>
+            </div>
+            <span class="sec-note">Stored locally · never sent anywhere</span>
+        </div>
+        <div class="pgrid">
+            <div class="pcard">
+                <div class="pc-ico">🛒</div>
+                <h3>Your cart</h3>
+                <p>The cart dock, the shop page and checkout read this key locally. The server first sees your cart at the moment you press Pay - not a second before.</p>
+                <span class="key-pill">trendaryo_cart</span>
+            </div>
+            <div class="pcard pcard--pink">
+                <div class="pc-ico">♥</div>
+                <h3>Your wishlist</h3>
+                <p>Works without an account: leave the site, come back tomorrow on the same browser, and your list still greets you. Nothing was uploaded while you were gone.</p>
+                <span class="key-pill">wishlist</span>
+            </div>
+            <div class="pcard pcard--green">
+                <div class="pc-ico">↺</div>
+                <h3>Recently viewed</h3>
+                <p>Powers the "Continue where you left off" rail on the shop page. A capped list of product IDs - names, images and prices are looked up fresh on every visit.</p>
+                <span class="key-pill">trendaryo_recent</span>
+            </div>
+            <div class="pcard pcard--gold">
+                <div class="pc-ico">★</div>
+                <h3>Your reviews &amp; drafts</h3>
+                <p>Ratings and review text you submit are kept on your device until you post them. No background sync, no silent transmission.</p>
+                <span class="key-pill">trendaryo_reviews</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 03 · RED LINES -->
+    <section class="sec" id="never" aria-labelledby="nevTitle">
+        <div class="sec-head">
+            <div class="sec-head-txt">
+                <span class="sec-kicker">Section 03 · The red lines</span>
+                <h2 class="sec-title" id="nevTitle">Four things we will never do</h2>
+                <p class="sec-sub">These aren't aspirations - they're constraints the business model is built around. If a future feature required breaking one of them, the feature would be dropped, not the promise.</p>
+            </div>
+        </div>
+        <div class="pgrid">
+            <div class="pcard"><div class="pc-ico">🚫</div><h3>Sell or rent your data</h3><p>No data brokerage, no "trusted partners", no exceptions. Products are the business; data is not.</p></div>
+            <div class="pcard pcard--pink"><div class="pc-ico">💰</div><h3>Take money for placement</h3><p>The shelf has zero paid placements, so there is nothing your data could be sold to influence - the ranking is rating × review volume, and that's all it can ever be.</p></div>
+            <div class="pcard pcard--green"><div class="pc-ico">🕶️</div><h3>Follow you across the web</h3><p>No advertising cookies, no social pixels, no cross-site identifiers. What you browse on other sites is your business.</p></div>
+            <div class="pcard pcard--gold"><div class="pc-ico">📦</div><h3>Keep secrets from you</h3><p>Every storage key is named and explained on the <a href="cookie-policy.html">Cookie Policy</a> page - including the ones that only hold demo data.</p></div>
+        </div>
+    </section>
+
+    <!-- 04 · SECURITY ARCHITECTURE -->
+    <section class="sec" id="security" aria-labelledby="secTitle">
+        <div class="sec-head">
+            <div class="sec-head-txt">
+                <span class="sec-kicker">Section 04 · Defence in depth</span>
+                <h2 class="sec-title" id="secTitle">How the ledger is protected</h2>
+                <p class="sec-sub">Four layers, each doing a job the layer above can't. The same "numbers or it didn't happen" energy the shelf applies to products, applied to your data.</p>
+            </div>
+        </div>
+        <div id="secSteps" class="mount-pad"></div>
+    </section>
+
+    <!-- 05 · RETENTION SCHEDULE -->
+    <section class="sec" id="retention" aria-labelledby="retTitle">
+        <div class="sec-head">
+            <div class="sec-head-txt">
+                <span class="sec-kicker">Section 05 · Nothing lives forever</span>
+                <h2 class="sec-title" id="retTitle">The retention schedule</h2>
+                <p class="sec-sub">Every category from the ledger has an expiry date. The clock starts when the data is created - not when you last logged in.</p>
+            </div>
+            <span class="sec-note">Deletion requests cut the line: 30 days, maximum</span>
+        </div>
+        <div class="tl-list">
+            <div class="tl-row"><div class="tl-when">Day 0</div><div class="tl-what"><b>An order is placed</b><p>The order record is created and payment metadata is stored alongside it. Your receipt email goes out within minutes.</p></div></div>
+            <div class="tl-row tl-row--green"><div class="tl-when">30 days</div><div class="tl-what"><b>Abandoned carts age out</b><p>Cart and search-history keys are wiped from your browser. Nothing was on our servers to begin with.</p></div></div>
+            <div class="tl-row tl-row--gold"><div class="tl-when">12 months</div><div class="tl-what"><b>Security logs aggregate</b><p>Sign-in telemetry (IP + timestamp) is aggregated beyond recognition. What's left can't point back to you.</p></div></div>
+            <div class="tl-row tl-row--pink"><div class="tl-when">24 months</div><div class="tl-what"><b>Support conversations purge</b><p>Chat and email threads are deleted unless they're tied to an open return or warranty claim.</p></div></div>
+            <div class="tl-row"><div class="tl-when">7 years</div><div class="tl-what"><b>Order records close</b><p>The tax law that required us to keep orders finally lets go. The record is anonymised, then erased.</p></div></div>
+        </div>
+    </section>
+
+    <!-- 06 · YOUR RIGHTS -->
+    <section class="sec" id="rights" aria-labelledby="rigTitle">
+        <div class="sec-head">
+            <div class="sec-head-txt">
+                <span class="sec-kicker">Section 06 · You hold the pen</span>
+                <h2 class="sec-title" id="rigTitle">Your rights, and how to use them</h2>
+                <p class="sec-sub">Every right below is exercised the same way: one email to <a href="mailto:privacy@trendaryo.com">privacy@trendaryo.com</a> from your registered address. No forms, no fees, no dark patterns - a human answers within 30 days, usually far sooner.</p>
+            </div>
+        </div>
+        <div class="rgrid">
+            <div class="rcard"><span class="rcard-num">01</span><div><h3>Access</h3><p>Get a full copy of everything tied to your email address.</p><span class="how">How: ask for "a copy" - it arrives as a readable document.</span></div></div>
+            <div class="rcard"><span class="rcard-num">02</span><div><h3>Correct</h3><p>Fix a misspelled name, an old address, a wrong phone number.</p><span class="how">How: reply to any order email with the correction.</span></div></div>
+            <div class="rcard"><span class="rcard-num">03</span><div><h3>Delete</h3><p>Erase your account, saved addresses and order history.</p><span class="how">How: email from your registered address; done within 30 days.</span></div></div>
+            <div class="rcard"><span class="rcard-num">04</span><div><h3>Port</h3><p>Take your order history with you when you go.</p><span class="how">How: say "export" - it arrives as a CSV file.</span></div></div>
+            <div class="rcard"><span class="rcard-num">05</span><div><h3>Object</h3><p>Switch off every marketing email in one click, keep your account.</p><span class="how">How: <a href="email-preferences.html">Email Preferences</a> or the footer link.</span></div></div>
+            <div class="rcard"><span class="rcard-num">06</span><div><h3>Complain</h3><p>Escalate anything above to a person, not a queue.</p><span class="how">How: mark your email "escalation" - it jumps the line.</span></div></div>
+        </div>
+    </section>
+
+    <!-- 07 · THIRD-PARTY PROCESSORS -->
+    <section class="sec" id="processors" aria-labelledby="proTitle">
+        <div class="sec-head">
+            <div class="sec-head-txt">
+                <span class="sec-kicker">Section 07 · Who else touches your order</span>
+                <h2 class="sec-title" id="proTitle">Third-party processors</h2>
+                <p class="sec-sub">Five services help this store run. Each sees only the fields its job requires - and none of them may reuse your data for their own purposes under our agreements.</p>
+            </div>
+        </div>
+        <div class="ledger-scroll">
+            <table class="ledger">
+                <thead><tr><th>Service</th><th>What they receive</th><th>Why</th></tr></thead>
+                <tbody>
+                    <tr><td><b>Payment processor</b>tokenized gateway</td><td>Card details - sent directly by your browser over TLS, never by us</td><td>Taking payment, fraud checks, refunds</td></tr>
+                    <tr><td><b>Shipping carriers</b>domestic &amp; international</td><td>Name, delivery address, phone, parcel contents</td><td>Delivering the parcel - nothing else</td></tr>
+                    <tr><td><b>Email provider</b>transactional</td><td>Your email address</td><td>Receipts, confirmations and opt-in marketing</td></tr>
+                    <tr><td><b>Firebase Auth</b>Google</td><td>Email and a hashed credential</td><td>Sign-in sessions only - no profiling</td></tr>
+                    <tr><td><b>Static CDN</b>hosting</td><td>Nothing personal</td><td>Serving the pages you asked for, fast</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="note-strip">No advertising networks. No data brokers. No "strategic partners". If that ever changes, this page changes first - and the previous version stays available on request.</div>
+    </section>
+
+    <!-- 08 · FAQ + TRUST + CTA -->
+    <section class="sec" id="faq" aria-labelledby="faqTitle">
+        <div class="sec-head">
+            <div class="sec-head-txt">
+                <span class="sec-kicker">Section 08 · Asked and answered</span>
+                <h2 class="sec-title" id="faqTitle">The questions this policy gets</h2>
+            </div>
+        </div>
+        <div id="faqRoot" class="mount-pad"></div>
+        <div id="trustRoot" class="mount-pad"></div>
+        <div id="ctaRoot" class="mount-pad"></div>
+    </section>
+
+    </div><!-- /legal-shell -->
+    </main>
+
+    <script src="components.js"></script>
+    <script src="page-helpers.js"></script>
+    <script>
+    (function () {
+        var UI = window.TrendaryoUI;
+        if (!UI) return;
+        var steps = document.getElementById('secSteps');
+        if (steps && UI.steps) steps.innerHTML = UI.steps([
+            { title: 'Encrypted in transit', text: 'Every request runs over TLS 1.2+ with 256-bit encryption - the padlock in your address bar is doing real work, not decorating.' },
+            { title: 'Tokenized payments', text: 'Card details travel straight from your browser to the payment processor. Our servers see a result code - never a card number.' },
+            { title: 'Least-privilege access', text: 'Staff tools expose only the fields a job requires. Nobody browses your data out of curiosity, and every access is logged.' },
+            { title: 'Aggregate, not personal', text: 'Browsing the shelf needs no account, and our analytics are page-level counts - trends, not profiles.' }
+        ]);
+        var faq = document.getElementById('faqRoot');
+        if (faq && UI.faq) faq.innerHTML = UI.faq([
+            { q: 'Do you sell my personal data?', a: 'No - and the word carries no fine print. Revenue comes from products on the shelf; there is no data side-business, no "anonymised partner feeds", no exceptions. If that ever changes, this page changes first.' },
+            { q: 'Where does my cart actually live?', a: 'In your browser, under the storage key <code>trendaryo_cart</code>. The shop page, the cart dock and checkout read it locally - the server first sees your cart at the moment you press Pay.' },
+            { q: 'How do I delete everything?', a: 'One email to privacy@trendaryo.com from your registered address covers the server side - account, orders and history are erased within 30 days. Browser-side data (cart, wishlist, recently viewed) clears instantly via your browser settings or the wipe button on the <a href="cookie-policy.html" style="color:var(--accent);">Cookie Policy</a> page.' },
+            { q: 'Do you track me on other websites?', a: 'No. There are no advertising cookies, no social pixels and no cross-site identifiers on Trendaryo. What you browse elsewhere never reaches us - and never will.' },
+            { q: 'Who sees my card number?', a: 'Nobody here. Card details go directly to the payment processor over an encrypted channel; we store only the brand, the last four digits and the transaction status - enough for receipts and refunds, nothing more.' },
+            { q: 'What about the demo orders on the orders page?', a: 'Those are seeded samples stored only in your own browser so first-time pages don\'t look broken. They contain no real personal data and vanish the moment you clear site data.' }
+        ], false);
+        var ts = document.getElementById('trustRoot');
+        if (ts && UI.trustStrip) ts.innerHTML = UI.trustStrip();
+        var cta = document.getElementById('ctaRoot');
+        if (cta && UI.ctaBand) cta.innerHTML = UI.ctaBand({
+            title: 'Questions about your data?',
+            text: 'A person reads privacy@trendaryo.com. Request a copy, a correction or a deletion - you will get a reply within 24 hours, not a ticket number.',
+            cta: 'Contact the Privacy Desk',
+            href: 'contact.html'
+        });
+    })();
+    </script>
+    <script src="bg.js"></script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found | Trendaryo</title>
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="shared.css">
+    <script src="performance.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="bg.js"></script>
+    <style>
+        :root { --accent: #00f0ff; --accent-2: #ff00aa; --accent-3: #00ff88; --glass: rgba(255,255,255,0.05); --glass-border: rgba(255,255,255,0.1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Rajdhani', sans-serif; background: #0a0a2a; color: #fff; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
+        #three-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+        
+        .error-container-3d { text-align: center; padding: 2rem; flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .error-code-3d { font-family: 'Orbitron', sans-serif; font-size: 8rem; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; margin-bottom: 1rem; }
+        .error-title-3d { font-family: 'Orbitron', sans-serif; font-size: 2rem; margin-bottom: 1rem; }
+        .error-text-3d { color: #888; font-size: 1.2rem; margin-bottom: 2rem; max-width: 500px; margin-left: auto; margin-right: auto; }
+        
+        .error-buttons-3d { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+        .btn-home-3d { padding: 1rem 2.5rem; background: linear-gradient(135deg, var(--accent), var(--accent-3)); border: none; border-radius: 12px; font-family: 'Orbitron', sans-serif; font-size: 0.9rem; font-weight: 700; color: #000; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s; text-decoration: none; }
+        .btn-home-3d:hover { box-shadow: 0 0 40px rgba(0,240,255,0.5); transform: translateY(-3px); }
+        .btn-back-3d { padding: 1rem 2.5rem; background: #0a0a2a; border: 2px solid var(--glass-border); border-radius: 12px; font-family: 'Orbitron', sans-serif; font-size: 0.9rem; font-weight: 600; color: #fff; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s; text-decoration: none; }
+        .btn-back-3d:hover { border-color: var(--accent); color: var(--accent); }
+        
+        .preloader-3d { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; align-items: center; justify-content: center; gap: 2rem; }
+        .preloader-3d.hidden { opacity: 0; pointer-events: none; transition: opacity 0.5s; }
+        .preloader-logo-3d { font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .preloader-spinner-3d { width: 50px; height: 50px; border: 3px solid var(--glass-border); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
+        
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .footer { background: rgba(0,0,0,0.08); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); padding: 2rem; text-align: center; border-top: 1px solid var(--glass-border); }
+        .footer p { color: rgba(255,255,255,0.5); }
+    </style>
+</head>
+<body>
+    <canvas id="three-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;"></canvas>
+    
+    <div class="preloader-3d" id="preloader">
+        <div class="preloader-logo-3d">TRENDARYO</div>
+        <div class="preloader-spinner-3d"></div>
+    </div>
+    
+    <div class="error-container-3d">
+        <div class="error-code-3d">404</div>
+        <h1 class="error-title-3d">PAGE NOT FOUND</h1>
+        <p class="error-text-3d">Oops! The page you're looking for seems to have wandered off into the digital void. Let's get you back on track.</p>
+        <div class="error-buttons-3d">
+            <a href="index.html" class="btn-home-3d">Go Home</a>
+            <a href="javascript:history.back()" class="btn-back-3d">Go Back</a>
+        </div>
+    </div>
+    
+    <script src="components.js"></script>
+    <script>
+    // Hide preloader when page loads
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            var preloader = document.getElementById('preloader');
+            if (preloader) {
+                preloader.classList.add('hidden');
+            }
+        }, 800);
+    });
+    
+    // Fallback: hide after 3 seconds anyway
+    setTimeout(function() {
+        var preloader = document.getElementById('preloader');
+        if (preloader) {
+            preloader.classList.add('hidden');
+        }
+    }, 3000);
+    </script>
+</body>
+</html>

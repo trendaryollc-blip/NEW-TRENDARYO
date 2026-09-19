@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="shared.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Trendaryo Rewards - Loyalty Points & Referrals" />
+    <title>Rewards - TRENDARYO</title>
+    <link rel="stylesheet" href="responsive.css">
+    <script src="performance.js"></script>
+    <link rel="stylesheet" href="styles.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="shared.css">
+    <style>
+        :root { --accent:#00f0ff; --accent2:#ff00aa; --accent3:#00ff88; --glass:rgba(255,255,255,0.05); --glassBorder:rgba(255,255,255,0.1); }
+        * { box-sizing: border-box; }
+        body { margin:0; font-family: Rajdhani, sans-serif; background: linear-gradient(180deg,#0a0a2a 0%,#1a1a40 100%); color:#fff; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 2rem; padding-top: 180px; }
+        .hero { background: var(--glass); border: 1px solid var(--glassBorder); border-radius: 20px; padding: 2rem; text-align:center; }
+        .title { font-family: Orbitron, sans-serif; font-size: 2.2rem; font-weight: 900; background: linear-gradient(135deg,var(--accent),var(--accent2)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color: transparent; margin:0 0 0.5rem; }
+        .subtitle { color: rgba(255,255,255,0.75); margin:0; }
+
+        .grid { display:grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem; }
+        @media(max-width: 900px){ .grid { grid-template-columns: 1fr; } }
+
+        .card { background: var(--glass); border: 1px solid var(--glassBorder); border-radius: 16px; padding: 1.5rem; }
+        .card h2 { font-family: Orbitron, sans-serif; font-size: 1.1rem; margin:0 0 1rem; }
+
+        .statRow { display:grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .stat { padding: 1rem; border-radius: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); }
+        .stat strong { display:block; font-family: Orbitron, sans-serif; font-size: 1.4rem; }
+        .muted { color: rgba(255,255,255,0.7); font-size: 0.95rem; }
+
+        .field { display:flex; flex-direction: column; gap: 0.5rem; margin-top: 0.75rem; }
+        label { font-weight: 600; color: rgba(255,255,255,0.9); }
+        input { padding: 0.85rem 1rem; border-radius: 12px; border: 1px solid var(--glassBorder); background: rgba(255,255,255,0.06); color:#fff; outline: none; }
+
+        .row { display:flex; gap: 0.75rem; flex-wrap: wrap; }
+        .btn { padding: 0.85rem 1.2rem; border-radius: 12px; border: 1px solid transparent; cursor:pointer; font-family: Orbitron, sans-serif; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+        .btnPrimary { background: linear-gradient(135deg,var(--accent),var(--accent3)); color:#000; }
+        .btnGhost { background: #0a0a2a; border-color: rgba(255,255,255,0.18); color: rgba(255,255,255,0.9); }
+
+        .notice { margin-top: 0.75rem; padding: 0.85rem 1rem; border-radius: 12px; display:none; }
+        .notice.success { display:block; border: 1px solid rgba(0,255,136,0.6); background: rgba(0,255,136,0.08); color: rgba(0,255,136,1); }
+        .notice.error { display:block; border: 1px solid rgba(255,0,170,0.6); background: rgba(255,0,170,0.08); color: rgba(255,0,170,1); }
+
+        .history { margin-top: 1rem; display:grid; gap: 0.75rem; }
+        .event { padding: 0.85rem 1rem; border-radius: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); }
+        .event strong { font-family: Orbitron, sans-serif; font-size: 0.95rem; }
+        .event small { display:block; color: rgba(255,255,255,0.65); margin-top: 0.3rem; }
+
+        .code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    </style>
+<script src="bg.js"></script>
+</head>
+<body>
+    <canvas id="three-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;"></canvas>
+    <div id="header-container" data-type="full"></div>
+    <div class="container">
+        <div class="hero">
+            <h1 class="title">Trendaryo Rewards</h1>
+            <p class="subtitle">Earn points on every purchase and get bonuses by referring friends.</p>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <h2>My Rewards</h2>
+                <div class="statRow">
+                    <div class="stat">
+                        <strong id="points">-</strong>
+                        <div class="muted">Loyalty points</div>
+                    </div>
+                    <div class="stat">
+                        <strong id="credit">-</strong>
+                        <div class="muted">Store credit ($)</div>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="redeem">Redeem points to credit (100 pts = $1)</label>
+                    <input id="redeem" type="number" min="100" step="100" placeholder="e.g., 500" />
+                </div>
+
+                <div class="row" style="margin-top: 0.9rem;">
+                    <button class="btn btnPrimary" id="btnRedeem">Redeem</button>
+                    <button class="btn btnGhost" id="btnRefresh">Refresh</button>
+                </div>
+
+                <div class="notice" id="notice"></div>
+            </div>
+
+            <div class="card">
+                <h2>Referrals</h2>
+                <div class="muted">Share your referral code with friends. They can enter it at registration.</div>
+
+                <div class="field">
+                    <label>Your referral code</label>
+                    <input id="refCode" class="code" readonly />
+                </div>
+
+                <div class="field">
+                    <label>Referral link</label>
+                    <input id="refLink" class="code" readonly />
+                </div>
+
+                <div class="row" style="margin-top: 0.9rem;">
+                    <button class="btn btnPrimary" id="btnCopy">Copy Link</button>
+                    <button class="btn btnGhost" id="btnCopyCode">Copy Code</button>
+                </div>
+
+                <div class="notice" id="copyNotice"></div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 1.5rem;">
+            <h2>Recent Activity</h2>
+            <div class="history" id="history"></div>
+        </div>
+
+        <div class="card" style="margin-top: 1.5rem;">
+            <h2>How Rewards Work</h2>
+            <div id="rw-steps"></div>
+        </div>
+
+        <div class="card" style="margin-top: 1.5rem;">
+            <h2>Membership Tiers</h2>
+            <div id="rw-tiers"></div>
+            <div class="muted" style="margin-top: 0.9rem;">Your tier is calculated from lifetime points and upgrades automatically — higher tiers earn faster and unlock exclusive perks.</div>
+        </div>
+
+        <div class="card" style="margin-top: 1.5rem;">
+            <h2>Ways to Earn</h2>
+            <div id="rw-earn"></div>
+        </div>
+
+        <div class="card" style="margin-top: 1.5rem;">
+            <h2>Rewards FAQ</h2>
+            <div id="rw-faq"></div>
+        </div>
+
+        <div id="rw-cta" style="margin-top: 2rem;"></div>
+    </div>
+
+    <script>
+        /* Local rewards engine - points grow from real orders in localStorage.
+           When the backend is ready, swap refresh()/redeem() for API calls. */
+        const RW_KEY = 'trendaryo_rewards';
+
+        const elPoints = document.getElementById('points');
+        const elCredit = document.getElementById('credit');
+        const elRefCode = document.getElementById('refCode');
+        const elRefLink = document.getElementById('refLink');
+        const elRedeem = document.getElementById('redeem');
+        const elNotice = document.getElementById('notice');
+        const elCopyNotice = document.getElementById('copyNotice');
+        const elHistory = document.getElementById('history');
+
+        function rwRead() {
+            try {
+                const r = JSON.parse(localStorage.getItem(RW_KEY) || 'null');
+                if (r && typeof r.points === 'number') return r;
+            } catch (e) {}
+            return null;
+        }
+
+        function rwWrite(r) {
+            try { localStorage.setItem(RW_KEY, JSON.stringify(r)); } catch (e) {}
+        }
+
+        function rwEnsure() {
+            let r = rwRead();
+            if (r) return r;
+            let code = localStorage.getItem('trendaryo_ref_code');
+            if (!code) {
+                code = 'TRD-' + Math.random().toString(36).slice(2, 8).toUpperCase();
+                try { localStorage.setItem('trendaryo_ref_code', code); } catch (e) {}
+            }
+            r = { points: 0, credit: 0, refCode: code, history: [] };
+            let spent = 0;
+            if (window.TrendaryoOrders) {
+                window.TrendaryoOrders.list().forEach(o => { spent += (o.total || 0); });
+            }
+            if (spent > 0) {
+                r.points = Math.round(spent) + 100;
+                r.history.push({ type: 'Order points', points: Math.round(spent), createdAt: new Date().toISOString() });
+            }
+            r.history.push({ type: 'Welcome bonus', points: 100, createdAt: new Date().toISOString() });
+            rwWrite(r);
+            return r;
+        }
+
+        function setNotice(el, type, msg) {
+            el.className = 'notice ' + type;
+            el.textContent = msg;
+        }
+
+        function clearNotice(el) {
+            el.className = 'notice';
+            el.textContent = '';
+        }
+
+        function renderHistory(items) {
+            if (!items || items.length === 0) {
+                elHistory.innerHTML = `<div class="muted">No reward activity yet.</div>`;
+                return;
+            }
+            elHistory.innerHTML = items.map(e => {
+                const pts = e.points;
+                const sign = pts > 0 ? '+' : '';
+                return `
+                    <div class="event">
+                        <strong>${e.type} <span class="code">(${sign}${pts})</span></strong>
+                        <small>${new Date(e.createdAt).toLocaleString()}</small>
+                    </div>
+                `;
+            }).join('');
+        }
+    function refresh() {
+        clearNotice(elNotice);
+        const r = rwEnsure();
+        elPoints.textContent = String(r.points);
+        elCredit.textContent = '$' + Number(r.credit || 0).toFixed(2);
+        elRefCode.value = r.refCode || '';
+        elRefLink.value = `${window.location.origin}/register.html?ref=${encodeURIComponent(r.refCode || '')}`;
+        renderHistory((r.history || []).slice().reverse());
+    }
+
+    function redeem() {
+        clearNotice(elNotice);
+        const pts = parseInt(elRedeem.value, 10);
+        if (!pts || pts < 100) {
+            setNotice(elNotice, 'error', 'Enter points to redeem (minimum 100).');
+            return;
+        }
+        const r = rwEnsure();
+        if (r.points < pts) {
+            setNotice(elNotice, 'error', `You only have ${r.points} points.`);
+            return;
+        }
+        const credit = Math.floor(pts / 100) * 5; // 100 pts = $5 credit
+        r.points -= pts;
+        r.credit = (r.credit || 0) + credit;
+        r.history.push({ type: `Redeemed ${pts} pts`, points: -pts, createdAt: new Date().toISOString() });
+        rwWrite(r);
+        setNotice(elNotice, 'success', `Redeemed ${pts} points for $${credit} store credit.`);
+        refresh();
+    }
+
+    async function copy(text) {
+        try {
+            await navigator.clipboard.writeText(text);
+            return true;
+        } catch {
+            return false;
+        }
+    }
+
+    document.getElementById('btnRefresh').addEventListener('click', refresh);
+    document.getElementById('btnRedeem').addEventListener('click', redeem);
+    document.getElementById('btnCopy').addEventListener('click', async () => {
+        clearNotice(elCopyNotice);
+        const ok = await copy(elRefLink.value);
+        setNotice(elCopyNotice, ok ? 'success' : 'error', ok ? 'Referral link copied.' : 'Copy failed.');
+    });
+    document.getElementById('btnCopyCode').addEventListener('click', async () => {
+        clearNotice(elCopyNotice);
+        const ok = await copy(elRefCode.value);
+        setNotice(elCopyNotice, ok ? 'success' : 'error', ok ? 'Referral code copied.' : 'Copy failed.');
+    });
+
+    refresh();
+    </script>
+    <div id="footer-container"></div>
+    <script src="components.js"></script>
+    <script src="products-data.js"></script>
+    <script src="backend-bridge.js"></script>
+    <script src="page-helpers.js"></script>
+    <script>
+    (function () {
+        var UI = window.TrendaryoUI;
+        if (!UI) return;
+        var steps = document.getElementById('rw-steps');
+        var tiers = document.getElementById('rw-tiers');
+        var earn = document.getElementById('rw-earn');
+        var faq = document.getElementById('rw-faq');
+        var cta = document.getElementById('rw-cta');
+        if (steps && UI.steps) steps.innerHTML = UI.steps([
+            { title: 'Shop', text: 'Every order automatically earns 1 point per $1 spent — no opt-in needed.' },
+            { title: 'Review & refer', text: 'Write a product review for +50 points, or refer a friend for +100 when they register.' },
+            { title: 'Redeem', text: 'Swap points for store credit — 100 points = $1 off any order, stackable with sales.' }
+        ]);
+        if (tiers && UI.tiers) tiers.innerHTML = UI.tiers([
+            { name: 'Bronze', mult: '1× points · from 0 lifetime', perks: ['Earn on every order', 'Birthday bonus +100 pts', 'Member-only deals'] },
+            { name: 'Silver', mult: '1.25× points · 2,000 lifetime', perks: ['Everything in Bronze', 'Early access to drops', 'Express shipping over $75'] },
+            { name: 'Gold', mult: '1.5× points · 5,000 lifetime', perks: ['Everything in Silver', 'Priority support queue', 'Gold-exclusive products'], featured: true },
+            { name: 'Nebula', mult: '2× points · 12,000 lifetime', perks: ['Everything in Gold', 'Free returns shipping', 'Annual gift + secret drops'] }
+        ]);
+        if (earn) earn.innerHTML = '<ul class="rw-earn-list">'
+            + '<li><strong>1 point</strong> per $1 spent — applied automatically</li>'
+            + '<li><strong>+50 points</strong> for every product review with a photo</li>'
+            + '<li><strong>+100 points</strong> for each friend who registers with your link</li>'
+            + '<li><strong>+200 points</strong> on your birthday (once a year)</li>'
+            + '<li><strong>+250 points</strong> for your first order over $150</li>'
+            + '</ul>';
+        if (faq && UI.faq) faq.innerHTML = UI.faq([
+            { q: 'Do my points expire?', a: 'No — points stay in your account as long as it remains active. If no order is made for 24 months, we email you before anything resets.' },
+            { q: 'Can I use points with a promo code?', a: 'Yes. Points credit is applied after discount codes, so you can stack WELCOME10 with your redeemed credit.' },
+            { q: 'How do referrals work?', a: 'Share the link in the Referrals card above. When your friend creates an account, you both get +100 points — with no limit.' },
+            { q: 'When do points appear?', a: 'Order points credit as soon as your order ships. Review and referral points appear instantly.' }
+        ], false);
+        if (cta && UI.ctaBand) cta.innerHTML = UI.ctaBand({
+            title: 'Not earning yet?',
+            text: 'Place your first order today and start collecting points toward free gear.',
+            cta: 'Start Shopping', href: 'shop.html'
+        });
+    })();
+    </script>
+</body>
+</html>

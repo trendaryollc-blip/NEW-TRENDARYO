@@ -1,0 +1,134 @@
+rules_version = '2';
+
+/**
+ * TRENDARYO - Firestore Security Rules
+ *
+ * Design:
+ *  - All commerce writes (orders, payments, coupons, stock) happen through the
+ *    serverless API using the Firebase Admin SDK, which bypasses these rules.
+ *    The client SDK is restricted to reading public data and managing the
+ *    signed-in user's own profile / cart / wishlist / reviews.
+ *  - A user can NEVER change their own `role` or `status`.
+ */
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /* ---------- helpers ---------- */
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // Safe admin check - a missing users/{uid} doc denies access instead of
+    // throwing inside the rule.
+    function isAdmin() {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // Fields a normal user is allowed to edit on their own profile.
+    function profileWriteIsSafe() {
+      return request.resource.data.role == resource.data.role
+        && request.resource.data.status == resource.data.status
+        && request.resource.data.email == resource.data.email;
+    }
+
+    /* ---------- users ---------- */
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      // Self-registration may only create a plain, active user.
+      allow create: if isOwner(userId)
+        && request.resource.data.role == 'user'
+        && request.resource.data.status == 'active';
+      // Profile edits are allowed, but role/status/email are immutable for the
+      // account owner. Only admins may change those.
+      allow update: if (isOwner(userId) && profileWriteIsSafe()) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    /* ---------- products ---------- */
+    match /products/{productId} {
+      // Public can read active products; admins can read everything.
+      allow read: if (resource.data.status == 'active') || isAdmin();
+      allow create, update, delete: if isAdmin();
+    }
+
+    /* ---------- categories ---------- */
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    /* ---------- carts ---------- */
+    match /carts/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+
+    /* ---------- wishlists ---------- */
+    match /wishlists/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+
+    /* ---------- orders ---------- */
+    // Orders are created/updated exclusively by the server. Clients may only
+    // read their own orders (or admins read all).
+    match /orders/{orderId} {
+      allow read: if isOwner(resource.data.userId) || isAdmin();
+      allow create, update, delete: if false;
+    }
+
+    /* ---------- order status history (subcollection) ---------- */
+    match /orders/{orderId}/history/{entryId} {
+      allow read: if isAdmin() || isOwner(get(/databases/$(database)/documents/orders/$(orderId)).data.userId);
+      allow create, update, delete: if false;
+    }
+
+    /* ---------- reviews ---------- */
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow create: if isSignedIn()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.status == 'pending';
+      allow update, delete: if isOwner(resource.data.userId) || isAdmin();
+    }
+
+    /* ---------- payments ---------- */
+    match /payments/{paymentId} {
+      allow read: if isOwner(resource.data.userId) || isAdmin();
+      allow create, update, delete: if false;
+    }
+
+    /* ---------- coupons ---------- */
+    // Validated server-side only, so clients cannot enumerate codes.
+    match /coupons/{couponId} {
+      allow read, write: if isAdmin();
+    }
+
+    /* ---------- settings ---------- */
+    match /settings/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    /* ---------- newsletter ---------- */
+    match /newsletter/{entryId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
+    /* ---------- admin activity log ---------- */
+    match /adminLogs/{logId} {
+      allow read, write: if isAdmin();
+    }
+
+    /* ---------- deny anything else ---------- */
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

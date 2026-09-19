@@ -1,0 +1,791 @@
+/* ============================================================
+   RESPONSIVE UNIVERSAL — Complete Device Support
+   Optimized for: Mobile, Tablet, Laptop, Desktop, Ultra-wide
+   3D Background: Smooth across all devices
+   ============================================================ */
+
+:root {
+    --accent: #00f0ff;
+    --accent-2: #ff00aa;
+    --accent-3: #00ff88;
+    --glass: rgba(255,255,255,0.05);
+    --glass-border: rgba(255,255,255,0.1);
+    --header-height: 140px;
+    --header-height-mobile: 120px;
+}
+
+/* ── MOBILE FIRST APPROACH ── */
+
+/* ── Ultra-small devices (320px - 374px) ── */
+@media (max-width: 374px) {
+    :root {
+        --header-height-mobile: 100px;
+    }
+
+    .store-header-inner {
+        padding: 0.6rem 0.75rem;
+        gap: 0.4rem;
+    }
+
+    .store-logo {
+        font-size: 1.2rem;
+        letter-spacing: 1px;
+    }
+
+    .store-icon-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 0.9rem;
+    }
+
+    .store-nav-link {
+        font-size: 0.7rem;
+        padding: 0.5rem 0.6rem;
+        letter-spacing: 1px;
+    }
+
+    .page-offset {
+        padding-top: 100px;
+    }
+
+    body {
+        font-size: 14px;
+    }
+
+    .section-title {
+        font-size: clamp(1.2rem, 4vw, 1.8rem);
+    }
+
+    .section-subtitle {
+        font-size: 0.9rem;
+    }
+}
+
+/* ── Small phones (375px - 480px) ── */
+@media (min-width: 375px) and (max-width: 480px) {
+    :root {
+        --header-height-mobile: 110px;
+    }
+
+    .store-header-inner {
+        padding: 0.7rem 0.9rem;
+        gap: 0.5rem;
+    }
+
+    .store-logo {
+        font-size: 1.3rem;
+        letter-spacing: 1.5px;
+    }
+
+    .store-icon-btn {
+        width: 38px;
+        height: 38px;
+        font-size: 1rem;
+    }
+
+    .store-nav-link {
+        font-size: 0.75rem;
+        padding: 0.55rem 0.7rem;
+        letter-spacing: 1.2px;
+    }
+
+    .page-offset {
+        padding-top: 110px;
+    }
+
+    body {
+        font-size: 15px;
+    }
+
+    .section-title {
+        font-size: clamp(1.3rem, 4.5vw, 2rem);
+    }
+
+    .section-subtitle {
+        font-size: 0.95rem;
+    }
+
+    .cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-left {
+        text-align: center;
+    }
+
+    .hero-cta-3d {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+/* ── Medium phones (481px - 600px) ── */
+@media (min-width: 481px) and (max-width: 600px) {
+    :root {
+        --header-height-mobile: 120px;
+    }
+
+    .store-header-inner {
+        padding: 0.75rem 1rem;
+        gap: 0.6rem;
+    }
+
+    .store-logo {
+        font-size: 1.4rem;
+        letter-spacing: 1.5px;
+    }
+
+    .store-icon-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.05rem;
+    }
+
+    .store-nav-link {
+        font-size: 0.78rem;
+        padding: 0.6rem 0.75rem;
+        letter-spacing: 1.3px;
+    }
+
+    .page-offset {
+        padding-top: 120px;
+    }
+
+    body {
+        font-size: 15px;
+    }
+
+    .section-title {
+        font-size: clamp(1.4rem, 5vw, 2.1rem);
+    }
+
+    .section-subtitle {
+        font-size: 0.98rem;
+    }
+
+    .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-left {
+        text-align: center;
+    }
+
+    .hero-cta-3d {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .cs-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .vx-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .jn-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tst-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ── Large phones / Small tablets (601px - 768px) ── */
+@media (min-width: 601px) and (max-width: 768px) {
+    :root {
+        --header-height-mobile: 130px;
+    }
+
+    .store-header-inner {
+        padding: 0.8rem 1.1rem;
+        gap: 0.7rem;
+    }
+
+    .store-logo {
+        font-size: 1.5rem;
+        letter-spacing: 1.5px;
+    }
+
+    .store-icon-btn {
+        width: 42px;
+        height: 42px;
+        font-size: 1.1rem;
+    }
+
+    .store-nav-link {
+        font-size: 0.8rem;
+        padding: 0.65rem 0.8rem;
+        letter-spacing: 1.4px;
+    }
+
+    .page-offset {
+        padding-top: 130px;
+    }
+
+    body {
+        font-size: 16px;
+    }
+
+    .section-title {
+        font-size: clamp(1.5rem, 5.5vw, 2.2rem);
+    }
+
+    .section-subtitle {
+        font-size: 1rem;
+    }
+
+    .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .hero-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-left {
+        text-align: center;
+    }
+
+    .hero-cta-3d {
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .cs-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .vx-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .jn-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tst-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .footer-top {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* ── Tablets (769px - 1024px) ── */
+@media (min-width: 769px) and (max-width: 1024px) {
+    :root {
+        --header-height: 140px;
+    }
+
+    .store-header-inner {
+        padding: 0.8rem 1.2rem;
+        gap: 0.8rem;
+    }
+
+    .store-logo {
+        font-size: 1.5rem;
+    }
+
+    .store-search {
+        min-width: 250px;
+    }
+
+    .store-icon-btn {
+        width: 42px;
+        height: 42px;
+    }
+
+    .store-nav-link {
+        font-size: 0.82rem;
+        padding: 0.65rem 0.85rem;
+    }
+
+    .page-offset {
+        padding-top: 140px;
+    }
+
+    body {
+        font-size: 16px;
+    }
+
+    .section-title {
+        font-size: clamp(1.6rem, 5.5vw, 2.3rem);
+    }
+
+    .section-subtitle {
+        font-size: 1.02rem;
+    }
+
+    .cards-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .hero-grid {
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 2rem;
+    }
+
+    .hero-left {
+        text-align: left;
+    }
+
+    .hero-cta-3d {
+        flex-direction: row;
+        justify-content: flex-start;
+    }
+
+    .cs-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .vx-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .jn-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .tst-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .footer-top {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+/* ── Laptops (1025px - 1440px) ── */
+@media (min-width: 1025px) and (max-width: 1440px) {
+    :root {
+        --header-height: 140px;
+    }
+
+    .store-header-inner {
+        padding: 0.8rem 1.25rem;
+        gap: 1rem;
+    }
+
+    .store-logo {
+        font-size: 1.6rem;
+    }
+
+    .store-search {
+        min-width: 280px;
+    }
+
+    .store-icon-btn {
+        width: 42px;
+        height: 42px;
+    }
+
+    .store-nav-link {
+        font-size: 0.82rem;
+        padding: 0.65rem 0.9rem;
+    }
+
+    .page-offset {
+        padding-top: 140px;
+    }
+
+    body {
+        font-size: 16px;
+    }
+
+    .section-title {
+        font-size: clamp(1.8rem, 5.5vw, 2.4rem);
+    }
+
+    .section-subtitle {
+        font-size: 1.05rem;
+    }
+
+    .cards-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .hero-grid {
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 2.5rem;
+    }
+
+    .hero-left {
+        text-align: left;
+    }
+
+    .hero-cta-3d {
+        flex-direction: row;
+        justify-content: flex-start;
+    }
+
+    .cs-grid {
+        grid-template-columns: repeat(6, 1fr);
+    }
+
+    .vx-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .jn-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .tst-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .footer-top {
+        grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr;
+    }
+}
+
+/* ── Desktops (1441px - 1920px) ── */
+@media (min-width: 1441px) and (max-width: 1920px) {
+    :root {
+        --header-height: 140px;
+    }
+
+    .store-header-inner {
+        padding: 0.8rem 1.5rem;
+        gap: 1.2rem;
+    }
+
+    .store-logo {
+        font-size: 1.7rem;
+    }
+
+    .store-search {
+        min-width: 300px;
+    }
+
+    .store-icon-btn {
+        width: 44px;
+        height: 44px;
+    }
+
+    .store-nav-link {
+        font-size: 0.85rem;
+        padding: 0.7rem 1rem;
+    }
+
+    .page-offset {
+        padding-top: 140px;
+    }
+
+    body {
+        font-size: 17px;
+    }
+
+    .section-title {
+        font-size: clamp(2rem, 5.5vw, 2.6rem);
+    }
+
+    .section-subtitle {
+        font-size: 1.1rem;
+    }
+
+    .cards-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .hero-grid {
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 3rem;
+    }
+
+    .hero-left {
+        text-align: left;
+    }
+
+    .hero-cta-3d {
+        flex-direction: row;
+        justify-content: flex-start;
+    }
+
+    .cs-grid {
+        grid-template-columns: repeat(6, 1fr);
+    }
+
+    .vx-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .jn-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .tst-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .footer-top {
+        grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr;
+    }
+}
+
+/* ── Ultra-wide displays (1921px+) ── */
+@media (min-width: 1921px) {
+    :root {
+        --header-height: 150px;
+    }
+
+    .store-header-inner {
+        padding: 1rem 2rem;
+        gap: 1.5rem;
+    }
+
+    .store-logo {
+        font-size: 1.8rem;
+    }
+
+    .store-search {
+        min-width: 350px;
+    }
+
+    .store-icon-btn {
+        width: 48px;
+        height: 48px;
+        font-size: 1.2rem;
+    }
+
+    .store-nav-link {
+        font-size: 0.9rem;
+        padding: 0.75rem 1.1rem;
+    }
+
+    .page-offset {
+        padding-top: 150px;
+    }
+
+    body {
+        font-size: 18px;
+    }
+
+    .section-title {
+        font-size: clamp(2.2rem, 5.5vw, 3rem);
+    }
+
+    .section-subtitle {
+        font-size: 1.15rem;
+    }
+
+    .cards-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .hero-grid {
+        grid-template-columns: 1.3fr 0.7fr;
+        gap: 3.5rem;
+    }
+
+    .cs-grid {
+        grid-template-columns: repeat(6, 1fr);
+    }
+
+    .vx-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .jn-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .tst-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .footer-top {
+        grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr;
+    }
+}
+
+/* ── LANDSCAPE MODE ADJUSTMENTS ── */
+@media (max-height: 500px) and (orientation: landscape) {
+    :root {
+        --header-height-mobile: 80px;
+    }
+
+    .store-header-inner {
+        padding: 0.5rem 0.8rem;
+    }
+
+    .store-logo {
+        font-size: 1.1rem;
+    }
+
+    .store-icon-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 0.9rem;
+    }
+
+    .page-offset {
+        padding-top: 80px;
+    }
+
+    .section-pad {
+        padding: 2rem 1.25rem;
+    }
+
+    .hero-section-3d {
+        padding: 2rem 1.25rem 1.5rem;
+    }
+}
+
+/* ── TOUCH DEVICE OPTIMIZATIONS ── */
+@media (hover: none) and (pointer: coarse) {
+    /* Increase touch targets */
+    .store-icon-btn {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .btn-3d {
+        padding: 1rem 2rem;
+        min-height: 44px;
+    }
+
+    .card {
+        padding: 1.5rem;
+    }
+
+    .product {
+        border-radius: 20px;
+    }
+
+    /* Remove hover effects that don't work on touch */
+    .store-nav-link:hover {
+        background: rgba(255,255,255,0.05);
+    }
+
+    .card:hover {
+        transform: none;
+    }
+
+    .product:hover {
+        transform: none;
+    }
+
+    /* Add active states instead */
+    .store-icon-btn:active {
+        transform: scale(0.95);
+    }
+
+    .btn-3d:active {
+        transform: scale(0.98);
+    }
+}
+
+/* ── HIGH DPI DISPLAYS ── */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .store-logo {
+        filter: drop-shadow(0 0 8px rgba(0,240,255,0.4));
+    }
+
+    .btn-3d {
+        box-shadow: 0 10px 30px rgba(0,240,255,0.3);
+    }
+}
+
+/* ── REDUCED MOTION ── */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .store-logo {
+        filter: drop-shadow(0 0 8px rgba(0,240,255,0.4));
+    }
+}
+
+/* ── DARK MODE (already default) ── */
+@media (prefers-color-scheme: dark) {
+    body {
+        background: transparent;
+        color: #fff;
+    }
+}
+
+/* ── LIGHT MODE FALLBACK ── */
+@media (prefers-color-scheme: light) {
+    body {
+        background: #f5f5f5;
+        color: #333;
+    }
+
+    .store-header {
+        background: rgba(255,255,255,0.95);
+        border-bottom-color: rgba(0,0,0,0.1);
+    }
+
+    .store-nav-link {
+        color: rgba(0,0,0,0.7);
+    }
+
+    .store-nav-link:hover {
+        background: rgba(0,0,0,0.05);
+        color: rgba(0,0,0,0.9);
+    }
+}
+
+/* ── PRINT STYLES ── */
+@media print {
+    .store-header,
+    .store-nav,
+    .store-actions,
+    .site-footer,
+    .preloader-3d {
+        display: none;
+    }
+
+    body {
+        background: #fff;
+        color: #000;
+    }
+
+    .page-offset {
+        padding-top: 0;
+    }
+}

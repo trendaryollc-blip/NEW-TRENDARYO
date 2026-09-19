@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Self-Healing System Dashboard - Trendaryo</title>
+    <script src="bg.js"></script>
+    <style>
+        :root {
+            --accent: #00f0ff;
+            --accent-2: #ff00aa;
+            --accent-3: #00ff88;
+            --glass: rgba(255,255,255,0.05);
+            --glass-border: rgba(255,255,255,0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: linear-gradient(180deg, #0a0a2a, #1a1a40);
+            color: #fff;
+            min-height: 100vh;
+        }
+        
+        #three-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            padding-top: 12rem;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 8rem;
+        }
+        
+        .header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .status-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .status-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+        
+        .status-value {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .status-label {
+            color: #888;
+            font-size: 1.1rem;
+        }
+        
+        .status-card.active {
+            border-color: var(--accent-3);
+        }
+        
+        .status-card.active .status-value {
+            color: var(--accent-3);
+        }
+        
+        .history-section {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+        }
+        
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .history-header h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent);
+        }
+        
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        
+        .btn-primary {
+            background: var(--accent);
+            color: #000;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,240,255,0.3);
+        }
+        
+        .btn-secondary {
+            background: var(--glass);
+            color: #fff;
+            border: 1px solid var(--glass-border);
+        }
+        
+        .history-item {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+        }
+        
+        .history-item:hover {
+            border-color: var(--accent);
+        }
+        
+        .history-header-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .history-time {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        .history-stats {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .stat-value {
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .issues-list {
+            display: grid;
+            gap: 0.5rem;
+        }
+        
+        .issue-item {
+            background: rgba(255,255,255,0.05);
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .issue-type {
+            color: var(--accent-2);
+            font-weight: 600;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #888;
+        }
+        
+        .empty-state h3 {
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+    </style>
+    <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+    <script src="components.js"></script>
+    <canvas id="three-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;"></canvas>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🔧 Self-Healing System</h1>
+            <p>Automated code quality monitoring and repair for Trendaryo</p>
+        </div>
+        
+        <div class="status-grid">
+            <div class="status-card active" id="system-status">
+                <div class="status-value" id="status-value">🟢</div>
+                <div class="status-label">System Status</div>
+            </div>
+            
+            <div class="status-card">
+                <div class="status-value" id="total-scans">0</div>
+                <div class="status-label">Total Scans</div>
+            </div>
+            
+            <div class="status-card">
+                <div class="status-value" id="total-fixes">0</div>
+                <div class="status-label">Total Fixes</div>
+            </div>
+            
+            <div class="status-card">
+                <div class="status-value" id="last-scan">Never</div>
+                <div class="status-label">Last Scan</div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button class="btn btn-primary" onclick="runManualScan()">🔍 Run Manual Scan</button>
+            <button class="btn btn-secondary" onclick="refreshData()">🔄 Refresh</button>
+            <button class="btn btn-secondary" onclick="exportReport()">📊 Export Report</button>
+        </div>
+        
+        <div class="history-section">
+            <div class="history-header">
+                <h2>📈 Recent Activity</h2>
+                <button class="btn btn-secondary" onclick="clearHistory()">Clear History</button>
+            </div>
+            <div id="history-container"></div>
+        </div>
+    </div>
+    
+    <script>
+        let updateInterval;
+        
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            refreshData();
+            updateInterval = setInterval(refreshData, 30000); // Update every 30 seconds
+        });
+        
+        // Refresh dashboard data
+        async function refreshData() {
+            try {
+                const response = await fetch('./self-healing-log.json');
+                const data = await response.json();
+                
+                updateStatusCards(data);
+                updateHistory(data.history || []);
+                
+            } catch (error) {
+                console.error('Failed to load data:', error);
+                document.getElementById('system-status').innerHTML = '<div class="status-value">🔴</div><div class="status-label">Offline</div>';
+            }
+        }
+        
+        // Update status cards
+        function updateStatusCards(data) {
+            document.getElementById('total-scans').textContent = data.totalScans || 0;
+            document.getElementById('total-fixes').textContent = data.totalFixes || 0;
+            
+            const lastScan = data.lastScan ? new Date(data.lastScan).toLocaleString() : 'Never';
+            document.getElementById('last-scan').textContent = lastScan;
+            
+            // Check if system is recently active (within last 10 minutes)
+            const isActive = data.lastScan && (Date.now() - new Date(data.lastScan).getTime()) < 10 * 60 * 1000;
+            const statusCard = document.getElementById('system-status');
+            
+            if (isActive) {
+                statusCard.innerHTML = '<div class="status-value pulse">🟢</div><div class="status-label">Active</div>';
+                statusCard.classList.add('active');
+            } else {
+                statusCard.innerHTML = '<div class="status-value">🟡</div><div class="status-label">Idle</div>';
+                statusCard.classList.remove('active');
+            }
+        }
+        
+        // Update history section
+        function updateHistory(history) {
+            const container = document.getElementById('history-container');
+            
+            if (!history || history.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No Activity Yet</h3>
+                        <p>The self-healing system hasn't performed any scans yet.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const historyHTML = history.slice(0, 10).map(item => `
+                <div class="history-item">
+                    <div class="history-header-info">
+                        <div>
+                            <strong>Scan #${history.indexOf(item) + 1}</strong>
+                            <span class="history-time">${new Date(item.timestamp).toLocaleString()}</span>
+                        </div>
+                        <div class="history-stats">
+                            <div class="stat">
+                                <span>Issues:</span>
+                                <span class="stat-value">${item.issuesFound || 0}</span>
+                            </div>
+                            <div class="stat">
+                                <span>Fixes:</span>
+                                <span class="stat-value">${item.fixesApplied || 0}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    ${item.issues && item.issues.length > 0 ? `
+                        <div class="issues-list">
+                            ${item.issues.slice(0, 3).map(issue => `
+                                <div class="issue-item">
+                                    <span>${issue.description}</span>
+                                    <span class="issue-type">${issue.type}</span>
+                                </div>
+                            `).join('')}
+                            ${item.issues.length > 3 ? `<div class="issue-item"><span>...and ${item.issues.length - 3} more</span></div>` : ''}
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+            
+            container.innerHTML = historyHTML;
+        }
+        
+        // Run manual scan
+        async function runManualScan() {
+            const btn = event.target;
+            btn.disabled = true;
+            btn.textContent = '⏳ Scanning...';
+            
+            try {
+                const response = await fetch('./run-scan.js', { method: 'POST' });
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Scan completed successfully!');
+                    refreshData();
+                } else {
+                    alert('Scan failed: ' + result.error);
+                }
+            } catch (error) {
+                alert('Scan failed: ' + error.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '🔍 Run Manual Scan';
+            }
+        }
+        
+        // Export report
+        function exportReport() {
+            fetch('./self-healing-log.json')
+                .then(response => response.json())
+                .then(data => {
+                    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `self-healing-report-${new Date().toISOString().split('T')[0]}.json`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                })
+                .catch(error => {
+                    alert('Failed to export report: ' + error.message);
+                });
+        }
+        
+        // Clear history
+        function clearHistory() {
+            if (confirm('Are you sure you want to clear the history? This cannot be undone.')) {
+                fetch('./clear-history.js', { method: 'POST' })
+                    .then(() => {
+                        alert('History cleared successfully!');
+                        refreshData();
+                    })
+                    .catch(error => {
+                        alert('Failed to clear history: ' + error.message);
+                    });
+            }
+        }
+    </script>
+</body>
+</html>

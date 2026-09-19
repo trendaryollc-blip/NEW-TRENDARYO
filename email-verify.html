@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification - Trendaryo</title>
+    <meta name="robots" content="noindex, follow">
+    <link rel="canonical" href="https://trendaryo.com/email-verify.html">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon-crown-star.svg">
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="performance.js"></script>
+    <script src="bg.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0a0a0a; --bg-deep: #0a0a2a;
+            --accent: #00f0ff; --accent-2: #ff00aa; --accent-3: #00ff88;
+            --text: #ffffff; --muted: rgba(255,255,255,0.66); --muted-2: rgba(255,255,255,0.45);
+            --glass: rgba(255,255,255,0.05);
+            --glass-border: rgba(255,255,255,0.1); --glass-border-2: rgba(255,255,255,0.18);
+            --card-grad: linear-gradient(168deg, rgba(255,255,255,0.075), rgba(255,255,255,0.02));
+            --r-sm: 10px; --r-md: 16px; --r-lg: 22px; --r-pill: 999px;
+            --ease: cubic-bezier(0.22, 1, 0.36, 1);
+            --font-d: 'Orbitron', sans-serif; --font-b: 'Rajdhani', sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-b); background: var(--bg-deep); color: #fff; overflow-x: hidden; }
+        #three-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+        .page-offset { padding-top: 190px; padding-bottom: 3rem; }
+        a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+        .ev-shell { max-width: 480px; margin: 0 auto; padding: 0 2.5rem; }
+        .ev-card { background: var(--card-grad); border: 1px solid var(--glass-border); border-radius: var(--r-lg); padding: 2.5rem; text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.3); }
+        .ev-icon { width: 72px; height: 72px; margin: 0 auto 1.5rem; background: rgba(0,240,255,0.12); border: 2px solid rgba(0,240,255,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; }
+        .ev-title { font-family: var(--font-d); font-size: 1.4rem; font-weight: 900; margin-bottom: 0.5rem; background: linear-gradient(135deg, #fff, var(--accent)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .ev-msg { color: var(--muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem; }
+        .ev-status { padding: 0.8rem 1rem; border-radius: var(--r-md); margin-bottom: 1.5rem; display: none; font-size: 0.92rem; }
+        .ev-status.loading { display: block; background: rgba(0,240,255,0.08); border: 1px solid var(--accent); color: var(--accent); }
+        .ev-status.success { display: block; background: rgba(0,255,136,0.08); border: 1px solid var(--accent-3); color: var(--accent-3); }
+        .ev-status.error { display: block; background: rgba(255,0,170,0.08); border: 1px solid var(--accent-2); color: var(--accent-2); }
+        .ev-actions { display: flex; flex-direction: column; gap: 0.8rem; align-items: center; margin-top: 1.5rem; }
+        .ev-btn { width: 100%; max-width: 300px; padding: 0.85rem; border-radius: var(--r-md); font-family: var(--font-d); font-size: 0.68rem; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; cursor: pointer; transition: all 0.25s; border: 0; }
+        .ev-btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; }
+        .ev-btn-primary:hover { box-shadow: 0 0 20px rgba(0,240,255,0.4); transform: translateY(-1px); }
+        .ev-btn-secondary { background: transparent; border: 1px solid var(--glass-border-2); color: rgba(255,255,255,0.8); }
+        .ev-btn-secondary:hover { border-color: rgba(255,255,255,0.5); color: #fff; }
+        .ev-link { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--glass-border); }
+        .ev-link a { color: var(--accent); text-decoration: none; font-weight: 600; }
+        .ev-link a:hover { color: var(--accent-2); }
+        .ev-spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top: 2px solid #fff; border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 0.5rem; vertical-align: middle; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @media (max-width: 600px) { .ev-shell { padding: 0 1rem; } .ev-card { padding: 1.5rem; } }
+        @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--accent), var(--accent-2)); border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <canvas id="three-canvas"></canvas>
+    <div id="header-container"></div>
+    <script src="components.js"></script>
+
+    <main class="page-offset">
+        <div class="ev-shell">
+            <div class="ev-card">
+                <div class="ev-icon">✉️</div>
+                <h1 class="ev-title">Email Verification</h1>
+                <div class="ev-msg">Please wait while we verify your email address...</div>
+                <div class="ev-status loading" id="loadingStatus"><span class="ev-spinner"></span>Verifying your email address...</div>
+                <div class="ev-status success" id="successStatus" style="display:none;">Email verified successfully! You can now login to your account.</div>
+                <div class="ev-status error" id="errorStatus" style="display:none;">Invalid or expired verification link. Please request a new verification email.</div>
+                <div class="ev-actions" id="actionButtons" style="display:none;">
+                    <button class="ev-btn ev-btn-primary" onclick="resendVerification()">Resend Verification Email</button>
+                    <button class="ev-btn ev-btn-secondary" onclick="window.location.href='login.html'">Go to Login</button>
+                </div>
+                <div class="ev-link"><p>Already verified? <a href="login.html">Sign in to your account</a></p></div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-container"></div>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script>
+        var urlParams = new URLSearchParams(window.location.search);
+        var oobCode = urlParams.get('oobCode') || urlParams.get('token') || urlParams.get('code');
+
+        function showSuccess() {
+            document.getElementById('loadingStatus').style.display = 'none';
+            document.getElementById('successStatus').style.display = 'block';
+            document.getElementById('actionButtons').style.display = 'flex';
+            document.querySelector('.ev-msg').textContent = 'Your email has been verified!';
+        }
+
+        function showError(msg) {
+            document.getElementById('loadingStatus').style.display = 'none';
+            document.getElementById('errorStatus').style.display = 'block';
+            document.getElementById('actionButtons').style.display = 'flex';
+            if (msg) document.getElementById('errorStatus').textContent = msg;
+            document.querySelector('.ev-msg').textContent = 'Something went wrong.';
+        }
+
+        function waitForFirebase(retry) {
+            var attempts = 0;
+            (function wait() {
+                if (typeof firebase !== 'undefined' && firebase.auth) return retry();
+                if (attempts++ < 100) setTimeout(wait, 100);
+                else showError('Could not connect to the verification service. Please retry.');
+            })();
+        }
+
+        async function verify() {
+            try {
+                await initFirebase();
+                await firebase.auth().applyActionCode(oobCode);
+                if (firebase.auth().currentUser) await firebase.auth().currentUser.reload();
+                showSuccess();
+            } catch (e) {
+                if (e && e.code === 'auth/invalid-action-code') {
+                    showError('This verification link is invalid or has already been used.');
+                } else {
+                    showError((e && e.message) || 'Verification failed. Please try again.');
+                }
+            }
+        }
+
+        async function resendVerification() {
+            var btn = document.getElementById('actionButtons').querySelector('button');
+            btn.disabled = true;
+            if (!firebase || !firebase.auth || !firebase.auth().currentUser) {
+                btn.textContent = 'Sign in to resend';
+                setTimeout(function () { btn.textContent = 'Resend Verification Email'; btn.disabled = false; }, 2500);
+                return;
+            }
+            try {
+                await firebase.auth().currentUser.sendEmailVerification();
+                btn.textContent = 'Email Sent!';
+            } catch (e) {
+                btn.textContent = 'Failed - try again';
+                btn.disabled = false;
+            }
+        }
+
+        if (!oobCode) {
+            showError('Verification code is missing. Please check your email for the complete verification link.');
+        } else {
+            waitForFirebase(verify);
+        }
+    </script>
+    <script>
+        function hidePreloader() { var p = document.getElementById('preloader'); if (p) p.classList.add('hidden'); }
+        if (document.readyState === 'complete') { setTimeout(hidePreloader, 600); } else { window.addEventListener('load', function () { setTimeout(hidePreloader, 600); }); }
+        setTimeout(hidePreloader, 1500);
+    </script>
+</body>
+</html>

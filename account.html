@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Manage your Trendaryo account, view order history, update addresses, and track shipments.">
+    <meta name="keywords" content="my account, profile, orders">
+    <meta name="robots" content="noindex, follow">
+    <meta name="author" content="Trendaryo">
+    <link rel="canonical" href="https://trendaryo.com/account.html">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://trendaryo.com/account.html">
+    <meta property="og:title" content="My Account - Trendaryo">
+    <meta property="og:description" content="Manage your Trendaryo account, view order history, update addresses, and track shipments.">
+    <meta property="og:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://trendaryo.com/account.html">
+    <meta property="twitter:title" content="My Account - Trendaryo">
+    <meta property="twitter:description" content="Manage your Trendaryo account, view order history, update addresses, and track shipments.">
+    <meta property="twitter:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
+    <title>My Account - Trendaryo</title>
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="shared.css">
+    <script src="performance.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <script src="bg.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --accent: #00f0ff; --accent-2: #ff00aa; --accent-3: #00ff88; --glass: rgba(255,255,255,0.05); --glass-border: rgba(255,255,255,0.1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Rajdhani', sans-serif; background: #0a0a2a; color: #fff; overflow-x: hidden; transition: background 1s ease-in-out; }
+        #three-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none;}
+
+        .store-header { position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: rgba(0,0,0,0.08); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid var(--glass-border); }
+        .store-header-inner { max-width: 1200px; margin: 0 auto; padding: 0.8rem 1.25rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+        .store-brand { display: flex; align-items: center; gap: 0.75rem; min-width: 180px; }
+        .store-logo { font-family: 'Orbitron', sans-serif; font-size: 1.6rem; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent-2)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; white-space: nowrap; }
+        .store-search { flex: 1; display: flex; align-items: center; gap: 0.5rem; padding: 0.55rem 0.9rem; border-radius: 999px; background: var(--glass); border: 1px solid var(--glass-border); min-width: 220px; }
+        .store-search input { width: 100%; border: none; outline: none; background: #0a0a2a; color: rgba(255,255,255,0.9); font-family: inherit; font-size: 1rem; }
+        .store-search input::placeholder { color: rgba(255,255,255,0.55); }
+        .store-actions { display: flex; align-items: center; gap: 0.6rem; position: relative; }
+        .store-icon-btn { width: 42px; height: 42px; border-radius: 999px; background: var(--glass); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.9); text-decoration: none; transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease; cursor: pointer; }
+        .store-icon-btn:hover { transform: translateY(-1px); border-color: rgba(0,240,255,0.6); background: rgba(0,240,255,0.12); }
+        .store-mobile-toggle { display: none; width: 42px; height: 42px; border-radius: 999px; background: var(--glass); border: 1px solid var(--glass-border); color: rgba(255,255,255,0.9); cursor: pointer; }
+
+        .store-nav { max-width: 1200px; margin: 0 auto; padding: 0 1.25rem 0.85rem; }
+        .store-nav-list { display: flex; align-items: center; justify-content: center; gap: 0.25rem; list-style: none; }
+        .store-nav-item { position: relative; }
+        .store-nav-link { font-family: 'Orbitron', sans-serif; font-size: 0.82rem; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; color: rgba(255,255,255,0.85); text-decoration: none; padding: 0.65rem 0.9rem; border-radius: 999px; display: inline-flex; align-items: center; gap: 0.5rem; transition: background 0.2s ease, color 0.2s ease; }
+        .store-nav-link:hover { background: rgba(255,255,255,0.08); color: rgba(255,255,255,1); }
+        .store-nav-link[aria-current="page"] { background: rgba(0,240,255,0.14); color: rgba(255,255,255,1); border: 1px solid rgba(0,240,255,0.25); }
+        .store-caret { font-size: 0.8rem; opacity: 0.85; }
+        .store-dropdown { position: absolute; left: 0; top: calc(100% + 10px); min-width: 240px; background: rgba(10,10,42,0.92); border: 1px solid var(--glass-border); border-radius: 14px; padding: 0.5rem; box-shadow: 0 18px 48px rgba(0,0,0,0.45); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease; }
+        .store-dropdown a { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.7rem 0.8rem; border-radius: 10px; color: rgba(255,255,255,0.88); text-decoration: none; transition: background 0.18s ease, color 0.18s ease; }
+        .store-dropdown a:hover { background: rgba(0,240,255,0.12); color: #fff; }
+        .store-dropdown small { color: rgba(255,255,255,0.55); font-size: 0.85rem; }
+        .store-nav-item:hover .store-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+        .store-nav-item.is-open .store-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+
+        .page-offset { padding-top: 150px; }
+        
+        .page-header-3d { padding: 2rem 2rem 2rem; text-align: center; }
+        .page-title-3d { font-family: 'Orbitron', sans-serif; font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 900; background: linear-gradient(135deg, #fff, var(--accent)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; }
+        .page-subtitle-3d { color: #888; font-size: 1.2rem; }
+        
+        .account-section-3d { padding: 2rem; min-height: 80vh; }
+        .account-container-3d { display: grid; grid-template-columns: 300px 1fr; gap: 2rem; max-width: 1200px; margin: 0 auto; }
+        
+        .account-sidebar-3d { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; height: fit-content; backdrop-filter: blur(10px); }
+        .profile-3d { text-align: center; margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid var(--glass-border); }
+        .profile-avatar-3d { width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent-2)); margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 900; }
+        .profile-name-3d { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 0.25rem; }
+        .profile-email-3d { color: #888; font-size: 0.9rem; }
+        
+        .menu-item-3d { display: flex; align-items: center; gap: 1rem; padding: 1rem; border-radius: 12px; cursor: pointer; transition: all 0.3s; margin-bottom: 0.5rem; color: rgba(255,255,255,0.8); text-decoration: none; }
+        .menu-item-3d:hover, .menu-item-3d.active { background: rgba(0,240,255,0.1); color: var(--accent); }
+        .menu-item-3d svg { width: 20px; height: 20px; }
+        
+        .account-content-3d { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; backdrop-filter: blur(10px); }
+        .content-title-3d { font-family: 'Orbitron', sans-serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 2rem; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; }
+        
+        .orders-list-3d { display: flex; flex-direction: column; gap: 1rem; }
+        .order-card-3d { background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 12px; padding: 1.5rem; transition: all 0.3s; }
+        .order-card-3d:hover { border-color: var(--accent); }
+        .order-header-3d { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .order-number-3d { font-family: 'Orbitron', sans-serif; font-weight: 700; }
+        .order-status-3d { padding: 0.4rem 1rem; background: rgba(0,255,136,0.2); color: var(--accent-3); border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+        .order-items-3d { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .order-item-3d { width: 60px; height: 60px; border-radius: 8px; overflow: hidden; border: 1px solid var(--glass-border); }
+        .order-item-3d img { width: 100%; height: 100%; object-fit: cover; }
+        .order-footer-3d { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--glass-border); }
+        .order-total-3d { font-family: 'Orbitron', sans-serif; font-weight: 800; color: var(--accent); }
+        
+        .stats-grid-3d { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .stat-card-3d { background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 12px; padding: 1.5rem; text-align: center; transition: all 0.3s; }
+        .stat-card-3d:hover { border-color: var(--accent); transform: translateY(-5px); }
+        .stat-value-3d { font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent-3)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .stat-label-3d { color: #888; font-size: 0.9rem; margin-top: 0.5rem; }
+        
+        .preloader-3d { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 2rem; }
+        .preloader-3d.hidden { opacity: 0; pointer-events: none; transition: opacity 0.5s; }
+        .preloader-logo-3d { font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent-2)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .preloader-spinner-3d { width: 50px; height: 50px; border: 3px solid var(--glass-border); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
+        
+        @media (max-width: 900px) {
+            .account-container-3d { grid-template-columns: 1fr; }
+            .store-search { display: none; }
+            .store-mobile-toggle { display: inline-flex; align-items: center; justify-content: center; }
+            .store-nav { display: none; }
+            .store-header.is-open .store-nav { display: block; padding-bottom: 1rem; }
+            .store-nav-list { flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 0.5rem; }
+            .store-nav-link { width: 100%; justify-content: space-between; }
+            .store-dropdown { position: static; opacity: 1; visibility: visible; transform: none; box-shadow: none; background: rgba(255,255,255,0.04); }
+            .store-nav-item:hover .store-dropdown { opacity: 1; visibility: visible; transform: none; }
+            .page-offset { padding-top: 120px; }
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--accent), var(--accent-2)); border-radius: 4px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* HF Theme styles */
+        html[data-hf-theme="darkgray"] .store-logo {
+          background: linear-gradient(135deg, #e8e8ea, #9aa3ad) !important;
+          background-clip: text !important;
+          -webkit-background-clip: text !important;
+          -webkit-text-fill-color: transparent !important;
+        }
+
+        /* Live dashboard states */
+        .order-item-3d { display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.35); }
+        .acct-emoji { font-size: 1.6rem; line-height: 1; }
+        .acct-more { align-self: center; color: #888; font-size: 0.85rem; }
+        .acct-order-link { display: block; color: inherit; text-decoration: none; }
+        .acct-order-link:hover { border-color: var(--accent); }
+        .acct-loading { color: #888; padding: 0.5rem 0; }
+        .acct-empty { display: flex; flex-direction: column; align-items: center; gap: 1rem; text-align: center; color: #aaa; padding: 2rem 1rem; }
+        .acct-empty p { margin: 0; }
+        .order-status-3d.status-pending { background: rgba(255,196,0,0.18); color: #ffc400; }
+        .order-status-3d.status-processing,
+        .order-status-3d.status-confirmed,
+        .order-status-3d.status-shipped { background: rgba(0,240,255,0.15); color: var(--accent); }
+        .order-status-3d.status-cancelled,
+        .order-status-3d.status-refunded { background: rgba(255,77,109,0.18); color: #ff4d6d; }
+        .order-status-3d.status-delivered { background: rgba(0,255,136,0.2); color: var(--accent-3); }
+    </style>
+</head>
+<body>
+    <script src="components.js"></script>
+    <canvas id="three-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;"></canvas>
+    <div id="header-container"></div>
+    <div class="preloader-3d" id="preloader"><div class="preloader-logo-3d">TRENDARYO</div><div class="preloader-spinner-3d"></div></div>
+    
+    <!-- Full Navigation Header -->
+    <div id="header-container" data-type="full"></div>
+
+
+
+    <main class="page-offset">
+    
+    <section class="page-header-3d">
+        <h1 class="page-title-3d">MY ACCOUNT</h1>
+        <p class="page-subtitle-3d">Welcome to your 3D dashboard</p>
+    </section>
+    
+    <section class="account-section-3d">
+        <div class="account-container-3d">
+            <aside class="account-sidebar-3d">
+                <div class="profile-3d">
+                    <div class="profile-avatar-3d" id="sidebar-avatar">?</div>
+                    <h3 class="profile-name-3d" id="sidebar-name">Loading...</h3>
+                    <p class="profile-email-3d" id="sidebar-email"></p>
+                </div>
+                <a href="account.html" class="menu-item-3d active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    Dashboard
+                </a>
+                <a href="orders.html" class="menu-item-3d">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                    My Orders
+                </a>
+                <a href="wishlist.html" class="menu-item-3d">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    Wishlist
+                </a>
+                <a href="track-order.html" class="menu-item-3d">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    Track Order
+                </a>
+                <a href="profile.html" class="menu-item-3d">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                    Profile Settings
+                </a>
+                <a href="index.html" class="menu-item-3d" onclick="window.handleLogout ? handleLogout() : logout()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    Logout
+                </a>
+            </aside>
+            
+            <div class="account-content-3d">
+                <h2 class="content-title-3d">Dashboard Overview</h2>
+                
+                <div class="stats-grid-3d">
+                    <div class="stat-card-3d">
+                        <div class="stat-value-3d" id="stat-orders">--</div>
+                        <div class="stat-label-3d">Total Orders</div>
+                    </div>
+                    <div class="stat-card-3d">
+                        <div class="stat-value-3d" id="stat-spent">$0.00</div>
+                        <div class="stat-label-3d">Total Spent</div>
+                    </div>
+                    <div class="stat-card-3d">
+                        <div class="stat-value-3d" id="stat-wishlist">0</div>
+                        <div class="stat-label-3d">Wishlist Items</div>
+                    </div>
+                    <div class="stat-card-3d">
+                        <div class="stat-value-3d" id="stat-delivered">0</div>
+                        <div class="stat-label-3d">Orders Delivered</div>
+                    </div>
+                </div>
+                
+                <h3 class="content-title-3d" style="font-size:1.2rem;margin-top:2rem;">Recent Orders</h3>
+                <div class="orders-list-3d" id="recent-orders">
+                    <div class="acct-loading">Loading your orders&hellip;</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    </main>
+
+    <!-- Firebase Auth + order data (real account dashboard) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="firebase-auth-helper.js"></script>
+    <script src="order-manager.js"></script>
+
+    <script>
+        // Theme toggle logic
+        const themes = [
+            "linear-gradient(180deg, #0a0a2a 0%, #1a1a40 100%)", // Deep Navy
+            "linear-gradient(180deg, #2a003f 0%, #3b0066 100%)", // Cosmic Purple
+            "linear-gradient(180deg, #002b36 0%, #004f66 100%)", // Dark Teal
+            "linear-gradient(180deg, #2a003f 0%, #1a1a40 100%)"  // Purple + Golden Accent
+        ];
+
+        let currentTheme = 0;
+        const themeToggle = document.getElementById("theme-toggle");
+        if (themeToggle) {
+            themeToggle.addEventListener("click", () => {
+                currentTheme = (currentTheme + 1) % themes.length;
+                (window.__themeBgDiv || document.body).style.background = themes[currentTheme];
+
+                // Apply golden accents when Purple + Golden theme is active
+                if (currentTheme === 3) {
+                    document.querySelectorAll("h1, h2, h3, .product-title, .hero-title-3d, .page-title-3d").forEach(el => {
+                        el.style.color = "#FFD700";
+                    });
+                    document.querySelectorAll("button, .btn-3d").forEach(btn => {
+                        btn.style.background = "#6a0dad";
+                        btn.style.color = "#FFD700";
+                    });
+                } else {
+                    // Reset to default white text for other themes
+                    document.querySelectorAll("h1, h2, h3, .product-title, .hero-title-3d, .page-title-3d").forEach(el => {
+                        el.style.color = "";
+                    });
+                    document.querySelectorAll("button, .btn-3d").forEach(btn => {
+                        btn.style.background = "";
+                        btn.style.color = "";
+                    });
+                }
+            });
+        }
+
+        // HF Theme logic
+        const hfThemeStorageKey = 'trendaryo_hf_theme';
+        const hfThemes = ['neon', 'darkgray'];
+        const applyHFTheme = (theme) => {
+            localStorage.setItem(hfThemeStorageKey, theme);
+            document.documentElement.setAttribute('data-hf-theme', theme);
+        };
+        const hfThemeToggle = document.getElementById("hf-theme-toggle");
+        if (hfThemeToggle) {
+            hfThemeToggle.addEventListener("click", () => {
+                const current = localStorage.getItem(hfThemeStorageKey) || 'neon';
+                const idx = hfThemes.indexOf(current);
+                const next = hfThemes[(idx + 1 + hfThemes.length) % hfThemes.length];
+                applyHFTheme(next);
+            });
+        }
+        // Apply initial HF theme
+        applyHFTheme(localStorage.getItem(hfThemeStorageKey) || 'neon');
+
+        // Set store-actions position relative
+        var storeActions = document.querySelector('.store-actions');
+        if (storeActions) storeActions.style.position = 'relative';
+
+        // Real account dashboard: gate on Firebase auth, then load server orders.
+        (function () {
+            function esc(value) {
+                return String(value == null ? '' : value).replace(/[&<>"']/g, function (c) {
+                    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+                });
+            }
+
+            function money(n) {
+                return '$' + (Number(n) || 0).toFixed(2);
+            }
+
+            function statusClass(status) {
+                return String(status || 'pending').toLowerCase().replace(/[^a-z]/g, '') || 'pending';
+            }
+
+            function wishlistCount() {
+                try {
+                    var raw = JSON.parse(localStorage.getItem('wishlist') || '[]');
+                    if (Array.isArray(raw)) return raw.length;
+                    if (raw && typeof raw === 'object') return Object.keys(raw).length;
+                } catch (e) {}
+                return 0;
+            }
+
+            function setSidebar(user) {
+                var name = (user && (user.displayName || user.name)) || (user && user.email) || 'User';
+                var email = (user && user.email) || '';
+                var initials = name.split(' ').filter(Boolean).map(function (w) { return w[0]; })
+                    .join('').toUpperCase().slice(0, 2) || '?';
+                var avatarEl = document.getElementById('sidebar-avatar');
+                var nameEl = document.getElementById('sidebar-name');
+                var emailEl = document.getElementById('sidebar-email');
+                if (avatarEl) avatarEl.textContent = initials;
+                if (nameEl) nameEl.textContent = name;
+                if (emailEl) emailEl.textContent = email;
+            }
+
+            function renderStats(orders) {
+                var spent = 0;
+                var delivered = 0;
+                for (var i = 0; i < orders.length; i++) {
+                    var o = orders[i] || {};
+                    if (String(o.status || '').toLowerCase() === 'cancelled') continue;
+                    spent += Number(o.total) || 0;
+                    if (String(o.status || '').toLowerCase() === 'delivered') delivered++;
+                }
+                var ordersEl = document.getElementById('stat-orders');
+                var spentEl = document.getElementById('stat-spent');
+                var wishEl = document.getElementById('stat-wishlist');
+                var deliveredEl = document.getElementById('stat-delivered');
+                if (ordersEl) ordersEl.textContent = orders.length;
+                if (spentEl) spentEl.textContent = money(spent);
+                if (wishEl) wishEl.textContent = wishlistCount();
+                if (deliveredEl) deliveredEl.textContent = delivered;
+            }
+
+            function thumb(item) {
+                if (item && item.image) {
+                    return '<img src="' + esc(item.image) + '" alt="' + esc(item.name || '') + '" loading="lazy">';
+                }
+                return '<span class="acct-emoji">' + esc((item && item.emoji) || '📦') + '</span>';
+            }
+
+            function renderOrders(orders) {
+                var wrap = document.getElementById('recent-orders');
+                if (!wrap) return;
+
+                if (!orders.length) {
+                    wrap.innerHTML = '<div class="acct-empty">' +
+                        '<div style="font-size:2.5rem;">📭</div>' +
+                        '<p>You have not placed any orders yet.</p>' +
+                        '<a class="menu-item-3d" style="justify-content:center;" href="shop.html">Start shopping</a>' +
+                        '</div>';
+                    return;
+                }
+
+                wrap.innerHTML = orders.slice(0, 3).map(function (order) {
+                    var items = Array.isArray(order.items) ? order.items : [];
+                    var thumbs = items.slice(0, 5).map(function (it) {
+                        return '<div class="order-item-3d">' + thumb(it) + '</div>';
+                    }).join('');
+                    if (items.length > 5) thumbs += '<span class="acct-more">+' + (items.length - 5) + '</span>';
+
+                    var date = (window.OrderManager && window.OrderManager.formatOrderDate)
+                        ? window.OrderManager.formatOrderDate(order.createdAt) : '';
+                    var status = String(order.status || 'pending');
+
+                    return '<a class="order-card-3d acct-order-link" href="orders.html">' +
+                        '<div class="order-header-3d">' +
+                        '<span class="order-number-3d">#' + esc(String(order.id || '').substring(0, 8).toUpperCase()) + '</span>' +
+                        '<span class="order-status-3d status-' + statusClass(status) + '">' + esc(status.toUpperCase()) + '</span>' +
+                        '</div>' +
+                        '<div class="order-items-3d">' + thumbs + '</div>' +
+                        '<div class="order-footer-3d">' +
+                        '<span style="color:#888;">' + esc(date) + '</span>' +
+                        '<span class="order-total-3d">' + money(order.total) + '</span>' +
+                        '</div>' +
+                        '</a>';
+                }).join('');
+            }
+
+            function extractOrders(result) {
+                if (!result || !result.success) return [];
+                var payload = result.data || {};
+                if (Array.isArray(payload.data)) return payload.data;
+                if (Array.isArray(payload.orders)) return payload.orders;
+                if (Array.isArray(payload)) return payload;
+                return [];
+            }
+
+            async function loadOrders() {
+                var wrap = document.getElementById('recent-orders');
+                try {
+                    if (!window.OrderManager) throw new Error('OrderManager unavailable');
+                    var result = await window.OrderManager.getOrders(50, 1);
+                    var orders = extractOrders(result).map(function (o) {
+                        if (o && typeof o.items === 'string') {
+                            try { o.items = JSON.parse(o.items); } catch (e) { o.items = []; }
+                        }
+                        return o;
+                    });
+                    orders.sort(function (a, b) {
+                        return new Date((b && b.createdAt) || 0) - new Date((a && a.createdAt) || 0);
+                    });
+                    renderStats(orders);
+                    renderOrders(orders);
+                } catch (e) {
+                    console.error('[account] order load failed:', e);
+                    renderStats([]);
+                    if (wrap) wrap.innerHTML = '<div class="acct-empty"><p>We could not load your orders right now. Please try again later.</p></div>';
+                }
+            }
+
+            async function boot() {
+                if (typeof initFirebase === 'function') {
+                    try { await initFirebase(); } catch (e) { console.error('[account] firebase init failed:', e); }
+                }
+
+                var auth = (typeof firebase !== 'undefined' && firebase.auth) ? firebase.auth() : null;
+                if (!auth) {
+                    if (typeof FirebaseAuth !== 'undefined' && FirebaseAuth.getCurrentUser()) {
+                        setSidebar(FirebaseAuth.getCurrentUser());
+                        loadOrders();
+                    } else {
+                        window.location.replace('login.html');
+                    }
+                    return;
+                }
+
+                auth.onAuthStateChanged(function (user) {
+                    if (!user) {
+                        window.location.replace('login.html');
+                        return;
+                    }
+                    setSidebar(user);
+                    loadOrders();
+                });
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', boot);
+            } else {
+                boot();
+            }
+        })();
+    </script>
+
+    <script src="bg.js"></script>
+    <!-- Self-Healing System -->
+<script>
+window.onerror = function(msg, url, lineNo, columnNo, error) {
+  console.log('Error caught:', msg);
+  const errorDiv = document.createElement('div');
+  errorDiv.style.cssText = 'position:fixed; bottom:20px; right:20px; background:#f3f4f6; padding:10px; border-radius:5px; z-index:9999; border:1px solid #ccc;';
+  errorDiv.innerHTML = '⚠️ Something went wrong. Retrying...';
+  document.body.appendChild(errorDiv);
+  setTimeout(() => errorDiv.remove(), 3000);
+  return false;
+};
+</script>
+    <script>
+        // Preloader: failsafe ensures it always hides
+        function hidePreloader() { var p = document.getElementById('preloader'); if (p) p.classList.add('hidden'); }
+        if (document.readyState === 'complete') { setTimeout(hidePreloader, 800); }
+        else { window.addEventListener('load', function () { setTimeout(hidePreloader, 800); }); }
+        setTimeout(hidePreloader, 2000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+# Environment Variables (NEVER COMMIT THESE!)
+.env
+*.env
+.env.local
+.env.*.local
+
+# Dependencies
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Build outputs
+dist/
+build/
+*.min.js
+*.min.css
+.next/
+out/
+
+# Testing
+coverage/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+.cache/
+.parcel-cache/
+
+# Firebase service account keys
+*serviceAccountKey*.json
+
+# Lock files
+yarn.lock
+pnpm-lock.yaml

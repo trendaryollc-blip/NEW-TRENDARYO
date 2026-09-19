@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compare Products - Trendaryo | Side-by-Side</title>
+    <meta name="description" content="Compare up to 3 Trendaryo products side by side. Prices, specs, ratings, discounts and value scores — all in one table.">
+    <meta name="keywords" content="compare products, product comparison, side by side, specs comparison">
+    <meta name="robots" content="noindex, follow">
+    <link rel="canonical" href="https://trendaryo.com/compare.html">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://trendaryo.com/compare.html">
+    <meta property="og:title" content="Compare Products - Trendaryo">
+    <meta property="og:description" content="Side-by-side comparison of prices, specs, ratings and value scores.">
+    <meta property="og:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Compare Products - Trendaryo">
+    <meta name="twitter:description" content="Side-by-side comparison of prices, specs, ratings and value scores.">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon-crown-star.svg">
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="performance.js"></script>
+    <script src="bg.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0a0a0a; --bg-deep: #0a0a2a;
+            --accent: #00f0ff; --accent-2: #ff00aa; --accent-3: #00ff88; --accent-4: #ffd700;
+            --danger: #ff4444;
+            --text: #ffffff; --muted: rgba(255,255,255,0.66); --muted-2: rgba(255,255,255,0.45);
+            --glass: rgba(255,255,255,0.05); --glass-2: rgba(255,255,255,0.03);
+            --glass-border: rgba(255,255,255,0.1); --glass-border-2: rgba(255,255,255,0.18);
+            --card-grad: linear-gradient(168deg, rgba(255,255,255,0.075), rgba(255,255,255,0.02));
+            --r-sm: 10px; --r-md: 16px; --r-lg: 22px; --r-pill: 999px;
+            --ease: cubic-bezier(0.22, 1, 0.36, 1);
+            --font-d: 'Orbitron', sans-serif; --font-b: 'Rajdhani', sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-b); background: var(--bg-deep); color: #fff; overflow-x: hidden; }
+        #three-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+        .page-offset { padding-top: 190px; padding-bottom: 3rem; }
+        a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+        .cmp-shell { max-width: 1200px; margin: 0 auto; padding: 0 2.5rem; }
+
+        /* ── Hero ── */
+        .cmp-hero { position: relative; overflow: hidden; padding: 3rem 1.5rem 2.5rem; margin-bottom: 2rem; border-radius: var(--r-lg); background: var(--card-grad); border: 1px solid var(--glass-border); }
+        .cmp-hero-neb { position: absolute; border-radius: 50%; filter: blur(110px); pointer-events: none; z-index: 0; }
+        .cmp-hero-neb-1 { width: 360px; height: 360px; top: -140px; left: -100px; background: radial-gradient(circle, rgba(0,240,255,0.2), transparent 70%); }
+        .cmp-hero-neb-2 { width: 420px; height: 420px; bottom: -200px; right: -120px; background: radial-gradient(circle, rgba(255,0,170,0.15), transparent 70%); animation: nebDrift 16s ease-in-out infinite alternate; }
+        @keyframes nebDrift { from { transform: scale(1) translateY(0); } to { transform: scale(1.12) translateY(-28px); } }
+        .cmp-hero-inner { position: relative; z-index: 1; }
+        .cmp-hero-live { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0.85rem; border-radius: var(--r-pill); background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.3); font-family: var(--font-d); font-size: 0.6rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); }
+        .cmp-hero-live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-3); box-shadow: 0 0 10px var(--accent-3); animation: livePulse 2.2s ease-in-out infinite; }
+        @keyframes livePulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.75); } }
+        .cmp-hero h1 { font-family: var(--font-d); font-weight: 900; font-size: clamp(1.8rem, 4.5vw, 3.2rem); line-height: 1.05; margin: 0.8rem 0 0.6rem; background: linear-gradient(120deg, #fff 8%, var(--accent) 50%, var(--accent-2) 90%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .cmp-hero p { color: var(--muted); font-size: 1.05rem; line-height: 1.65; max-width: 55ch; }
+
+        /* ── Stats ── */
+        .cmp-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.85rem; margin-bottom: 2rem; }
+        .cmp-stat { position: relative; padding: 1.1rem 1.2rem; border-radius: var(--r-md); background: var(--card-grad); border: 1px solid var(--glass-border); overflow: hidden; }
+        .cmp-stat::after { content: ''; position: absolute; inset: 0 0 auto 0; height: 2px; background: linear-gradient(90deg, var(--accent), rgba(0,240,255,0)); }
+        .cmp-stat:nth-child(2n)::after { background: linear-gradient(90deg, var(--accent-2), rgba(255,0,170,0)); }
+        .cmp-stat:nth-child(3n)::after { background: linear-gradient(90deg, var(--accent-3), rgba(0,255,136,0)); }
+        .cmp-stat-val { font-family: var(--font-d); font-size: 1.4rem; font-weight: 900; }
+        .cmp-stat-lab { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1.4px; color: var(--muted-2); margin-top: 0.15rem; }
+
+        /* ── Toolbar ── */
+        .cmp-toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.5rem; padding: 1rem 1.25rem; border-radius: var(--r-md); background: var(--card-grad); border: 1px solid var(--glass-border); }
+        .cmp-toolbar-left { font-family: var(--font-d); font-size: 0.72rem; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); }
+        .cmp-toolbar-right { display: flex; align-items: center; gap: 0.6rem; }
+        .cmp-btn { padding: 0.5rem 1rem; border-radius: var(--r-pill); border: none; font-family: var(--font-d); font-size: 0.66rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.22s ease; }
+        .cmp-btn--add { background: linear-gradient(135deg, var(--accent), var(--accent-3)); color: #00202a; }
+        .cmp-btn--add:hover { box-shadow: 0 0 18px rgba(0,240,255,0.4); }
+        .cmp-btn--clear { background: rgba(255,68,68,0.15); border: 1px solid rgba(255,68,68,0.3); color: var(--danger); }
+        .cmp-btn--clear:hover { background: rgba(255,68,68,0.25); }
+        .cmp-btn--export { background: rgba(255,215,0,0.12); border: 1px solid rgba(255,215,0,0.3); color: var(--accent-4); }
+        .cmp-btn--export:hover { background: rgba(255,215,0,0.2); }
+
+        /* ── Product Cards ── */
+        .cmp-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-bottom: 2.5rem; }
+        .cmp-card { position: relative; border-radius: var(--r-lg); background: var(--card-grad); border: 1px solid var(--glass-border); overflow: hidden; transition: transform 0.35s var(--ease), border-color 0.35s ease, box-shadow 0.35s ease; }
+        .cmp-card:hover { transform: translateY(-4px); border-color: rgba(0,240,255,0.35); }
+        .cmp-card-remove { position: absolute; top: 10px; right: 10px; z-index: 3; width: 30px; height: 30px; border-radius: 50%; border: none; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); color: rgba(255,255,255,0.7); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; transition: all 0.25s ease; opacity: 0; }
+        .cmp-card:hover .cmp-card-remove { opacity: 1; }
+        .cmp-card-remove:hover { background: var(--danger); color: #fff; transform: scale(1.1); }
+        .cmp-card-media { height: 200px; overflow: hidden; background: rgba(0,0,0,0.2); position: relative; }
+        .cmp-card-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .cmp-card:hover .cmp-card-media img { transform: scale(1.06); }
+        .cmp-card-badge { position: absolute; bottom: 10px; left: 10px; padding: 0.25rem 0.6rem; border-radius: var(--r-pill); font-family: var(--font-d); font-size: 0.55rem; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; backdrop-filter: blur(8px); }
+        .cmp-card-badge--hot { background: rgba(255,68,68,0.85); color: #fff; }
+        .cmp-card-badge--trending { background: rgba(0,240,255,0.85); color: #001a1f; }
+        .cmp-card-badge--new { background: rgba(0,255,136,0.85); color: #001a0d; }
+        .cmp-card-badge--premium { background: rgba(255,215,0,0.85); color: #1a1400; }
+        .cmp-card-body { padding: 1.2rem 1.25rem 1rem; }
+        .cmp-card-cat { font-family: var(--font-d); font-size: 0.56rem; letter-spacing: 1.4px; text-transform: uppercase; color: var(--accent); margin-bottom: 0.3rem; }
+        .cmp-card-name { font-family: var(--font-d); font-size: 0.95rem; font-weight: 700; line-height: 1.25; margin-bottom: 0.4rem; }
+        .cmp-card-name a { color: #fff; text-decoration: none; }
+        .cmp-card-name a:hover { color: var(--accent); }
+        .cmp-card-rating { display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.5rem; }
+        .cmp-card-stars { display: flex; gap: 1px; color: var(--accent-4); }
+        .cmp-card-rating span { font-size: 0.78rem; color: var(--muted); }
+        .cmp-card-prices { display: flex; align-items: baseline; gap: 0.6rem; margin-bottom: 0.8rem; }
+        .cmp-card-price { font-family: var(--font-d); font-size: 1.15rem; font-weight: 900; color: var(--accent); }
+        .cmp-card-old { font-size: 0.82rem; color: var(--muted-2); text-decoration: line-through; }
+        .cmp-card-drop { font-size: 0.7rem; color: var(--accent-3); font-weight: 700; }
+        .cmp-card-actions { display: flex; gap: 0.5rem; }
+        .cmp-card-cart { flex: 1; padding: 0.65rem; border: 0; border-radius: var(--r-sm); background: linear-gradient(135deg, var(--accent), var(--accent-3)); color: #00202a; font-family: var(--font-d); font-size: 0.66rem; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; cursor: pointer; transition: all 0.25s ease; }
+        .cmp-card-cart:hover { box-shadow: 0 0 18px rgba(0,240,255,0.4); }
+        .cmp-card-cart.is-added { background: rgba(0,255,136,0.2); color: var(--accent-3); }
+        .cmp-card-view { padding: 0.65rem 0.9rem; border: 1px solid var(--glass-border-2); border-radius: var(--r-sm); background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.85); font-family: var(--font-d); font-size: 0.66rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; cursor: pointer; text-decoration: none; transition: all 0.22s ease; }
+        .cmp-card-view:hover { border-color: var(--accent); color: var(--accent); }
+        .cmp-card-slot { display: flex; align-items: center; justify-content: center; min-height: 340px; border: 2px dashed rgba(255,255,255,0.12); border-radius: var(--r-lg); background: rgba(255,255,255,0.02); transition: border-color 0.25s ease; }
+        .cmp-card-slot:hover { border-color: rgba(0,240,255,0.35); }
+        .cmp-card-slot a { text-decoration: none; color: var(--muted-2); text-align: center; }
+        .cmp-card-slot-icon { font-size: 2.5rem; margin-bottom: 0.5rem; opacity: 0.5; }
+        .cmp-card-slot-text { font-family: var(--font-d); font-size: 0.72rem; letter-spacing: 1.2px; text-transform: uppercase; }
+
+        /* ── Comparison Table ── */
+        .cmp-table-wrap { overflow-x: auto; margin-bottom: 3rem; border-radius: var(--r-lg); border: 1px solid var(--glass-border); background: var(--card-grad); }
+        .cmp-table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        .cmp-table th, .cmp-table td { padding: 0.85rem 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.92rem; }
+        .cmp-table th { background: rgba(255,255,255,0.04); font-family: var(--font-d); font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted-2); width: 18%; white-space: nowrap; }
+        .cmp-table td { text-align: center; vertical-align: middle; }
+        .cmp-table tr:nth-child(even) td { background: rgba(255,255,255,0.015); }
+        .cmp-table tr:hover td { background: rgba(0,240,255,0.03); }
+        .cmp-head { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 0.5rem 0; }
+        .cmp-head-media { width: 64px; height: 64px; border-radius: 12px; overflow: hidden; background: rgba(0,0,0,0.2); }
+        .cmp-head-media img { width: 100%; height: 100%; object-fit: cover; }
+        .cmp-head-name { font-family: var(--font-d); font-size: 0.78rem; font-weight: 700; color: #fff; text-decoration: none; text-align: center; }
+        .cmp-head-name:hover { color: var(--accent); }
+        .cmp-win { display: inline-block; padding: 0.1rem 0.45rem; border-radius: var(--r-pill); background: rgba(0,255,136,0.15); color: var(--accent-3); font-family: var(--font-d); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; margin-left: 0.3rem; vertical-align: middle; }
+        .cmp-lose { color: var(--muted-2); }
+        .cmp-section-row td, .cmp-section-row th { background: rgba(0,240,255,0.06) !important; padding: 0.5rem 1rem; }
+        .cmp-section-row th { color: var(--accent); font-size: 0.65rem; }
+        .cmp-actions-cell { display: flex; gap: 0.4rem; justify-content: center; flex-wrap: wrap; }
+        .cmp-mini { padding: 0.4rem 0.7rem; border-radius: var(--r-sm); border: 1px solid var(--glass-border-2); background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.8); font-family: var(--font-d); font-size: 0.58rem; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; cursor: pointer; transition: all 0.2s ease; }
+        .cmp-mini:hover { border-color: var(--accent); color: var(--accent); }
+        .cmp-mini--danger:hover { border-color: var(--danger); color: var(--danger); }
+
+        /* ── Empty State ── */
+        .cmp-empty { text-align: center; padding: 5rem 2rem; }
+        .cmp-empty-icon { font-size: 4rem; margin-bottom: 1.5rem; opacity: 0.5; }
+        .cmp-empty h2 { font-family: var(--font-d); font-size: 1.6rem; font-weight: 900; margin-bottom: 0.7rem; background: linear-gradient(135deg, #fff, var(--accent)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .cmp-empty p { color: var(--muted); font-size: 1rem; max-width: 42ch; margin: 0 auto 2rem; line-height: 1.65; }
+        .cmp-empty-cta { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.85rem 1.8rem; border-radius: var(--r-pill); background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #00202a; font-family: var(--font-d); font-size: 0.75rem; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; text-decoration: none; transition: all 0.25s ease; }
+        .cmp-empty-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,240,255,0.3); }
+        .cmp-empty-suggestions { margin-top: 3rem; }
+        .cmp-empty-suggestions h3 { font-family: var(--font-d); font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted-2); margin-bottom: 1.2rem; }
+        .cmp-suggest-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; max-width: 900px; margin: 0 auto; }
+
+        /* ── Note ── */
+        .cmp-note { margin-top: 2rem; padding: 1rem 1.25rem; border-radius: var(--r-md); border: 1px dashed rgba(0,240,255,0.3); background: rgba(0,240,255,0.03); color: rgba(255,255,255,0.8); font-size: 0.9rem; line-height: 1.6; }
+        .cmp-note a { color: var(--accent); }
+
+        /* ── Confirm Modal ── */
+        .cmp-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 10000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(6px); }
+        .cmp-modal-overlay.is-open { display: flex; }
+        .cmp-modal { position: relative; width: 90%; max-width: 420px; border-radius: var(--r-lg); background: rgba(10,10,42,0.95); border: 1px solid var(--glass-border-2); padding: 2rem; box-shadow: 0 24px 60px rgba(0,0,0,0.6); text-align: center; }
+        .cmp-modal-close { position: absolute; top: 1rem; right: 1rem; width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.06); color: var(--muted); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+        .cmp-modal-close:hover { background: rgba(255,68,68,0.2); color: var(--danger); }
+        .cmp-modal p { margin-bottom: 1.2rem; color: var(--muted); font-size: 1rem; }
+        .cmp-modal-btns { display: flex; gap: 0.75rem; justify-content: center; }
+        .cmp-modal-yes { padding: 0.65rem 1.5rem; border: 0; border-radius: var(--r-pill); background: var(--danger); color: #fff; font-family: var(--font-d); font-size: 0.7rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
+        .cmp-modal-no { padding: 0.65rem 1.5rem; border: 1px solid var(--glass-border-2); border-radius: var(--r-pill); background: transparent; color: rgba(255,255,255,0.8); font-family: var(--font-d); font-size: 0.7rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
+
+        /* ── Toast ── */
+        #cmpToast { position: fixed; top: 100px; right: 20px; z-index: 10001; display: none; padding: 1rem 1.5rem; border-radius: 10px; font-family: var(--font-d); font-weight: 700; font-size: 0.85rem; backdrop-filter: blur(20px); box-shadow: 0 0 30px rgba(0,240,255,0.2); }
+
+        /* ── FAQ ── */
+        .cmp-faq { margin: 3rem 0; }
+        .cmp-faq h2 { font-family: var(--font-d); font-size: 1.2rem; font-weight: 900; margin-bottom: 1.2rem; background: linear-gradient(135deg, #fff, var(--accent)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* ── Responsive ── */
+        @media (max-width: 900px) {
+            .page-offset { padding-top: 130px; }
+            .cmp-shell { padding: 0 1.5rem; }
+            .cmp-hero { padding: 2rem 1.25rem 1.75rem; }
+            .cmp-toolbar { flex-direction: column; align-items: stretch; }
+            .cmp-toolbar-left, .cmp-toolbar-right { justify-content: center; }
+            .cmp-cards { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+        }
+        @media (max-width: 600px) {
+            .cmp-shell { padding: 0 1rem; }
+            .cmp-cards { grid-template-columns: 1fr; }
+            .cmp-stats { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--accent), var(--accent-2)); border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <canvas id="three-canvas"></canvas>
+    <script src="components.js"></script>
+
+    <main class="page-offset">
+        <div class="cmp-shell">
+
+            <!-- HERO -->
+            <section class="cmp-hero">
+                <div class="cmp-hero-neb cmp-hero-neb-1"></div>
+                <div class="cmp-hero-neb cmp-hero-neb-2"></div>
+                <div class="cmp-hero-inner">
+                    <span class="cmp-hero-live"><span class="cmp-hero-live-dot"></span>Live catalogue</span>
+                    <h1>Compare Products</h1>
+                    <p>Line up to 3 products side by side. Prices, specs, ratings, discounts and value scores — every number comes from the same live catalogue the shop uses.</p>
+                </div>
+            </section>
+
+            <!-- STATS -->
+            <div class="cmp-stats" id="cmpStats">
+                <div class="cmp-stat"><div class="cmp-stat-val" id="csCount">0</div><div class="cmp-stat-lab">Products compared</div></div>
+                <div class="cmp-stat"><div class="cmp-stat-val" id="csRange">—</div><div class="cmp-stat-lab">Price range</div></div>
+                <div class="cmp-stat"><div class="cmp-stat-val" id="csBest">—</div><div class="cmp-stat-lab">Highest rated</div></div>
+                <div class="cmp-stat"><div class="cmp-stat-val" id="csSavings">—</div><div class="cmp-stat-lab">Max savings</div></div>
+            </div>
+
+            <!-- TOOLBAR -->
+            <div class="cmp-toolbar" id="cmpToolbar" style="display:none;">
+                <div class="cmp-toolbar-left" id="cmpToolbarInfo"></div>
+                <div class="cmp-toolbar-right">
+                    <a href="shop.html" class="cmp-btn cmp-btn--add">+ Add Product</a>
+                    <button class="cmp-btn cmp-btn--export" id="cmpExportBtn" type="button">Export</button>
+                    <button class="cmp-btn cmp-btn--clear" id="cmpClearBtn" type="button">Clear All</button>
+                </div>
+            </div>
+
+            <!-- CARDS -->
+            <div class="cmp-cards" id="cmpCards"></div>
+
+            <!-- TABLE -->
+            <div class="cmp-table-wrap" id="cmpTableWrap" style="display:none;">
+                <table class="cmp-table">
+                    <thead><tr id="cmpThead"></tr></thead>
+                    <tbody id="cmpTbody"></tbody>
+                </table>
+            </div>
+
+            <!-- EMPTY -->
+            <div class="cmp-empty" id="cmpEmpty" style="display:none;">
+                <div class="cmp-empty-icon">⚖️</div>
+                <h2>No Products to Compare</h2>
+                <p>Pick 2 or 3 products from the shop and they line up here automatically — every spec, every price, every rating side by side.</p>
+                <a href="shop.html" class="cmp-empty-cta">Browse the Catalogue</a>
+                <div class="cmp-empty-suggestions">
+                    <h3>Popular picks to compare</h3>
+                    <div class="cmp-suggest-grid" id="cmpSuggest"></div>
+                </div>
+            </div>
+
+            <!-- NOTE -->
+            <div class="cmp-note">
+                Compare pulls from the same live catalogue as <a href="shop.html">the shop</a>. Prices, stock and ratings update on every visit. The comparison tray on the shop page holds your shortlist while you browse.
+            </div>
+
+            <!-- FAQ -->
+            <section class="cmp-faq" id="cmpFaq"></section>
+
+            <!-- TRUST -->
+            <div id="cmpTrust"></div>
+
+            <!-- CTA -->
+            <div id="cmpCta"></div>
+
+        </div>
+    </main>
+
+    <!-- CONFIRM MODAL -->
+    <div class="cmp-modal-overlay" id="cmpConfirmModal">
+        <div class="cmp-modal">
+            <button class="cmp-modal-close" id="cmpConfirmClose" type="button" aria-label="Close">&times;</button>
+            <p id="cmpConfirmText"></p>
+            <div class="cmp-modal-btns">
+                <button class="cmp-modal-no" id="cmpConfirmNo" type="button">Keep It</button>
+                <button class="cmp-modal-yes" id="cmpConfirmYes" type="button">Clear All</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div id="cmpToast"></div>
+
+    <script src="products-data.js"></script>
+    <script src="backend-bridge.js"></script>
+    <script src="cart-manager.js"></script>
+    <script src="page-helpers.js"></script>
+    <script>
+    (function () {
+        'use strict';
+        var P = window.TrendaryoProducts;
+        var UI = window.TrendaryoUI;
+        if (!P) return;
+
+        var K_CMP = 'compare_list';
+        var CMP_MAX = 3;
+
+        /* ── Storage ── */
+        function readCmp() {
+            try { var r = JSON.parse(localStorage.getItem(K_CMP) || '[]'); return Array.isArray(r) ? r : []; } catch (e) { return []; }
+        }
+        function writeCmp(list) {
+            try { localStorage.setItem(K_CMP, JSON.stringify(list)); } catch (e) {}
+            window.dispatchEvent(new CustomEvent('compare-updated', { detail: { count: list.length } }));
+        }
+
+        /* ── Enrich with catalogue data ── */
+        function entryId(e) { return String(e && typeof e === 'object' ? e.id : e); }
+        function enrich(item) {
+            var cat = P.find(entryId(item));
+            if (!cat) return null;
+            return {
+                id: cat.id, name: cat.name, price: cat.price, oldPrice: cat.oldPrice || null,
+                emoji: cat.emoji || item.emoji || '', badge: cat.badge || '',
+                rating: cat.rating || 0, reviews: cat.reviews || 0,
+                image: cat.image || '', description: cat.description || '',
+                category: P.categoryOf(cat)
+            };
+        }
+
+        function getEnriched() { return readCmp().map(enrich).filter(Boolean); }
+
+        /* ── Helpers ── */
+        function price(n) { return '$' + Number(n).toFixed(2).replace(/\.00$/, ''); }
+        function discPct(p) { return p.oldPrice && p.oldPrice > p.price ? Math.round((1 - p.price / p.oldPrice) * 100) : 0; }
+        function saveAmt(p) { return p.oldPrice && p.oldPrice > p.price ? p.oldPrice - p.price : 0; }
+        function valueScore(p) { return p.price > 0 ? ((Number(p.rating) || 0) * Math.log2((Number(p.reviews) || 1) + 1) / (p.price / 100)) : 0; }
+        function stars(r) {
+            var full = Math.round(Number(r) || 0), out = '';
+            for (var i = 1; i <= 5; i++) {
+                out += '<svg width="12" height="12" viewBox="0 0 24 24" fill="' + (i <= full ? 'currentColor' : 'none') + '" stroke="currentColor" stroke-width="1.5"><path d="m12 17.27 6.18 3.73-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21Z"/></svg>';
+            }
+            return out;
+        }
+        function esc(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+        function inCart(id) {
+            if (typeof CartManager === 'undefined') return false;
+            var cart = CartManager.getCart();
+            for (var i = 0; i < cart.length; i++) { if (String(cart[i].id) === String(id)) return true; }
+            return false;
+        }
+
+        /* ── Toast ── */
+        function toast(msg, type) {
+            var el = document.getElementById('cmpToast');
+            if (!el) return;
+            el.textContent = msg;
+            el.style.display = 'block';
+            el.style.background = type === 'error' ? 'rgba(255,68,68,0.15)' : 'rgba(0,240,255,0.12)';
+            el.style.border = '1px solid ' + (type === 'error' ? 'rgba(255,68,68,0.3)' : 'rgba(0,240,255,0.3)');
+            el.style.color = type === 'error' ? '#ff4444' : '#00f0ff';
+            clearTimeout(el._t);
+            el._t = setTimeout(function () { el.style.display = 'none'; }, 2800);
+        }
+
+        /* ── Remove ── */
+        function removeItem(id) {
+            var list = readCmp().filter(function (i) { return entryId(i) !== String(id); });
+            writeCmp(list);
+            toast('Removed from comparison');
+            render();
+        }
+
+        /* ── Add to cart ── */
+        function addToCart(id) {
+            var p = P.find(id);
+            if (!p) return;
+            if (typeof CartManager !== 'undefined') {
+                CartManager.addItem(p.id, 1, { id: p.id, name: p.name, price: p.price, image: p.image || '', emoji: p.emoji || '' });
+            }
+            toast(p.name + ' added to cart');
+            render();
+        }
+
+        /* ── Render Cards ── */
+        function renderCards(list) {
+            var grid = document.getElementById('cmpCards');
+            if (!grid) return;
+            var html = list.map(function (item) {
+                var drop = discPct(item);
+                var badgeCls = item.badge ? ' cmp-card-badge--' + item.badge : '';
+                var badge = item.badge ? '<div class="cmp-card-badge' + badgeCls + '">' + item.badge.toUpperCase() + '</div>' : '';
+                var oldP = item.oldPrice ? '<span class="cmp-card-old">' + price(item.oldPrice) + '</span>' : '';
+                var dropLabel = drop ? '<span class="cmp-card-drop">-' + drop + '%</span>' : '';
+                var catLabel = item.category || '';
+                var cartBtn = inCart(item.id)
+                    ? '<button class="cmp-card-cart is-added" type="button" disabled>In Cart</button>'
+                    : '<button class="cmp-card-cart" data-cmpcart="' + item.id + '" type="button">Add to Cart</button>';
+                var imgSrc = item.image || '';
+                var imgTag = imgSrc
+                    ? '<img src="' + imgSrc + '" alt="' + esc(item.name) + '" loading="lazy">'
+                    : '<div style="font-size:3.5rem;display:flex;align-items:center;justify-content:center;height:100%;">' + (item.emoji || '📦') + '</div>';
+
+                return '<div class="cmp-card" data-cid="' + item.id + '">' +
+                    '<button class="cmp-card-remove" data-cmprem="' + item.id + '" type="button" aria-label="Remove">&times;</button>' +
+                    '<div class="cmp-card-media">' + imgTag + badge + '</div>' +
+                    '<div class="cmp-card-body">' +
+                        (catLabel ? '<div class="cmp-card-cat">' + catLabel + '</div>' : '') +
+                        '<div class="cmp-card-name"><a href="product.html?id=' + item.id + '">' + esc(item.name) + '</a></div>' +
+                        '<div class="cmp-card-rating"><div class="cmp-card-stars">' + stars(item.rating) + '</div><span>' + item.rating + ' (' + (item.reviews || 0) + ')</span></div>' +
+                        '<div class="cmp-card-prices"><span class="cmp-card-price">' + price(item.price) + '</span>' + oldP + dropLabel + '</div>' +
+                        '<div class="cmp-card-actions">' + cartBtn +
+                            '<a href="product.html?id=' + item.id + '" class="cmp-card-view">View</a>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+            }).join('');
+
+            /* Add empty slots */
+            for (var s = list.length; s < CMP_MAX; s++) {
+                html += '<div class="cmp-card-slot"><a href="shop.html"><div class="cmp-card-slot-icon">+</div><div class="cmp-card-slot-text">Add Product</div></a></div>';
+            }
+
+            grid.innerHTML = html;
+            bindCardEvents();
+        }
+
+        /* ── Render Table ── */
+        function renderTable(list) {
+            var wrap = document.getElementById('cmpTableWrap');
+            if (!wrap) return;
+            if (list.length < 2) { wrap.style.display = 'none'; return; }
+            wrap.style.display = '';
+
+            var bestPrice = Math.min.apply(null, list.map(function (p) { return p.price; }));
+            var bestRating = Math.max.apply(null, list.map(function (p) { return p.rating; }));
+            var bestReviews = Math.max.apply(null, list.map(function (p) { return p.reviews; }));
+            var bestDisc = Math.max.apply(null, list.map(function (p) { return discPct(p); }));
+            var bestValue = Math.max.apply(null, list.map(function (p) { return valueScore(p); }));
+
+            /* Header */
+            var thead = document.getElementById('cmpThead');
+            if (thead) {
+                thead.innerHTML = '<th scope="col">Attribute</th>' + list.map(function (p) {
+                    var imgTag = p.image
+                        ? '<img src="' + p.image + '" alt="' + esc(p.name) + '" loading="lazy">'
+                        : '<div style="font-size:1.8rem;display:flex;align-items:center;justify-content:center;width:100%;height:100%;">' + (p.emoji || '📦') + '</div>';
+                    return '<td><div class="cmp-head">' +
+                        '<div class="cmp-head-media">' + imgTag + '</div>' +
+                        '<a class="cmp-head-name" href="product.html?id=' + p.id + '">' + esc(p.name) + '</a>' +
+                        '<div class="cmp-actions-cell">' +
+                            '<button class="cmp-mini" data-cmpcart="' + p.id + '">Add to cart</button>' +
+                            '<button class="cmp-mini cmp-mini--danger" data-cmprem="' + p.id + '">Remove</button>' +
+                        '</div></div></td>';
+                }).join('');
+            }
+
+            /* Rows */
+            var rows = [
+                { label: 'Price', section: 'pricing' },
+                { label: '_price', fn: function (p) { return '<b>' + price(p.price) + '</b>' + (p.price === bestPrice ? ' <span class="cmp-win">lowest</span>' : ''); } },
+                { label: '_oldPrice', fn: function (p) { return p.oldPrice ? price(p.oldPrice) : '—'; } },
+                { label: '_discount', fn: function (p) { var d = discPct(p); return d ? '−' + d + '% · save ' + price(saveAmt(p)) + (d === bestDisc ? ' <span class="cmp-win">best</span>' : '') : '—'; } },
+                { label: 'Value & Rating', section: 'value' },
+                { label: '_rating', fn: function (p) { return '<span style="color:var(--accent-4)">' + Number(p.rating).toFixed(1) + '★</span>' + (p.rating === bestRating ? ' <span class="cmp-win">highest</span>' : ''); } },
+                { label: '_reviews', fn: function (p) { return p.reviews + ' reviews' + (p.reviews === bestReviews ? ' <span class="cmp-win">most</span>' : ''); } },
+                { label: '_value', fn: function (p) { var v = valueScore(p); return v.toFixed(1) + ' pts / $100' + (v === bestValue ? ' <span class="cmp-win">best value</span>' : ''); } },
+                { label: 'Product Info', section: 'info' },
+                { label: '_category', fn: function (p) { return esc(p.category || '—'); } },
+                { label: '_badge', fn: function (p) { return p.badge ? '<span style="text-transform:uppercase;font-family:var(--font-d);font-size:0.65rem;letter-spacing:1px;">' + esc(p.badge) + '</span>' : '—'; } },
+                { label: '_description', fn: function (p) { return '<span style="font-size:0.85rem;color:var(--muted)">' + esc(p.description || '—') + '</span>'; } },
+            ];
+
+            /* Add spec rows from catalogue */
+            var specLabels = [];
+            for (var i = 0; i < list.length; i++) {
+                var specRows = P.specs(P.find(list[i].id) || list[i]) || [];
+                for (var r = 0; r < specRows.length && specLabels.length < 6; r++) {
+                    var lab = String(specRows[r][0]);
+                    if (specLabels.indexOf(lab) === -1) specLabels.push(lab);
+                }
+            }
+            if (specLabels.length) {
+                rows.push({ label: 'Specifications', section: 'specs' });
+                for (var s = 0; s < specLabels.length; s++) {
+                    (function (label) {
+                        rows.push({
+                            label: '_' + label,
+                            fn: function (p) {
+                                var specs = P.specs(P.find(p.id) || p) || [];
+                                for (var j = 0; j < specs.length; j++) {
+                                    if (specs[j][0] === label) return esc(specs[j][1]);
+                                }
+                                return '—';
+                            }
+                        });
+                    })(specLabels[s]);
+                }
+            }
+
+            var tbody = document.getElementById('cmpTbody');
+            if (tbody) {
+                tbody.innerHTML = rows.map(function (row) {
+                    if (row.section) {
+                        return '<tr class="cmp-section-row"><th colspan="' + (list.length + 1) + '">' + row.section.toUpperCase() + '</th></tr>';
+                    }
+                    var label = row.label.replace(/^_/, '');
+                    return '<tr><th>' + esc(label) + '</th>' + list.map(function (p) {
+                        return '<td>' + row.fn(p) + '</td>';
+                    }).join('') + '</tr>';
+                }).join('');
+            }
+
+            bindCardEvents();
+        }
+
+        /* ── Stats ── */
+        function renderStats(list) {
+            document.getElementById('csCount').textContent = list.length;
+            if (list.length === 0) {
+                document.getElementById('csRange').textContent = '—';
+                document.getElementById('csBest').textContent = '—';
+                document.getElementById('csSavings').textContent = '—';
+                return;
+            }
+            var prices = list.map(function (p) { return p.price; });
+            var lo = Math.min.apply(null, prices), hi = Math.max.apply(null, prices);
+            document.getElementById('csRange').textContent = lo === hi ? price(lo) : price(lo) + ' – ' + price(hi);
+            var best = list.reduce(function (a, b) { return a.rating >= b.rating ? a : b; });
+            document.getElementById('csBest').textContent = best.rating + '★';
+            var maxSave = Math.max.apply(null, list.map(function (p) { return saveAmt(p); }));
+            document.getElementById('csSavings').textContent = maxSave > 0 ? price(maxSave) : '—';
+        }
+
+        /* ── Suggestions ── */
+        function renderSuggestions() {
+            var el = document.getElementById('cmpSuggest');
+            if (!el) return;
+            var featured = P.featured(4);
+            if (UI && UI.productMini) {
+                el.innerHTML = featured.map(function (p) { return UI.productMini(p); }).join('');
+                UI.bindMiniCards(el);
+            }
+        }
+
+        /* ── Bind card events ── */
+        function bindCardEvents() {
+            document.querySelectorAll('[data-cmprem]').forEach(function (btn) {
+                btn.onclick = function (e) { e.stopPropagation(); removeItem(this.getAttribute('data-cmprem')); };
+            });
+            document.querySelectorAll('[data-cmpcart]').forEach(function (btn) {
+                btn.onclick = function (e) { e.stopPropagation(); addToCart(this.getAttribute('data-cmpcart')); };
+            });
+        }
+
+        /* ── Main Render ── */
+        function render() {
+            var list = getEnriched();
+            var cards = document.getElementById('cmpCards');
+            var empty = document.getElementById('cmpEmpty');
+            var toolbar = document.getElementById('cmpToolbar');
+
+            renderStats(list);
+
+            if (list.length === 0) {
+                if (cards) cards.style.display = 'none';
+                if (toolbar) toolbar.style.display = 'none';
+                if (empty) { empty.style.display = 'block'; renderSuggestions(); }
+                document.getElementById('cmpTableWrap').style.display = 'none';
+                return;
+            }
+
+            if (cards) cards.style.display = '';
+            if (toolbar) toolbar.style.display = '';
+            if (empty) empty.style.display = 'none';
+
+            var info = document.getElementById('cmpToolbarInfo');
+            if (info) info.textContent = list.length + ' of ' + CMP_MAX + ' slots used';
+
+            renderCards(list);
+            renderTable(list);
+        }
+
+        /* ── Toolbar Bindings ── */
+        var clearBtn = document.getElementById('cmpClearBtn');
+        if (clearBtn) clearBtn.addEventListener('click', function () {
+            var modal = document.getElementById('cmpConfirmModal');
+            var txt = document.getElementById('cmpConfirmText');
+            if (txt) txt.textContent = 'Clear all ' + getEnriched().length + ' products from the comparison?';
+            if (modal) modal.classList.add('is-open');
+        });
+
+        var confirmYes = document.getElementById('cmpConfirmYes');
+        if (confirmYes) confirmYes.addEventListener('click', function () {
+            writeCmp([]);
+            document.getElementById('cmpConfirmModal').classList.remove('is-open');
+            toast('Comparison cleared');
+            render();
+        });
+
+        var confirmNo = document.getElementById('cmpConfirmNo');
+        if (confirmNo) confirmNo.addEventListener('click', function () {
+            document.getElementById('cmpConfirmModal').classList.remove('is-open');
+        });
+
+        var confirmClose = document.getElementById('cmpConfirmClose');
+        if (confirmClose) confirmClose.addEventListener('click', function () {
+            document.getElementById('cmpConfirmModal').classList.remove('is-open');
+        });
+
+        var exportBtn = document.getElementById('cmpExportBtn');
+        if (exportBtn) exportBtn.addEventListener('click', function () {
+            var list = getEnriched();
+            var data = list.map(function (i) { return { id: i.id, name: i.name, price: i.price, rating: i.rating, category: i.category }; });
+            var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            var a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'compare_' + new Date().toISOString().split('T')[0] + '.json';
+            a.click();
+            toast('Comparison exported');
+        });
+
+        /* ── FAQ ── */
+        if (UI && UI.faq) {
+            var faqEl = document.getElementById('cmpFaq');
+            if (faqEl) {
+                faqEl.innerHTML = '<h2>Frequently Asked Questions</h2>' + UI.faq([
+                    { q: 'How many products can I compare?', a: 'Up to 3 products at once. The shop page holds your shortlist while you browse, and this page lines them up side by side.' },
+                    { q: 'Where does the comparison data come from?', a: 'From the same live catalogue the shop uses. Prices, ratings, stock and specs update on every visit — nothing is cached or stale.' },
+                    { q: 'What does "value score" mean?', a: 'A formula that weighs rating and review volume against price. Higher is better — it tells you which product gives the most bang per dollar.' },
+                    { q: 'Can I export the comparison?', a: 'Yes. Tap Export to download a JSON file with every product name, price, rating and category.' },
+                    { q: 'Does the comparison table include real specs?', a: 'Yes. Every product has up to 6 specification rows pulled from the catalogue — driver size, battery life, water resistance, materials, whatever applies.' }
+                ], true);
+            }
+        }
+
+        /* ── Trust + CTA ── */
+        var trustEl = document.getElementById('cmpTrust');
+        if (trustEl && UI && UI.trustStrip) trustEl.innerHTML = UI.trustStrip();
+        var ctaEl = document.getElementById('cmpCta');
+        if (ctaEl && UI && UI.ctaBand) ctaEl.innerHTML = UI.ctaBand({
+            title: 'Found the one?',
+            text: 'Add it to your cart and check out in seconds — free shipping on orders over $50.',
+            cta: 'Open the Shop',
+            href: 'shop.html'
+        });
+
+        /* ── Init ── */
+        render();
+    })();
+    </script>
+    <script>
+        function hidePreloader() { var p = document.getElementById('preloader'); if (p) p.classList.add('hidden'); }
+        if (document.readyState === 'complete') { setTimeout(hidePreloader, 600); }
+        else { window.addEventListener('load', function () { setTimeout(hidePreloader, 600); }); }
+        setTimeout(hidePreloader, 1500);
+    </script>
+</body>
+</html>

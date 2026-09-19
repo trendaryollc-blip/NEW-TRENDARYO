@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Order - Trendaryo | Real-Time Shipping Updates</title>
+    <meta name="description" content="Track your Trendaryo order in real-time. Enter your order number for live shipping updates, delivery estimates and tracking history.">
+    <meta name="keywords" content="track order, order tracking, shipping status, delivery update, trendaryo">
+    <meta name="robots" content="noindex, follow">
+    <link rel="canonical" href="https://trendaryo.com/track-order.html">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://trendaryo.com/track-order.html">
+    <meta property="og:title" content="Track Order - Trendaryo">
+    <meta property="og:description" content="Real-time shipping updates and delivery estimates for your Trendaryo orders.">
+    <meta property="og:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Track Order - Trendaryo">
+    <meta name="twitter:description" content="Real-time shipping updates and delivery estimates for your Trendaryo orders.">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon-crown-star.svg">
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="performance.js"></script>
+    <script src="bg.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0a0a0a; --bg-deep: #0a0a2a;
+            --accent: #00f0ff; --accent-2: #ff00aa; --accent-3: #00ff88; --accent-4: #ffd700;
+            --danger: #ff4444;
+            --text: #ffffff; --muted: rgba(255,255,255,0.66); --muted-2: rgba(255,255,255,0.45);
+            --glass: rgba(255,255,255,0.05); --glass-2: rgba(255,255,255,0.03);
+            --glass-border: rgba(255,255,255,0.1); --glass-border-2: rgba(255,255,255,0.18);
+            --card-grad: linear-gradient(168deg, rgba(255,255,255,0.075), rgba(255,255,255,0.02));
+            --r-sm: 10px; --r-md: 16px; --r-lg: 22px; --r-pill: 999px;
+            --ease: cubic-bezier(0.22, 1, 0.36, 1);
+            --font-d: 'Orbitron', sans-serif; --font-b: 'Rajdhani', sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-b); background: var(--bg-deep); color: #fff; overflow-x: hidden; }
+        #three-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+        .page-offset { padding-top: 190px; padding-bottom: 3rem; }
+        a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+        .track-shell { max-width: 960px; margin: 0 auto; padding: 0 2.5rem; }
+
+        /* ── Hero ── */
+        .track-hero { position: relative; overflow: hidden; padding: 3rem 1.5rem 2.5rem; margin-bottom: 2rem; border-radius: var(--r-lg); background: var(--card-grad); border: 1px solid var(--glass-border); text-align: center; }
+        .track-hero-neb { position: absolute; border-radius: 50%; filter: blur(110px); pointer-events: none; z-index: 0; }
+        .track-hero-neb-1 { width: 360px; height: 360px; top: -140px; left: -100px; background: radial-gradient(circle, rgba(0,255,136,0.2), transparent 70%); }
+        .track-hero-neb-2 { width: 420px; height: 420px; bottom: -200px; right: -120px; background: radial-gradient(circle, rgba(0,240,255,0.15), transparent 70%); animation: nebDrift 16s ease-in-out infinite alternate; }
+        @keyframes nebDrift { from { transform: scale(1) translateY(0); } to { transform: scale(1.12) translateY(-28px); } }
+        .track-hero-inner { position: relative; z-index: 1; }
+        .track-hero-live { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0.85rem; border-radius: var(--r-pill); background: rgba(0,255,136,0.08); border: 1px solid rgba(0,255,136,0.3); font-family: var(--font-d); font-size: 0.6rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-3); }
+        .track-hero-live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-3); box-shadow: 0 0 10px var(--accent-3); animation: livePulse 2.2s ease-in-out infinite; }
+        @keyframes livePulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.75); } }
+        .track-hero h1 { font-family: var(--font-d); font-weight: 900; font-size: clamp(1.8rem, 4.5vw, 3.2rem); line-height: 1.05; margin: 0.8rem 0 0.6rem; background: linear-gradient(120deg, #fff 8%, var(--accent-3) 50%, var(--accent) 90%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .track-hero p { color: var(--muted); font-size: 1.05rem; line-height: 1.65; max-width: 50ch; margin: 0 auto; }
+
+        /* ── Lookup Card ── */
+        .track-lookup { max-width: 580px; margin: 0 auto 2.5rem; padding: 2rem; border-radius: var(--r-lg); background: var(--card-grad); border: 1px solid var(--glass-border); }
+        .track-lookup h2 { font-family: var(--font-d); font-size: 1.05rem; font-weight: 800; margin-bottom: 0.5rem; }
+        .track-lookup p { color: var(--muted); font-size: 0.95rem; line-height: 1.65; margin-bottom: 1.2rem; }
+        .track-lookup p a { color: var(--accent); }
+        .track-lookup-row { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+        .track-lookup-input { flex: 1; min-width: 200px; padding: 0.85rem 1rem; border-radius: var(--r-md); border: 1px solid var(--glass-border-2); background: rgba(255,255,255,0.05); color: #fff; font-family: var(--font-b); font-size: 1rem; outline: none; transition: border-color 0.25s ease, box-shadow 0.25s ease; }
+        .track-lookup-input:focus { border-color: rgba(0,240,255,0.6); box-shadow: 0 0 20px rgba(0,240,255,0.15); }
+        .track-lookup-input::placeholder { color: var(--muted-2); }
+        .track-lookup-btn { padding: 0.85rem 1.6rem; border: 0; border-radius: var(--r-md); background: linear-gradient(135deg, var(--accent), var(--accent-3)); color: #00202a; font-family: var(--font-d); font-size: 0.72rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.25s ease; }
+        .track-lookup-btn:hover { box-shadow: 0 0 20px rgba(0,240,255,0.4); transform: translateY(-1px); }
+        .track-lookup-hint { font-size: 0.82rem; color: var(--muted-2); margin-top: 1rem; }
+        .track-lookup-hint strong { color: var(--accent); cursor: pointer; }
+
+        /* ── Alert ── */
+        .track-alert { padding: 0.9rem 1.2rem; border-radius: var(--r-md); margin-bottom: 1.5rem; display: none; font-size: 0.9rem; line-height: 1.5; }
+        .track-alert.show { display: block; }
+        .track-alert--error { background: rgba(255,68,68,0.12); border: 1px solid rgba(255,68,68,0.3); color: #ff6b6b; }
+
+        /* ── Order Card ── */
+        .track-card { padding: 2rem; border-radius: var(--r-lg); background: var(--card-grad); border: 1px solid var(--glass-border); margin-bottom: 2rem; }
+        .track-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.2rem; padding-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.06); margin-bottom: 1.5rem; }
+        .track-info-item { display: flex; flex-direction: column; gap: 0.3rem; }
+        .track-info-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1.4px; color: var(--muted-2); font-family: var(--font-d); }
+        .track-info-value { font-weight: 700; font-size: 1.05rem; color: #fff; }
+        .track-info-value--accent { color: var(--accent); }
+
+        /* ── Status Badge ── */
+        .track-status { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.8rem; border-radius: var(--r-pill); font-family: var(--font-d); font-size: 0.62rem; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; }
+        .track-status--processing { background: rgba(255,215,0,0.12); border: 1px solid rgba(255,215,0,0.3); color: var(--accent-4); }
+        .track-status--shipped { background: rgba(0,240,255,0.12); border: 1px solid rgba(0,240,255,0.3); color: var(--accent); }
+        .track-status--delivered { background: rgba(0,255,136,0.12); border: 1px solid rgba(0,255,136,0.3); color: var(--accent-3); }
+        .track-status--cancelled { background: rgba(255,68,68,0.12); border: 1px solid rgba(255,68,68,0.3); color: var(--danger); }
+
+        /* ── Timeline ── */
+        .track-timeline { padding: 1rem 0; }
+        .track-tl-item { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; position: relative; }
+        .track-tl-item:not(:last-child)::after { content: ''; position: absolute; left: 19px; top: 48px; width: 2px; height: calc(100% + 8px); background: linear-gradient(180deg, rgba(0,255,136,0.4), rgba(255,255,255,0.06)); }
+        .track-tl-item.is-pending:not(:last-child)::after { background: rgba(255,255,255,0.06); }
+        .track-tl-dot { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--glass-border); background: rgba(255,255,255,0.04); display: flex; align-items: center; justify-content: center; font-family: var(--font-d); font-size: 0.75rem; font-weight: 800; flex-shrink: 0; position: relative; z-index: 1; color: var(--muted-2); }
+        .track-tl-item.is-done .track-tl-dot { background: rgba(0,255,136,0.15); border-color: var(--accent-3); color: var(--accent-3); }
+        .track-tl-item.is-current .track-tl-dot { background: rgba(0,240,255,0.15); border-color: var(--accent); color: var(--accent); box-shadow: 0 0 18px rgba(0,240,255,0.3); }
+        .track-tl-body { flex: 1; padding-top: 0.3rem; }
+        .track-tl-title { font-weight: 700; font-size: 1rem; margin-bottom: 0.2rem; }
+        .track-tl-item.is-pending .track-tl-title { color: var(--muted-2); }
+        .track-tl-date { font-size: 0.82rem; color: var(--muted-2); margin-bottom: 0.3rem; }
+        .track-tl-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.55; }
+
+        /* ── Shipping Details ── */
+        .track-ship { padding: 1.25rem 1.5rem; border-radius: var(--r-md); background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.06); margin-top: 1.5rem; }
+        .track-ship-title { font-family: var(--font-d); font-size: 0.72rem; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--accent); margin-bottom: 0.8rem; }
+        .track-ship-row { display: flex; justify-content: space-between; align-items: center; padding: 0.65rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.92rem; }
+        .track-ship-row:last-child { border-bottom: none; }
+        .track-ship-label { color: var(--muted); }
+        .track-ship-val { font-weight: 700; color: #fff; text-align: right; }
+
+        /* ── ETA ── */
+        .track-eta { margin-top: 1.5rem; padding: 1.25rem; border-radius: var(--r-md); background: linear-gradient(135deg, rgba(0,255,136,0.1), rgba(0,240,255,0.1)); border: 1px solid rgba(0,255,136,0.25); text-align: center; }
+        .track-eta-label { font-size: 0.85rem; color: var(--muted); margin-bottom: 0.4rem; }
+        .track-eta-date { font-family: var(--font-d); font-size: 1.6rem; font-weight: 900; color: var(--accent-3); }
+
+        /* ── Items List ── */
+        .track-items { margin-top: 1.5rem; }
+        .track-items-title { font-family: var(--font-d); font-size: 0.72rem; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--accent); margin-bottom: 0.8rem; }
+        .track-item { display: flex; align-items: center; gap: 1rem; padding: 0.7rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+        .track-item:last-child { border-bottom: none; }
+        .track-item-emoji { font-size: 1.5rem; width: 40px; text-align: center; }
+        .track-item-info { flex: 1; }
+        .track-item-name { font-weight: 700; font-size: 0.95rem; }
+        .track-item-meta { font-size: 0.82rem; color: var(--muted-2); }
+        .track-item-price { font-family: var(--font-d); font-weight: 800; color: var(--accent); }
+
+        /* ── Actions ── */
+        .track-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; flex-wrap: wrap; }
+        .track-action { padding: 0.7rem 1.4rem; border-radius: var(--r-md); border: 1px solid var(--glass-border-2); background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.85); font-family: var(--font-d); font-size: 0.66rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; cursor: pointer; transition: all 0.22s ease; text-decoration: none; }
+        .track-action:hover { border-color: var(--accent); color: var(--accent); background: rgba(0,240,255,0.06); }
+        .track-action--primary { background: linear-gradient(135deg, var(--accent), var(--accent-3)); border: none; color: #00202a; }
+        .track-action--primary:hover { box-shadow: 0 0 18px rgba(0,240,255,0.4); transform: translateY(-1px); }
+
+        /* ── Recent Orders ── */
+        .track-recent { margin-bottom: 2.5rem; }
+        .track-recent h2 { font-family: var(--font-d); font-size: 1.1rem; font-weight: 900; margin-bottom: 1rem; background: linear-gradient(135deg, #fff, var(--accent)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .track-recent-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+        .track-recent-card { padding: 1.1rem 1.25rem; border-radius: var(--r-md); background: var(--card-grad); border: 1px solid var(--glass-border); cursor: pointer; transition: all 0.25s ease; text-decoration: none; color: #fff; }
+        .track-recent-card:hover { border-color: rgba(0,240,255,0.4); transform: translateY(-2px); }
+        .track-recent-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+        .track-recent-id { font-family: var(--font-d); font-size: 0.78rem; font-weight: 700; color: var(--accent); }
+        .track-recent-date { font-size: 0.78rem; color: var(--muted-2); }
+        .track-recent-items { font-size: 0.88rem; color: var(--muted); margin-bottom: 0.4rem; }
+        .track-recent-total { font-family: var(--font-d); font-weight: 800; }
+
+        /* ── How It Works ── */
+        .track-how { margin: 3rem 0; }
+        .track-how h2 { font-family: var(--font-d); font-size: 1.1rem; font-weight: 900; margin-bottom: 1.2rem; background: linear-gradient(135deg, #fff, var(--accent)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* ── Help Grid ── */
+        .track-help { margin: 2.5rem 0; }
+        .track-help h2 { font-family: var(--font-d); font-size: 1.1rem; font-weight: 900; margin-bottom: 1.2rem; background: linear-gradient(135deg, #fff, var(--accent-2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .track-help-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+        .track-help-card { padding: 1.25rem; border-radius: var(--r-md); background: var(--card-grad); border: 1px solid var(--glass-border); }
+        .track-help-icon { font-size: 1.5rem; margin-bottom: 0.6rem; }
+        .track-help-card h3 { font-family: var(--font-d); font-size: 0.82rem; font-weight: 800; margin-bottom: 0.4rem; }
+        .track-help-card p { font-size: 0.9rem; color: var(--muted); line-height: 1.55; }
+        .track-help-card a { color: var(--accent); text-decoration: none; }
+        .track-help-card a:hover { text-decoration: underline; }
+
+        /* ── FAQ ── */
+        .track-faq { margin: 3rem 0; }
+        .track-faq h2 { font-family: var(--font-d); font-size: 1.1rem; font-weight: 900; margin-bottom: 1.2rem; background: linear-gradient(135deg, #fff, var(--accent)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* ── Note ── */
+        .track-note { margin-top: 2rem; padding: 1rem 1.25rem; border-radius: var(--r-md); border: 1px dashed rgba(0,255,136,0.3); background: rgba(0,255,136,0.03); color: rgba(255,255,255,0.8); font-size: 0.9rem; line-height: 1.6; }
+        .track-note a { color: var(--accent); }
+
+        /* ── Loading ── */
+        .track-loading { text-align: center; padding: 4rem 2rem; }
+        .track-spinner { width: 48px; height: 48px; border: 3px solid var(--glass-border); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── Responsive ── */
+        @media (max-width: 900px) {
+            .page-offset { padding-top: 130px; }
+            .track-shell { padding: 0 1.5rem; }
+            .track-hero { padding: 2rem 1.25rem 1.75rem; }
+        }
+        @media (max-width: 600px) {
+            .track-shell { padding: 0 1rem; }
+            .track-info { grid-template-columns: 1fr 1fr; }
+            .track-actions { flex-direction: column; }
+            .track-action { width: 100%; text-align: center; }
+        }
+        @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--accent), var(--accent-2)); border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <canvas id="three-canvas"></canvas>
+    <script src="components.js"></script>
+
+    <main class="page-offset">
+        <div class="track-shell">
+
+            <!-- HERO -->
+            <section class="track-hero">
+                <div class="track-hero-neb track-hero-neb-1"></div>
+                <div class="track-hero-neb track-hero-neb-2"></div>
+                <div class="track-hero-inner">
+                    <span class="track-hero-live"><span class="track-hero-live-dot"></span>Live tracking</span>
+                    <h1>Track Your Order</h1>
+                    <p>Enter your order number for real-time shipping updates, delivery estimates and tracking history.</p>
+                </div>
+            </section>
+
+            <!-- LOOKUP -->
+            <div class="track-lookup" id="trackLookup">
+                <h2>Find your order</h2>
+                <p>You will find the order number in your confirmation email, or on your <a href="orders.html">Orders page</a>. No account needed.</p>
+                <div class="track-lookup-row">
+                    <input type="text" id="trackInput" class="track-lookup-input" placeholder="e.g. TRD-2026-001234" autocomplete="off" aria-label="Order number">
+                    <button type="button" class="track-lookup-btn" id="trackBtn">Track Order</button>
+                </div>
+                <p class="track-lookup-hint">Just exploring? Try the demo: <strong id="trackDemo">TRD-DEMO-1234</strong></p>
+            </div>
+
+            <!-- ALERT -->
+            <div class="track-alert" id="trackAlert"></div>
+
+            <!-- RECENT ORDERS -->
+            <div class="track-recent" id="trackRecent" style="display:none;">
+                <h2>Recent Orders</h2>
+                <div class="track-recent-grid" id="trackRecentGrid"></div>
+            </div>
+
+            <!-- RESULT (injected by JS) -->
+            <div id="trackResult"></div>
+
+            <!-- HOW IT WORKS -->
+            <section class="track-how" id="trackHow"></section>
+
+            <!-- HELP -->
+            <section class="track-help">
+                <h2>Need Help?</h2>
+                <div class="track-help-grid">
+                    <div class="track-help-card">
+                        <div class="track-help-icon">📦</div>
+                        <h3>Order not arrived?</h3>
+                        <p>If your order is past the estimated delivery date, <a href="contact.html">contact support</a> with your order number and we will investigate with the carrier.</p>
+                    </div>
+                    <div class="track-help-card">
+                        <div class="track-help-icon">🔄</div>
+                        <h3>Want to return?</h3>
+                        <p>You have 30 days from delivery to return any item in its original condition. Start from the <a href="orders.html">Orders page</a> or read the <a href="returns.html">return policy</a>.</p>
+                    </div>
+                    <div class="track-help-card">
+                        <div class="track-help-icon">✉️</div>
+                        <h3>Missing tracking email?</h3>
+                        <p>Check your spam folder. If it is not there, <a href="contact.html">contact us</a> and we will resend it within 1 hour during business hours.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FAQ -->
+            <section class="track-faq" id="trackFaq"></section>
+
+            <!-- NOTE -->
+            <div class="track-note">
+                Tracking data comes from the carrier and updates every few hours. If the status seems stale, give it up to 24 hours before contacting support. <a href="contact.html">Get in touch</a>.
+            </div>
+
+            <!-- TRUST -->
+            <div id="trackTrust"></div>
+
+            <!-- CTA -->
+            <div id="trackCta"></div>
+
+        </div>
+    </main>
+
+    <script src="products-data.js"></script>
+    <script src="backend-bridge.js"></script>
+    <script src="cart-manager.js"></script>
+    <script src="page-helpers.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="firebase-auth-helper.js"></script>
+    <script src="order-manager.js"></script>
+    <script>
+    (function () {
+        'use strict';
+        var P = window.TrendaryoProducts;
+        var UI = window.TrendaryoUI;
+        var Orders = window.TrendaryoOrders;
+
+        /* ── Helpers ── */
+        function fmtDate(iso) {
+            try { return new Date(iso).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }); }
+            catch (e) { return '—'; }
+        }
+        function fmtDateTime(iso) {
+            try { return new Date(iso).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }); }
+            catch (e) { return '—'; }
+        }
+        function price(n) { return '$' + Number(n || 0).toFixed(2); }
+        function esc(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+        function statusClass(s) {
+            var map = { processing: 'processing', confirmed: 'processing', packed: 'shipped', shipped: 'shipped', 'out-for-delivery': 'shipped', delivered: 'delivered', cancelled: 'cancelled' };
+            return map[String(s || '').toLowerCase()] || 'processing';
+        }
+
+        /* ── Find Order ── */
+        function findOrder(id) {
+            var q = String(id || '').trim();
+            if (!q) return null;
+            if (Orders) {
+                var o = Orders.find(q);
+                if (o) return o;
+            }
+            var key = q.toUpperCase().replace(/^#/, '');
+            if (key === 'DEMO' || key === 'TRD-DEMO-1234' || key === 'TRDDEMO1234') {
+                var now = Date.now();
+                var day = 86400000;
+                return {
+                    id: 'TRD-DEMO-1234', date: new Date(now - 3 * day).toISOString(), status: 'shipped',
+                    items: [
+                        { id: 1, name: 'Wireless Headphones', price: 149, qty: 1, emoji: '🎧' },
+                        { id: 5, name: 'Wireless Earbuds', price: 89, qty: 1, emoji: '🎵' }
+                    ],
+                    total: 238, shipping: { name: 'Demo Customer', address: '482 Nebula Street', city: 'Al Seeb', country: 'Oman' },
+                    carrier: 'Trendaryo Express', trackingNumber: 'TRX-88291-MCT',
+                    eta: new Date(now + 2 * day).toISOString()
+                };
+            }
+            return null;
+        }
+
+        /* ── Show Alert ── */
+        function showAlert(msg) {
+            var el = document.getElementById('trackAlert');
+            if (!el) return;
+            el.textContent = msg;
+            el.className = 'track-alert track-alert--error show';
+            setTimeout(function () { el.classList.remove('show'); }, 6000);
+        }
+
+        /* ── Render Recent Orders ── */
+        function renderRecent() {
+            var container = document.getElementById('trackRecent');
+            var grid = document.getElementById('trackRecentGrid');
+            if (!container || !grid || !Orders) { return; }
+            var list = Orders.list();
+            if (list.length === 0) { container.style.display = 'none'; return; }
+            container.style.display = '';
+            grid.innerHTML = list.slice(0, 3).map(function (o) {
+                var items = (o.items || []).map(function (i) { return i.name; }).join(', ');
+                var sc = statusClass(o.status);
+                return '<div class="track-recent-card" data-track="' + esc(o.id) + '">' +
+                    '<div class="track-recent-top"><span class="track-recent-id">#' + esc(o.id) + '</span><span class="track-recent-date">' + fmtDate(o.date) + '</span></div>' +
+                    '<div class="track-recent-items">' + esc(items || 'No items') + '</div>' +
+                    '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+                        '<span class="track-status track-status--' + sc + '">' + esc(o.status || 'processing') + '</span>' +
+                        '<span class="track-recent-total" style="color:var(--accent);">' + price(o.total) + '</span>' +
+                    '</div></div>';
+            }).join('');
+
+            grid.querySelectorAll('[data-track]').forEach(function (card) {
+                card.addEventListener('click', function () {
+                    var id = this.getAttribute('data-track');
+                    document.getElementById('trackInput').value = id;
+                    doLookup(id);
+                });
+            });
+        }
+
+        /* ── Render Tracking Result ── */
+        function renderTracking(order) {
+            var el = document.getElementById('trackResult');
+            if (!el) return;
+            var current = UI ? UI.statusIndex(order.status) : 0;
+            var sc = statusClass(order.status);
+
+            var steps = [
+                { title: 'Order Placed', sub: fmtDate(order.date), icon: '✓' },
+                { title: 'Processing', sub: current >= 1 ? 'Completed' : 'Preparing your order', icon: current >= 1 ? '✓' : '2' },
+                { title: 'Shipped', sub: current >= 2 ? (order.carrier || 'Dispatched') : 'Awaiting dispatch', icon: current >= 2 ? '✓' : '3' },
+                { title: 'Delivered', sub: current >= 3 ? fmtDate(order.eta || order.date) : 'Pending', icon: current >= 3 ? '✓' : '4' }
+            ];
+
+            var timelineHtml = steps.map(function (step, i) {
+                var cls = i < current ? 'is-done' : (i === current ? 'is-current' : 'is-pending');
+                return '<div class="track-tl-item ' + cls + '">' +
+                    '<div class="track-tl-dot">' + step.icon + '</div>' +
+                    '<div class="track-tl-body">' +
+                        '<div class="track-tl-title">' + step.title + '</div>' +
+                        '<div class="track-tl-date">' + step.sub + '</div>' +
+                    '</div></div>';
+            }).join('');
+
+            var itemsHtml = (order.items || []).map(function (item) {
+                var prod = P.find(item.id);
+                var emoji = item.emoji || (prod ? prod.emoji : '📦');
+                return '<div class="track-item">' +
+                    '<div class="track-item-emoji">' + emoji + '</div>' +
+                    '<div class="track-item-info"><div class="track-item-name">' + esc(item.name) + '</div>' +
+                    '<div class="track-item-meta">Qty: ' + (item.qty || 1) + '</div></div>' +
+                    '<div class="track-item-price">' + price(item.price) + '</div></div>';
+            }).join('');
+
+            var etaHtml = current < 3
+                ? '<div class="track-eta"><div class="track-eta-label">Estimated Delivery</div><div class="track-eta-date">' + fmtDate(order.eta || order.date) + '</div></div>'
+                : '<div class="track-eta" style="background:linear-gradient(135deg,rgba(0,255,136,0.12),rgba(0,255,136,0.05));border-color:rgba(0,255,136,0.35);"><div class="track-eta-label">Delivered on</div><div class="track-eta-date">' + fmtDate(order.eta || order.date) + '</div></div>';
+
+            var addr = order.shipping || {};
+            var addrStr = [addr.address, addr.city, addr.country].filter(Boolean).join(', ') || '—';
+
+            el.innerHTML = '<div class="track-card">' +
+                '<div class="track-info">' +
+                    '<div class="track-info-item"><span class="track-info-label">Order ID</span><span class="track-info-value track-info-value--accent">#' + esc(order.id) + '</span></div>' +
+                    '<div class="track-info-item"><span class="track-info-label">Status</span><span class="track-info-value"><span class="track-status track-status--' + sc + '">' + esc(order.status || 'processing') + '</span></span></div>' +
+                    '<div class="track-info-item"><span class="track-info-label">Order Date</span><span class="track-info-value">' + fmtDate(order.date) + '</span></div>' +
+                    '<div class="track-info-item"><span class="track-info-label">Total</span><span class="track-info-value track-info-value--accent">' + price(order.total) + '</span></div>' +
+                '</div>' +
+                '<div class="track-timeline">' + timelineHtml + '</div>' +
+                '<div class="track-items"><div class="track-items-title">Items in this order</div>' + itemsHtml + '</div>' +
+                '<div class="track-ship">' +
+                    '<div class="track-ship-title">Shipping Details</div>' +
+                    '<div class="track-ship-row"><span class="track-ship-label">Carrier</span><span class="track-ship-val">' + esc(order.carrier || 'Trendaryo Express') + '</span></div>' +
+                    '<div class="track-ship-row"><span class="track-ship-label">Tracking Number</span><span class="track-ship-val">' + esc(order.trackingNumber || 'Assigned at dispatch') + '</span></div>' +
+                    '<div class="track-ship-row"><span class="track-ship-label">Delivery Address</span><span class="track-ship-val">' + esc(addrStr) + '</span></div>' +
+                '</div>' +
+                etaHtml +
+                '<div class="track-actions">' +
+                    '<a href="orders.html" class="track-action track-action--primary">Back to Orders</a>' +
+                    '<button type="button" class="track-action" id="trackPrint">Print</button>' +
+                    '<button type="button" class="track-action" id="trackShare">Share</button>' +
+                '</div>' +
+            '</div>';
+
+            document.getElementById('trackPrint').addEventListener('click', function () { window.print(); });
+            document.getElementById('trackShare').addEventListener('click', function () {
+                var url = window.location.origin + window.location.pathname + '?orderId=' + encodeURIComponent(order.id);
+                if (navigator.share) { navigator.share({ title: 'Track Order ' + order.id, url: url }); }
+                else { navigator.clipboard.writeText(url); alert('Link copied!'); }
+            });
+        }
+
+        /* ── Find Order (server) ── */
+        async function findOrderRemote(id) {
+            if (!window.OrderManager) return null;
+            try {
+                if (typeof initFirebase === 'function') { try { await initFirebase(); } catch (e) {} }
+                var result = await window.OrderManager.getOrders(50, 1);
+                var payload = (result && result.success && result.data) || {};
+                var list = Array.isArray(payload.data) ? payload.data : (Array.isArray(payload.orders) ? payload.orders : []);
+                var q = String(id || '').trim().toUpperCase().replace(/^#/, '');
+                if (!q) return null;
+
+                var match = null;
+                for (var i = 0; i < list.length; i++) {
+                    var o = list[i] || {};
+                    var oid = String(o.id || '').toUpperCase();
+                    var onum = String(o.orderNumber || '').toUpperCase();
+                    if (oid === q || onum === q || (q.length >= 6 && (oid.indexOf(q) === 0 || onum.indexOf(q) === 0))) { match = o; break; }
+                }
+                if (!match) return null;
+
+                var items = match.items;
+                if (typeof items === 'string') { try { items = JSON.parse(items); } catch (e) { items = []; } }
+                if (!Array.isArray(items)) items = [];
+
+                var addr = match.shippingAddress;
+                if (typeof addr === 'string') { try { addr = JSON.parse(addr); } catch (e) { addr = {}; } }
+                addr = addr || {};
+
+                return {
+                    id: match.orderNumber || match.id,
+                    date: match.createdAt,
+                    status: match.status || 'processing',
+                    items: items.map(function (it) {
+                        return { id: it.productId, name: it.name, price: Number(it.price) || 0, qty: Number(it.quantity) || 1, emoji: it.emoji || '' };
+                    }),
+                    total: Number(match.total) || 0,
+                    shipping: { name: addr.fullName || addr.name || '', address: addr.street || addr.address || '', city: addr.city || '', country: addr.country || '' },
+                    carrier: match.carrier || 'Trendaryo Express',
+                    trackingNumber: match.trackingNumber || '',
+                    eta: match.eta || null
+                };
+            } catch (e) {
+                console.error('[track-order] server lookup failed:', e);
+                return null;
+            }
+        }
+
+        /* ── Lookup ── */
+        async function doLookup(id) {
+            var order = findOrder(id);
+            if (!order) { order = await findOrderRemote(id); }
+            if (!order) {
+                showAlert('No order found for "' + esc(id) + '". Double-check the number and try again.');
+                document.getElementById('trackResult').innerHTML = '';
+                return;
+            }
+            document.getElementById('trackAlert').classList.remove('show');
+            renderTracking(order);
+        }
+
+        /* ── Init ── */
+        var input = document.getElementById('trackInput');
+        var btn = document.getElementById('trackBtn');
+        var demo = document.getElementById('trackDemo');
+
+        if (btn) btn.addEventListener('click', function () { doLookup(input ? input.value : ''); });
+        if (input) input.addEventListener('keydown', function (e) { if (e.key === 'Enter') doLookup(input.value); });
+        if (demo) demo.addEventListener('click', function () { if (input) input.value = 'TRD-DEMO-1234'; doLookup('TRD-DEMO-1234'); });
+
+        var params = new URLSearchParams(window.location.search);
+        var startId = params.get('orderId') || params.get('id') || '';
+        if (startId) { if (input) input.value = startId; doLookup(startId); }
+
+        renderRecent();
+
+        /* ── How it works ── */
+        if (UI && UI.steps) {
+            var howEl = document.getElementById('trackHow');
+            if (howEl) {
+                howEl.innerHTML = '<h2>How Order Tracking Works</h2>' + UI.steps([
+                    { title: 'Instant confirmation', text: 'The moment your order is placed, you get a confirmation email with your order number. That is the number you enter above.' },
+                    { title: 'Real-time status', text: 'Each step — processing, packed, shipped, delivered — is updated in real time. The timeline on this page always shows the latest state.' },
+                    { title: 'Carrier handoff', text: 'Once the carrier picks up your package, the tracking number appears here. You can also use it on the carrier\'s own site for even more detail.' }
+                ]);
+            }
+        }
+
+        /* ── FAQ ── */
+        if (UI && UI.faq) {
+            var faqEl = document.getElementById('trackFaq');
+            if (faqEl) {
+                faqEl.innerHTML = '<h2>Frequently Asked Questions</h2>' + UI.faq([
+                    { q: 'Where do I find my order number?', a: 'It is in the confirmation email you received after checkout. It starts with TRD- followed by a date and four digits. You can also find it on the Orders page if you have an account.' },
+                    { q: 'My order status has not changed in a while. Is something wrong?', a: 'Not necessarily. Carriers update tracking data every few hours, and some scan events are skipped during transit. If the status has not moved for more than 48 hours past the estimated delivery date, contact support.' },
+                    { q: 'Can I change my delivery address after ordering?', a: 'If the order has not shipped yet, yes — contact support within 2 hours of placing the order and we will update it. Once shipped, the address cannot be changed.' },
+                    { q: 'What if my package arrives damaged?', a: 'Take photos of the damage and contact support within 48 hours of delivery. We will arrange a replacement or full refund — no need to return the damaged item in most cases.' },
+                    { q: 'Do you ship internationally?', a: 'We ship to over 50 countries. International orders may take 7–14 working days depending on customs. Tracking is available for all international shipments.' }
+                ], true);
+            }
+        }
+
+        /* ── Trust + CTA ── */
+        var trustEl = document.getElementById('trackTrust');
+        if (trustEl && UI && UI.trustStrip) trustEl.innerHTML = UI.trustStrip();
+        var ctaEl = document.getElementById('trackCta');
+        if (ctaEl && UI && UI.ctaBand) ctaEl.innerHTML = UI.ctaBand({
+            title: 'Need something new?',
+            text: 'Browse the full catalogue with live prices, ratings and stock.',
+            cta: 'Open the Shop',
+            href: 'shop.html'
+        });
+    })();
+    </script>
+    <script>
+        function hidePreloader() { var p = document.getElementById('preloader'); if (p) p.classList.add('hidden'); }
+        if (document.readyState === 'complete') { setTimeout(hidePreloader, 600); }
+        else { window.addEventListener('load', function () { setTimeout(hidePreloader, 600); }); }
+        setTimeout(hidePreloader, 1500);
+    </script>
+</body>
+</html>

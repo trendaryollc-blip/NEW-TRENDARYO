@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn about Trendaryo mission to transform online shopping through 3D technology. 50K+ customers, 4.9 rating, 99% satisfaction. Meet our team.">
+    <meta name="keywords" content="about trendaryo, company info, our story, team, mission">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Trendaryo">
+    <link rel="canonical" href="https://trendaryo.com/about.html">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://trendaryo.com/about.html">
+    <meta property="og:title" content="About Us - Trendaryo | Revolutionizing Online Shopping">
+    <meta property="og:description" content="Learn about Trendaryo mission to transform online shopping through 3D technology. 50K+ customers, 4.9 rating, 99% satisfaction. Meet our team.">
+    <meta property="og:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://trendaryo.com/about.html">
+    <meta property="twitter:title" content="About Us - Trendaryo | Revolutionizing Online Shopping">
+    <meta property="twitter:description" content="Learn about Trendaryo mission to transform online shopping through 3D technology. 50K+ customers, 4.9 rating, 99% satisfaction. Meet our team.">
+    <meta property="twitter:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>About Us - Trendaryo | Revolutionizing Online Shopping</title>
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="shared.css">
+    <script src="performance.js"></script>
+    <script src="bg.js"></script>
+    <link rel="stylesheet" href="styles.css?v=2024022402">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="assets/favicon-crown-star.svg">
+    <style>
+        :root { --accent: #00f0ff; --accent-2: #ff00aa; --accent-3: #00ff88; --glass: rgba(255,255,255,0.05); --glass-border: rgba(255,255,255,0.1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Rajdhani', sans-serif; background: #0a0a2a; color: #fff; overflow-x: hidden; transition: background 1s ease-in-out; }
+        #three-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none;}
+
+        .store-header { position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: rgba(0,0,0,0.08); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid var(--glass-border); }
+        .store-header-inner { max-width: 1200px; margin: 0 auto; padding: 0.8rem 1.25rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+        .store-brand { display: flex; align-items: center; gap: 0.75rem; min-width: 180px; }
+        .store-logo { font-family: 'Orbitron', sans-serif; font-size: 1.6rem; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent-2)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; white-space: nowrap; }
+        .store-search { flex: 1; display: flex; align-items: center; gap: 0.5rem; padding: 0.55rem 0.9rem; border-radius: 999px; background: var(--glass); border: 1px solid var(--glass-border); min-width: 220px; }
+        .store-search input { width: 100%; border: none; outline: none; background: #0a0a2a; color: rgba(255,255,255,0.9); font-family: inherit; font-size: 1rem; }
+        .store-search input::placeholder { color: rgba(255,255,255,0.55); }
+        .store-actions { display: flex; align-items: center; gap: 0.6rem; position: relative; }
+        .store-icon-btn { width: 42px; height: 42px; border-radius: 999px; background: var(--glass); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.9); text-decoration: none; transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease; cursor: pointer; }
+        .store-icon-btn:hover { transform: translateY(-1px); border-color: rgba(0,240,255,0.6); background: rgba(0,240,255,0.12); }
+        .store-mobile-toggle { display: none; width: 42px; height: 42px; border-radius: 999px; background: var(--glass); border: 1px solid var(--glass-border); color: rgba(255,255,255,0.9); cursor: pointer; }
+
+        .store-nav { max-width: 1200px; margin: 0 auto; padding: 0 1.25rem 0.85rem; }
+        .store-nav-list { display: flex; align-items: center; justify-content: center; gap: 0.25rem; list-style: none; }
+        .store-nav-item { position: relative; }
+        .store-nav-link { font-family: 'Orbitron', sans-serif; font-size: 0.82rem; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; color: rgba(255,255,255,0.85); text-decoration: none; padding: 0.65rem 0.9rem; border-radius: 999px; display: inline-flex; align-items: center; gap: 0.5rem; transition: background 0.2s ease, color 0.2s ease; }
+        .store-nav-link:hover { background: rgba(255,255,255,0.08); color: rgba(255,255,255,1); }
+        .store-nav-link[aria-current="page"] { background: rgba(0,240,255,0.14); color: rgba(255,255,255,1); border: 1px solid rgba(0,240,255,0.25); }
+        .store-caret { font-size: 0.8rem; opacity: 0.85; }
+        .store-dropdown { position: absolute; left: 0; top: calc(100% + 10px); min-width: 240px; background: rgba(10,10,42,0.92); border: 1px solid var(--glass-border); border-radius: 14px; padding: 0.5rem; box-shadow: 0 18px 48px rgba(0,0,0,0.45); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease; }
+        .store-dropdown a { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.7rem 0.8rem; border-radius: 10px; color: rgba(255,255,255,0.88); text-decoration: none; transition: background 0.18s ease, color 0.18s ease; }
+        .store-dropdown a:hover { background: rgba(0,240,255,0.12); color: #fff; }
+        .store-dropdown small { color: rgba(255,255,255,0.55); font-size: 0.85rem; }
+        .store-nav-item:hover .store-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+        .store-nav-item.is-open .store-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+
+        .page-offset { padding-top: 150px; }
+        
+        .welcome-banner { position: fixed; top: 140px; left: 0; right: 0; z-index: 9999; background: linear-gradient(135deg, rgba(0,240,255,0.15), rgba(255,0,170,0.15)); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border); padding: 1rem 1.25rem; text-align: center; animation: slideDown 0.6s ease, bannerPulse 3s ease-in-out infinite; box-shadow: 0 0 30px rgba(0,240,255,0.3); }
+        .welcome-banner-content { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+        .welcome-text { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 700; background: linear-gradient(135deg, var(--accent), var(--accent-2), var(--accent-3)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px; animation: textPulse 2s ease-in-out infinite, textGlow 2s ease-in-out infinite alternate; flex: 1; text-align: center; }
+        .welcome-icon { font-size: 1.5rem; animation: wave 1.5s ease-in-out infinite, iconPulse 2s ease-in-out infinite; }
+        .welcome-close { background: none; border: none; color: rgba(255,255,255,0.7); font-size: 1.2rem; cursor: pointer; padding: 0.25rem 0.5rem; transition: color 0.3s; }
+        .welcome-close:hover { color: var(--accent-2); }
+        .welcome-banner.hidden { transform: translateY(-100%); opacity: 0; pointer-events: none; transition: all 0.4s ease; }
+        @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes wave { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(20deg); } 75% { transform: rotate(-20deg); } }
+        @keyframes bannerPulse { 0%, 100% { box-shadow: 0 0 30px rgba(0,240,255,0.3); } 50% { box-shadow: 0 0 50px rgba(255,0,170,0.5), 0 0 80px rgba(0,240,255,0.3); } }
+        @keyframes textPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+        @keyframes textGlow { from { text-shadow: 0 0 10px rgba(0,240,255,0.5); } to { text-shadow: 0 0 20px rgba(255,0,170,0.8), 0 0 30px rgba(0,240,255,0.5); } }
+        @keyframes iconPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        
+        .page-header-3d { padding: 6rem 2rem 3rem; text-align: center; }
+        .page-title-3d { font-family: 'Orbitron', sans-serif; font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 900; background: linear-gradient(135deg, #fff, var(--accent)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; }
+        
+        .about-section-3d { padding: 2rem; max-width: 1200px; margin: 0 auto; }
+        
+        .about-hero-3d { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; margin-bottom: 6rem; }
+        .about-content-3d h2 { font-family: 'Orbitron', sans-serif; font-size: 2rem; margin-bottom: 1.5rem; }
+        .about-content-3d p { color: #aaa; line-height: 1.8; margin-bottom: 1rem; font-size: 1.1rem; }
+        .about-image-3d { position: relative; }
+        .about-image-3d img { width: 100%; border-radius: 20px; border: 1px solid var(--glass-border); }
+        .about-image-3d::before { content: ''; position: absolute; left: -20px; top: -20px; right: 20px; width: 100%; height: 100%; border: 2px solid var(--accent); border-radius: 20px; z-index: -1; }
+        
+        .stats-row-3d { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-bottom: 6rem; }
+        .stat-card-3d { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; text-align: center; transition: all 0.3s; }
+        .stat-card-3d:hover { transform: translateY(-5px); border-color: var(--accent); }
+        .stat-value-3d { font-family: 'Orbitron', sans-serif; font-size: 3rem; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent-3)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .stat-label-3d { color: #888; font-size: 1rem; margin-top: 0.5rem; }
+        
+        .team-section-3d { margin-bottom: 6rem; }
+        .section-title-3d { font-family: 'Orbitron', sans-serif; font-size: 2rem; text-align: center; margin-bottom: 3rem; }
+        
+        .team-grid-3d { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
+        .team-card-3d { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; text-align: center; transition: all 0.3s; }
+        .team-card-3d:hover { transform: translateY(-10px); border-color: var(--accent); }
+        .team-avatar-3d { width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 1.5rem; background: linear-gradient(135deg, var(--accent), var(--accent-2)); display: flex; align-items: center; justify-content: center; font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 900; }
+        .team-name-3d { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; margin-bottom: 0.25rem; }
+        .team-role-3d { color: var(--accent); font-size: 0.9rem; }
+        
+        .values-section-3d { margin-bottom: 4rem; }
+        .values-grid-3d { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+        .value-card-3d { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; text-align: center; transition: all 0.3s; }
+        .value-card-3d:hover { border-color: var(--accent); }
+        .value-icon-3d { width: 70px; height: 70px; margin: 0 auto 1.5rem; background: linear-gradient(135deg, rgba(0,240,255,0.2), rgba(255,0,170,0.2)); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid var(--accent); }
+        .value-icon-3d svg { width: 32px; height: 32px; color: var(--accent); }
+        .value-title-3d { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; margin-bottom: 1rem; }
+        .value-text-3d { color: #aaa; line-height: 1.7; }
+        
+        .preloader-3d { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 2rem; }
+        .preloader-3d.hidden { opacity: 0; pointer-events: none; transition: opacity 0.5s; }
+        .preloader-logo-3d { font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent-2)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .preloader-spinner-3d { width: 50px; height: 50px; border: 3px solid var(--glass-border); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
+        
+        @media(max-width:900px){
+            .about-hero-3d{grid-template-columns:1fr;}
+            .stats-row-3d{grid-template-columns:repeat(2,1fr);}
+            .store-search { display: none; }
+            .store-mobile-toggle { display: inline-flex; align-items: center; justify-content: center; }
+            .store-nav { display: none; }
+            .store-header.is-open .store-nav { display: block; padding-bottom: 1rem; }
+            .store-nav-list { flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 0.5rem; }
+            .store-nav-link { width: 100%; justify-content: space-between; }
+            .store-dropdown { position: static; opacity: 1; visibility: visible; transform: none; box-shadow: none; background: rgba(255,255,255,0.04); }
+            .store-nav-item:hover .store-dropdown { opacity: 1; visibility: visible; transform: none; }
+            .page-offset { padding-top: 120px; }
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* HF Theme styles */
+    </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "name": "About Trendaryo",
+  "description": "Learn about Trendaryo mission to transform online shopping",
+  "url": "https://trendaryo.com/about.html"
+}
+</script>
+</head>
+<body>
+    <script src="components.js"></script>
+    <div class="preloader-3d" id="preloader"><div class="preloader-logo-3d">TRENDARYO</div><div class="preloader-spinner-3d"></div></div>
+    <canvas id="three-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;"></canvas>
+    
+    <!-- Full Navigation Header -->
+    <div id="header-container" data-type="full"></div>
+
+
+
+    <main class="page-offset">
+    
+    <section class="page-header-3d">
+        <h1 class="page-title-3d">ABOUT US</h1>
+    </section>
+    
+    <section class="about-section-3d">
+        <!-- Company Information Section -->
+        <div style="background: linear-gradient(135deg, rgba(0,240,255,0.08), rgba(255,0,170,0.08)); border: 2px solid var(--glass-border); border-radius: 24px; padding: 3rem 2.5rem; margin-bottom: 4rem;">
+            <h2 style="font-family: 'Orbitron', sans-serif; font-size: 2rem; margin-bottom: 2rem; color: var(--accent); text-align: center;">Company Information</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;">
+                <div>
+                    <div style="background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem;">
+                        <h3 style="font-family: 'Orbitron', sans-serif; font-size: 1.2rem; color: var(--accent-2); margin-bottom: 1rem;">Legal Entity</h3>
+                        <p style="color: rgba(255,255,255,0.9); font-size: 1.1rem; line-height: 1.8; margin: 0;"><strong style="color: #fff;">Company Name:</strong> TRENDARYO LLC</p>
+                        <p style="color: rgba(255,255,255,0.9); font-size: 1.1rem; line-height: 1.8; margin: 0.5rem 0 0 0;"><strong style="color: #fff;">Registered:</strong> Sultanate of Oman</p>
+                    </div>
+                    <div style="background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem;">
+                        <h3 style="font-family: 'Orbitron', sans-serif; font-size: 1.2rem; color: var(--accent-3); margin-bottom: 1rem;">Business Address</h3>
+                        <p style="color: rgba(255,255,255,0.9); font-size: 1.05rem; line-height: 1.8; margin: 0;">
+                            Al Maabela, Wilayat Al Seeb<br>
+                            Muscat Governorate, OMAN
+                        </p>
+                    </div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="width: 200px; height: 200px; margin: 0 auto 1.5rem; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent-2)); display: flex; align-items: center; justify-content: center; border: 4px solid var(--glass-border); box-shadow: 0 0 40px rgba(0,240,255,0.3);">
+                        <svg width="90" height="90" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
+                    <h3 style="font-family: 'Orbitron', sans-serif; font-size: 1.5rem; margin-bottom: 0.5rem; color: #fff;">Trendaryo Leadership</h3>
+                    <p style="color: var(--accent); font-size: 1.1rem; font-weight: 700;">Founder-led &amp; customer-obsessed</p>
+                    <p style="color: rgba(255,255,255,0.7); font-size: 0.95rem; margin-top: 1rem; font-style: italic;">A team dedicated to quality, speed and design excellence</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="about-hero-3d">
+            <div class="about-content-3d">
+                <h2>Revolutionizing Online Shopping</h2>
+                <p>TRENDARYO LLC was founded with a singular vision: to transform the way people shop online. We believe shopping should be an immersive, exciting experience that engages all your senses.</p>
+                <p>Our team of tech enthusiasts and fashion experts work tirelessly to curate the finest products from around the world, bringing you premium watches, cutting-edge electronics, and timeless fashion accessories.</p>
+                <p>What sets us apart is our commitment to innovation. We're not just another e-commerce store – we're a glimpse into the future of retail.</p>
+            </div>
+            <div class="about-image-3d">
+                <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&h=500&fit=crop" alt="About Trendaryo">
+            </div>
+        </div>
+        
+        <div class="stats-row-3d">
+            <div class="stat-card-3d"><div class="stat-value-3d">50K+</div><div class="stat-label-3d">Happy Customers</div></div>
+            <div class="stat-card-3d"><div class="stat-value-3d">10K+</div><div class="stat-label-3d">Products</div></div>
+            <div class="stat-card-3d"><div class="stat-value-3d">4.9</div><div class="stat-label-3d">Average Rating</div></div>
+            <div class="stat-card-3d"><div class="stat-value-3d">99%</div><div class="stat-label-3d">Satisfaction</div></div>
+        </div>
+        
+        <div class="team-section-3d">
+            <h2 class="section-title-3d">Meet Our Team</h2>
+            <div class="team-grid-3d">
+                <div class="team-card-3d">
+                    <div class="team-avatar-3d">JC</div>
+                    <h3 class="team-name-3d">John Carter</h3>
+                    <p class="team-role-3d">CEO & Founder</p>
+                </div>
+                <div class="team-card-3d">
+                    <div class="team-avatar-3d">SM</div>
+                    <h3 class="team-name-3d">Sarah Miller</h3>
+                    <p class="team-role-3d">Head of Design</p>
+                </div>
+                <div class="team-card-3d">
+                    <div class="team-avatar-3d">DK</div>
+                    <h3 class="team-name-3d">David Kim</h3>
+                    <p class="team-role-3d">Tech Lead</p>
+                </div>
+                <div class="team-card-3d">
+                    <div class="team-avatar-3d">EJ</div>
+                    <h3 class="team-name-3d">Emma Johnson</h3>
+                    <p class="team-role-3d">Marketing Director</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="values-section-3d">
+            <h2 class="section-title-3d">Our Values</h2>
+            <div class="values-grid-3d">
+                <div class="value-card-3d">
+                    <div class="value-icon-3d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
+                    <h3 class="value-title-3d">Quality First</h3>
+                    <p class="value-text-3d">Every product is carefully vetted to ensure it meets our strict quality standards.</p>
+                </div>
+                <div class="value-card-3d">
+                    <div class="value-icon-3d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg></div>
+                    <h3 class="value-title-3d">Fast Delivery</h3>
+                    <p class="value-text-3d">We believe your time is precious. Get your orders delivered faster than ever.</p>
+                </div>
+                <div class="value-card-3d">
+                    <div class="value-icon-3d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></div>
+                    <h3 class="value-title-3d">24/7 Support</h3>
+                    <p class="value-text-3d">Our dedicated support team is always here to help you, anytime, anywhere.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Journey Timeline -->
+        <div style="margin: 6rem 0;">
+            <h2 class="section-title-3d">Our Journey</h2>
+            <div style="max-width: 800px; margin: 0 auto;">
+                <div style="border-left: 2px solid var(--accent); padding-left: 2rem; position: relative;">
+                    <div style="margin-bottom: 3rem;">
+                        <div style="position: absolute; left: -9px; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 3px solid #0a0a2a;"></div>
+                        <div style="font-family: 'Orbitron', sans-serif; color: var(--accent); font-size: 1.2rem; margin-bottom: 0.5rem;">2020 - The Beginning</div>
+                        <p style="color: #aaa; line-height: 1.7;">Founded with a vision to revolutionize online shopping through immersive 3D experiences.</p>
+                    </div>
+                    <div style="margin-bottom: 3rem;">
+                        <div style="position: absolute; left: -9px; width: 16px; height: 16px; border-radius: 50%; background: var(--accent-2); border: 3px solid #0a0a2a;"></div>
+                        <div style="font-family: 'Orbitron', sans-serif; color: var(--accent-2); font-size: 1.2rem; margin-bottom: 0.5rem;">2021 - First 10K Customers</div>
+                        <p style="color: #aaa; line-height: 1.7;">Reached our first major milestone with 10,000 happy customers across 50 countries.</p>
+                    </div>
+                    <div style="margin-bottom: 3rem;">
+                        <div style="position: absolute; left: -9px; width: 16px; height: 16px; border-radius: 50%; background: var(--accent-3); border: 3px solid #0a0a2a;"></div>
+                        <div style="font-family: 'Orbitron', sans-serif; color: var(--accent-3); font-size: 1.2rem; margin-bottom: 0.5rem;">2023 - Innovation Award</div>
+                        <p style="color: #aaa; line-height: 1.7;">Recognized as "Most Innovative E-commerce Platform" by Tech Innovation Awards.</p>
+                    </div>
+                    <div>
+                        <div style="position: absolute; left: -9px; width: 16px; height: 16px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent-2)); border: 3px solid #0a0a2a;"></div>
+                        <div style="font-family: 'Orbitron', sans-serif; background: linear-gradient(135deg, var(--accent), var(--accent-2)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.2rem; margin-bottom: 0.5rem;">2024 - Global Expansion</div>
+                        <p style="color: #aaa; line-height: 1.7;">Expanding to 100+ countries with 50K+ satisfied customers worldwide.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customer Success Stories -->
+        <div style="background: rgba(0,240,255,0.03); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); padding: 4rem 2rem; margin: 0 -2rem;">
+            <h2 class="section-title-3d">Customer Success Stories</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto;">
+                <div style="background: var(--glass); border: 1px solid var(--glass-border); border-radius: 18px; padding: 2rem;">
+                    <div style="color: #FFD700; font-size: 1.5rem; margin-bottom: 1rem;">⭐⭐⭐⭐⭐</div>
+                    <p style="color: rgba(255,255,255,0.85); line-height: 1.7; margin-bottom: 1.5rem; font-style: italic;">"The 3D shopping experience is mind-blowing! I could see every detail of the watch before buying. Absolutely love it!"</p>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent-2)); display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">👤</div>
+                        <div>
+                            <div style="font-weight: 700; color: var(--accent);">Alex Thompson</div>
+                            <div style="color: rgba(255,255,255,0.6); font-size: 0.9rem;">Premium Watch Buyer</div>
+                        </div>
+                    </div>
+                </div>
+                <div style="background: var(--glass); border: 1px solid var(--glass-border); border-radius: 18px; padding: 2rem;">
+                    <div style="color: #FFD700; font-size: 1.5rem; margin-bottom: 1rem;">⭐⭐⭐⭐⭐</div>
+                    <p style="color: rgba(255,255,255,0.85); line-height: 1.7; margin-bottom: 1.5rem; font-style: italic;">"Customer service is exceptional! They helped me choose the perfect gift. Fast shipping too!"</p>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-2), var(--accent-3)); display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">👤</div>
+                        <div>
+                            <div style="font-weight: 700; color: var(--accent);">Maria Garcia</div>
+                            <div style="color: rgba(255,255,255,0.6); font-size: 0.9rem;">Fashion Enthusiast</div>
+                        </div>
+                    </div>
+                </div>
+                <div style="background: var(--glass); border: 1px solid var(--glass-border); border-radius: 18px; padding: 2rem;">
+                    <div style="color: #FFD700; font-size: 1.5rem; margin-bottom: 1rem;">⭐⭐⭐⭐⭐</div>
+                    <p style="color: rgba(255,255,255,0.85); line-height: 1.7; margin-bottom: 1.5rem; font-style: italic;">"Been shopping here for 2 years. Quality is always top-notch. Trendaryo never disappoints!"</p>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-3), var(--accent)); display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">👤</div>
+                        <div>
+                            <div style="font-weight: 700; color: var(--accent);">James Wilson</div>
+                            <div style="color: rgba(255,255,255,0.6); font-size: 0.9rem;">Loyal Customer</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Behind the Scenes -->
+        <div style="margin: 6rem 0;">
+            <h2 class="section-title-3d">Behind the Scenes</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+                <div style="background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🏢</div>
+                    <h3 style="font-family: 'Orbitron', sans-serif; font-size: 1.2rem; margin-bottom: 0.5rem;">Modern Workspace</h3>
+                    <p style="color: #aaa; line-height: 1.7;">State-of-the-art office designed for creativity and collaboration.</p>
+                </div>
+                <div style="background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🔬</div>
+                    <h3 style="font-family: 'Orbitron', sans-serif; font-size: 1.2rem; margin-bottom: 0.5rem;">Quality Lab</h3>
+                    <p style="color: #aaa; line-height: 1.7;">Every product tested rigorously before reaching you.</p>
+                </div>
+                <div style="background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">📦</div>
+                    <h3 style="font-family: 'Orbitron', sans-serif; font-size: 1.2rem; margin-bottom: 0.5rem;">Smart Warehouse</h3>
+                    <p style="color: #aaa; line-height: 1.7;">AI-powered logistics for lightning-fast delivery.</p>
+                </div>
+                <div style="background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">💚</div>
+                    <h3 style="font-family: 'Orbitron', sans-serif; font-size: 1.2rem; margin-bottom: 0.5rem;">Eco-Friendly</h3>
+                    <p style="color: #aaa; line-height: 1.7;">100% recyclable packaging, carbon-neutral shipping.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Awards & Recognition -->
+        <div style="background: linear-gradient(135deg, rgba(0,240,255,0.08), rgba(255,0,170,0.08)); border: 2px solid var(--glass-border); border-radius: 24px; padding: 4rem 3rem; text-align: center; margin-bottom: 4rem;">
+            <h2 class="section-title-3d" style="margin-bottom: 3rem;">Awards & Recognition</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 3rem;">
+                <div>
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">🏆</div>
+                    <div style="font-family: 'Orbitron', sans-serif; font-size: 1.1rem; color: var(--accent); margin-bottom: 0.5rem;">Best E-commerce 2023</div>
+                    <div style="color: #888; font-size: 0.9rem;">Tech Innovation Awards</div>
+                </div>
+                <div>
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">⭐</div>
+                    <div style="font-family: 'Orbitron', sans-serif; font-size: 1.1rem; color: var(--accent-2); margin-bottom: 0.5rem;">Customer Choice 2024</div>
+                    <div style="color: #888; font-size: 0.9rem;">Retail Excellence</div>
+                </div>
+                <div>
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">🚀</div>
+                    <div style="font-family: 'Orbitron', sans-serif; font-size: 1.1rem; color: var(--accent-3); margin-bottom: 0.5rem;">Fastest Growing 2023</div>
+                    <div style="color: #888; font-size: 0.9rem;">Business Magazine</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div style="text-align: center; padding: 3rem 0;">
+            <h2 style="font-family: 'Orbitron', sans-serif; font-size: 2.5rem; margin-bottom: 1rem; background: linear-gradient(135deg, var(--accent), var(--accent-2)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Join Our Journey</h2>
+            <p style="color: #aaa; font-size: 1.2rem; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">Be part of the future of shopping. Experience the difference today.</p>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="shop.html" style="display: inline-block; padding: 1rem 2.5rem; border-radius: 999px; background: linear-gradient(135deg, rgba(0,240,255,0.25), rgba(255,0,170,0.25)); border: 1px solid var(--glass-border); color: #fff; font-weight: 700; text-decoration: none; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem;">Start Shopping</a>
+                <a href="contact.html" style="display: inline-block; padding: 1rem 2.5rem; border-radius: 999px; background: var(--glass); border: 1px solid var(--glass-border); color: #fff; font-weight: 700; text-decoration: none; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem;">Get in Touch</a>
+            </div>
+        </div>
+    </section>
+    
+    </main>
+
+    <!-- Footer is injected by components.js -->
+
+    <script>
+        // Force cache refresh
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                for(let registration of registrations) {
+                    registration.unregister();
+                }
+            });
+        }
+    </script>
+
+    <script>
+        const storeHeader = document.getElementById('store-header');
+        const mobileToggle = document.getElementById('store-mobile-toggle');
+        const dropdownItems = Array.from(document.querySelectorAll('.store-nav-item[data-dropdown]'));
+
+        if (mobileToggle && storeHeader) {
+            mobileToggle.addEventListener('click', () => {
+                const isOpen = storeHeader.classList.toggle('is-open');
+                mobileToggle.setAttribute('aria-expanded', String(isOpen));
+                if (!isOpen) dropdownItems.forEach(i => i.classList.remove('is-open'));
+            });
+        }
+
+        dropdownItems.forEach(item => {
+            const link = item.querySelector('.store-nav-link');
+            if (!link) return;
+            link.addEventListener('click', (e) => {
+                const isMobile = window.matchMedia('(max-width: 900px)').matches;
+                if (!isMobile) return;
+                const isOpen = item.classList.contains('is-open');
+                if (!isOpen) {
+                    e.preventDefault();
+                    dropdownItems.forEach(i => i.classList.remove('is-open'));
+                    item.classList.add('is-open');
+                }
+            });
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!storeHeader) return;
+            if (storeHeader.contains(e.target)) return;
+            dropdownItems.forEach(i => i.classList.remove('is-open'));
+            storeHeader.classList.remove('is-open');
+            if (mobileToggle) mobileToggle.setAttribute('aria-expanded', 'false');
+        });
+
+        // Preloader: failsafe ensures it always hides
+        function hidePreloader() { var p = document.getElementById('preloader'); if (p) p.classList.add('hidden'); }
+        if (document.readyState === 'complete') { setTimeout(hidePreloader, 800); }
+        else { window.addEventListener('load', function () { setTimeout(hidePreloader, 800); }); }
+        setTimeout(hidePreloader, 2000);
+    </script>
+    <script>
+        const themes = [
+            'linear-gradient(180deg, #0a0a2a 0%, #1a1a40 100%)',
+            'linear-gradient(180deg, #2a003f 0%, #3b0066 100%)',
+            'linear-gradient(180deg, #002b36 0%, #004f66 100%)',
+            'linear-gradient(180deg, #2a003f 0%, #1a1a40 100%)'
+        ];
+        let currentTheme = 0;
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                currentTheme = (currentTheme + 1) % themes.length;
+                (window.__themeBgDiv || document.body).style.background = themes[currentTheme];
+                if (currentTheme === 3) {
+                    document.querySelectorAll('h1,h2,h3,.page-title-3d').forEach(el => { el.style.color = '#FFD700'; });
+                    document.querySelectorAll('button,.btn-3d').forEach(btn => { btn.style.background = '#6a0dad'; btn.style.color = '#FFD700'; });
+                } else {
+                    document.querySelectorAll('h1,h2,h3,.page-title-3d').forEach(el => { el.style.color = ''; });
+                    document.querySelectorAll('button,.btn-3d').forEach(btn => { btn.style.background = ''; btn.style.color = ''; });
+                }
+            });
+        }
+    </script>
+    <script src="bg.js"></script>
+    <!-- Self-Healing System -->
+<script>
+window.onerror = function(msg, url, lineNo, columnNo, error) {
+  console.log('Error caught:', msg);
+  const errorDiv = document.createElement('div');
+  errorDiv.style.cssText = 'position:fixed; bottom:20px; right:20px; background:#f3f4f6; padding:10px; border-radius:5px; z-index:9999; border:1px solid #ccc;';
+  errorDiv.innerHTML = '⚠️ Something went wrong. Retrying...';
+  document.body.appendChild(errorDiv);
+  setTimeout(() => errorDiv.remove(), 3000);
+  return false;
+};
+</script>
+</body>
+</html>

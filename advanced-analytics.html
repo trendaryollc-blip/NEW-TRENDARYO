@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Analytics - Admin - Trendaryo</title>
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="responsive-universal.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="bg.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(0, 240, 255, 0.05);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2em;
+            background: linear-gradient(135deg, #00f0ff, #ff00aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            color: #00f0ff;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        .btn:hover {
+            background: rgba(0, 240, 255, 0.2);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+        }
+
+        .btn.primary {
+            background: rgba(0, 255, 136, 0.2);
+            border-color: rgba(0, 255, 136, 0.3);
+            color: #00ff88;
+        }
+
+        .btn.primary:hover {
+            background: rgba(0, 255, 136, 0.3);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+        }
+
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .filter-group label {
+            color: #00f0ff;
+            font-weight: bold;
+        }
+
+        select {
+            padding: 10px;
+            background: rgba(0, 240, 255, 0.05);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            color: #e0e0e0;
+            border-radius: 5px;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        select:focus {
+            outline: none;
+            background: rgba(0, 240, 255, 0.1);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: rgba(0, 240, 255, 0.05);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            background: rgba(0, 240, 255, 0.1);
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
+        }
+
+        .metric-label {
+            font-size: 0.9em;
+            color: #00f0ff;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #00f0ff, #ff00aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .metric-change {
+            font-size: 0.85em;
+            color: #00ff88;
+        }
+
+        .metric-change.negative {
+            color: #ff0055;
+        }
+
+        .section {
+            background: rgba(0, 240, 255, 0.05);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3em;
+            color: #00f0ff;
+            margin-bottom: 20px;
+        }
+
+        .chart-container {
+            background: rgba(0, 240, 255, 0.05);
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            border-radius: 5px;
+            padding: 20px;
+            min-height: 300px;
+            position: relative;
+        }
+
+        .segment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .segment-card {
+            background: rgba(0, 240, 255, 0.05);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .segment-name {
+            color: #00f0ff;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .segment-stat {
+            font-size: 1.5em;
+            color: #ff00aa;
+            margin: 5px 0;
+        }
+
+        .funnel-stage {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+        }
+
+        .funnel-bar {
+            flex: 1;
+            height: 40px;
+            background: linear-gradient(90deg, #00f0ff, #ff00aa);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            color: #0a0e27;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .funnel-label {
+            min-width: 150px;
+            color: #00f0ff;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: rgba(0, 240, 255, 0.1);
+            padding: 12px;
+            text-align: left;
+            color: #00f0ff;
+            font-weight: bold;
+            border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+        }
+
+        tr:hover {
+            background: rgba(0, 240, 255, 0.05);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            color: #00f0ff;
+            cursor: pointer;
+            font-family: 'Rajdhani', sans-serif;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn:hover {
+            color: #ff00aa;
+        }
+
+        .tab-btn.active {
+            border-bottom-color: #00f0ff;
+            color: #00f0ff;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #00f0ff;
+        }
+
+        .spinner {
+            border: 3px solid rgba(0, 240, 255, 0.2);
+            border-top: 3px solid #00f0ff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .header-actions {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+
+            .filter-group {
+                flex-direction: column;
+            }
+
+            .funnel-bar {
+                margin-right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="three-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;"></canvas>
+    
+    <!-- Full Navigation Header -->
+    <div id="header-container" data-type="full"></div>
+
+    <main style="padding-top: 180px;">
+    <div class="container">
+        <div class="header">
+            <h1>📊 Advanced Analytics</h1>
+            <div class="header-actions">
+                <button class="btn" onclick="goBack()">← Back</button>
+                <button class="btn primary" onclick="refreshData()">🔄 Refresh</button>
+            </div>
+        </div>
+
+        <div class="filters">
+            <div class="filter-group">
+                <label>Period:</label>
+                <select id="periodFilter" onchange="applyFilters()">
+                    <option value="week">This Week</option>
+                    <option value="month" selected>This Month</option>
+                    <option value="quarter">This Quarter</option>
+                    <option value="year">This Year</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="metrics-grid" id="metricsGrid">
+            <div class="loading">
+                <div class="spinner"></div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('segmentation')">Segmentation</button>
+            <button class="tab-btn" onclick="switchTab('products')">Products</button>
+            <button class="tab-btn" onclick="switchTab('funnel')">Funnel</button>
+            <button class="tab-btn" onclick="switchTab('cohort')">Cohort</button>
+        </div>
+
+        <div id="segmentation" class="tab-content active">
+            <div class="section">
+                <div class="section-title">Customer Segmentation</div>
+                <div class="segment-grid" id="segmentationGrid">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="products" class="tab-content">
+            <div class="section">
+                <div class="section-title">Top Performers</div>
+                <div class="table-container" id="topProductsTable">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Underperformers</div>
+                <div class="table-container" id="underperformersTable">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="funnel" class="tab-content">
+            <div class="section">
+                <div class="section-title">Conversion Funnel</div>
+                <div id="funnelContainer">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="cohort" class="tab-content">
+            <div class="section">
+                <div class="section-title">Cohort Analysis</div>
+                <div class="table-container" id="cohortTable">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+    <script src="components.js"></script>
+    <script src="admin-manager.js"></script>
+    <script src="analytics-engine.js"></script>
+    <script>
+        let currentPeriod = 'month';
+
+        function checkAdminAccess() {
+            if (!window.AdminManager.isAdmin()) {
+                alert('Access denied. Admin privileges required.');
+                window.location.href = 'admin-login.html';
+            }
+        }
+
+        async function loadAllData() {
+            try {
+                const metrics = await window.AnalyticsEngine.getDashboardMetrics(currentPeriod);
+                displayMetrics(metrics);
+                loadSegmentation();
+                loadProductPerformance();
+                loadConversionFunnel();
+                loadCohortAnalysis();
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
+        }
+
+        function displayMetrics(metrics) {
+            const grid = document.getElementById('metricsGrid');
+            grid.innerHTML = `
+                <div class="metric-card">
+                    <div class="metric-label">Total Revenue</div>
+                    <div class="metric-value">${window.AnalyticsEngine.formatCurrency(metrics.revenue.totalRevenue)}</div>
+                    <div class="metric-change ${metrics.revenue.growth >= 0 ? '' : 'negative'}">${metrics.revenue.growth >= 0 ? '+' : ''}${metrics.revenue.growth}%</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Total Orders</div>
+                    <div class="metric-value">${metrics.orders.totalOrders}</div>
+                    <div class="metric-change ${metrics.orders.growth >= 0 ? '' : 'negative'}">${metrics.orders.growth >= 0 ? '+' : ''}${metrics.orders.growth}%</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Avg Order Value</div>
+                    <div class="metric-value">${window.AnalyticsEngine.formatCurrency(metrics.orders.avgOrderValue)}</div>
+                    <div class="metric-change">Median: ${window.AnalyticsEngine.formatCurrency(metrics.orders.medianOrderValue)}</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">New Customers</div>
+                    <div class="metric-value">${metrics.customers.newCustomers}</div>
+                    <div class="metric-change">Retention: ${metrics.customers.retentionRate}%</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Customer LTV</div>
+                    <div class="metric-value">${window.AnalyticsEngine.formatCurrency(metrics.customers.avgCustomerLifetimeValue)}</div>
+                    <div class="metric-change">Churn: ${metrics.customers.churnRate}%</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Repeat Order Rate</div>
+                    <div class="metric-value">${metrics.orders.repeatOrderRate}%</div>
+                    <div class="metric-change">Frequency: ${metrics.orders.orderFrequency}</div>
+                </div>
+            `;
+        }
+
+        async function loadSegmentation() {
+            try {
+                const data = await window.AnalyticsEngine.getCustomerSegmentation();
+                displaySegmentation(data);
+            } catch (error) {
+                console.error('Error loading segmentation:', error);
+            }
+        }
+
+        function displaySegmentation(data) {
+            const grid = document.getElementById('segmentationGrid');
+            const segments = data.segments;
+            grid.innerHTML = `
+                <div class="segment-card">
+                    <div class="segment-name">👑 VIP</div>
+                    <div class="segment-stat">${segments.vip.count}</div>
+                    <div style="color: #00f0ff; font-size: 0.9em;">Revenue: ${window.AnalyticsEngine.formatCurrency(segments.vip.revenue)}</div>
+                </div>
+                <div class="segment-card">
+                    <div class="segment-name">💎 Loyal</div>
+                    <div class="segment-stat">${segments.loyal.count}</div>
+                    <div style="color: #00f0ff; font-size: 0.9em;">Revenue: ${window.AnalyticsEngine.formatCurrency(segments.loyal.revenue)}</div>
+                </div>
+                <div class="segment-card">
+                    <div class="segment-name">⚠️ At Risk</div>
+                    <div class="segment-stat">${segments.atrisk.count}</div>
+                    <div style="color: #ff0055; font-size: 0.9em;">Revenue: ${window.AnalyticsEngine.formatCurrency(segments.atrisk.revenue)}</div>
+                </div>
+                <div class="segment-card">
+                    <div class="segment-name">😴 Inactive</div>
+                    <div class="segment-stat">${segments.inactive.count}</div>
+                    <div style="color: #808080; font-size: 0.9em;">Revenue: ${window.AnalyticsEngine.formatCurrency(segments.inactive.revenue)}</div>
+                </div>
+                <div class="segment-card">
+                    <div class="segment-name">🆕 New</div>
+                    <div class="segment-stat">${segments.new.count}</div>
+                    <div style="color: #00ff88; font-size: 0.9em;">Revenue: ${window.AnalyticsEngine.formatCurrency(segments.new.revenue)}</div>
+                </div>
+            `;
+        }
+
+        async function loadProductPerformance() {
+            try {
+                const data = await window.AnalyticsEngine.getProductPerformance(10);
+                displayProductPerformance(data);
+            } catch (error) {
+                console.error('Error loading product performance:', error);
+            }
+        }
+
+        function displayProductPerformance(data) {
+            const topTable = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Units Sold</th>
+                            <th>Revenue</th>
+                            <th>Margin</th>
+                            <th>Rating</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${(data.topPerformers || []).map(p => `
+                            <tr>
+                                <td>${p.name}</td>
+                                <td>${p.unitsSold}</td>
+                                <td>${window.AnalyticsEngine.formatCurrency(p.revenue)}</td>
+                                <td>${p.margin}%</td>
+                                <td>${p.rating || 'N/A'}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            document.getElementById('topProductsTable').innerHTML = topTable;
+
+            const underTable = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Units Sold</th>
+                            <th>Revenue</th>
+                            <th>Margin</th>
+                            <th>Trend</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${(data.underperformers || []).map(p => `
+                            <tr>
+                                <td>${p.name}</td>
+                                <td>${p.unitsSold}</td>
+                                <td>${window.AnalyticsEngine.formatCurrency(p.revenue)}</td>
+                                <td>${p.margin}%</td>
+                                <td>${p.trend}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            document.getElementById('underperformersTable').innerHTML = underTable;
+        }
+
+        async function loadConversionFunnel() {
+            try {
+                const data = await window.AnalyticsEngine.getConversionFunnel();
+                displayConversionFunnel(data);
+            } catch (error) {
+                console.error('Error loading conversion funnel:', error);
+            }
+        }
+
+        function displayConversionFunnel(data) {
+            const stages = data.stages;
+            const rates = data.conversionRates;
+            const container = document.getElementById('funnelContainer');
+            
+            container.innerHTML = `
+                <div class="funnel-stage">
+                    <div class="funnel-bar" style="width: 100%;">Visitors: ${stages.visitors}</div>
+                    <div class="funnel-label">100%</div>
+                </div>
+                <div class="funnel-stage">
+                    <div class="funnel-bar" style="width: ${rates.visitorToCart}%;">Added to Cart: ${stages.addedToCart}</div>
+                    <div class="funnel-label">${rates.visitorToCart}%</div>
+                </div>
+                <div class="funnel-stage">
+                    <div class="funnel-bar" style="width: ${rates.cartToCheckout}%;">Checkout: ${stages.initiatedCheckout}</div>
+                    <div class="funnel-label">${rates.cartToCheckout}%</div>
+                </div>
+                <div class="funnel-stage">
+                    <div class="funnel-bar" style="width: ${rates.checkoutToComplete}%;">Completed: ${stages.completed}</div>
+                    <div class="funnel-label">${rates.checkoutToComplete}%</div>
+                </div>
+                <div style="margin-top: 20px; padding: 15px; background: rgba(0, 240, 255, 0.05); border-radius: 5px;">
+                    <div style="color: #00f0ff; margin-bottom: 10px;">Overall Conversion Rate: <strong>${rates.overall}%</strong></div>
+                </div>
+            `;
+        }
+
+        async function loadCohortAnalysis() {
+            try {
+                const data = await window.AnalyticsEngine.getCohortAnalysis('monthly');
+                displayCohortAnalysis(data);
+            } catch (error) {
+                console.error('Error loading cohort analysis:', error);
+            }
+        }
+
+        function displayCohortAnalysis(data) {
+            const table = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cohort</th>
+                            <th>Size</th>
+                            <th>Month 1</th>
+                            <th>Month 2</th>
+                            <th>Month 3</th>
+                            <th>Avg Retention</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${(data.cohorts || []).map(cohort => `
+                            <tr>
+                                <td>${cohort.name}</td>
+                                <td>${cohort.size}</td>
+                                <td>${cohort.month1}%</td>
+                                <td>${cohort.month2}%</td>
+                                <td>${cohort.month3}%</td>
+                                <td>${cohort.avgRetention}%</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            document.getElementById('cohortTable').innerHTML = table;
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function applyFilters() {
+            currentPeriod = document.getElementById('periodFilter').value;
+            loadAllData();
+        }
+
+        function refreshData() {
+            window.AnalyticsEngine.clearCache();
+            loadAllData();
+        }
+
+        function goBack() {
+            window.location.href = 'admin-dashboard-enhanced.html';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAdminAccess();
+            loadAllData();
+        });
+    </script>
+</body>
+</html>

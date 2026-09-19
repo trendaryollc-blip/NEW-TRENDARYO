@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wishlist - Trendaryo | Saved Products</title>
+    <meta name="description" content="View and manage your saved products on Trendaryo. Add items to cart, share your wishlist, and track price drops on your favorite items.">
+    <meta name="keywords" content="wishlist, saved items, favorites, wish list, saved products">
+    <meta name="robots" content="noindex, follow">
+    <link rel="canonical" href="https://trendaryo.com/wishlist.html">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://trendaryo.com/wishlist.html">
+    <meta property="og:title" content="My Wishlist - Trendaryo">
+    <meta property="og:description" content="Your saved products, price drops at a glance, one-tap add to cart.">
+    <meta property="og:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="My Wishlist - Trendaryo">
+    <meta name="twitter:description" content="Your saved products, price drops at a glance, one-tap add to cart.">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon-crown-star.svg">
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="performance.js"></script>
+    <script src="bg.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0a0a0a; --bg-deep: #0a0a2a;
+            --accent: #00f0ff; --accent-2: #ff00aa; --accent-3: #00ff88; --accent-4: #ffd700;
+            --danger: #ff4444;
+            --text: #ffffff; --muted: rgba(255,255,255,0.66); --muted-2: rgba(255,255,255,0.45);
+            --glass: rgba(255,255,255,0.05); --glass-2: rgba(255,255,255,0.03);
+            --glass-border: rgba(255,255,255,0.1); --glass-border-2: rgba(255,255,255,0.18);
+            --card-grad: linear-gradient(168deg, rgba(255,255,255,0.075), rgba(255,255,255,0.02));
+            --shadow-lift: 0 18px 44px rgba(0,0,0,0.48);
+            --glow-cyan: 0 0 26px rgba(0,240,255,0.28);
+            --r-sm: 10px; --r-md: 16px; --r-lg: 22px; --r-pill: 999px;
+            --ease: cubic-bezier(0.22, 1, 0.36, 1);
+            --font-d: 'Orbitron', sans-serif; --font-b: 'Rajdhani', sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-b); background: var(--bg-deep); color: #fff; overflow-x: hidden; }
+        #three-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+        .page-offset { padding-top: 190px; padding-bottom: 3rem; }
+        a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+        .wish-shell { max-width: 1200px; margin: 0 auto; padding: 0 2.5rem; }
+
+        /* ── Hero Deck ── */
+        .wish-hero { position: relative; overflow: hidden; padding: 3rem 1.5rem 2.5rem; margin-bottom: 2rem; border-radius: var(--r-lg); background: var(--card-grad); border: 1px solid var(--glass-border); }
+        .wish-hero-neb { position: absolute; border-radius: 50%; filter: blur(110px); pointer-events: none; z-index: 0; }
+        .wish-hero-neb-1 { width: 360px; height: 360px; top: -140px; left: -100px; background: radial-gradient(circle, rgba(255,0,170,0.2), transparent 70%); }
+        .wish-hero-neb-2 { width: 420px; height: 420px; bottom: -200px; right: -120px; background: radial-gradient(circle, rgba(0,240,255,0.15), transparent 70%); animation: nebDrift 16s ease-in-out infinite alternate; }
+        @keyframes nebDrift { from { transform: scale(1) translateY(0); } to { transform: scale(1.12) translateY(-28px); } }
+        .wish-hero-inner { position: relative; z-index: 1; }
+        .wish-hero-live { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0.85rem; border-radius: var(--r-pill); background: rgba(255,0,170,0.08); border: 1px solid rgba(255,0,170,0.3); font-family: var(--font-d); font-size: 0.6rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-2); }
+        .wish-hero-live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-3); box-shadow: 0 0 10px var(--accent-3); animation: livePulse 2.2s ease-in-out infinite; }
+        @keyframes livePulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.75); } }
+        .wish-hero h1 { font-family: var(--font-d); font-weight: 900; font-size: clamp(1.8rem, 4.5vw, 3.2rem); line-height: 1.05; margin: 0.8rem 0 0.6rem; background: linear-gradient(120deg, #fff 8%, var(--accent-2) 50%, var(--accent) 90%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .wish-hero p { color: var(--muted); font-size: 1.05rem; line-height: 1.65; max-width: 55ch; }
+
+        /* ── Stats Row ── */
+        .wish-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.85rem; margin-bottom: 2rem; }
+        .wish-stat { position: relative; padding: 1.1rem 1.2rem; border-radius: var(--r-md); background: var(--card-grad); border: 1px solid var(--glass-border); overflow: hidden; }
+        .wish-stat::after { content: ''; position: absolute; inset: 0 0 auto 0; height: 2px; background: linear-gradient(90deg, var(--accent), rgba(0,240,255,0)); }
+        .wish-stat:nth-child(2n)::after { background: linear-gradient(90deg, var(--accent-2), rgba(255,0,170,0)); }
+        .wish-stat:nth-child(3n)::after { background: linear-gradient(90deg, var(--accent-3), rgba(0,255,136,0)); }
+        .wish-stat-val { font-family: var(--font-d); font-size: 1.4rem; font-weight: 900; }
+        .wish-stat-lab { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1.4px; color: var(--muted-2); margin-top: 0.15rem; }
+
+        /* ── Toolbar ── */
+        .wish-toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.5rem; padding: 1rem 1.25rem; border-radius: var(--r-md); background: var(--card-grad); border: 1px solid var(--glass-border); }
+        .wish-toolbar-left { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+        .wish-toolbar-right { display: flex; align-items: center; gap: 0.6rem; }
+        .wish-select-info { font-family: var(--font-d); font-size: 0.72rem; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); }
+        .wish-filter-btn, .wish-sort-btn { padding: 0.5rem 1rem; border-radius: var(--r-pill); border: 1px solid var(--glass-border-2); background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.85); font-family: var(--font-d); font-size: 0.66rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.22s ease; }
+        .wish-filter-btn:hover, .wish-sort-btn:hover { border-color: rgba(0,240,255,0.5); color: var(--accent); }
+        .wish-filter-btn.is-on { background: linear-gradient(135deg, rgba(0,240,255,0.18), rgba(255,0,170,0.14)); border-color: var(--accent); color: #fff; }
+        .wish-action-btn { padding: 0.5rem 1rem; border-radius: var(--r-pill); border: none; font-family: var(--font-d); font-size: 0.66rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.22s ease; }
+        .wish-action-btn--add { background: linear-gradient(135deg, var(--accent), var(--accent-3)); color: #00202a; }
+        .wish-action-btn--add:hover { box-shadow: 0 0 18px rgba(0,240,255,0.4); }
+        .wish-action-btn--share { background: linear-gradient(135deg, var(--accent-2), #ff4488); color: #fff; }
+        .wish-action-btn--share:hover { box-shadow: 0 0 18px rgba(255,0,170,0.4); }
+        .wish-action-btn--clear { background: rgba(255,68,68,0.15); border: 1px solid rgba(255,68,68,0.3); color: var(--danger); }
+        .wish-action-btn--clear:hover { background: rgba(255,68,68,0.25); }
+        .wish-action-btn--export { background: rgba(255,215,0,0.12); border: 1px solid rgba(255,215,0,0.3); color: var(--accent-4); }
+        .wish-action-btn--export:hover { background: rgba(255,215,0,0.2); }
+
+        /* ── Grid ── */
+        .wish-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; margin-bottom: 3rem; }
+        .wish-card { position: relative; border-radius: var(--r-lg); background: var(--card-grad); border: 1px solid var(--glass-border); overflow: hidden; transition: transform 0.35s var(--ease), border-color 0.35s ease, box-shadow 0.35s ease; }
+        .wish-card:hover { transform: translateY(-6px); border-color: rgba(0,240,255,0.45); box-shadow: 0 16px 40px rgba(0,0,0,0.4); }
+        .wish-card.is-selected { border-color: var(--accent-2); box-shadow: 0 0 0 2px rgba(255,0,170,0.3); }
+        .wish-card-check { position: absolute; top: 12px; left: 12px; z-index: 3; width: 28px; height: 28px; border-radius: 8px; border: 2px solid rgba(255,255,255,0.3); background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; }
+        .wish-card-check:hover { border-color: var(--accent-2); }
+        .wish-card.is-selected .wish-card-check { background: var(--accent-2); border-color: var(--accent-2); }
+        .wish-card.is-selected .wish-card-check::after { content: '✓'; color: #fff; font-size: 0.8rem; font-weight: 700; }
+        .wish-card-remove { position: absolute; top: 12px; right: 12px; z-index: 3; width: 32px; height: 32px; border-radius: 50%; border: none; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); color: rgba(255,255,255,0.7); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; transition: all 0.25s ease; opacity: 0; }
+        .wish-card:hover .wish-card-remove { opacity: 1; }
+        .wish-card-remove:hover { background: var(--danger); color: #fff; transform: scale(1.1); }
+        .wish-card-media { position: relative; height: 210px; overflow: hidden; background: rgba(0,0,0,0.2); }
+        .wish-card-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .wish-card:hover .wish-card-media img { transform: scale(1.08); }
+        .wish-card-badge { position: absolute; bottom: 10px; left: 10px; padding: 0.3rem 0.7rem; border-radius: var(--r-pill); font-family: var(--font-d); font-size: 0.58rem; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; backdrop-filter: blur(8px); }
+        .wish-card-badge--hot { background: rgba(255,68,68,0.85); color: #fff; }
+        .wish-card-badge--trending { background: rgba(0,240,255,0.85); color: #001a1f; }
+        .wish-card-badge--new { background: rgba(0,255,136,0.85); color: #001a0d; }
+        .wish-card-badge--premium { background: rgba(255,215,0,0.85); color: #1a1400; }
+        .wish-card-drop { position: absolute; top: 10px; right: 10px; padding: 0.25rem 0.6rem; border-radius: var(--r-pill); background: rgba(0,255,136,0.9); color: #001a0d; font-family: var(--font-d); font-size: 0.6rem; font-weight: 800; }
+        .wish-card-body { padding: 1.2rem 1.25rem 1rem; }
+        .wish-card-cat { font-family: var(--font-d); font-size: 0.58rem; letter-spacing: 1.6px; text-transform: uppercase; color: var(--accent); margin-bottom: 0.35rem; }
+        .wish-card-name { font-family: var(--font-d); font-size: 0.95rem; font-weight: 700; line-height: 1.25; margin-bottom: 0.4rem; }
+        .wish-card-name a { color: #fff; text-decoration: none; transition: color 0.2s; }
+        .wish-card-name a:hover { color: var(--accent); }
+        .wish-card-rating { display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.6rem; }
+        .wish-card-stars { display: flex; gap: 1px; color: var(--accent-4); }
+        .wish-card-rating span { font-size: 0.78rem; color: var(--muted); }
+        .wish-card-prices { display: flex; align-items: baseline; gap: 0.6rem; margin-bottom: 0.9rem; }
+        .wish-card-price { font-family: var(--font-d); font-size: 1.2rem; font-weight: 900; color: var(--accent); }
+        .wish-card-old { font-size: 0.85rem; color: var(--muted-2); text-decoration: line-through; }
+        .wish-card-saved { font-size: 0.72rem; color: var(--accent-3); font-weight: 600; }
+        .wish-card-actions { display: flex; gap: 0.5rem; }
+        .wish-card-cart { flex: 1; padding: 0.7rem; border: 0; border-radius: var(--r-sm); background: linear-gradient(135deg, var(--accent), var(--accent-3)); color: #00202a; font-family: var(--font-d); font-size: 0.68rem; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; cursor: pointer; transition: all 0.25s ease; }
+        .wish-card-cart:hover { box-shadow: 0 0 18px rgba(0,240,255,0.4); transform: translateY(-1px); }
+        .wish-card-cart.is-added { background: rgba(0,255,136,0.2); color: var(--accent-3); }
+        .wish-card-view { padding: 0.7rem 1rem; border: 1px solid var(--glass-border-2); border-radius: var(--r-sm); background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.85); font-family: var(--font-d); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; cursor: pointer; text-decoration: none; transition: all 0.22s ease; }
+        .wish-card-view:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* ── Empty State ── */
+        .wish-empty { text-align: center; padding: 5rem 2rem; }
+        .wish-empty-icon { font-size: 4rem; margin-bottom: 1.5rem; opacity: 0.5; }
+        .wish-empty h2 { font-family: var(--font-d); font-size: 1.6rem; font-weight: 900; margin-bottom: 0.7rem; background: linear-gradient(135deg, #fff, var(--accent-2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .wish-empty p { color: var(--muted); font-size: 1rem; max-width: 42ch; margin: 0 auto 2rem; line-height: 1.65; }
+        .wish-empty-cta { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.85rem 1.8rem; border-radius: var(--r-pill); background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #00202a; font-family: var(--font-d); font-size: 0.75rem; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; text-decoration: none; transition: all 0.25s ease; }
+        .wish-empty-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,240,255,0.3); }
+        .wish-empty-suggestions { margin-top: 3rem; }
+        .wish-empty-suggestions h3 { font-family: var(--font-d); font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted-2); margin-bottom: 1.2rem; }
+        .wish-suggest-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; max-width: 900px; margin: 0 auto; }
+
+        /* ── Share Modal ── */
+        .wish-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 10000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(6px); }
+        .wish-modal-overlay.is-open { display: flex; }
+        .wish-modal { position: relative; width: 90%; max-width: 480px; max-height: 85vh; overflow-y: auto; border-radius: var(--r-lg); background: rgba(10,10,42,0.95); border: 1px solid var(--glass-border-2); padding: 2rem; box-shadow: 0 24px 60px rgba(0,0,0,0.6); }
+        .wish-modal-close { position: absolute; top: 1rem; right: 1rem; width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.06); color: var(--muted); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; transition: all 0.2s; }
+        .wish-modal-close:hover { background: rgba(255,68,68,0.2); color: var(--danger); border-color: rgba(255,68,68,0.3); }
+        .wish-modal h2 { font-family: var(--font-d); font-size: 1.3rem; font-weight: 900; margin-bottom: 1.2rem; background: linear-gradient(135deg, #fff, var(--accent)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .wish-share-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 1.5rem; }
+        .wish-share-opt { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; padding: 1rem 0.5rem; border-radius: var(--r-md); border: 1px solid var(--glass-border); background: rgba(255,255,255,0.03); cursor: pointer; transition: all 0.22s ease; text-decoration: none; color: #fff; }
+        .wish-share-opt:hover { background: rgba(0,240,255,0.08); border-color: rgba(0,240,255,0.4); transform: translateY(-2px); }
+        .wish-share-opt-icon { font-size: 1.6rem; }
+        .wish-share-opt-label { font-size: 0.78rem; font-weight: 600; }
+        .wish-share-link { display: flex; gap: 0.5rem; }
+        .wish-share-link input { flex: 1; padding: 0.75rem 1rem; border-radius: var(--r-sm); border: 1px solid var(--glass-border); background: rgba(255,255,255,0.04); color: #fff; font-family: var(--font-b); font-size: 0.9rem; }
+        .wish-share-link button { padding: 0.75rem 1.2rem; border: 0; border-radius: var(--r-sm); background: var(--accent); color: #00202a; font-family: var(--font-d); font-size: 0.7rem; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
+        .wish-share-link button:hover { background: var(--accent-2); color: #fff; }
+
+        /* ── Confirms ── */
+        .wish-confirm { text-align: center; padding: 1.5rem; }
+        .wish-confirm p { margin-bottom: 1.2rem; color: var(--muted); font-size: 1rem; }
+        .wish-confirm-btns { display: flex; gap: 0.75rem; justify-content: center; }
+        .wish-confirm-yes { padding: 0.65rem 1.5rem; border: 0; border-radius: var(--r-pill); background: var(--danger); color: #fff; font-family: var(--font-d); font-size: 0.7rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
+        .wish-confirm-no { padding: 0.65rem 1.5rem; border: 1px solid var(--glass-border-2); border-radius: var(--r-pill); background: transparent; color: rgba(255,255,255,0.8); font-family: var(--font-d); font-size: 0.7rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
+
+        /* ── Note Strip ── */
+        .wish-note { margin-top: 2rem; padding: 1rem 1.25rem; border-radius: var(--r-md); border: 1px dashed rgba(255,215,0,0.35); background: rgba(255,215,0,0.04); color: rgba(255,255,255,0.8); font-size: 0.9rem; line-height: 1.6; }
+        .wish-note a { color: var(--accent); }
+
+        /* ── FAQ ── */
+        .wish-faq { margin: 3rem 0; }
+        .wish-faq h2 { font-family: var(--font-d); font-size: 1.2rem; font-weight: 900; margin-bottom: 1.2rem; background: linear-gradient(135deg, #fff, var(--accent)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* ── Responsive ── */
+        @media (max-width: 900px) {
+            .page-offset { padding-top: 130px; }
+            .wish-shell { padding: 0 1.5rem; }
+            .wish-hero { padding: 2rem 1.25rem 1.75rem; }
+            .wish-toolbar { flex-direction: column; align-items: stretch; }
+            .wish-toolbar-left, .wish-toolbar-right { justify-content: center; }
+            .wish-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+        }
+        @media (max-width: 600px) {
+            .wish-shell { padding: 0 1rem; }
+            .wish-grid { grid-template-columns: 1fr; }
+            .wish-stats { grid-template-columns: repeat(2, 1fr); }
+            .wish-share-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--accent), var(--accent-2)); border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <canvas id="three-canvas"></canvas>
+    <script src="components.js"></script>
+
+    <div id="header-container" data-type="full"></div>
+
+    <main class="page-offset">
+        <div class="wish-shell">
+
+            <!-- HERO -->
+            <section class="wish-hero">
+                <div class="wish-hero-neb wish-hero-neb-1"></div>
+                <div class="wish-hero-neb wish-hero-neb-2"></div>
+                <div class="wish-hero-inner">
+                    <span class="wish-hero-live"><span class="wish-hero-live-dot"></span>Live catalogue</span>
+                    <h1>Your Wishlist</h1>
+                    <p>Every product you saved, with live prices, ratings and stock. Add to cart in one tap or share the list with someone who should know.</p>
+                </div>
+            </section>
+
+            <!-- STATS -->
+            <div class="wish-stats" id="wishStats">
+                <div class="wish-stat"><div class="wish-stat-val" id="wsCount">0</div><div class="wish-stat-lab">Items saved</div></div>
+                <div class="wish-stat"><div class="wish-stat-val" id="wsValue">$0</div><div class="wish-stat-lab">Total value</div></div>
+                <div class="wish-stat"><div class="wish-stat-val" id="wsSaved">$0</div><div class="wish-stat-lab">Potential savings</div></div>
+                <div class="wish-stat"><div class="wish-stat-val" id="wsDrops">0</div><div class="wish-stat-lab">Price drops available</div></div>
+            </div>
+
+            <!-- TOOLBAR -->
+            <div class="wish-toolbar" id="wishToolbar" style="display:none;">
+                <div class="wish-toolbar-left">
+                    <span class="wish-select-info" id="wishSelectInfo"></span>
+                    <button class="wish-filter-btn" data-wfilter="all" type="button">All</button>
+                    <button class="wish-filter-btn" data-wfilter="hot" type="button">Hot</button>
+                    <button class="wish-filter-btn" data-wfilter="trending" type="button">Trending</button>
+                    <button class="wish-filter-btn" data-wfilter="new" type="button">New</button>
+                    <button class="wish-filter-btn" data-wfilter="premium" type="button">Premium</button>
+                </div>
+                <div class="wish-toolbar-right">
+                    <select id="wishSort" class="wish-sort-btn" aria-label="Sort wishlist">
+                        <option value="added">Recently added</option>
+                        <option value="price-low">Price: low to high</option>
+                        <option value="price-high">Price: high to low</option>
+                        <option value="rating">Highest rated</option>
+                        <option value="name">Name A–Z</option>
+                        <option value="savings">Biggest savings</option>
+                    </select>
+                    <button class="wish-action-btn wish-action-btn--add" id="wishAddAll" type="button">Add All to Cart</button>
+                    <button class="wish-action-btn wish-action-btn--share" id="wishShareBtn" type="button">Share</button>
+                    <button class="wish-action-btn wish-action-btn--export" id="wishExportBtn" type="button">Export</button>
+                    <button class="wish-action-btn wish-action-btn--clear" id="wishClearBtn" type="button">Clear All</button>
+                </div>
+            </div>
+
+            <!-- GRID -->
+            <div class="wish-grid" id="wishGrid"></div>
+
+            <!-- EMPTY STATE -->
+            <div class="wish-empty" id="wishEmpty" style="display:none;">
+                <div class="wish-empty-icon">❤️</div>
+                <h2>Your Wishlist is Empty</h2>
+                <p>Tap the heart on any product to save it here. Build a list, compare later, share with friends.</p>
+                <a href="shop.html" class="wish-empty-cta">Browse the Catalogue</a>
+                <div class="wish-empty-suggestions">
+                    <h3>Popular picks to get you started</h3>
+                    <div class="wish-suggest-grid" id="wishSuggest"></div>
+                </div>
+            </div>
+
+            <!-- NOTE -->
+            <div class="wish-note">
+                Your wishlist lives in this browser and updates instantly. <a href="shop.html">The shop</a> has filters, budget bands and side-by-side compare for when you are ready to decide.
+            </div>
+
+            <!-- FAQ -->
+            <section class="wish-faq" id="wishFaq"></section>
+
+            <!-- TRUST -->
+            <div id="wishTrust"></div>
+
+            <!-- CTA -->
+            <div id="wishCta"></div>
+
+        </div>
+    </main>
+
+    <!-- SHARE MODAL -->
+    <div class="wish-modal-overlay" id="wishShareModal">
+        <div class="wish-modal">
+            <button class="wish-modal-close" id="wishShareClose" type="button" aria-label="Close">&times;</button>
+            <h2>Share Your Wishlist</h2>
+            <div class="wish-share-grid" id="wishShareGrid"></div>
+            <div class="wish-share-link">
+                <input type="text" id="wishShareLink" readonly aria-label="Share link">
+                <button type="button" id="wishCopyLink">Copy</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONFIRM MODAL -->
+    <div class="wish-modal-overlay" id="wishConfirmModal">
+        <div class="wish-modal">
+            <button class="wish-modal-close" id="wishConfirmClose" type="button" aria-label="Close">&times;</button>
+            <div class="wish-confirm">
+                <p id="wishConfirmText"></p>
+                <div class="wish-confirm-btns">
+                    <button class="wish-confirm-no" id="wishConfirmNo" type="button">Keep It</button>
+                    <button class="wish-confirm-yes" id="wishConfirmYes" type="button">Clear All</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div id="wishToast" style="position:fixed;top:100px;right:20px;z-index:10001;display:none;padding:1rem 1.5rem;border-radius:10px;font-family:var(--font-d);font-weight:700;font-size:0.85rem;backdrop-filter:blur(20px);box-shadow:0 0 30px rgba(0,240,255,0.2);transition:opacity 0.3s;"></div>
+
+    <script src="products-data.js"></script>
+    <script src="backend-bridge.js"></script>
+    <script src="cart-manager.js"></script>
+    <script src="page-helpers.js"></script>
+    <script>
+    (function () {
+        'use strict';
+        var P = window.TrendaryoProducts;
+        var UI = window.TrendaryoUI;
+        if (!P) return;
+
+        var K_WISH = 'wishlist';
+        var selectedIds = {};
+        var currentFilter = 'all';
+        var currentSort = 'added';
+
+        /* ── Storage ── */
+        function readWish() {
+            try { var r = JSON.parse(localStorage.getItem(K_WISH) || '[]'); return Array.isArray(r) ? r : []; } catch (e) { return []; }
+        }
+        function writeWish(list) {
+            try { localStorage.setItem(K_WISH, JSON.stringify(list)); } catch (e) {}
+            window.dispatchEvent(new CustomEvent('wishlist-updated', { detail: { count: list.length } }));
+        }
+
+        /* ── Enrich with catalogue data ── */
+        function entryId(e) { return String(e && typeof e === 'object' ? e.id : e); }
+        function enrich(item) {
+            var cat = P.find(entryId(item));
+            if (!cat) return null;
+            return {
+                id: cat.id, name: cat.name, price: cat.price, oldPrice: cat.oldPrice || null,
+                emoji: cat.emoji || item.emoji || '', badge: cat.badge || '',
+                rating: cat.rating || 0, reviews: cat.reviews || 0,
+                image: cat.image || '', description: cat.description || '',
+                addedAt: (item && item.addedAt) || null
+            };
+        }
+
+        /* ── Derived data ── */
+        function getEnriched() { return readWish().map(enrich).filter(Boolean); }
+        function totalValue(list) { return list.reduce(function (s, i) { return s + (i.price || 0); }, 0); }
+        function totalSaved(list) { return list.reduce(function (s, i) { return s + ((i.oldPrice || i.price) - i.price); }, 0); }
+        function priceDrops(list) { return list.filter(function (i) { return i.oldPrice && i.oldPrice > i.price; }).length; }
+
+        /* ── Stars ── */
+        function stars(r) {
+            var full = Math.round(Number(r) || 0), out = '';
+            for (var i = 1; i <= 5; i++) {
+                out += '<svg width="12" height="12" viewBox="0 0 24 24" fill="' + (i <= full ? 'currentColor' : 'none') + '" stroke="currentColor" stroke-width="1.5"><path d="m12 17.27 6.18 3.73-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21Z"/></svg>';
+            }
+            return out;
+        }
+
+        /* ── Price format ── */
+        function price(n) { return '$' + Number(n).toFixed(2).replace(/\.00$/, ''); }
+
+        /* ── Days since added ── */
+        function timeAgo(iso) {
+            if (!iso) return '';
+            var diff = Date.now() - new Date(iso).getTime();
+            var days = Math.floor(diff / 86400000);
+            if (days === 0) return 'Added today';
+            if (days === 1) return 'Added yesterday';
+            if (days < 7) return 'Added ' + days + ' days ago';
+            if (days < 30) return 'Added ' + Math.floor(days / 7) + 'w ago';
+            return 'Added ' + Math.floor(days / 30) + 'mo ago';
+        }
+
+        /* ── Filter + Sort ── */
+        function filtered(list) {
+            if (currentFilter !== 'all') list = list.filter(function (i) { return i.badge === currentFilter; });
+            switch (currentSort) {
+                case 'price-low': list.sort(function (a, b) { return a.price - b.price; }); break;
+                case 'price-high': list.sort(function (a, b) { return b.price - a.price; }); break;
+                case 'rating': list.sort(function (a, b) { return (b.rating || 0) - (a.rating || 0); }); break;
+                case 'name': list.sort(function (a, b) { return (a.name || '').localeCompare(b.name || ''); }); break;
+                case 'savings': list.sort(function (a, b) { return ((b.oldPrice || b.price) - b.price) - ((a.oldPrice || a.price) - a.price); }); break;
+                default: list.sort(function (a, b) { return (b.addedAt || '').localeCompare(a.addedAt || ''); });
+            }
+            return list;
+        }
+
+        /* ── In-cart check ── */
+        function inCart(id) {
+            if (typeof CartManager === 'undefined') return false;
+            var cart = CartManager.getCart();
+            for (var i = 0; i < cart.length; i++) { if (String(cart[i].id) === String(id)) return true; }
+            return false;
+        }
+
+        /* ── Toast ── */
+        function toast(msg, type) {
+            var el = document.getElementById('wishToast');
+            if (!el) return;
+            el.textContent = msg;
+            el.style.display = 'block';
+            el.style.background = type === 'error' ? 'rgba(255,68,68,0.15)' : 'rgba(0,240,255,0.12)';
+            el.style.border = '1px solid ' + (type === 'error' ? 'rgba(255,68,68,0.3)' : 'rgba(0,240,255,0.3)');
+            el.style.color = type === 'error' ? '#ff4444' : '#00f0ff';
+            clearTimeout(el._t);
+            el._t = setTimeout(function () { el.style.display = 'none'; }, 2800);
+        }
+
+        /* ── Render ── */
+        function render() {
+            var list = getEnriched();
+            var shown = filtered(list.slice());
+            var grid = document.getElementById('wishGrid');
+            var empty = document.getElementById('wishEmpty');
+            var toolbar = document.getElementById('wishToolbar');
+
+            /* Stats */
+            document.getElementById('wsCount').textContent = list.length;
+            document.getElementById('wsValue').textContent = price(totalValue(list));
+            document.getElementById('wsSaved').textContent = price(totalSaved(list));
+            document.getElementById('wsDrops').textContent = priceDrops(list);
+
+            if (list.length === 0) {
+                if (grid) grid.style.display = 'none';
+                if (toolbar) toolbar.style.display = 'none';
+                if (empty) { empty.style.display = 'block'; renderSuggestions(); }
+                return;
+            }
+            if (grid) grid.style.display = '';
+            if (toolbar) toolbar.style.display = '';
+            if (empty) empty.style.display = 'none';
+
+            if (!grid) return;
+            grid.innerHTML = shown.map(function (item) {
+                var sel = selectedIds[item.id] ? ' is-selected' : '';
+                var drop = item.oldPrice && item.oldPrice > item.price ? '<div class="wish-card-drop">-' + Math.round((1 - item.price / item.oldPrice) * 100) + '%</div>' : '';
+                var badgeCls = item.badge ? ' wish-card-badge--' + item.badge : '';
+                var badge = item.badge ? '<div class="wish-card-badge' + badgeCls + '">' + item.badge.toUpperCase() + '</div>' : '';
+                var oldP = item.oldPrice ? '<span class="wish-card-old">' + price(item.oldPrice) + '</span>' : '';
+                var saved = item.oldPrice && item.oldPrice > item.price ? '<span class="wish-card-saved">Save ' + price(item.oldPrice - item.price) + '</span>' : '';
+                var catObj = P.find(item.id);
+                var catLabel = catObj ? (catObj.category || catObj.badge || '') : '';
+                var added = timeAgo(item.addedAt);
+                var cartBtn = inCart(item.id)
+                    ? '<button class="wish-card-cart is-added" type="button" disabled>In Cart</button>'
+                    : '<button class="wish-card-cart" data-wcart="' + item.id + '" type="button">Add to Cart</button>';
+                var imgSrc = item.image || '';
+                var imgTag = imgSrc
+                    ? '<img src="' + imgSrc + '" alt="' + item.name + '" loading="lazy">'
+                    : '<div style="font-size:3.5rem;display:flex;align-items:center;justify-content:center;height:100%;">' + (item.emoji || '📦') + '</div>';
+
+                return '<div class="wish-card' + sel + '" data-wid="' + item.id + '">' +
+                    '<div class="wish-card-check" data-wsel="' + item.id + '"></div>' +
+                    '<button class="wish-card-remove" data-wrem="' + item.id + '" type="button" aria-label="Remove">&times;</button>' +
+                    '<div class="wish-card-media">' + imgTag + badge + drop + '</div>' +
+                    '<div class="wish-card-body">' +
+                        (catLabel ? '<div class="wish-card-cat">' + catLabel + '</div>' : '') +
+                        '<div class="wish-card-name"><a href="product.html?id=' + item.id + '">' + item.name + '</a></div>' +
+                        '<div class="wish-card-rating"><div class="wish-card-stars">' + stars(item.rating) + '</div><span>' + item.rating + ' (' + (item.reviews || 0) + ')</span></div>' +
+                        '<div class="wish-card-prices"><span class="wish-card-price">' + price(item.price) + '</span>' + oldP + saved + '</div>' +
+                        '<div style="font-size:0.72rem;color:var(--muted-2);margin-bottom:0.7rem;">' + added + '</div>' +
+                        '<div class="wish-card-actions">' + cartBtn +
+                            '<a href="product.html?id=' + item.id + '" class="wish-card-view">View</a>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+            }).join('');
+
+            updateSelectInfo();
+            bindCards();
+        }
+
+        /* ── Suggestions for empty state ── */
+        function renderSuggestions() {
+            var el = document.getElementById('wishSuggest');
+            if (!el) return;
+            var featured = P.featured(4);
+            if (UI && UI.productMini) {
+                el.innerHTML = featured.map(function (p) { return UI.productMini(p); }).join('');
+                UI.bindMiniCards(el);
+            }
+        }
+
+        /* ── Bind card events ── */
+        function bindCards() {
+            var grid = document.getElementById('wishGrid');
+            if (!grid) return;
+
+            grid.querySelectorAll('[data-wrem]').forEach(function (btn) {
+                btn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    var id = this.getAttribute('data-wrem');
+                    var list = readWish().filter(function (i) { return entryId(i) !== String(id); });
+                    writeWish(list);
+                    delete selectedIds[id];
+                    toast('Removed from wishlist');
+                    render();
+                });
+            });
+
+            grid.querySelectorAll('[data-wsel]').forEach(function (btn) {
+                btn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    var id = this.getAttribute('data-wsel');
+                    if (selectedIds[id]) { delete selectedIds[id]; } else { selectedIds[id] = true; }
+                    var card = btn.closest('.wish-card');
+                    if (card) card.classList.toggle('is-selected', !!selectedIds[id]);
+                    updateSelectInfo();
+                });
+            });
+
+            grid.querySelectorAll('[data-wcart]').forEach(function (btn) {
+                btn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    var id = this.getAttribute('data-wcart');
+                    var p = P.find(id);
+                    if (!p) return;
+                    if (typeof CartManager !== 'undefined') {
+                        CartManager.addItem(p.id, 1, { id: p.id, name: p.name, price: p.price, image: p.image || '', emoji: p.emoji || '' });
+                    }
+                    this.textContent = '✓ Added';
+                    this.classList.add('is-added');
+                    this.disabled = true;
+                    toast(p.name + ' added to cart');
+                });
+            });
+        }
+
+        function updateSelectInfo() {
+            var count = Object.keys(selectedIds).length;
+            var el = document.getElementById('wishSelectInfo');
+            if (el) el.textContent = count > 0 ? count + ' selected' : '';
+        }
+
+        /* ── Toolbar bindings ── */
+        document.querySelectorAll('[data-wfilter]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                currentFilter = this.getAttribute('data-wfilter');
+                document.querySelectorAll('[data-wfilter]').forEach(function (b) { b.classList.toggle('is-on', b.getAttribute('data-wfilter') === currentFilter); });
+                render();
+            });
+        });
+
+        var sortEl = document.getElementById('wishSort');
+        if (sortEl) sortEl.addEventListener('change', function () { currentSort = this.value; render(); });
+
+        var addAllBtn = document.getElementById('wishAddAll');
+        if (addAllBtn) addAllBtn.addEventListener('click', function () {
+            var list = getEnriched();
+            var added = 0;
+            list.forEach(function (item) {
+                if (!inCart(item.id) && typeof CartManager !== 'undefined') {
+                    CartManager.addItem(item.id, 1, { id: item.id, name: item.name, price: item.price, image: item.image || '', emoji: item.emoji || '' });
+                    added++;
+                }
+            });
+            toast(added > 0 ? added + ' items added to cart' : 'All items already in cart');
+            render();
+        });
+
+        var clearBtn = document.getElementById('wishClearBtn');
+        if (clearBtn) clearBtn.addEventListener('click', function () {
+            var modal = document.getElementById('wishConfirmModal');
+            var txt = document.getElementById('wishConfirmText');
+            if (txt) txt.textContent = 'Remove all ' + getEnriched().length + ' items from your wishlist?';
+            if (modal) modal.classList.add('is-open');
+        });
+
+        var confirmYes = document.getElementById('wishConfirmYes');
+        if (confirmYes) confirmYes.addEventListener('click', function () {
+            writeWish([]);
+            selectedIds = {};
+            document.getElementById('wishConfirmModal').classList.remove('is-open');
+            toast('Wishlist cleared');
+            render();
+        });
+
+        var confirmNo = document.getElementById('wishConfirmNo');
+        if (confirmNo) confirmNo.addEventListener('click', function () {
+            document.getElementById('wishConfirmModal').classList.remove('is-open');
+        });
+
+        var confirmClose = document.getElementById('wishConfirmClose');
+        if (confirmClose) confirmClose.addEventListener('click', function () {
+            document.getElementById('wishConfirmModal').classList.remove('is-open');
+        });
+
+        /* ── Export ── */
+        var exportBtn = document.getElementById('wishExportBtn');
+        if (exportBtn) exportBtn.addEventListener('click', function () {
+            var list = getEnriched();
+            var data = list.map(function (i) { return { id: i.id, name: i.name, price: i.price, rating: i.rating }; });
+            var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            var a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'wishlist_' + new Date().toISOString().split('T')[0] + '.json';
+            a.click();
+            toast('Wishlist exported');
+        });
+
+        /* ── Share ── */
+        var shareBtn = document.getElementById('wishShareBtn');
+        if (shareBtn) shareBtn.addEventListener('click', function () {
+            var modal = document.getElementById('wishShareModal');
+            if (modal) modal.classList.add('is-open');
+            var linkInput = document.getElementById('wishShareLink');
+            if (linkInput) linkInput.value = window.location.href;
+            renderShareGrid();
+        });
+
+        var shareClose = document.getElementById('wishShareClose');
+        if (shareClose) shareClose.addEventListener('click', function () {
+            document.getElementById('wishShareModal').classList.remove('is-open');
+        });
+
+        var copyBtn = document.getElementById('wishCopyLink');
+        if (copyBtn) copyBtn.addEventListener('click', function () {
+            var input = document.getElementById('wishShareLink');
+            if (input) { input.select(); document.execCommand('copy'); toast('Link copied!'); }
+        });
+
+        function renderShareGrid() {
+            var grid = document.getElementById('wishShareGrid');
+            if (!grid) return;
+            var url = encodeURIComponent(window.location.href);
+            var text = encodeURIComponent('Check out my Trendaryo wishlist!');
+            var opts = [
+                { icon: '📘', label: 'Facebook', href: 'https://www.facebook.com/sharer/sharer.php?u=' + url },
+                { icon: '🐦', label: 'Twitter', href: 'https://twitter.com/intent/tweet?url=' + url + '&text=' + text },
+                { icon: '💬', label: 'WhatsApp', href: 'https://wa.me/?text=' + text + '%20' + url },
+                { icon: '📧', label: 'Email', href: 'mailto:?subject=My Trendaryo Wishlist&body=' + text + '%20' + url },
+                { icon: '🔗', label: 'Copy Link', href: '#' }
+            ];
+            grid.innerHTML = opts.map(function (o) {
+                return '<a class="wish-share-opt" href="' + o.href + '" target="_blank" rel="noopener">' +
+                    '<div class="wish-share-opt-icon">' + o.icon + '</div>' +
+                    '<div class="wish-share-opt-label">' + o.label + '</div></a>';
+            }).join('');
+        }
+
+        /* ── FAQ ── */
+        if (UI && UI.faq) {
+            var faqEl = document.getElementById('wishFaq');
+            if (faqEl) {
+                faqEl.innerHTML = '<h2>Frequently Asked Questions</h2>' + UI.faq([
+                    { q: 'Where does my wishlist live?', a: 'In your browser. The list is stored in localStorage and updates instantly. No account needed.' },
+                    { q: 'Can I share my wishlist?', a: 'Yes. Tap Share to get a link or send it via Facebook, Twitter, WhatsApp or email. The recipient sees your saved items on the Trendaryo site.' },
+                    { q: 'What happens if a price drops?', a: 'The wishlist shows the current live price from the catalogue. If a product you saved is cheaper now, the card shows the old price, the new price and how much you save.' },
+                    { q: 'Can I export my wishlist?', a: 'Yes. Tap Export to download a JSON file with every item\'s name, price and rating. You can import it later or share it outside the site.' },
+                    { q: 'Does clearing the wishlist affect my cart?', a: 'No. The wishlist and the cart are separate. Removing an item from the wishlist does not touch the cart, and vice versa.' }
+                ], true);
+            }
+        }
+
+        /* ── Trust + CTA ── */
+        var trustEl = document.getElementById('wishTrust');
+        if (trustEl && UI && UI.trustStrip) trustEl.innerHTML = UI.trustStrip();
+        var ctaEl = document.getElementById('wishCta');
+        if (ctaEl && UI && UI.ctaBand) ctaEl.innerHTML = UI.ctaBand({
+            title: 'Ready to decide?',
+            text: 'Compare specs, read reviews, and check live prices on the full catalogue.',
+            cta: 'Open the Shop',
+            href: 'shop.html'
+        });
+
+        /* ── Init ── */
+        render();
+        document.querySelectorAll('[data-wfilter]').forEach(function (b) { b.classList.toggle('is-on', b.getAttribute('data-wfilter') === 'all'); });
+    })();
+    </script>
+    <script>
+        function hidePreloader() { var p = document.getElementById('preloader'); if (p) p.classList.add('hidden'); }
+        if (document.readyState === 'complete') { setTimeout(hidePreloader, 600); }
+        else { window.addEventListener('load', function () { setTimeout(hidePreloader, 600); }); }
+        setTimeout(hidePreloader, 1500);
+    </script>
+</body>
+</html>

@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shipping Information - Trendaryo | Fast & Free Delivery</title>
+    <meta name="description" content="Free shipping on orders over $50. Fast delivery worldwide with real-time tracking. Learn about standard, express and overnight shipping options.">
+    <meta name="keywords" content="shipping, delivery, free shipping, tracking, express shipping, international shipping">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://trendaryo.com/shipping.html">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://trendaryo.com/shipping.html">
+    <meta property="og:title" content="Shipping Information - Trendaryo">
+    <meta property="og:description" content="Free shipping over $50, express options, real-time tracking.">
+    <meta property="og:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Shipping Information - Trendaryo">
+    <meta name="twitter:description" content="Free shipping over $50, express options, real-time tracking.">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon-crown-star.svg">
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="performance.js"></script>
+    <script src="bg.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0a0a0a; --bg-deep: #0a0a2a;
+            --accent: #00f0ff; --accent-2: #ff00aa; --accent-3: #00ff88; --accent-4: #ffd700;
+            --danger: #ff4444;
+            --text: #ffffff; --muted: rgba(255,255,255,0.66); --muted-2: rgba(255,255,255,0.45);
+            --glass: rgba(255,255,255,0.05); --glass-2: rgba(255,255,255,0.03);
+            --glass-border: rgba(255,255,255,0.1); --glass-border-2: rgba(255,255,255,0.18);
+            --card-grad: linear-gradient(168deg, rgba(255,255,255,0.075), rgba(255,255,255,0.02));
+            --r-sm: 10px; --r-md: 16px; --r-lg: 22px; --r-pill: 999px;
+            --ease: cubic-bezier(0.22, 1, 0.36, 1);
+            --font-d: 'Orbitron', sans-serif; --font-b: 'Rajdhani', sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-b); background: var(--bg-deep); color: #fff; overflow-x: hidden; }
+        #three-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+        .page-offset { padding-top: 190px; padding-bottom: 3rem; }
+        a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+        .ship-shell { max-width: 1100px; margin: 0 auto; padding: 0 2.5rem; }
+
+        /* -- Hero -- */
+        .ship-hero { position: relative; overflow: hidden; padding: 3rem 1.5rem 2.5rem; margin-bottom: 2.5rem; border-radius: var(--r-lg); background: var(--card-grad); border: 1px solid var(--glass-border); text-align: center; }
+        .ship-hero-neb { position: absolute; border-radius: 50%; filter: blur(110px); pointer-events: none; z-index: 0; }
+        .ship-hero-neb-1 { width: 360px; height: 360px; top: -140px; left: -100px; background: radial-gradient(circle, rgba(0,240,255,0.2), transparent 70%); }
+        .ship-hero-neb-2 { width: 420px; height: 420px; bottom: -200px; right: -120px; background: radial-gradient(circle, rgba(0,255,136,0.15), transparent 70%); animation: nebDrift 16s ease-in-out infinite alternate; }
+        @keyframes nebDrift { from { transform: scale(1) translateY(0); } to { transform: scale(1.12) translateY(-28px); } }
+        .ship-hero-inner { position: relative; z-index: 1; }
+        .ship-hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.9rem; border-radius: var(--r-pill); background: rgba(0,255,136,0.08); border: 1px solid rgba(0,255,136,0.3); font-family: var(--font-d); font-size: 0.6rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-3); margin-bottom: 0.8rem; }
+        .ship-hero h1 { font-family: var(--font-d); font-weight: 900; font-size: clamp(1.8rem, 4.5vw, 3.2rem); line-height: 1.05; margin: 0.6rem 0; background: linear-gradient(120deg, #fff 8%, var(--accent) 50%, var(--accent-3) 90%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .ship-hero p { color: var(--muted); font-size: 1.05rem; line-height: 1.65; max-width: 55ch; margin: 0 auto; }
+
+        /* -- Stats -- */
+        .ship-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.85rem; margin-bottom: 2.5rem; }
+        .ship-stat { position: relative; padding: 1.1rem 1.2rem; border-radius: var(--r-md); background: var(--card-grad); border: 1px solid var(--glass-border); overflow: hidden; text-align: center; }
+        .ship-stat::after { content: ''; position: absolute; inset: 0 0 auto 0; height: 2px; background: linear-gradient(90deg, var(--accent), rgba(0,240,255,0)); }
+        .ship-stat:nth-child(2n)::after { background: linear-gradient(90deg, var(--accent-2), rgba(255,0,170,0)); }
+        .ship-stat:nth-child(3n)::after { background: linear-gradient(90deg, var(--accent-3), rgba(0,255,136,0)); }
+        .ship-stat-val { font-family: var(--font-d); font-size: 1.4rem; font-weight: 900; }
+        .ship-stat-lab { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1.4px; color: var(--muted-2); margin-top: 0.15rem; }
+
+        /* -- Section Heads -- */
+        .ship-section { margin: 3rem 0; }
+        .ship-section-head { margin-bottom: 1.5rem; }
+        .ship-kicker { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--font-d); font-size: 0.62rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 0.4rem; }
+        .ship-kicker::before { content: ''; width: 20px; height: 1px; background: linear-gradient(90deg, transparent, var(--accent)); }
+        .ship-title { font-family: var(--font-d); font-size: clamp(1.2rem, 2.5vw, 1.7rem); font-weight: 900; background: linear-gradient(135deg, #fff 15%, var(--accent) 60%, var(--accent-2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .ship-sub { color: var(--muted); font-size: 0.97rem; line-height: 1.6; margin-top: 0.4rem; max-width: 60ch; }
+
+        /* -- Options Grid -- */
+        .ship-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
+        .ship-opt { position: relative; padding: 2rem 1.5rem; border-radius: var(--r-lg); background: var(--card-grad); border: 1px solid var(--glass-border); overflow: hidden; transition: transform 0.35s var(--ease), border-color 0.35s ease, box-shadow 0.35s ease; }
+        .ship-opt:hover { transform: translateY(-5px); border-color: rgba(0,240,255,0.4); box-shadow: 0 16px 40px rgba(0,0,0,0.35); }
+        .ship-opt-icon { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1rem; border: 2px solid var(--accent); background: linear-gradient(135deg, rgba(0,240,255,0.15), rgba(255,0,170,0.15)); }
+        .ship-opt-name { font-family: var(--font-d); font-size: 1.05rem; font-weight: 800; color: var(--accent); margin-bottom: 0.3rem; }
+        .ship-opt-price { font-family: var(--font-d); font-size: 1.8rem; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.2rem; }
+        .ship-opt-time { color: var(--muted); font-size: 0.95rem; margin-bottom: 1rem; }
+        .ship-opt-list { list-style: none; }
+        .ship-opt-list li { padding: 0.4rem 0; color: rgba(255,255,255,0.8); font-size: 0.92rem; position: relative; padding-left: 1.3rem; }
+        .ship-opt-list li::before { content: '?'; position: absolute; left: 0; color: var(--accent-3); font-weight: 700; }
+        .ship-opt-popular { position: absolute; top: 14px; right: 14px; padding: 0.25rem 0.6rem; border-radius: var(--r-pill); background: rgba(0,240,255,0.15); border: 1px solid rgba(0,240,255,0.3); font-family: var(--font-d); font-size: 0.55rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); }
+
+        /* -- Calculator -- */
+        .ship-calc { padding: 2rem; border-radius: var(--r-lg); background: var(--card-grad); border: 1px solid var(--glass-border); }
+        .ship-calc-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+        .ship-calc-group { display: flex; flex-direction: column; gap: 0.4rem; }
+        .ship-calc-label { font-family: var(--font-d); font-size: 0.62rem; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--muted-2); }
+        .ship-calc-input, .ship-calc-select { padding: 0.75rem 0.9rem; border-radius: var(--r-md); border: 1px solid var(--glass-border-2); background: rgba(255,255,255,0.05); color: #fff; font-family: var(--font-b); font-size: 0.95rem; outline: none; transition: border-color 0.25s, box-shadow 0.25s; }
+        .ship-calc-input:focus, .ship-calc-select:focus { border-color: rgba(0,240,255,0.6); box-shadow: 0 0 18px rgba(0,240,255,0.12); }
+        .ship-calc-input::placeholder { color: var(--muted-2); }
+        .ship-calc-select option { background: #0a0a2a; color: #fff; }
+        .ship-calc-methods { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.2rem; }
+        .ship-calc-radio { display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem 1rem; border-radius: var(--r-md); border: 1px solid transparent; background: rgba(0,0,0,0.2); cursor: pointer; transition: all 0.22s ease; }
+        .ship-calc-radio:hover { background: rgba(0,240,255,0.04); border-color: rgba(0,240,255,0.15); }
+        .ship-calc-radio input[type="radio"] { accent-color: var(--accent); width: 16px; height: 16px; }
+        .ship-calc-radio-text { flex: 1; }
+        .ship-calc-radio-title { font-weight: 700; font-size: 0.92rem; }
+        .ship-calc-radio-sub { font-size: 0.8rem; color: var(--muted-2); }
+        .ship-calc-radio-price { font-family: var(--font-d); font-weight: 800; color: var(--accent); font-size: 0.85rem; }
+        .ship-calc-btn { width: 100%; padding: 0.85rem; border: 0; border-radius: var(--r-md); background: linear-gradient(135deg, var(--accent), var(--accent-3)); color: #00202a; font-family: var(--font-d); font-size: 0.72rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.25s ease; }
+        .ship-calc-btn:hover { box-shadow: 0 0 20px rgba(0,240,255,0.4); transform: translateY(-1px); }
+        .ship-calc-result { margin-top: 1.2rem; padding: 1.25rem; border-radius: var(--r-md); background: rgba(0,240,255,0.06); border: 1px solid rgba(0,240,255,0.2); display: none; }
+        .ship-calc-result.is-open { display: block; }
+        .ship-calc-result-row { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.92rem; }
+        .ship-calc-result-row:last-child { border-bottom: none; }
+        .ship-calc-result-label { color: var(--muted); }
+        .ship-calc-result-val { font-weight: 700; }
+        .ship-calc-result-val--accent { color: var(--accent); }
+        .ship-calc-result-val--green { color: var(--accent-3); }
+        .ship-calc-result-total { margin-top: 0.5rem; padding: 0.7rem 1rem; border-radius: var(--r-sm); background: rgba(0,255,136,0.1); display: flex; justify-content: space-between; font-weight: 700; }
+
+        /* -- Info Cards -- */
+        .ship-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem; }
+        .ship-info-card { padding: 1.75rem; border-radius: var(--r-lg); background: var(--card-grad); border: 1px solid var(--glass-border); transition: transform 0.25s var(--ease), border-color 0.25s; }
+        .ship-info-card:hover { transform: translateY(-3px); border-color: rgba(0,240,255,0.3); }
+        .ship-info-card h3 { font-family: var(--font-d); font-size: 0.85rem; font-weight: 800; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem; }
+        .ship-info-card h3 span { font-size: 1.2rem; }
+        .ship-info-card p, .ship-info-card li { color: var(--muted); font-size: 0.92rem; line-height: 1.65; }
+        .ship-info-card ul { list-style: none; }
+        .ship-info-card li { padding: 0.35rem 0; position: relative; padding-left: 1.2rem; }
+        .ship-info-card li::before { content: '?'; position: absolute; left: 0; color: var(--accent); }
+        .ship-info-card a { color: var(--accent); }
+
+        /* -- Zones Table -- */
+        .ship-zones { overflow-x: auto; border-radius: var(--r-lg); border: 1px solid var(--glass-border); background: var(--card-grad); }
+        .ship-zones table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        .ship-zones th, .ship-zones td { padding: 0.8rem 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; }
+        .ship-zones th { background: rgba(255,255,255,0.04); font-family: var(--font-d); font-size: 0.65rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted-2); }
+        .ship-zones tr:hover td { background: rgba(0,240,255,0.02); }
+        .ship-zones .free { color: var(--accent-3); font-weight: 700; }
+
+        /* -- Help Grid -- */
+        .ship-help-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+        .ship-help-card { padding: 1.25rem; border-radius: var(--r-md); background: var(--card-grad); border: 1px solid var(--glass-border); }
+        .ship-help-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .ship-help-card h3 { font-family: var(--font-d); font-size: 0.78rem; font-weight: 800; margin-bottom: 0.35rem; }
+        .ship-help-card p { font-size: 0.88rem; color: var(--muted); line-height: 1.55; }
+        .ship-help-card a { color: var(--accent); text-decoration: none; }
+        .ship-help-card a:hover { text-decoration: underline; }
+
+        /* -- FAQ -- */
+        .ship-faq { margin: 3rem 0; }
+        .ship-faq h2 { font-family: var(--font-d); font-size: 1.1rem; font-weight: 900; margin-bottom: 1.2rem; background: linear-gradient(135deg, #fff, var(--accent)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* -- Note -- */
+        .ship-note { margin-top: 2rem; padding: 1rem 1.25rem; border-radius: var(--r-md); border: 1px dashed rgba(0,240,255,0.3); background: rgba(0,240,255,0.03); color: rgba(255,255,255,0.8); font-size: 0.9rem; line-height: 1.6; }
+        .ship-note a { color: var(--accent); }
+
+        /* -- Responsive -- */
+        @media (max-width: 900px) {
+            .page-offset { padding-top: 130px; }
+            .ship-shell { padding: 0 1.5rem; }
+            .ship-hero { padding: 2rem 1.25rem 1.75rem; }
+            .ship-calc-row { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 600px) {
+            .ship-shell { padding: 0 1rem; }
+            .ship-stats { grid-template-columns: repeat(2, 1fr); }
+            .ship-options { grid-template-columns: 1fr; }
+        }
+        @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--accent), var(--accent-2)); border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <canvas id="three-canvas"></canvas>
+    <script src="components.js"></script>
+
+    <main class="page-offset">
+        <div class="ship-shell">
+
+            <!-- HERO -->
+            <section class="ship-hero">
+                <div class="ship-hero-neb ship-hero-neb-1"></div>
+                <div class="ship-hero-neb ship-hero-neb-2"></div>
+                <div class="ship-hero-inner">
+                    <div class="ship-hero-badge">?? Free shipping on orders over $50</div>
+                    <h1>Fast & Reliable Delivery</h1>
+                    <p>Shop with confidence. Every order ships with tracking, insurance and a delivery estimate you can count on.</p>
+                </div>
+            </section>
+
+            <!-- STATS -->
+            <div class="ship-stats">
+                <div class="ship-stat"><div class="ship-stat-val">$0</div><div class="ship-stat-lab">Standard over $50</div></div>
+                <div class="ship-stat"><div class="ship-stat-val">2–3 days</div><div class="ship-stat-lab">Express delivery</div></div>
+                <div class="ship-stat"><div class="ship-stat-val">50+</div><div class="ship-stat-lab">Countries served</div></div>
+                <div class="ship-stat"><div class="ship-stat-val">24h</div><div class="ship-stat-lab">Same-day dispatch</div></div>
+            </div>
+
+            <!-- SHIPPING OPTIONS -->
+            <section class="ship-section">
+                <div class="ship-section-head">
+                    <div class="ship-kicker">Choose your speed</div>
+                    <h2 class="ship-title">Shipping Options</h2>
+                    <p class="ship-sub">Pick the delivery window that fits your schedule. All options include tracking and insurance.</p>
+                </div>
+                <div class="ship-options">
+                    <div class="ship-opt">
+                        <div class="ship-opt-icon">??</div>
+                        <div class="ship-opt-name">Standard</div>
+                        <div class="ship-opt-price">FREE</div>
+                        <div class="ship-opt-time">5–7 business days</div>
+                        <ul class="ship-opt-list">
+                            <li>Free on orders over $50</li>
+                            <li>Tracking included</li>
+                            <li>Full insurance coverage</li>
+                            <li>Dispatch within 24 hours</li>
+                        </ul>
+                    </div>
+                    <div class="ship-opt" style="border-color:rgba(0,240,255,0.3);">
+                        <span class="ship-opt-popular">Most popular</span>
+                        <div class="ship-opt-icon">?</div>
+                        <div class="ship-opt-name">Express</div>
+                        <div class="ship-opt-price">$14.99</div>
+                        <div class="ship-opt-time">2–3 business days</div>
+                        <ul class="ship-opt-list">
+                            <li>Priority processing</li>
+                            <li>Real-time tracking updates</li>
+                            <li>Full insurance coverage</li>
+                            <li>Same-day dispatch before 3 PM</li>
+                        </ul>
+                    </div>
+                    <div class="ship-opt">
+                        <div class="ship-opt-icon">??</div>
+                        <div class="ship-opt-name">Overnight</div>
+                        <div class="ship-opt-price">$29.99</div>
+                        <div class="ship-opt-time">Next business day</div>
+                        <ul class="ship-opt-list">
+                            <li>Same-day dispatch guaranteed</li>
+                            <li>Live tracking with SMS alerts</li>
+                            <li>Premium insurance included</li>
+                            <li>Signature on delivery</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CALCULATOR -->
+            <section class="ship-section">
+                <div class="ship-section-head">
+                    <div class="ship-kicker">Get a quote</div>
+                    <h2 class="ship-title">Shipping Calculator</h2>
+                    <p class="ship-sub">Enter your location and order value for an instant estimate.</p>
+                </div>
+                <div class="ship-calc">
+                    <div class="ship-calc-row">
+                        <div class="ship-calc-group">
+                            <label class="ship-calc-label" for="shipCountry">Country</label>
+                            <select id="shipCountry" class="ship-calc-select">
+                                <option value="US">United States</option>
+                                <option value="CA">Canada</option>
+                                <option value="UK">United Kingdom</option>
+                                <option value="AU">Australia</option>
+                                <option value="DE">Germany</option>
+                                <option value="FR">France</option>
+                                <option value="JP">Japan</option>
+                                <option value="AE">United Arab Emirates</option>
+                                <option value="SA">Saudi Arabia</option>
+                                <option value="OM">Oman</option>
+                                <option value="OTHER">Other</option>
+                            </select>
+                        </div>
+                        <div class="ship-calc-group">
+                            <label class="ship-calc-label" for="shipValue">Order Value ($)</label>
+                            <input type="number" id="shipValue" class="ship-calc-input" placeholder="0.00" min="0" step="0.01">
+                        </div>
+                    </div>
+                    <label class="ship-calc-label" style="margin-bottom:0.6rem;display:block;">Shipping Method</label>
+                    <div class="ship-calc-methods">
+                        <label class="ship-calc-radio"><input type="radio" name="shipMethod" value="standard" checked><div class="ship-calc-radio-text"><div class="ship-calc-radio-title">Standard Shipping</div><div class="ship-calc-radio-sub">5–7 business days</div></div><div class="ship-calc-radio-price">FREE*</div></label>
+                        <label class="ship-calc-radio"><input type="radio" name="shipMethod" value="express"><div class="ship-calc-radio-text"><div class="ship-calc-radio-title">Express Shipping</div><div class="ship-calc-radio-sub">2–3 business days</div></div><div class="ship-calc-radio-price">$14.99</div></label>
+                        <label class="ship-calc-radio"><input type="radio" name="shipMethod" value="overnight"><div class="ship-calc-radio-text"><div class="ship-calc-radio-title">Overnight Shipping</div><div class="ship-calc-radio-sub">Next business day</div></div><div class="ship-calc-radio-price">$29.99</div></label>
+                    </div>
+                    <button type="button" class="ship-calc-btn" id="shipCalcBtn">Calculate Shipping</button>
+                    <div class="ship-calc-result" id="shipCalcResult"></div>
+                </div>
+            </section>
+
+            <!-- ZONES TABLE -->
+            <section class="ship-section">
+                <div class="ship-section-head">
+                    <div class="ship-kicker">By region</div>
+                    <h2 class="ship-title">Shipping Zones & Rates</h2>
+                    <p class="ship-sub">Standard shipping costs by region. Express and overnight are flat-rate add-ons.</p>
+                </div>
+                <div class="ship-zones">
+                    <table>
+                        <thead><tr><th>Region</th><th>Countries</th><th>Standard</th><th>Express</th><th>Overnight</th></tr></thead>
+                        <tbody>
+                            <tr><td>Domestic</td><td>United States</td><td class="free">Free over $50</td><td>$14.99</td><td>$29.99</td></tr>
+                            <tr><td>North America</td><td>Canada, Mexico</td><td>$9.99</td><td>$24.99</td><td>$49.99</td></tr>
+                            <tr><td>Europe</td><td>UK, Germany, France, Spain, Italy…</td><td>$14.99</td><td>$34.99</td><td>$59.99</td></tr>
+                            <tr><td>Middle East</td><td>UAE, Saudi Arabia, Oman, Qatar…</td><td>$12.99</td><td>$29.99</td><td>$54.99</td></tr>
+                            <tr><td>Asia-Pacific</td><td>Japan, Australia, Singapore, India…</td><td>$14.99</td><td>$34.99</td><td>$59.99</td></tr>
+                            <tr><td>Rest of World</td><td>50+ other countries</td><td>$19.99</td><td>$39.99</td><td>Quote on request</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- INFO CARDS -->
+            <section class="ship-section">
+                <div class="ship-section-head">
+                    <div class="ship-kicker">Know before you order</div>
+                    <h2 class="ship-title">Shipping Policies</h2>
+                </div>
+                <div class="ship-info-grid">
+                    <div class="ship-info-card">
+                        <h3><span>??</span> International Shipping</h3>
+                        <p>We ship to over 50 countries worldwide. International orders may be subject to customs duties and taxes, which are the buyer's responsibility. Tracking is available for every international shipment.</p>
+                    </div>
+                    <div class="ship-info-card">
+                        <h3><span>??</span> Dispatch Times</h3>
+                        <ul>
+                            <li>Orders placed before 3 PM ship same day</li>
+                            <li>Orders after 3 PM ship next business day</li>
+                            <li>Weekend orders ship Monday</li>
+                            <li>Express and overnight get priority packing</li>
+                        </ul>
+                    </div>
+                    <div class="ship-info-card">
+                        <h3><span>??</span> Insurance & Signature</h3>
+                        <ul>
+                            <li>Every shipment is insured at no extra cost</li>
+                            <li>Orders over $200 require signature on delivery</li>
+                            <li>Lost or damaged? We reship or refund within 48 hours</li>
+                        </ul>
+                    </div>
+                    <div class="ship-info-card">
+                        <h3><span>??</span> Real-Time Tracking</h3>
+                        <p>You get a tracking number the moment your order ships. Use it on our <a href="track-order.html">Track Order page</a> or directly on the carrier's site for live updates.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- HOW IT WORKS -->
+            <section class="ship-section" id="shipHow"></section>
+
+            <!-- HELP -->
+            <section class="ship-section">
+                <div class="ship-section-head">
+                    <div class="ship-kicker">Common questions</div>
+                    <h2 class="ship-title">Need Help?</h2>
+                </div>
+                <div class="ship-help-grid">
+                    <div class="ship-help-card">
+                        <div class="ship-help-icon">??</div>
+                        <h3>Where is my order?</h3>
+                        <p>Use the <a href="track-order.html">Track Order page</a> with your order number for real-time status updates.</p>
+                    </div>
+                    <div class="ship-help-card">
+                        <div class="ship-help-icon">??</div>
+                        <h3>Need to return?</h3>
+                        <p>You have 30 days from delivery. Start from the <a href="orders.html">Orders page</a> or read the <a href="returns.html">return policy</a>.</p>
+                    </div>
+                    <div class="ship-help-card">
+                        <div class="ship-help-icon">??</div>
+                        <h3>Missing tracking email?</h3>
+                        <p>Check your spam folder. If it is not there, <a href="contact.html">contact us</a> and we will resend it within 1 hour.</p>
+                    </div>
+                    <div class="ship-help-card">
+                        <div class="ship-help-icon">??</div>
+                        <h3>Customs & duties</h3>
+                        <p>International orders may incur local customs charges. These are set by your country and are not included in our prices.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FAQ -->
+            <section class="ship-faq" id="shipFaq"></section>
+
+            <!-- NOTE -->
+            <div class="ship-note">
+                All delivery times are estimates and begin from the date of dispatch, not the date of order. Carrier delays outside our control may extend delivery windows. <a href="contact.html">Contact support</a> if your order is significantly late.
+            </div>
+
+            <!-- TRUST -->
+            <div id="shipTrust"></div>
+
+            <!-- CTA -->
+            <div id="shipCta"></div>
+
+        </div>
+    </main>
+
+    <script src="products-data.js"></script>
+    <script src="backend-bridge.js"></script>
+    <script src="page-helpers.js"></script>
+    <script>
+    (function () {
+        'use strict';
+        var UI = window.TrendaryoUI;
+
+        /* -- Calculator -- */
+        var calcBtn = document.getElementById('shipCalcBtn');
+        if (calcBtn) calcBtn.addEventListener('click', function () {
+            var country = document.getElementById('shipCountry').value;
+            var value = parseFloat(document.getElementById('shipValue').value) || 0;
+            var method = (document.querySelector('input[name="shipMethod"]:checked') || {}).value || 'standard';
+
+            var cost = 0, days = '', free = false;
+            if (method === 'standard') {
+                if (country === 'US' && value >= 50) { cost = 0; free = true; }
+                else if (country === 'US') cost = 4.99;
+                else if (country === 'CA' || country === 'MX') cost = 9.99;
+                else if (['UK','DE','FR','ES','IT','AE','SA','OM'].indexOf(country) !== -1) cost = 12.99;
+                else cost = 19.99;
+                days = '5–7 business days';
+            } else if (method === 'express') {
+                cost = country === 'US' ? 14.99 : (['CA','MX'].indexOf(country) !== -1 ? 24.99 : 34.99);
+                days = '2–3 business days';
+            } else {
+                cost = country === 'US' ? 29.99 : 49.99;
+                days = 'Next business day';
+            }
+
+            var est = new Date();
+            est.setDate(est.getDate() + (method === 'overnight' ? 1 : method === 'express' ? 3 : 7));
+
+            var countryName = document.getElementById('shipCountry').options[document.getElementById('shipCountry').selectedIndex].text;
+            var result = document.getElementById('shipCalcResult');
+            result.innerHTML =
+                '<div class="ship-calc-result-row"><span class="ship-calc-result-label">Country</span><span class="ship-calc-result-val">' + countryName + '</span></div>' +
+                '<div class="ship-calc-result-row"><span class="ship-calc-result-label">Order value</span><span class="ship-calc-result-val">$' + value.toFixed(2) + '</span></div>' +
+                '<div class="ship-calc-result-row"><span class="ship-calc-result-label">Method</span><span class="ship-calc-result-val">' + method.charAt(0).toUpperCase() + method.slice(1) + '</span></div>' +
+                '<div class="ship-calc-result-row"><span class="ship-calc-result-label">Shipping cost</span><span class="ship-calc-result-val ' + (free ? 'ship-calc-result-val--green' : 'ship-calc-result-val--accent') + '">' + (free ? 'FREE' : '$' + cost.toFixed(2)) + '</span></div>' +
+                '<div class="ship-calc-result-row"><span class="ship-calc-result-label">Delivery time</span><span class="ship-calc-result-val">' + days + '</span></div>' +
+                '<div class="ship-calc-result-row"><span class="ship-calc-result-label">Estimated arrival</span><span class="ship-calc-result-val">' + est.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' }) + '</span></div>' +
+                '<div class="ship-calc-result-total"><span>Total</span><span style="color:var(--accent-3);">$' + (value + cost).toFixed(2) + '</span></div>';
+            result.classList.add('is-open');
+        });
+
+        /* -- How it works -- */
+        if (UI && UI.steps) {
+            var howEl = document.getElementById('shipHow');
+            if (howEl) {
+                howEl.innerHTML = '<div class="ship-section-head"><div class="ship-kicker">The process</div><h2 class="ship-title">How Shipping Works</h2></div>' + UI.steps([
+                    { title: 'You order', text: 'Place your order before 3 PM and it ships the same day. After 3 PM, it goes out the next business day.' },
+                    { title: 'We pack & dispatch', text: 'Every item is carefully packed and handed to the carrier. You get a tracking number by email the moment it leaves our warehouse.' },
+                    { title: 'Track in real time', text: 'Follow your package from our door to yours. Use our Track Order page or the carrier\'s own tracking for live updates.' },
+                    { title: 'It arrives', text: 'Standard and express require signature on orders over $200. If you are not home, the carrier leaves a retry notice.' }
+                ]);
+            }
+        }
+
+        /* -- FAQ -- */
+        if (UI && UI.faq) {
+            var faqEl = document.getElementById('shipFaq');
+            if (faqEl) {
+                faqEl.innerHTML = '<h2>Frequently Asked Questions</h2>' + UI.faq([
+                    { q: 'When does my order ship?', a: 'Orders placed before 3 PM (your local time) ship the same business day. Orders after 3 PM ship the next business day. Weekend orders ship Monday.' },
+                    { q: 'How do I get free shipping?', a: 'Standard shipping is free on all domestic orders over $50. The discount is applied automatically at checkout — no code needed.' },
+                    { q: 'Do you ship internationally?', a: 'Yes. We ship to over 50 countries. International orders may incur customs duties and import taxes, which vary by country and are the buyer\'s responsibility.' },
+                    { q: 'Can I change my shipping method after ordering?', a: 'If the order has not shipped yet, contact support within 2 hours and we will upgrade you (you pay the difference). Once shipped, the method cannot be changed.' },
+                    { q: 'What if my package is lost or damaged?', a: 'Every shipment is insured. If your package is lost or arrives damaged, contact support with your order number and photos (if damaged). We will reship or refund within 48 hours.' },
+                    { q: 'How do I track my order?', a: 'You will receive a tracking number by email once your order ships. You can also enter your order number on our Track Order page for real-time status updates.' }
+                ], true);
+            }
+        }
+
+        /* -- Trust + CTA -- */
+        var trustEl = document.getElementById('shipTrust');
+        if (trustEl && UI && UI.trustStrip) trustEl.innerHTML = UI.trustStrip();
+        var ctaEl = document.getElementById('shipCta');
+        if (ctaEl && UI && UI.ctaBand) ctaEl.innerHTML = UI.ctaBand({
+            title: 'Ready to order?',
+            text: 'Browse the full catalogue with live prices, ratings and stock.',
+            cta: 'Open the Shop',
+            href: 'shop.html'
+        });
+    })();
+    </script>
+    <script>
+        function hidePreloader() { var p = document.getElementById('preloader'); if (p) p.classList.add('hidden'); }
+        if (document.readyState === 'complete') { setTimeout(hidePreloader, 600); }
+        else { window.addEventListener('load', function () { setTimeout(hidePreloader, 600); }); }
+        setTimeout(hidePreloader, 1500);
+    </script>
+</body>
+</html>

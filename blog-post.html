@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trendaryo Blog — Article</title>
+<meta name="description" content="Read the latest Trendaryo blog articles on fashion, technology, lifestyle and buying guides.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://trendaryo.com/blog-post.html">
+<link rel="icon" href="assets/favicon-crown-star.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+body{font-family:'Rajdhani',sans-serif;background:transparent;color:#fff;min-height:100vh;display:flex;flex-direction:column;}
+.page-offset{padding-top:180px;}
+.bp-wrap{max-width:860px;margin:0 auto;padding:1rem 1.25rem 4rem;width:100%;}
+.bp-card{border:1px solid rgba(255,255,255,0.1);border-radius:20px;background:rgba(255,255,255,0.03);overflow:hidden;}
+.bp-cover{width:100%;aspect-ratio:2/1;object-fit:cover;display:block;}
+.bp-body{padding:1.75rem 2rem;}
+.bp-cat{display:inline-block;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#000;padding:0.25rem 0.9rem;border-radius:20px;font-size:0.72rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:1rem;}
+.bp-title{font-family:'Orbitron',sans-serif;font-size:clamp(1.4rem,3.5vw,2.1rem);font-weight:900;line-height:1.25;margin-bottom:0.9rem;background:linear-gradient(135deg,#fff,var(--accent));background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.bp-meta{display:flex;gap:1rem;flex-wrap:wrap;color:rgba(255,255,255,0.55);font-size:0.9rem;margin-bottom:1.5rem;}
+.bp-meta b{color:rgba(255,255,255,0.85);font-weight:600;}
+.bp-body p{color:rgba(255,255,255,0.82);line-height:1.75;font-size:1.05rem;margin-bottom:1.1rem;}
+.bp-h2{font-family:'Orbitron',sans-serif;font-size:1.05rem;letter-spacing:1px;color:var(--accent);text-transform:uppercase;margin:1.6rem 0 0.8rem;}
+.bp-list{margin:0 0 1.1rem 1.2rem;color:rgba(255,255,255,0.82);line-height:1.75;font-size:1.05rem;}
+.bp-back{display:inline-flex;align-items:center;gap:0.5rem;color:var(--accent);font-weight:700;text-decoration:none;margin-bottom:1rem;transition:gap 0.2s ease;}
+.bp-back:hover{gap:0.8rem;}
+.bp-missing{font-family:'Orbitron',sans-serif;font-size:1.1rem;text-align:center;padding:4rem 1rem;color:rgba(255,255,255,0.6);}
+</style>
+</head>
+<body>
+<div class="preloader-3d" id="preloader"><div class="preloader-logo-3d">TRENDARYO</div><div class="preloader-spinner-3d"></div></div>
+<div id="header-container" data-type="full"></div>
+
+<main class="page-offset">
+    <div class="bp-wrap">
+        <a class="bp-back" href="blog.html">&larr; Back to Blog</a>
+        <article class="bp-card" id="postContent"></article>
+    </div>
+</main>
+
+<div id="footer-container"></div>
+<script src="firebase-config.js"></script>
+<script src="components.js"></script>
+<script>
+(function () {
+    'use strict';
+    var POSTS = [
+        {
+            id: 1, category: 'Technology', title: 'How to Choose Wireless Headphones in 2026',
+            read: '8 min read', image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1200&h=600&fit=crop', alt: 'Wireless headphones on a desk',
+            fields: [
+                ['Never buy on the spec sheet alone', 'Spec sheets are written by marketers, not engineers. The headline numbers — battery life, driver size — tell you little about how a pair actually sounds. What matters is fit, the quality of the noise cancelling implementation, and whether the codecs your phone supports are actually enabled. Demo the pair with your own music for at least fifteen minutes before you commit.'],
+                ['Prioritise the five specs that change everything', 'Active noise cancelling that removes the low rumble of a train or office AC is the difference between a good day and a exhausting one. Battery life of 30 hours or more means you recharge on a schedule, not a whim. Multipoint pairing switches between laptop and phone without the ritual of forgetting and re-pairing. A comfortable clamp force keeps long sessions painless, and a USB-C port means one cable for everything you own.'],
+                ['Ignore the marketing terms', 'Look for the parts vendors actually compete on: the ANC chip, the transducer, and the firmware tuning. Terms like \u201cstudio quality\u201d and \u201cHi-Res certified\u201d are largely marketing. A cheap pair with great tuning beats an expensive pair with a long feature list you will never use.']
+            ]
+        },
+        {
+            id: 2, category: 'Buying Guide', title: 'Smartwatch vs Fitness Band: Which One Fits Your Life?',
+            read: '6 min read', image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=1200&h=600&fit=crop', alt: 'Smart watch on a wrist',
+            fields: [
+                ['Both track steps. Neither tracks motivation', 'A fitness band is a lightweight sensor on your wrist. A smartwatch is a small computer. Before you spend, ask what you actually need: two weeks of battery life and basic heart rate, or notifications, navigation and on-wrist payments every single day.'],
+                ['Battery life decides the winner', 'Bands routinely run 10-14 days on a charge, which means you wear them constantly and the data stays meaningful. Most watches need charging every couple of days, and plenty of people quietly stop wearing them once the novelty fades. If you want a long-term habit, the band is usually the honest choice.'],
+                ['Buy the ecosystem that matches your phone', 'A watch is only as good as the apps it talks to. Check that the companion app syncs with the health platform you already use, that notifications arrive reliably, and that any smart features you care about work on your exact phone model. The cheapest watch that covers your core needs beats the most expensive one that does not.']
+            ]
+        },
+        {
+            id: 3, category: 'Fashion', title: '5 Everyday Carry Upgrades Under $100',
+            read: '5 min read', image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=1200&h=600&fit=crop', alt: 'Everyday carry backpack',
+            fields: [
+                ['Start with the objects you touch every day', 'The biggest wins come from the items in your pockets, not the gear in your bag. A slim, well-made wallet, a battery bank you actually remember to carry, and a bag that opens without a fight will change your day more than any gadget.'],
+                ['Buy for the worst day, not the best', 'Everyday carry is about the moments when you are tired, rushed and unprepared. A reliable 10,000mAh power bank, a spare cable that fits all your devices, and a waterproof pouch for documents cost very little and pay for themselves on the first bad morning.'],
+                ['One bag upgrade that is worth it', 'If you upgrade nothing else, upgrade the bag. Look for a comfortable strap system, a water bottle pocket that holds the bottle you actually own, and a dedicated padding for your laptop. A better bag turns a chore into something you reach for automatically.']
+            ]
+        },
+        {
+            id: 4, category: 'Lifestyle', title: 'The Real Difference Between Cheap and Premium Sneakers',
+            read: '7 min read', image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1200&h=600&fit=crop', alt: 'Premium sneakers',
+            fields: [
+                ['You are paying for foam, knit and glue', 'The visible difference between a cheap and a premium sneaker is rarely the logo — it is the midsole foam that absorbs impact, the density of the upper knit that holds its shape, and the quality of the assembly that keeps the sole attached for years instead of months.'],
+                ['Where the money actually goes', 'Premium shoes invest in tooling and materials that improve durability and comfort over the long run. A cheap shoe can feel identical out of the box and fall apart after a season. Check the outsole rubber, the padding around the heel collar, and how the upper is joined to the sole before you buy.'],
+                ['When it is worth it — and when it is not', 'If you walk, stand or run a lot, the premium option tends to pay for itself through comfort and longevity. If you buy for occasional fashion, the mid-range is often the smarter spend. And remember: the best fit is the one that fits your foot, not the one with the most expensive label.']
+            ]
+        },
+        {
+            id: 5, category: 'Technology', title: 'Working From Home: The Desk Setup That Actually Helps',
+            read: '9 min read', image: 'https://images.unsplash.com/photo-1588872657840-790ff3bde08c?w=1200&h=600&fit=crop', alt: 'Work from home desk setup with laptop',
+            fields: [
+                ['The order of priorities is monitor, keyboard, lighting', 'Most people buy the wrong thing first: a fancy desk or an ergonomic chair. Start at eye level. A monitor at the right height stops the forward head posture that causes most of the fatigue. A real keyboard and mouse let your shoulders relax. Only then does lighting and organisation matter.'],
+                ['Light is the hidden productivity booster', 'A bright, even light source that doesn\u2019t glare on your screen keeps you alert and reduces eye strain. Position the gentle light behind the monitor or beside it, never facing you. Add a second lamp if you work through noon and rely on overhead lighting.'],
+                ['Small fixes, big returns', 'A cable tray, a monitor arm that lets you stand when you need to, and a footrest under the desk are cheap changes that compound over a year of daily use. The goal is not a beautiful desk — it is a desk you can sit at for hours without noticing it is there.']
+            ]
+        },
+        {
+            id: 6, category: 'Buying Guide', title: 'Gift Guide: Tech Gifts They\u2019ll Actually Use',
+            read: '6 min read', image: 'https://images.unsplash.com/photo-1484704849700-f032a568e944?w=1200&h=600&fit=crop', alt: 'Wireless earbuds as a gift',
+            fields: [
+                ['Six gifts under $150 that stay in rotation', 'The gifts people keep using are the ones that fix a small daily annoyance. A quality wireless charger, a good pair of earbuds, a power bank with a display, a smart water bottle, a mechanical keyboard cable, or a portable monitor for the desk — each solves one specific problem.'],
+                ['What to avoid', 'Skip anything that needs its own charging ritual, novelty gadgets that get played with once, and accessories that only work with one brand. The best gift is boring in the best way: it is always there, always charged, and always useful.'],
+                ['Wrap it like it matters', 'The unboxing is part of the gift. A premium box, a note explaining why you picked it, and a gift receipt all make a practical item feel personal.']
+            ]
+        }
+    ];
+
+    var params = new URLSearchParams(window.location.search);
+    var id = Number(params.get('id') || '');
+    var post = null;
+    for (var i = 0; i < POSTS.length; i++) {
+        if (POSTS[i].id === id) { post = POSTS[i]; break; }
+    }
+
+    var el = document.getElementById('postContent');
+    if (!post) {
+        el.innerHTML = '<div class="bp-missing"><p>Article not found.</p><p style="font-size:0.9rem;margin-top:1rem;"><a href="blog.html" style="color:var(--accent);">Browse all articles</a></p></div>';
+        return;
+    }
+
+    var body = post.fields.map(function (f) {
+        return '<h2 class="bp-h2">' + f[0] + '</h2><p>' + f[1] + '</p>';
+    }).join('');
+
+    document.title = post.title + ' — Trendaryo Blog';
+    el.innerHTML =
+        '<img class="bp-cover" src="' + post.image + '" alt="' + post.alt + '" loading="lazy">' +
+        '<div class="bp-body">' +
+            '<span class="bp-cat">' + post.category + '</span>' +
+            '<h1 class="bp-title">' + post.title + '</h1>' +
+            '<div class="bp-meta"><span><b>Trendaryo Editorial</b></span><span>' + post.read + '</span></div>' +
+            body +
+            '<div class="cta-band"><h2>Shop What You Just Read About</h2>' +
+            '<p>The products in this article are in stock and ship within 24 hours. Free shipping over $50.</p>' +
+            '<a href="shop.html" class="btn-band">Browse the Shop</a></div>' +
+        '</div>';
+})();
+</script>
+<script>
+    function hidePreloader() { var p = document.getElementById('preloader'); if (p) p.classList.add('hidden'); }
+    if (document.readyState === 'complete') { setTimeout(hidePreloader, 600); }
+    else { window.addEventListener('load', function () { setTimeout(hidePreloader, 600); }); }
+    setTimeout(hidePreloader, 1500);
+</script>
+</body>
+</html>

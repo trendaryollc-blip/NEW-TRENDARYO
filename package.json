@@ -1,0 +1,26 @@
+{
+  "name": "trendaryo",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Trendaryo - Premium E-Commerce Platform",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'Static site - no build needed'",
+    "start": "vercel dev",
+    "deploy": "vercel --prod",
+    "seed": "node scripts/seed-firestore.js",
+    "seed:fresh": "node scripts/seed-firestore.js --fresh",
+    "admin:create": "node scripts/create-admin.js"
+  },
+  "dependencies": {
+    "cloudinary": "^2.0.0",
+    "firebase-admin": "^14.4.0",
+    "stripe": "^17.0.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.6.1"
+  }
+}

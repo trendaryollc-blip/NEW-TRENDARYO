@@ -1,0 +1,415 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - Trendaryo | The Rules Behind the Shelf, in Plain Words</title>
+    <meta name="description" content="The Trendaryo terms of service in plain words: who we are, how an order forms, when the contract binds, how returns work and what we owe you - twelve sections, numbers attached, no fog.">
+    <meta name="keywords" content="terms of service, terms and conditions, order contract, return window, trendaryo terms">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Trendaryo">
+    <link rel="canonical" href="https://trendaryo.com/terms.html">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://trendaryo.com/terms.html">
+    <meta property="og:title" content="Terms of Service - Trendaryo">
+    <meta property="og:description" content="The rules behind the shelf, in plain words: how orders form, when the contract binds and what happens when something goes wrong.">
+    <meta property="og:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://trendaryo.com/terms.html">
+    <meta property="twitter:title" content="Terms of Service - Trendaryo">
+    <meta property="twitter:description" content="The rules behind the shelf, in plain words: how orders form, when the contract binds and what happens when something goes wrong.">
+    <meta property="twitter:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon-crown-star.svg">
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="performance.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ==================================================================
+           TRENDARYO - TERMS OF SERVICE (Command Deck edition)
+           Same design system as shop.html: dark cosmic glass, Orbitron +
+           Rajdhani, accents #00f0ff / #ff00aa / #00ff88 / #ffd700.
+           Content architecture: 12 numbered sections (see body comments).
+           ================================================================== */
+        :root { --primary: #0a0a0a; --bg-deep: #0a0a2a; --accent: #00f0ff; --accent-2: #ff00aa; --accent-3: #00ff88; --accent-4: #ffd700; --danger: #ff4444; --text: #ffffff; --muted: rgba(255, 255, 255, 0.66); --muted-2: rgba(255, 255, 255, 0.45); --glass: rgba(255, 255, 255, 0.05); --glass-2: rgba(255, 255, 255, 0.03); --glass-border: rgba(255, 255, 255, 0.1); --glass-border-2: rgba(255, 255, 255, 0.18); --card-grad: linear-gradient(168deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.02)); --shadow-lift: 0 18px 44px rgba(0, 0, 0, 0.48); --glow-cyan: 0 0 26px rgba(0, 240, 255, 0.28); --r-sm: 10px; --r-md: 16px; --r-lg: 22px; --r-pill: 999px; --ease: cubic-bezier(0.22, 1, 0.36, 1); --font-d: 'Orbitron', sans-serif; --font-b: 'Rajdhani', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-b); background: var(--bg-deep); color: #fff; overflow-x: hidden; }
+        #three-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+        .page-offset { padding-top: 150px; }
+        a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+        .deck { position: relative; overflow: hidden; padding: 3rem 1.5rem 2.25rem; }
+        .deck-neb { position: absolute; border-radius: 50%; filter: blur(110px); pointer-events: none; z-index: 0; animation: nebDrift 16s ease-in-out infinite alternate; }
+        .deck-neb-1 { width: 430px; height: 430px; top: -150px; left: -110px; background: radial-gradient(circle, rgba(0, 240, 255, 0.22), transparent 70%); }
+        .deck-neb-2 { width: 520px; height: 520px; bottom: -220px; right: -130px; background: radial-gradient(circle, rgba(255, 0, 170, 0.16), transparent 70%); animation-delay: -8s; }
+        @keyframes nebDrift { from { transform: scale(1) translateY(0); } to { transform: scale(1.16) translateY(-34px); } }
+        .deck-inner { position: relative; z-index: 1; max-width: 1140px; margin: 0 auto; }
+        .deck-live { display: inline-flex; align-items: center; gap: 0.55rem; padding: 0.42rem 0.95rem; border-radius: var(--r-pill); background: rgba(0, 240, 255, 0.08); border: 1px solid rgba(0, 240, 255, 0.3); font-family: var(--font-d); font-size: 0.64rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); }
+        .deck-live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-3); box-shadow: 0 0 12px var(--accent-3); animation: livePulse 2.2s ease-in-out infinite; }
+        @keyframes livePulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.78); } }
+        .deck-title { font-family: var(--font-d); font-weight: 900; font-size: clamp(2rem, 5.2vw, 3.9rem); line-height: 1.03; margin: 0.9rem 0 0.7rem; max-width: 18ch; background: linear-gradient(120deg, #fff 8%, var(--accent) 46%, var(--accent-2) 88%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 26px rgba(0, 240, 255, 0.2)); }
+        .deck-sub { color: var(--muted); font-size: 1.06rem; line-height: 1.7; max-width: 62ch; }
+        .deck-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1.3rem; }
+        .deck-btn { padding: 0.78rem 1.5rem; border-radius: var(--r-pill); border: 1px solid rgba(0, 240, 255, 0.45); background: linear-gradient(135deg, rgba(0, 240, 255, 0.18), rgba(255, 0, 170, 0.18)); color: #fff; font-family: var(--font-d); font-size: 0.72rem; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: transform 0.25s var(--ease), box-shadow 0.25s ease; }
+        .deck-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0, 240, 255, 0.28); }
+        .deck-btn--solid { background: linear-gradient(135deg, var(--accent), var(--accent-3)); border-color: transparent; color: #00202a; }
+        .deck-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(152px, 1fr)); gap: 0.85rem; margin-top: 1.5rem; }
+        .deck-stat { position: relative; padding: 0.95rem 1.05rem; border-radius: var(--r-md); background: var(--card-grad); border: 1px solid var(--glass-border); overflow: hidden; }
+        .deck-stat::after { content: ''; position: absolute; inset: 0 0 auto 0; height: 2px; background: linear-gradient(90deg, var(--accent), rgba(0, 240, 255, 0)); }
+        .deck-stat:nth-child(2n)::after { background: linear-gradient(90deg, var(--accent-2), rgba(255, 0, 170, 0)); }
+        .deck-stat:nth-child(3n)::after { background: linear-gradient(90deg, var(--accent-3), rgba(0, 255, 136, 0)); }
+        .deck-stat-val { font-family: var(--font-d); font-size: 1.38rem; font-weight: 900; letter-spacing: -0.5px; }
+        .deck-stat-lab { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1.4px; color: var(--muted-2); margin-top: 0.15rem; }
+        .deck-stat-sub { font-size: 0.76rem; color: var(--muted); margin-top: 0.4rem; line-height: 1.4; }
+        /* - Section shells + heads (same as shop.html) - */
+        .legal-shell { max-width: 1140px; margin: 0 auto; padding: 0 1.5rem; }
+        .sec { margin: 4rem 0; position: relative; }
+        .sec-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1.25rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+        .sec-head-txt { max-width: 760px; }
+        .sec-kicker { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--font-d); font-size: 0.66rem; font-weight: 700; letter-spacing: 2.4px; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; }
+        .sec-kicker::before { content: ''; width: 22px; height: 1px; background: linear-gradient(90deg, transparent, var(--accent)); }
+        .sec-title { font-family: var(--font-d); font-size: clamp(1.3rem, 2.6vw, 1.95rem); font-weight: 900; line-height: 1.15; background: linear-gradient(135deg, #fff 15%, var(--accent) 60%, var(--accent-2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .sec-sub { color: var(--muted); line-height: 1.65; font-size: 0.97rem; margin-top: 0.5rem; }
+        .sec-sub a { color: var(--accent); }
+        .sec-note { font-size: 0.76rem; color: var(--muted-2); }
+        .summary-box h2 { font-family: var(--font-d); letter-spacing: 1px; }
+        .summary-box a { color: var(--accent); }
+        .ledger-scroll { overflow-x: auto; border: 1px solid var(--glass-border); border-radius: var(--r-lg); background: var(--glass-2); }
+        table.ledger { width: 100%; border-collapse: collapse; min-width: 640px; font-size: 0.95rem; }
+        .ledger th { font-family: var(--font-d); font-size: 0.64rem; letter-spacing: 1.6px; text-transform: uppercase; color: var(--accent); text-align: left; padding: 1rem 1.1rem; border-bottom: 1px solid var(--glass-border-2); white-space: nowrap; }
+        .ledger td { padding: 1rem 1.1rem; border-bottom: 1px solid var(--glass-border); vertical-align: top; color: var(--muted); line-height: 1.6; }
+        .ledger tr:last-child td { border-bottom: 0; }
+        .ledger td b { color: #fff; font-weight: 700; display: block; margin-bottom: 0.2rem; font-size: 1rem; }
+        .pill { display: inline-block; padding: 0.18rem 0.6rem; border-radius: var(--r-pill); border: 1px solid var(--glass-border-2); background: rgba(255, 255, 255, 0.05); font-family: var(--font-d); font-size: 0.62rem; letter-spacing: 1px; color: rgba(255, 255, 255, 0.85); white-space: nowrap; }
+        .pgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.25rem; }
+        .pcard { padding: 1.5rem 1.4rem; border-radius: var(--r-lg); background: var(--card-grad); border: 1px solid var(--glass-border); transition: border-color 0.3s ease, transform 0.3s var(--ease), box-shadow 0.3s ease; }
+        .pcard:hover { border-color: rgba(0, 240, 255, 0.4); transform: translateY(-4px); box-shadow: var(--shadow-lift); }
+        .pc-ico { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(0, 240, 255, 0.08); border: 1px solid rgba(0, 240, 255, 0.25); color: var(--accent); font-size: 1.05rem; }
+        .pcard--pink .pc-ico { color: var(--accent-2); border-color: rgba(255, 0, 170, 0.3); background: rgba(255, 0, 170, 0.07); }
+        .pcard--green .pc-ico { color: var(--accent-3); border-color: rgba(0, 255, 136, 0.3); background: rgba(0, 255, 136, 0.07); }
+        .pcard--gold .pc-ico { color: var(--accent-4); border-color: rgba(255, 215, 0, 0.3); background: rgba(255, 215, 0, 0.07); }
+        .pcard h3 { font-family: var(--font-d); font-size: 0.95rem; font-weight: 800; letter-spacing: 0.6px; margin: 0.8rem 0 0.5rem; color: #fff; }
+        .pcard p { color: var(--muted); font-size: 0.92rem; line-height: 1.65; }
+        .pcard p a { color: var(--accent); }
+        .tl-list { display: grid; gap: 0.75rem; }
+        .tl-row { display: grid; grid-template-columns: 150px 1fr; gap: 1.25rem; align-items: start; padding: 1.15rem 1.35rem; border-radius: var(--r-md); background: var(--glass-2); border: 1px solid var(--glass-border); }
+        .tl-when { font-family: var(--font-d); font-weight: 800; font-size: 0.82rem; color: var(--accent); padding-top: 0.15rem; white-space: nowrap; }
+        .tl-row--green .tl-when { color: var(--accent-3); }
+        .tl-row--pink .tl-when { color: var(--accent-2); }
+        .tl-row--gold .tl-when { color: var(--accent-4); }
+        .tl-what b { color: #fff; display: block; margin-bottom: 0.2rem; font-size: 1rem; }
+        .tl-what p { color: var(--muted); font-size: 0.92rem; line-height: 1.6; }
+        .note-strip { margin-top: 1.25rem; padding: 1rem 1.25rem; border-radius: var(--r-md); border: 1px dashed rgba(255, 215, 0, 0.4); background: rgba(255, 215, 0, 0.05); color: rgba(255, 255, 255, 0.8); font-size: 0.9rem; line-height: 1.6; }
+        .note-strip a { color: var(--accent); }
+        .mount-pad { min-height: 1px; }
+        @media (max-width: 900px) {
+            .page-offset { padding-top: 120px; }
+            .deck { padding: 1.75rem 1.25rem 1.5rem; }
+            .sec { margin: 2.75rem 0; }
+            .tl-row { grid-template-columns: 1fr; gap: 0.4rem; }
+        }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }
+    </style>
+</head>
+<body>
+    <canvas id="three-canvas"></canvas>
+
+    <main class="page-offset">
+
+    <!-- 00 · DECK HERO -->
+    <section class="deck" aria-labelledby="trTitle">
+        <div class="deck-neb deck-neb-1"></div>
+        <div class="deck-neb deck-neb-2"></div>
+        <div class="deck-inner">
+            <span class="deck-live"><span class="deck-live-dot"></span>Terms v2 · In force now</span>
+            <h1 class="deck-title" id="trTitle">Terms, without the fog.</h1>
+            <p class="deck-sub">Twelve sections and a short version up top. The same honesty the shelf applies to products applies here: what you get, what we owe you, and what happens when something goes wrong - with numbers attached, not vibes.</p>
+            <div class="deck-actions">
+                <a class="deck-btn deck-btn--solid" href="#ordering">How an order forms</a>
+                <a class="deck-btn" href="refund.html">The refund policy</a>
+                <a class="deck-btn" href="#quickread">The short version</a>
+            </div>
+            <div class="deck-stats">
+                <div class="deck-stat"><div class="deck-stat-val">30</div><div class="deck-stat-lab">Day return window</div><div class="deck-stat-sub">Change of mind included.</div></div>
+                <div class="deck-stat"><div class="deck-stat-val">0</div><div class="deck-stat-lab">Hidden fees</div><div class="deck-stat-sub">The price you see is the price you pay.</div></div>
+                <div class="deck-stat"><div class="deck-stat-val">24h</div><div class="deck-stat-lab">Support reply SLA</div><div class="deck-stat-sub">Every day of the week.</div></div>
+                <div class="deck-stat"><div class="deck-stat-val">1</div><div class="deck-stat-lab">Governing law: Oman</div><div class="deck-stat-sub">Courts of Muscat, plain and simple.</div></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="legal-shell">
+
+    <!-- 00b · THE SHORT VERSION -->
+    <section class="sec" id="quickread">
+        <div class="summary-box">
+            <h2>The short version</h2>
+            <ul>
+                <li>Trendaryo LLC, registered in Muscat, Oman, runs this store. Questions go to <a href="mailto:support@trendaryo.com">support@trendaryo.com</a> - a human replies within 24 hours.</li>
+                <li>The <strong>confirmation email</strong> - not the checkout screen - forms the contract for each order.</li>
+                <li>30-day returns on unused items; refunds land in 5-7 business days after your return passes inspection.</li>
+                <li>Prices are in USD. If we misprice a product badly, we tell you straight and you can cancel free.</li>
+                <li>Nothing here limits the rights the law already gives you.</li>
+            </ul>
+        </div>
+        <span class="last-updated">Last updated: 1 January 2024 · This page supersedes every earlier version.</span>
+    </section>
+
+    <!-- 01 · WHO WE ARE -->
+    <section class="sec" id="who" aria-labelledby="whoTitle">
+        <div class="sec-head">
+            <div class="sec-head-txt">
+                <span class="sec-kicker">Section 01 · The company behind the shelf</span>
+                <h2 class="sec-title" id="whoTitle">Who we are</h2>
+                <p class="sec-sub">A shortlist store: a deliberately small catalogue that is re-checked on every visit. The legal entity behind it is as short as the catalogue.</p>
+            </div>
+            <span class="sec-note">Founder-led · customer-obsessed</span>
+        </div>
+        <div class="ledger-scroll">
+            <table class="ledger">
+                <thead><tr><th>Legal entity</th><th>Registered office</th><th>Contact</th></tr></thead>
+                <tbody>
+                    <tr><td><b>Trendaryo LLC</b>the seller of record for every order</td><td>Al Maabela, Wilayat Al Seeb<br>Muscat Governorate, Oman</td><td><b>support@trendaryo.com</b>general questions<br><b>returns@trendaryo.com</b>returns &amp; refunds<br><b>privacy@trendaryo.com</b>data &amp; privacy</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="note-strip">"We compared. You just pick." is a product promise, not a slogan: every listing on the shelf beat its alternatives on rating and review volume before it was listed. These terms explain what happens before, during and after you click buy.</div>
+    </section>
+
+    <!-- 02 · WHAT THIS STORE IS -->
+    <section class="sec" id="store" aria-labelledby="storeTitle">
+        <div class="sec-head">
+            <div class="sec-head-txt">
+                <span class="sec-kicker">Section 02 · What you're buying into</span>
+                <h2 class="sec-title" id="storeTitle">What this store is - and isn't</h2>
+                <p class="sec-sub">Three clauses cover it. Everything else in this document is detail around them.</p>
+            </div>
+        </div>
+        <div class="pgrid">
+            <div class="pcard"><div class="pc-ico">📋</div><h3>Descriptions, as good as the data</h3><p>We describe products as accurately as the manufacturer's specification allows, and pull listings we can't stand behind. If you receive something that doesn't match its page, <a href="return-request.html">the 30-day policy</a> applies in full.</p></div>
+            <div class="pcard pcard--pink"><div class="pc-ico">🔄</div><h3>A live catalogue</h3><p>Prices and stock are re-checked on every visit and can change between visits. The price and stock shown at the moment you check out are the ones that count - never an earlier page.</p></div>
+            <div class="pcard pcard--green"><div class="pc-ico">🏆</div><h3>Curation, not advertising</h3><p>Listing order is rating × review volume. There are no paid placements, so "sponsored" is not a thing you'll ever need to discount mentally.</p></div>
+        </div>
+    </section>
+
+    <!-- 03 · ACCOUNTS -->
+    <section class="sec" id="accounts" aria-labelledby="accTitle">
+        <div class="sec-head">
+            <div class="sec-head-txt">
+                <span class="sec-kicker">Section 03 · Who can shop, and how accounts work</span>
+                <h2 class="sec-title" id="accTitle">Eligibility &amp; accounts</h2>
+            </div>
+        </div>
+        <div class="tl-list">
+            <div class="tl-row"><div class="tl-when">18+</div><div class="tl-what"><b>Age requirement</b><p>Order as an adult, or with a parent or guardian who takes the order. Minors browsing is fine; checking out is not.</p></div></div>
+            <div class="tl-row tl-row--green"><div class="tl-when">Guests</div><div class="tl-what"><b>Guest checkout, always</b><p>An account is never required. Creating one just adds order history, saved addresses and a faster repeat checkout - about 30 seconds on the <a href="register.html">registration page</a>.</p></div></div>
+            <div class="tl-row tl-row--gold"><div class="tl-when">1 : 1</div><div class="tl-what"><b>One human, one account</b><p>You're responsible for keeping your credentials private and for the activity on your account. Tell us fast if something looks wrong.</p></div></div>
+            <div class="tl-row tl-row--pink"><div class="tl-when">Truth</div><div class="tl-what"><b>Accurate details</b><p>Addresses and contact info must be real - carriers deliver to what you type. We can suspend accounts used for fraud or abuse of promotions.</p></div></div>
+        </div>
+    </section>
+
+    <!-- 04 · ORDERING & PRICING -->
+    <section class="sec" id="ordering" aria-labelledby="ordTitle">
+        <div class="sec-head">
+            <div class="sec-head-txt">
+                <span class="sec-kicker">Section 04 · From cart to contract</span>
+                <h2 class="sec-title" id="ordTitle">How an order forms - and when it binds</h2>
+                <p class="sec-sub">Four moments, one contract. The moment that counts is marked.</p>
+            </div>
+        </div>
+        <div class="tl-list">
+            <div class="tl-row"><div class="tl-when">Step 1</div><div class="tl-what"><b>The cart</b><p>Browsing, shortlisting and filling the cart owe nobody anything. Your cart lives in your browser until you check out.</p></div></div>
+            <div class="tl-row"><div class="tl-when">Step 2</div><div class="tl-what"><b>The request</b><p>At checkout you submit an address and a payment method. That's an offer to buy - we can still decline it (see the price-error rule below).</p></div></div>
+            <div class="tl-row tl-row--green"><div class="tl-when">Step 3</div><div class="tl-what"><b>The confirmation email - this is the contract</b><p>The moment it lands, we're bound: it lists your order number, items, prices and delivery window. The 30-day return clock starts at delivery, not at this email.</p></div></div>
+            <div class="tl-row"><div class="tl-when">Step 4</div><div class="tl-what"><b>Dispatch</b><p>Orders are packed within 24 hours on business days and tracking activates as soon as the carrier scans the parcel.</p></div></div>
+        </div>
+        <div class="note-strip"><b>Pricing, in four lines:</b> prices are in USD · promotions apply the way the promotion says (Section 08) · stock and prices can change between visits · and if a listing is mispriced by an obvious margin - a $299 item showing $29 - we flag it before charging. You can cancel free or re-order at the correct price; we never quietly charge a wrong number.</div>
+    </section>
+
+    <!-- 05 · PAYMENT -->
+    <section class="sec" id="payment" aria-labelledby="payTitle">
+        <div class="sec-head">
+            <div class="sec-head-txt">
+                <span class="sec-kicker">Section 05 · Taking payment safely</span>
+                <h2 class="sec-title" id="payTitle">Payment</h2>
+            </div>
+        </div>
+        <div class="pgrid">
+            <div class="pcard"><div class="pc-ico">💳</div><h3>Pay your way</h3><p>Major cards at checkout, cash on delivery where available. Every method is shown with its total before you confirm - the checkout total is the final total.</p></div>
+            <div class="pcard pcard--green"><div class="pc-ico">🔐</div><h3>Encrypted end to end</h3><p>Checkout runs over TLS 1.2+ with 256-bit encryption. The padlock in your address bar is doing real work.</p></div>
+            <div class="pcard pcard--pink"><div class="pc-ico">🚫</div><h3>We never store card numbers</h3><p>Card details go straight to the payment processor. Our order record keeps the brand, the last four digits and the status - enough for receipts and refunds, nothing more.</p></div>
+            <div class="pcard pcard--gold"><div class="pc-ico">↩️</div><h3>Refunds return to source</h3><p>Whatever the reason, a refund goes back to the original payment method - see <a href="refund.html">the refund policy</a> for the exact timing.</p></div>
+        </div>
+    </section>
+
+    <!-- 06 · DELIVERY -->
+    <section class="sec" id="delivery" aria-labelledby="delTitle">
+        <div class="sec-head">
+            <div class="sec-head-txt">
+                <span class="sec-kicker">Section 06 · What happens after Step 4</span>
+                <h2 class="sec-title" id="delTitle">Delivery</h2>
+                <p class="sec-sub">The numbers below match what the checkout shows and what <a href="shipping.html">the shipping page</a> explains in depth.</p>
+            </div>
+            <span class="sec-note">Risk passes to you on delivery · address changes possible until dispatch</span>
+        </div>
+        <div class="ledger-scroll">
+            <table class="ledger">
+                <thead><tr><th>Service</th><th>Window</th><th>Cost</th></tr></thead>
+                <tbody>
+                    <tr><td><b>Standard</b>packed within 24h, tracked end to end</td><td>5-7 business days</td><td><span class="pill">Free over $50</span></td></tr>
+                    <tr><td><b>Express</b>priority handling</td><td>2-3 business days</td><td><span class="pill">Calculated at checkout</span></td></tr>
+                    <tr><td><b>GCC</b>UAE, KSA, Qatar, Kuwait, Bahrain</td><td>3-5 business days</td><td><span class="pill">Calculated at checkout</span></td></tr>
+                    <tr><td><b>Rest of world</b>100+ countries</td><td>7-14 business days</td><td><span class="pill">Calculated at checkout</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="note-strip">Missed a delivery? The carrier tries three times and holds the parcel at the local depot for 7 days before returning it - redelivery costs you nothing. Import duties outside the GCC are the customer's responsibility, and the checkout tells you when that applies.</div>
+    </section>
+
+    <!-- 07 · RETURNS & REFUNDS -->
+    <section class="sec" id="returns" aria-labelledby="retTitle">
+        <div class="sec-head">
+            <div class="sec-head-txt">
+                <span class="sec-kicker">Section 07 · The 30-day promise</span>
+                <h2 class="sec-title" id="retTitle">Returns &amp; refunds</h2>
+                <p class="sec-sub">The short rules behind the numbers the trust strip shows on every page. Full detail lives on the <a href="returns.html">returns page</a> and the <a href="refund.html">refund policy</a>.</p>
+            </div>
+            <span class="sec-note">Start a return: <a href="return-request.html" style="color:var(--accent);">return-request.html</a></span>
+        </div>
+        <div class="tl-list">
+            <div class="tl-row"><div class="tl-when">30 days</div><div class="tl-what"><b>The window</b><p>From delivery, on any unused item in its original packaging with all accessories. Change of mind counts - no interrogation required.</p></div></div>
+            <div class="tl-row tl-row--green"><div class="tl-when">Label</div><div class="tl-what"><b>Who pays the postage</b><p>Faulty, damaged or wrong item: we pay, and a prepaid label lands in your email within 24 hours. Change of mind: you pay, and a tracked service is recommended.</p></div></div>
+            <div class="tl-row tl-row--gold"><div class="tl-when">2 days</div><div class="tl-what"><b>Inspection</b><p>Your return is inspected within 2 business days of arriving at the warehouse. Approval is the norm; if there's an issue, we contact you with photos and reasoning.</p></div></div>
+            <div class="tl-row tl-row--pink"><div class="tl-when">5-7 days</div><div class="tl-what"><b>The refund</b><p>Issued to your original payment method within 5-7 business days of a passed inspection, with an email the moment it's processed.</p></div></div>
+        </div>
+        <div class="note-strip">The short exceptions list, in full: personalised or custom-made items, opened beauty and personal care, intimate apparel, items marked Final Sale, and gift cards. Everything else on the shelf follows the 30-day rule.</div>
+    </section>
+
+    <!-- 08 · PROMOTIONS & CODES -->
+    <section class="sec" id="promotions" aria-labelledby="proTitle">
+        <div class="sec-head">
+            <div class="sec-head-txt">
+                <span class="sec-kicker">Section 08 · Deals, honestly</span>
+                <h2 class="sec-title" id="proTitle">Promotions &amp; codes</h2>
+            </div>
+        </div>
+        <div class="tl-list">
+            <div class="tl-row"><div class="tl-when">WELCOME10</div><div class="tl-what"><b>The welcome code</b><p>10% off your first order, one per customer, shown at checkout before you pay. It doesn't stack with other codes and can't be applied retroactively.</p></div></div>
+            <div class="tl-row tl-row--green"><div class="tl-when">Drops</div><div class="tl-what"><b>Price drops are verified</b><p>The shop page only shows reductions where the old price was genuinely charged and listed - the "verified reductions" section is computed from the catalogue, not invented for the banner.</p></div></div>
+            <div class="tl-row tl-row--gold"><div class="tl-when">Ends</div><div class="tl-what"><b>Promotions can end</b><p>We can end or amend a promotion with notice on this page. Orders already confirmed keep their price - the contract from Section 04 doesn't reopen.</p></div></div>
+            <div class="tl-row tl-row--pink"><div class="tl-when">Gifts</div><div class="tl-what"><b>Gift cards never expire</b><p>See <a href="gift-cards.html">gift-cards.html</a> for balances and delivery options.</p></div></div>
+        </div>
+    </section>
+
+    <!-- 09 · ACCEPTABLE USE -->
+    <section class="sec" id="use" aria-labelledby="useTitle">
+        <div class="sec-head">
+            <div class="sec-head-txt">
+                <span class="sec-kicker">Section 09 · Keep the shelf honest</span>
+                <h2 class="sec-title" id="useTitle">Acceptable use</h2>
+                <p class="sec-sub">A shortlist store only works if its signals are real. These rules protect the ranking you rely on.</p>
+            </div>
+        </div>
+        <div class="pgrid">
+            <div class="pcard"><div class="pc-ico">🤖</div><h3>No bulk scraping</h3><p>Browsing freely: yes. Harvesting the catalogue with automated tools, or reselling access to it: no. Ask first - some uses are fine with permission.</p></div>
+            <div class="pcard pcard--pink"><div class="pc-ico">🧾</div><h3>No fake orders or reviews</h3><p>Reviews feed the ranking directly - faking them poisons the shelf for everyone. We remove fake reviews and suspend the accounts behind them.</p></div>
+            <div class="pcard pcard--green"><div class="pc-ico">🛡️</div><h3>No interference</h3><p>No attacking the site, probing for vulnerabilities without disclosure, or disrupting other customers' checkout. Responsible disclosure of a security issue is always welcome and never punished.</p></div>
+            <div class="pcard pcard--gold"><div class="pc-ico">🏪</div><h3>No unauthorised reselling</h3><p>Buying the shelf to flip it elsewhere undermines the curation. Reseller partnerships exist - <a href="affiliate.html">the affiliate program</a> is the honest way to earn from Trendaryo.</p></div>
+        </div>
+    </section>
+
+    <!-- 10 · INTELLECTUAL PROPERTY -->
+    <section class="sec" id="ip" aria-labelledby="ipTitle">
+        <div class="sec-head">
+            <div class="sec-head-txt">
+                <span class="sec-kicker">Section 10 · Whose work this is</span>
+                <h2 class="sec-title" id="ipTitle">Intellectual property</h2>
+            </div>
+        </div>
+        <div class="pgrid">
+            <div class="pcard"><div class="pc-ico">©️</div><h3>The site</h3><p>The Trendaryo name, logo, design system and copy belong to Trendaryo LLC or its licensors. Product photography and manufacturer specs belong to their owners and are used by permission.</p></div>
+            <div class="pcard pcard--green"><div class="pc-ico">✍️</div><h3>Your reviews</h3><p>Your reviews stay yours. Posting one grants us a non-exclusive, worldwide licence to display it on this store - nothing more. Delete your account and the licence ends.</p></div>
+        </div>
+    </section>
+
+    <!-- 11 · LIABILITY -->
+    <section class="sec" id="liability" aria-labelledby="liaTitle">
+        <div class="sec-head">
+            <div class="sec-head-txt">
+                <span class="sec-kicker">Section 11 · Where responsibility sits</span>
+                <h2 class="sec-title" id="liaTitle">Disclaimers &amp; liability</h2>
+            </div>
+        </div>
+        <div class="tl-list">
+            <div class="tl-row"><div class="tl-when">Goods</div><div class="tl-what"><b>What we warrant</b><p>Every item is authentic, carries the manufacturer warranty listed on its page, and matches its description. Nothing on the shelf is refurbished stock sold as new.</p></div></div>
+            <div class="tl-row tl-row--green"><div class="tl-when">Site</div><div class="tl-what"><b>The store "as is"</b><p>We keep the store online and fast, but no service can promise 100% uptime. Maintenance windows and carrier delays happen; if one hits your order, the delivery promise shifts by the same amount.</p></div></div>
+            <div class="tl-row tl-row--gold"><div class="tl-when">Cap</div><div class="tl-what"><b>The ceiling</b><p>Where the law allows, our total liability for any order is capped at the value of that order. Nothing here excludes liability we can't exclude by law.</p></div></div>
+            <div class="tl-row tl-row--pink"><div class="tl-when">Rights</div><div class="tl-what"><b>Your statutory rights win</b><p>Consumer rights under mandatory law - yours wherever you live - always override anything on this page. These terms add clarity; they never subtract rights.</p></div></div>
+        </div>
+    </section>
+
+    <!-- 12 · GOVERNING LAW -->
+    <section class="sec" id="law" aria-labelledby="lawTitle">
+        <div class="sec-head">
+            <div class="sec-head-txt">
+                <span class="sec-kicker">Section 12 · The rules about the rules</span>
+                <h2 class="sec-title" id="lawTitle">Governing law, disputes &amp; changes</h2>
+            </div>
+        </div>
+        <div class="ledger-scroll">
+            <table class="ledger">
+                <thead><tr><th>Topic</th><th>The answer</th></tr></thead>
+                <tbody>
+                    <tr><td><b>Governing law</b>which law applies</td><td>The laws of the Sultanate of Oman.</td></tr>
+                    <tr><td><b>Disputes</b>where they're heard</td><td>The courts of Muscat, Oman - after a genuine attempt to fix it by email first. Most things resolve in one message to <a href="mailto:support@trendaryo.com">support@trendaryo.com</a>.</td></tr>
+                    <tr><td><b>Changes to terms</b>when this page moves</td><td>Material changes are announced on the <a href="index.html">home page</a> and emailed to account holders. Every order is governed by the terms in force when its confirmation email was sent.</td></tr>
+                    <tr><td><b>Severability</b>if one clause falls</td><td>If a clause is found unenforceable, the rest of the terms stand.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- 13 · FAQ + TRUST + CTA -->
+    <section class="sec" id="faq" aria-labelledby="faqTitle">
+        <div class="sec-head">
+            <div class="sec-head-txt">
+                <span class="sec-kicker">Section 13 · Asked and answered</span>
+                <h2 class="sec-title" id="faqTitle">The questions these terms get</h2>
+            </div>
+        </div>
+        <div id="faqRoot" class="mount-pad"></div>
+        <div id="trustRoot" class="mount-pad"></div>
+        <div id="ctaRoot" class="mount-pad"></div>
+    </section>
+
+    </div><!-- /legal-shell -->
+    </main>
+
+    <script src="components.js"></script>
+    <script src="page-helpers.js"></script>
+    <script>
+    (function () {
+        var UI = window.TrendaryoUI;
+        if (!UI) return;
+        var faq = document.getElementById('faqRoot');
+        if (faq && UI.faq) faq.innerHTML = UI.faq([
+            { q: 'When exactly does my order become a contract?', a: 'When the confirmation email lands (Section 04). The checkout screen is an offer; the email is our acceptance. Everything we owe you from that moment is listed in that email.' },
+            { q: 'What happens if a price is wrong?', a: 'If a listing is mispriced by an obvious margin, we flag it before charging you. You can cancel free or re-order at the correct price. We never quietly charge a wrong number.' },
+            { q: 'My item arrived damaged - what now?', a: 'Contact us within 48 hours with photos. We ship a replacement at no cost, or refund in full including original shipping - your choice (Section 07).' },
+            { q: 'My promo code didn\'t apply. Can you add it later?', a: 'Codes apply at checkout and can\'t be added retroactively - but if a code failed because of a fault on our side, email support@trendaryo.com and we\'ll make it right with the code or its equivalent.' },
+            { q: 'Can I resell Trendaryo products?', a: 'Buying the shelf to flip it elsewhere isn\'t covered by these terms. The honest route is the affiliate program - it pays you to send customers here without draining the stock.' }
+        ], false);
+        var ts = document.getElementById('trustRoot');
+        if (ts && UI.trustStrip) ts.innerHTML = UI.trustStrip();
+        var cta = document.getElementById('ctaRoot');
+        if (cta && UI.ctaBand) cta.innerHTML = UI.ctaBand({
+            title: 'That\'s the whole agreement.',
+            text: 'No traps, no clever clauses. The shelf is open: free shipping over $50, 30-day returns and secure checkout on every order.',
+            cta: 'Open the Shortlist',
+            href: 'shop.html'
+        });
+    })();
+    </script>
+    <script src="bg.js"></script>
+</body>
+</html>

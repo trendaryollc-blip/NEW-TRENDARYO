@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="30-day easy returns and exchanges. Free return shipping. Full refund guarantee. Learn about our hassle-free return policy.">
+    <meta name="keywords" content="returns, exchanges, refund, return policy">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Trendaryo">
+    <link rel="canonical" href="https://trendaryo.com/returns.html">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://trendaryo.com/returns.html">
+    <meta property="og:title" content="Returns & Exchanges - Trendaryo | Easy 30-Day Returns">
+    <meta property="og:description" content="30-day easy returns and exchanges. Free return shipping. Full refund guarantee. Learn about our hassle-free return policy.">
+    <meta property="og:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://trendaryo.com/returns.html">
+    <meta property="twitter:title" content="Returns & Exchanges - Trendaryo | Easy 30-Day Returns">
+    <meta property="twitter:description" content="30-day easy returns and exchanges. Free return shipping. Full refund guarantee. Learn about our hassle-free return policy.">
+    <meta property="twitter:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
+    <title>Returns & Exchanges - Trendaryo | Easy 30-Day Returns</title>
+    <link rel="stylesheet" href="responsive.css">
+    <script src="performance.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared.css">
+    <script src="bg.js"></script>
+    <style>
+        :root { --accent: #00f0ff; --accent-2: #ff00aa; --accent-3: #00ff88; --glass: rgba(255,255,255,0.05); --glass-border: rgba(255,255,255,0.1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { padding-top: 150px; font-family: 'Rajdhani', sans-serif; background: #0a0a2a; color: #fff; overflow-x: hidden; }
+        
+        /* Header Styles */
+        .store-header { position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: rgba(0,0,0,0.08); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid var(--glass-border); }
+        .store-header-inner { max-width: 1200px; margin: 0 auto; padding: 0.8rem 1.25rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+        .store-brand { display: flex; align-items: center; gap: 0.75rem; min-width: 180px; }
+        .store-logo { font-family: 'Orbitron', sans-serif; font-size: 1.6rem; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent-2)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; white-space: nowrap; }
+        .store-search { flex: 1; display: flex; align-items: center; gap: 0.5rem; padding: 0.55rem 0.9rem; border-radius: 999px; background: var(--glass); border: 1px solid var(--glass-border); min-width: 220px; }
+        .store-search input { width: 100%; border: none; outline: none; background: #0a0a2a; color: rgba(255,255,255,0.9); font-family: inherit; font-size: 1rem; }
+        .store-search input::placeholder { color: rgba(255,255,255,0.55); }
+        .store-actions { display: flex; align-items: center; gap: 0.6rem; }
+        .store-icon-btn { width: 42px; height: 42px; border-radius: 999px; background: var(--glass); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.9); text-decoration: none; transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease; cursor: pointer; }
+        .store-icon-btn:hover { transform: translateY(-1px); border-color: rgba(0,240,255,0.6); background: rgba(0,240,255,0.12); }
+        .store-nav { max-width: 1200px; margin: 0 auto; padding: 0 1.25rem 0.85rem; }
+        .store-nav-list { display: flex; align-items: center; justify-content: center; gap: 0.25rem; list-style: none; }
+        .store-nav-item { position: relative; }
+        .store-nav-link { font-family: 'Orbitron', sans-serif; font-size: 0.82rem; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; color: rgba(255,255,255,0.85); text-decoration: none; padding: 0.65rem 0.9rem; border-radius: 999px; display: inline-flex; align-items: center; gap: 0.5rem; transition: background 0.2s ease, color 0.2s ease; }
+        .store-nav-link:hover { background: rgba(255,255,255,0.08); color: rgba(255,255,255,1); }
+        .store-nav-link[aria-current="page"] { background: rgba(0,240,255,0.14); color: rgba(255,255,255,1); border: 1px solid rgba(0,240,255,0.25); }
+        .store-caret { font-size: 0.8rem; opacity: 0.85; }
+        .store-dropdown { position: absolute; left: 0; top: calc(100% + 10px); min-width: 240px; background: rgba(10,10,42,0.92); border: 1px solid var(--glass-border); border-radius: 14px; padding: 0.5rem; box-shadow: 0 18px 48px rgba(0,0,0,0.45); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease; }
+        .store-dropdown a { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.7rem 0.8rem; border-radius: 10px; color: rgba(255,255,255,0.88); text-decoration: none; transition: background 0.18s ease, color 0.18s ease; }
+        .store-dropdown a:hover { background: rgba(0,240,255,0.12); color: #fff; }
+        .store-dropdown small { color: rgba(255,255,255,0.55); font-size: 0.85rem; }
+        .store-nav-item:hover .store-dropdown, .store-nav-item.is-open .store-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+        .store-mobile-toggle { display: none; width: 42px; height: 42px; border-radius: 999px; background: var(--glass); border: 1px solid var(--glass-border); color: rgba(255,255,255,0.9); cursor: pointer; }
+        @media(max-width: 900px) { .store-nav { display: none; } .store-mobile-toggle { display: flex; align-items: center; justify-content: center; } }
+        
+        #three-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+        .page-header-3d { padding: 2rem 2rem 3rem; text-align: center; }
+        .page-title-3d { font-family: 'Orbitron', sans-serif; font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 900; background: linear-gradient(135deg, #fff, var(--accent)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .content-section-3d { padding: 2rem; max-width: 1000px; margin: 0 auto; }
+        .content-card-3d { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px; padding: 2.5rem; margin-bottom: 2rem; backdrop-filter: blur(10px); }
+        .content-card-3d h2 { font-family: 'Orbitron', sans-serif; font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--accent); }
+        .content-card-3d p, .content-card-3d li { color: rgba(255,255,255,0.95); line-height: 1.9; font-size: 1.1rem; }
+        .content-card-3d ul { padding-left: 1.5rem; }
+        .content-card-3d li { margin-bottom: 0.75rem; }
+        .process-steps-3d { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 2rem; }
+        .step-3d { text-align: center; }
+        .step-number-3d { width: 50px; height: 50px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-family: 'Orbitron', sans-serif; font-weight: 700; color: #000; }
+        .step-3d h4 { margin-bottom: 0.5rem; color: rgba(255,255,255,0.95); font-size: 1rem; }
+        .step-3d p { font-size: 0.95rem; color: rgba(255,255,255,0.85); }
+        .preloader-3d { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 2rem; }
+        .preloader-3d.hidden { opacity: 0; pointer-events: none; transition: opacity 0.5s; }
+        .preloader-logo-3d { font-family: 'Orbitron', sans-serif; font-size: 2rem; background: linear-gradient(135deg, var(--accent), var(--accent-2)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .preloader-spinner-3d { width: 50px; height: 50px; border: 3px solid var(--glass-border); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
+        @media(max-width:768px){ .process-steps-3d{grid-template-columns:repeat(2,1fr);} }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes pulse-glow { 0%,100% { opacity:0.3;transform:translate(-50%,-50%) scale(1); } 50% { opacity:0.6;transform:translate(-50%,-50%) scale(1.2); } }
+        @keyframes bounce-icon { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-10px); } }
+        @keyframes rotate-badge { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
+    </style>
+<!-- cache-bust: 1773610048940 -->
+</head>
+<body>
+    <!-- Full Navigation Header -->
+    <div id="header-container" data-type="full"></div>
+
+    <div class="preloader-3d" id="preloader"><div class="preloader-logo-3d">TRENDARYO</div><div class="preloader-spinner-3d"></div></div>
+    <canvas id="three-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;"></canvas>
+    <section class="page-header-3d"><h1 class="page-title-3d">RETURNS & EXCHANGES</h1></section>
+    <section class="content-section-3d">
+        <div class="content-card-3d">
+            <h2>Our Return Policy</h2>
+            <p>We want you to love your purchase. If you're not completely satisfied, you may return most items within 30 days of delivery for a full refund or exchange.</p>
+        </div>
+        <div class="content-card-3d">
+            <h2>How to Return</h2>
+            <div class="process-steps-3d">
+                <div class="step-3d"><div class="step-number-3d">1</div><h4>Contact Us</h4><p>Email support@trendaryo.com</p></div>
+                <div class="step-3d"><div class="step-number-3d">2</div><h4>Get Label</h4><p>We'll send a return label</p></div>
+                <div class="step-3d"><div class="step-number-3d">3</div><h4>Ship It</h4><p>Use the prepaid label</p></div>
+                <div class="step-3d"><div class="step-number-3d">4</div><h4>Get Refund</h4><p>Refund in 5-7 days</p></div>
+            </div>
+        </div>
+        <div class="content-card-3d">
+            <h2>Eligible Items</h2>
+            <ul>
+                <li>Items must be unused and in original packaging</li>
+                <li>All tags must be attached</li>
+                <li>Proof of purchase required</li>
+                <li>Personalized items cannot be returned</li>
+            </ul>
+        </div>
+        <div class="content-card-3d">
+            <h2>Refunds</h2>
+            <p>Once we receive your return, we'll process your refund within 5-7 business days. The refund will be credited to your original payment method.</p>
+        </div>
+    </section>
+
+    <!-- Instant Return Portal -->
+    <section style="padding:4rem 2rem;max-width:1200px;margin:0 auto;position:relative;z-index:2;">
+        <div style="background:linear-gradient(135deg,rgba(0,240,255,0.15),rgba(255,0,170,0.15));border:2px solid var(--glass-border);border-radius:30px;padding:4rem 3rem;text-align:center;position:relative;overflow:hidden;">
+            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;height:300px;background:radial-gradient(circle,rgba(0,240,255,0.3),transparent);border-radius:50%;animation:pulse-glow 3s ease-in-out infinite;"></div>
+            <div style="position:relative;z-index:1;">
+                <div style="font-size:4rem;margin-bottom:1.5rem;animation:bounce-icon 2s ease-in-out infinite;">📦</div>
+                <h2 style="font-family:'Orbitron',sans-serif;font-size:2.5rem;margin-bottom:1rem;background:linear-gradient(135deg,#fff,var(--accent));background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Start Your Return Instantly</h2>
+                <p style="color:rgba(255,255,255,0.9);font-size:1.2rem;margin-bottom:2.5rem;max-width:600px;margin-left:auto;margin-right:auto;">No waiting, no hassle. Get your return label in seconds</p>
+                <div style="display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;">
+                    <a href="#return-form" style="padding:1.2rem 3rem;background:linear-gradient(135deg,var(--accent),var(--accent-2));border-radius:50px;font-family:'Orbitron',sans-serif;font-weight:700;color:#000;text-decoration:none;transition:transform 0.3s ease,box-shadow 0.3s ease;box-shadow:0 10px 30px rgba(0,240,255,0.3);" onmouseover="this.style.transform='translateY(-3px) scale(1.05)';this.style.boxShadow='0 15px 40px rgba(0,240,255,0.5)';" onmouseout="this.style.transform='';this.style.boxShadow='0 10px 30px rgba(0,240,255,0.3)';">� Start Return</a>
+                    <a href="contact.html" style="padding:1.2rem 3rem;background:var(--glass);border:2px solid var(--glass-border);border-radius:50px;font-family:'Orbitron',sans-serif;font-weight:700;color:#fff;text-decoration:none;transition:all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.1)';this.style.borderColor='var(--accent)';" onmouseout="this.style.background='var(--glass)';this.style.borderColor='var(--glass-border)';">💬 Contact Support</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Return Request Form -->
+    <section id="return-form" style="padding:4rem 2rem;max-width:900px;margin:0 auto;position:relative;z-index:2;">
+        <div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:25px;padding:3rem;">
+            <h2 style="font-family:'Orbitron',sans-serif;font-size:2rem;margin-bottom:2rem;text-align:center;color:var(--accent);">Return Request Form</h2>
+            
+            <form id="return-request-form" style="display:grid;gap:2rem;">
+                <!-- Order Information -->
+                <div style="background:rgba(0,0,0,0.3);padding:2rem;border-radius:15px;">
+                    <h3 style="font-family:'Orbitron',sans-serif;margin-bottom:1.5rem;color:#fff;">Order Information</h3>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+                        <div>
+                            <label style="display:block;margin-bottom:0.5rem;color:rgba(255,255,255,0.9);font-weight:500;">Order Number *</label>
+                            <input type="text" id="return-order-number" placeholder="e.g., TRD-123456" required style="width:100%;padding:0.8rem;border-radius:8px;background:var(--glass);border:1px solid var(--glass-border);color:#fff;">
+                        </div>
+                        <div>
+                            <label style="display:block;margin-bottom:0.5rem;color:rgba(255,255,255,0.9);font-weight:500;">Email Address *</label>
+                            <input type="email" id="return-email" placeholder="your@email.com" required style="width:100%;padding:0.8rem;border-radius:8px;background:var(--glass);border:1px solid var(--glass-border);color:#fff;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Return Type -->
+                <div style="background:rgba(0,0,0,0.3);padding:2rem;border-radius:15px;">
+                    <h3 style="font-family:'Orbitron',sans-serif;margin-bottom:1.5rem;color:#fff;">Return Type *</h3>
+                    <div style="display:grid;gap:1rem;">
+                        <label style="display:flex;align-items:center;padding:1rem;background:rgba(0,0,0,0.3);border-radius:8px;cursor:pointer;">
+                            <input type="radio" name="return-type" value="refund" required style="margin-right:1rem;">
+                            <div style="flex:1;">
+                                <div style="font-weight:600;">Full Refund</div>
+                                <div style="font-size:0.9rem;color:rgba(255,255,255,0.75);">Get your money back to original payment method</div>
+                            </div>
+                        </label>
+                        <label style="display:flex;align-items:center;padding:1rem;background:rgba(0,0,0,0.3);border-radius:8px;cursor:pointer;">
+                            <input type="radio" name="return-type" value="exchange" required style="margin-right:1rem;">
+                            <div style="flex:1;">
+                                <div style="font-weight:600;">Exchange</div>
+                                <div style="font-size:0.9rem;color:rgba(255,255,255,0.75);">Get a different size, color, or product</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Reason for Return -->
+                <div style="background:rgba(0,0,0,0.3);padding:2rem;border-radius:15px;">
+                    <h3 style="font-family:'Orbitron',sans-serif;margin-bottom:1.5rem;color:#fff;">Reason for Return *</h3>
+                    <select id="return-reason" required style="width:100%;padding:0.8rem;border-radius:8px;background:var(--glass);border:1px solid var(--glass-border);color:#fff;">
+                        <option value="">Select a reason</option>
+                        <option value="wrong-size">Wrong Size</option>
+                        <option value="wrong-color">Wrong Color</option>
+                        <option value="defective">Defective Item</option>
+                        <option value="damaged">Damaged in Shipping</option>
+                        <option value="not-as-described">Not as Described</option>
+                        <option value="changed-mind">Changed Mind</option>
+                        <option value="unwanted-gift">Unwanted Gift</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <div style="margin-top:1rem;">
+                        <label style="display:block;margin-bottom:0.5rem;color:rgba(255,255,255,0.9);font-weight:500;">Additional Details</label>
+                        <textarea id="return-details" rows="4" placeholder="Please provide more details about your return..." style="width:100%;padding:0.8rem;border-radius:8px;background:var(--glass);border:1px solid var(--glass-border);color:#fff;resize:vertical;"></textarea>
+                    </div>
+                </div>
+
+                <!-- Photo Upload -->
+                <div style="background:rgba(0,0,0,0.3);padding:2rem;border-radius:15px;">
+                    <h3 style="font-family:'Orbitron',sans-serif;margin-bottom:1.5rem;color:#fff;">Product Photos (Optional)</h3>
+                    <p style="color:rgba(255,255,255,0.85);margin-bottom:1rem;">Upload photos of the product to help us process your return faster</p>
+                    <div id="photo-upload-area" style="border:2px dashed var(--glass-border);border-radius:10px;padding:2rem;text-align:center;cursor:pointer;transition:border-color 0.3s;">
+                        <div style="font-size:3rem;margin-bottom:1rem;">📷</div>
+                        <p style="color:rgba(255,255,255,0.9);">Click to upload photos or drag and drop</p>
+                        <p style="font-size:0.9rem;color:rgba(255,255,255,0.7);">JPG, PNG, GIF (Max 5MB each)</p>
+                        <input type="file" id="photo-input" accept="image/*" multiple style="display:none;">
+                    </div>
+                    <div id="photo-preview" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:1rem;margin-top:1rem;"></div>
+                </div>
+
+                <!-- Exchange Options (Hidden by default) -->
+                <div id="exchange-options" style="background:rgba(0,0,0,0.3);padding:2rem;border-radius:15px;display:none;">
+                    <h3 style="font-family:'Orbitron',sans-serif;margin-bottom:1.5rem;color:#fff;">Exchange Details</h3>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+                        <div>
+                            <label style="display:block;margin-bottom:0.5rem;color:rgba(255,255,255,0.9);font-weight:500;">New Size</label>
+                            <select id="exchange-size" style="width:100%;padding:0.8rem;border-radius:8px;background:var(--glass);border:1px solid var(--glass-border);color:#fff;">
+                                <option value="">Select size</option>
+                                <option value="XS">XS</option>
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="XL">XL</option>
+                                <option value="XXL">XXL</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="display:block;margin-bottom:0.5rem;color:rgba(255,255,255,0.9);font-weight:500;">New Color</label>
+                            <select id="exchange-color" style="width:100%;padding:0.8rem;border-radius:8px;background:var(--glass);border:1px solid var(--glass-border);color:#fff;">
+                                <option value="">Select color</option>
+                                <option value="black">Black</option>
+                                <option value="white">White</option>
+                                <option value="navy">Navy</option>
+                                <option value="gray">Gray</option>
+                                <option value="red">Red</option>
+                                <option value="blue">Blue</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div style="text-align:center;">
+                    <button type="submit" style="padding:1.2rem 3rem;background:linear-gradient(135deg,var(--accent),var(--accent-2));border:none;border-radius:50px;font-family:'Orbitron',sans-serif;font-weight:700;color:#000;cursor:pointer;transition:all 0.3s ease;font-size:1.1rem;">
+                        Submit Return Request
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Return Reasons Grid -->
+    <section style="padding:4rem 2rem;max-width:1200px;margin:0 auto;position:relative;z-index:2;">
+        <h2 style="font-family:'Orbitron',sans-serif;font-size:2rem;text-align:center;margin-bottom:3rem;color:var(--accent);">Common Return Reasons</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem;">
+            <div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;padding:2.5rem;text-align:center;transition:all 0.3s ease;cursor:pointer;" onmouseover="this.style.transform='translateY(-10px)';this.style.borderColor='rgba(0,240,255,0.5)';this.style.background='rgba(0,240,255,0.08)';" onmouseout="this.style.transform='';this.style.borderColor='var(--glass-border)';this.style.background='var(--glass)';">
+                <div style="font-size:3rem;margin-bottom:1rem;">📏</div>
+                <h3 style="font-family:'Orbitron',sans-serif;margin-bottom:1rem;color:#fff;">Wrong Size</h3>
+                <p style="color:rgba(255,255,255,0.85);line-height:1.6;">Free size exchanges available. Check our <a href="size-guide.html" style="color:var(--accent);text-decoration:none;">size guide</a></p>
+            </div>
+            <div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;padding:2.5rem;text-align:center;transition:all 0.3s ease;cursor:pointer;" onmouseover="this.style.transform='translateY(-10px)';this.style.borderColor='rgba(255,0,170,0.5)';this.style.background='rgba(255,0,170,0.08)';" onmouseout="this.style.transform='';this.style.borderColor='var(--glass-border)';this.style.background='var(--glass)';">
+                <div style="font-size:3rem;margin-bottom:1rem;">🎨</div>
+                <h3 style="font-family:'Orbitron',sans-serif;margin-bottom:1rem;color:#fff;">Different Color</h3>
+                <p style="color:rgba(255,255,255,0.85);line-height:1.6;">Not what you expected? Exchange for any color variant</p>
+            </div>
+            <div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;padding:2.5rem;text-align:center;transition:all 0.3s ease;cursor:pointer;" onmouseover="this.style.transform='translateY(-10px)';this.style.borderColor='rgba(0,255,136,0.5)';this.style.background='rgba(0,255,136,0.08)';" onmouseout="this.style.transform='';this.style.borderColor='var(--glass-border)';this.style.background='var(--glass)';">
+                <div style="font-size:3rem;margin-bottom:1rem;">⚠️</div>
+                <h3 style="font-family:'Orbitron',sans-serif;margin-bottom:1rem;color:#fff;">Defective Item</h3>
+                <p style="color:rgba(255,255,255,0.85);line-height:1.6;">Priority processing with prepaid return shipping</p>
+            </div>
+            <div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;padding:2.5rem;text-align:center;transition:all 0.3s ease;cursor:pointer;" onmouseover="this.style.transform='translateY(-10px)';this.style.borderColor='rgba(0,240,255,0.5)';this.style.background='rgba(0,240,255,0.08)';" onmouseout="this.style.transform='';this.style.borderColor='var(--glass-border)';this.style.background='var(--glass)';">
+                <div style="font-size:3rem;margin-bottom:1rem;">💭</div>
+                <h3 style="font-family:'Orbitron',sans-serif;margin-bottom:1rem;color:#fff;">Changed Mind</h3>
+                <p style="color:rgba(255,255,255,0.85);line-height:1.6;">No problem! 30-day hassle-free returns</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Money-Back Guarantee -->
+    <section style="padding:4rem 2rem;max-width:900px;margin:0 auto;position:relative;z-index:2;">
+        <div style="background:linear-gradient(135deg,rgba(0,255,136,0.1),rgba(0,240,255,0.1));border:3px solid var(--accent-3);border-radius:25px;padding:3rem;text-align:center;position:relative;overflow:hidden;">
+            <div style="position:absolute;top:-50px;right:-50px;width:200px;height:200px;background:radial-gradient(circle,rgba(0,255,136,0.2),transparent);border-radius:50%;"></div>
+            <div style="position:absolute;bottom:-50px;left:-50px;width:200px;height:200px;background:radial-gradient(circle,rgba(0,240,255,0.2),transparent);border-radius:50%;"></div>
+            <div style="position:relative;z-index:1;">
+                <div style="width:120px;height:120px;margin:0 auto 2rem;background:linear-gradient(135deg,var(--accent-3),var(--accent));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:4rem;box-shadow:0 20px 50px rgba(0,255,136,0.4);animation:rotate-badge 20s linear infinite;">✓</div>
+                <h2 style="font-family:'Orbitron',sans-serif;font-size:2.5rem;margin-bottom:1.5rem;color:#fff;">100% Money-Back Guarantee</h2>
+                <p style="color:rgba(255,255,255,0.9);font-size:1.2rem;line-height:1.8;max-width:600px;margin:0 auto 2rem;">If you're not completely satisfied with your purchase, we'll refund your money. No questions asked. That's our promise to you.</p>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:3rem;">
+                    <div><div style="font-size:2.5rem;font-weight:700;background:linear-gradient(135deg,var(--accent-3),var(--accent));background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:0.5rem;">30</div><div style="color:rgba(255,255,255,0.85);font-size:0.95rem;">Days Return</div></div>
+                    <div><div style="font-size:2.5rem;font-weight:700;background:linear-gradient(135deg,var(--accent-3),var(--accent));background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:0.5rem;">FREE</div><div style="color:rgba(255,255,255,0.85);font-size:0.95rem;">Return Shipping</div></div>
+                    <div><div style="font-size:2.5rem;font-weight:700;background:linear-gradient(135deg,var(--accent-3),var(--accent));background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:0.5rem;">5-7</div><div style="color:rgba(255,255,255,0.85);font-size:0.95rem;">Days Refund</div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Exchange Benefits -->
+    <section style="padding:4rem 2rem 6rem;max-width:1200px;margin:0 auto;position:relative;z-index:2;">
+        <h2 style="font-family:'Orbitron',sans-serif;font-size:2rem;text-align:center;margin-bottom:1rem;color:var(--accent);">Why Exchange Instead?</h2>
+        <p style="text-align:center;color:rgba(255,255,255,0.85);margin-bottom:3rem;font-size:1.1rem;">Get your perfect item faster with instant exchanges</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:2rem;">
+            <div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;padding:2rem;text-align:center;">
+                <div style="width:80px;height:80px;margin:0 auto 1.5rem;background:linear-gradient(135deg,rgba(0,240,255,0.2),rgba(255,0,170,0.2));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;">⚡</div>
+                <h3 style="font-family:'Orbitron',sans-serif;margin-bottom:1rem;color:#fff;font-size:1.2rem;">Faster Processing</h3>
+                <p style="color:rgba(255,255,255,0.85);line-height:1.6;font-size:0.95rem;">Exchanges ship immediately, no waiting for refunds</p>
+            </div>
+            <div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;padding:2rem;text-align:center;">
+                <div style="width:80px;height:80px;margin:0 auto 1.5rem;background:linear-gradient(135deg,rgba(255,0,170,0.2),rgba(0,255,136,0.2));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;">🎁</div>
+                <h3 style="font-family:'Orbitron',sans-serif;margin-bottom:1rem;color:#fff;font-size:1.2rem;">Priority Shipping</h3>
+                <p style="color:rgba(255,255,255,0.85);line-height:1.6;font-size:0.95rem;">Free expedited shipping on all exchanges</p>
+            </div>
+            <div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;padding:2rem;text-align:center;">
+                <div style="width:80px;height:80px;margin:0 auto 1.5rem;background:linear-gradient(135deg,rgba(0,255,136,0.2),rgba(0,240,255,0.2));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;">💰</div>
+                <h3 style="font-family:'Orbitron',sans-serif;margin-bottom:1rem;color:#fff;font-size:1.2rem;">Keep Your Discount</h3>
+                <p style="color:rgba(255,255,255,0.85);line-height:1.6;font-size:0.95rem;">Original sale prices honored on exchanges</p>
+            </div>
+            <div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;padding:2rem;text-align:center;">
+                <div style="width:80px;height:80px;margin:0 auto 1.5rem;background:linear-gradient(135deg,rgba(0,240,255,0.2),rgba(0,255,136,0.2));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;">🔄</div>
+                <h3 style="font-family:'Orbitron',sans-serif;margin-bottom:1rem;color:#fff;font-size:1.2rem;">Unlimited Exchanges</h3>
+                <p style="color:rgba(255,255,255,0.85);line-height:1.6;font-size:0.95rem;">Exchange as many times as needed within 30 days</p>
+            </div>
+        </div>
+    </section>
+    <script>
+        const storeHeader = document.getElementById('store-header');
+        const mobileToggle = document.getElementById('store-mobile-toggle');
+        const dropdownItems = Array.from(document.querySelectorAll('.store-nav-item[data-dropdown]'));
+
+        const storeNav = document.querySelector('.store-nav');
+
+        if (mobileToggle && storeNav) {
+            mobileToggle.addEventListener('click', () => {
+                const isOpen = storeNav.classList.toggle('mobile-open');
+                mobileToggle.setAttribute('aria-expanded', String(isOpen));
+                mobileToggle.textContent = isOpen ? '✕' : '☰';
+                if (!isOpen) dropdownItems.forEach(i => i.classList.remove('is-open'));
+            });
+        }
+
+        dropdownItems.forEach(item => {
+            const link = item.querySelector('.store-nav-link');
+            if (!link) return;
+            link.addEventListener('click', (e) => {
+                if (!window.matchMedia('(max-width: 900px)').matches) return;
+                const isOpen = item.classList.contains('is-open');
+                if (!isOpen) {
+                    e.preventDefault();
+                    dropdownItems.forEach(i => i.classList.remove('is-open'));
+                    item.classList.add('is-open');
+                }
+            });
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!storeHeader) return;
+            if (storeHeader.contains(e.target)) return;
+            dropdownItems.forEach(i => i.classList.remove('is-open'));
+            if (storeNav) { storeNav.classList.remove('mobile-open'); }
+            if (mobileToggle) { mobileToggle.setAttribute('aria-expanded', 'false'); mobileToggle.textContent = '☰'; }
+        });
+    </script>
+        <script>
+        (function() {
+            var themes = [
+                'linear-gradient(180deg, #0a0a2a 0%, #1a1a40 100%)',
+                'linear-gradient(180deg, #2a003f 0%, #3b0066 100%)',
+                'linear-gradient(180deg, #002b36 0%, #004f66 100%)',
+                'linear-gradient(180deg, #2a003f 0%, #1a1a40 100%)'
+            ];
+            var STORAGE_KEY = 'themeIndex';
+
+            // Use the bg div created by bg.js (window.__themeBgDiv = div#__theme-bg)
+            // bg.js sets body to transparent automatically
+            var bgDiv = window.__themeBgDiv || document.body;
+
+            var currentTheme = parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10);
+            if (isNaN(currentTheme) || currentTheme < 0 || currentTheme >= themes.length) currentTheme = 0;
+
+            function applyTheme(idx) {
+                bgDiv.style.background = themes[idx];
+                if (idx === 3) {
+                    document.querySelectorAll('h1,h2,h3,.page-title-3d').forEach(function(el){ el.style.color = '#FFD700'; });
+                    document.querySelectorAll('button,.btn-3d').forEach(function(btn){ btn.style.background = '#6a0dad'; btn.style.color = '#FFD700'; });
+                } else {
+                    document.querySelectorAll('h1,h2,h3,.page-title-3d').forEach(function(el){ el.style.color = ''; });
+                    document.querySelectorAll('button,.btn-3d').forEach(function(btn){ btn.style.background = ''; btn.style.color = ''; });
+                }
+                
+                // Update 3D particle colors if unified background is available
+                if (window.unifiedBackground && window.unifiedBackground.updateThemeColors) {
+                    const themeColors = [
+                        {accent: '#00f0ff', accent2: '#ff00aa', accent3: '#00ff88'},
+                        {accent: '#bf00ff', accent2: '#ff00ff', accent3: '#00ffff'},
+                        {accent: '#00ff41', accent2: '#39ff14', accent3: '#00ff88'},
+                        {accent: '#ffd700', accent2: '#ffaa00', accent3: '#ff8c00'}
+                    ];
+                    window.unifiedBackground.updateThemeColors(themeColors[idx] || themeColors[0]);
+                }
+                
+                // Update original bg.js particles if available
+                if (typeof updateParticlesTheme === 'function') {
+                    const themeColors = [
+                        {accent: '#00f0ff', accent2: '#ff00aa', accent3: '#00ff88'},
+                        {accent: '#bf00ff', accent2: '#ff00ff', accent3: '#00ffff'},
+                        {accent: '#00ff41', accent2: '#39ff14', accent3: '#00ff88'},
+                        {accent: '#ffd700', accent2: '#ffaa00', accent3: '#ff8c00'}
+                    ];
+                    updateParticlesTheme(themeColors[idx] || themeColors[0]);
+                }
+                
+                // Force refresh of any 3D background systems
+                if (window.unifiedBackground && window.unifiedBackground.refresh) {
+                    window.unifiedBackground.refresh();
+                }
+            }
+
+            applyTheme(currentTheme);
+
+            var themeToggle = document.getElementById('theme-toggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', function() {
+                    currentTheme = (currentTheme + 1) % themes.length;
+                    localStorage.setItem(STORAGE_KEY, currentTheme);
+                    applyTheme(currentTheme);
+                });
+            }
+        })();
+    </script>
+    <script>
+        function hidePreloader() { var p = document.getElementById('preloader'); if (p) p.classList.add('hidden'); }
+        if (document.readyState === 'complete') { setTimeout(hidePreloader, 800); }
+        else { window.addEventListener('load', function () { setTimeout(hidePreloader, 800); }); }
+        setTimeout(hidePreloader, 2000);
+    </script>
+    <script>
+        // Return Form Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const returnTypeRadios = document.querySelectorAll('input[name="return-type"]');
+            const exchangeOptions = document.getElementById('exchange-options');
+            const photoUploadArea = document.getElementById('photo-upload-area');
+            const photoInput = document.getElementById('photo-input');
+            const photoPreview = document.getElementById('photo-preview');
+            const returnForm = document.getElementById('return-request-form');
+            
+            let uploadedPhotos = [];
+            let formData = {};
+            
+            // Show/hide exchange options based on return type
+            returnTypeRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'exchange') {
+                        exchangeOptions.style.display = 'block';
+                    } else {
+                        exchangeOptions.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Photo upload functionality
+            photoUploadArea.addEventListener('click', () => photoInput.click());
+            
+            photoUploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                photoUploadArea.style.borderColor = 'var(--accent)';
+                photoUploadArea.style.background = 'rgba(0,240,255,0.05)';
+            });
+            
+            photoUploadArea.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                photoUploadArea.style.borderColor = 'var(--glass-border)';
+                photoUploadArea.style.background = 'transparent';
+            });
+            
+            photoUploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                photoUploadArea.style.borderColor = 'var(--glass-border)';
+                photoUploadArea.style.background = 'transparent';
+                handleFiles(e.dataTransfer.files);
+            });
+            
+            photoInput.addEventListener('change', (e) => {
+                handleFiles(e.target.files);
+            });
+            
+            function handleFiles(files) {
+                Array.from(files).forEach(file => {
+                    if (file.type.startsWith('image/') && file.size <= 5 * 1024 * 1024) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            const photoId = Date.now() + Math.random();
+                            uploadedPhotos.push({
+                                id: photoId,
+                                name: file.name,
+                                url: e.target.result
+                            });
+                            displayPhoto(photoId, e.target.result);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+            
+            function displayPhoto(id, url) {
+                const photoDiv = document.createElement('div');
+                photoDiv.style.cssText = 'position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;';
+                photoDiv.innerHTML = `
+                    <img src="${url}" style="width:100%;height:100%;object-fit:cover;">
+                    <button type="button" onclick="removePhoto(${id})" style="position:absolute;top:5px;right:5px;background:rgba(255,0,0,0.8);border:none;border-radius:50%;width:24px;height:24px;color:white;cursor:pointer;font-size:12px;">×</button>
+                `;
+                photoPreview.appendChild(photoDiv);
+            }
+            
+            window.removePhoto = function(id) {
+                uploadedPhotos = uploadedPhotos.filter(photo => photo.id !== id);
+                renderPhotoPreview();
+            };
+            
+            function renderPhotoPreview() {
+                photoPreview.innerHTML = '';
+                uploadedPhotos.forEach(photo => {
+                    displayPhoto(photo.id, photo.url);
+                });
+            }
+            
+            // Form submission
+            returnForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                formData = {
+                    orderNumber: document.getElementById('return-order-number').value,
+                    email: document.getElementById('return-email').value,
+                    returnType: document.querySelector('input[name="return-type"]:checked').value,
+                    reason: document.getElementById('return-reason').value,
+                    details: document.getElementById('return-details').value,
+                    photos: uploadedPhotos,
+                    exchangeSize: document.getElementById('exchange-size').value,
+                    exchangeColor: document.getElementById('exchange-color').value
+                };
+                
+                // Generate return label
+                generateReturnLabel(formData);
+            });
+        });
+        
+        function generateReturnLabel(data) {
+            // Create return confirmation modal
+            const modal = document.createElement('div');
+            modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:100000;display:flex;align-items:center;justify-content:center;';
+            modal.innerHTML = `
+                <div style="background:linear-gradient(135deg,#0a0a2a,#1a1a40);border:2px solid var(--accent);border-radius:20px;padding:3rem;max-width:500px;width:90%;max-height:90vh;overflow-y:auto;position:relative;">
+                    <button onclick="this.closest('div[style*=position]').remove()" style="position:absolute;top:1rem;right:1rem;background:none;border:none;color:#fff;font-size:2rem;cursor:pointer;">×</button>
+                    
+                    <div style="text-align:center;margin-bottom:2rem;">
+                        <div style="font-size:4rem;margin-bottom:1rem;">✅</div>
+                        <h2 style="font-family:'Orbitron',sans-serif;color:var(--accent);margin-bottom:1rem;">Return Request Approved!</h2>
+                        <p style="color:#aaa;">Your return has been processed successfully</p>
+                    </div>
+                    
+                    <div style="background:rgba(0,0,0,0.3);padding:1.5rem;border-radius:10px;margin-bottom:2rem;">
+                        <h3 style="color:#fff;margin-bottom:1rem;">Return Details</h3>
+                        <div style="display:grid;gap:0.5rem;font-size:0.9rem;">
+                            <div style="display:flex;justify-content:space-between;"><span>Order Number:</span><span>${data.orderNumber}</span></div>
+                            <div style="display:flex;justify-content:space-between;"><span>Return Type:</span><span>${data.returnType}</span></div>
+                            <div style="display:flex;justify-content:space-between;"><span>Reason:</span><span>${data.reason}</span></div>
+                            <div style="display:flex;justify-content:space-between;"><span>Return ID:</span><span style="color:var(--accent);font-weight:700;">RET-${Date.now()}</span></div>
+                        </div>
+                    </div>
+                    
+                    <div style="background:rgba(0,255,136,0.1);border:2px solid var(--accent-3);padding:1.5rem;border-radius:10px;margin-bottom:2rem;">
+                        <h3 style="color:var(--accent-3);margin-bottom:1rem;">📦 Return Shipping Label</h3>
+                        <p style="color:#aaa;margin-bottom:1rem;">Your prepaid return label is ready</p>
+                        <button onclick="downloadLabel('${data.orderNumber}')" style="width:100%;padding:1rem;background:linear-gradient(135deg,var(--accent-3),var(--accent));border:none;border-radius:10px;font-weight:700;color:#000;cursor:pointer;">
+                            📄 Download Return Label
+                        </button>
+                    </div>
+                    
+                    <div style="background:rgba(0,240,255,0.1);border:1px solid var(--accent);padding:1.5rem;border-radius:10px;">
+                        <h4 style="color:var(--accent);margin-bottom:1rem;">Next Steps:</h4>
+                        <ol style="color:#aaa;line-height:1.8;padding-left:1.5rem;">
+                            <li>Print the return label</li>
+                            <li>Package your items securely</li>
+                            <li>Attach the label to the package</li>
+                            <li>Drop off at any shipping location</li>
+                            <li>We'll process your refund within 5-7 days</li>
+                        </ol>
+                    </div>
+                    
+                    <div style="text-align:center;margin-top:2rem;">
+                        <button onclick="this.closest('div[style*=position]').remove()" style="padding:1rem 2rem;background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;color:#fff;cursor:pointer;">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+        
+        function downloadLabel(orderNumber) {
+            // Simulate label download
+            const labelContent = `
+========================================
+TRENDARYO RETURN SHIPPING LABEL
+========================================
+Return ID: RET-${Date.now()}
+Order Number: ${orderNumber}
+Method: Prepaid Return Shipping
+========================================
+Ship To:
+TRENDARYO RETURNS
+123 Return Center Drive
+Suite 100
+Chicago, IL 60601
+========================================
+Instructions:
+1. Package items securely
+2. Remove old shipping labels
+3. Attach this label to package
+4. Drop off at any authorized location
+========================================
+`;
+            
+            const blob = new Blob([labelContent], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Trendaryo_Return_Label_RET-${Date.now()}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+    </script>
+    <div id="footer-container"></div>
+    <script src="components.js"></script>
+    <script src="bg.js"></script>
+    <!-- Self-Healing System -->
+<script>
+window.onerror = function(msg, url, lineNo, columnNo, error) {
+  console.log('Error caught:', msg);
+  const errorDiv = document.createElement('div');
+  errorDiv.style.cssText = 'position:fixed; bottom:20px; right:20px; background:#f3f4f6; padding:10px; border-radius:5px; z-index:9999; border:1px solid #ccc;';
+  errorDiv.innerHTML = '⚠️ Something went wrong. Retrying...';
+  document.body.appendChild(errorDiv);
+  setTimeout(() => errorDiv.remove(), 3000);
+  return false;
+};
+</script>
+</body>
+</html>

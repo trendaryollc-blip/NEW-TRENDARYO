@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Preferences - Trendaryo</title>
+    <meta name="robots" content="noindex, follow">
+    <link rel="canonical" href="https://trendaryo.com/email-preferences.html">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon-crown-star.svg">
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="performance.js"></script>
+    <script src="bg.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0a0a0a; --bg-deep: #0a0a2a;
+            --accent: #00f0ff; --accent-2: #ff00aa; --accent-3: #00ff88;
+            --text: #ffffff; --muted: rgba(255,255,255,0.66); --muted-2: rgba(255,255,255,0.45);
+            --glass: rgba(255,255,255,0.05);
+            --glass-border: rgba(255,255,255,0.1); --glass-border-2: rgba(255,255,255,0.18);
+            --card-grad: linear-gradient(168deg, rgba(255,255,255,0.075), rgba(255,255,255,0.02));
+            --r-sm: 10px; --r-md: 16px; --r-lg: 22px; --r-pill: 999px;
+            --ease: cubic-bezier(0.22, 1, 0.36, 1);
+            --font-d: 'Orbitron', sans-serif; --font-b: 'Rajdhani', sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-b); background: var(--bg-deep); color: #fff; overflow-x: hidden; }
+        #three-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+        .page-offset { padding-top: 190px; padding-bottom: 3rem; }
+        a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+        .ep-shell { max-width: 700px; margin: 0 auto; padding: 0 2.5rem; }
+
+        .ep-hero { text-align: center; margin-bottom: 2.5rem; }
+        .ep-title { font-family: var(--font-d); font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 900; background: linear-gradient(135deg, #fff, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.3rem; }
+        .ep-sub { color: var(--muted); font-size: 0.95rem; }
+
+        .ep-card { background: var(--card-grad); border: 1px solid var(--glass-border); border-radius: var(--r-lg); padding: 2rem; margin-bottom: 1.5rem; }
+        .ep-card-title { font-family: var(--font-d); font-size: 0.85rem; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: var(--accent); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.6rem; }
+        .ep-card-title span { font-size: 1.2rem; }
+
+        .ep-item { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.2rem; background: rgba(0,0,0,0.2); border-radius: var(--r-md); margin-bottom: 0.7rem; border: 1px solid var(--glass-border); }
+        .ep-item:last-child { margin-bottom: 0; }
+        .ep-item-info { flex: 1; }
+        .ep-item-label { font-weight: 700; margin-bottom: 0.2rem; }
+        .ep-item-desc { color: var(--muted); font-size: 0.88rem; }
+
+        .ep-toggle { position: relative; width: 52px; height: 28px; background: rgba(255,255,255,0.1); border-radius: var(--r-pill); cursor: pointer; border: 1px solid var(--glass-border); transition: all 0.3s; flex-shrink: 0; }
+        .ep-toggle.active { background: rgba(0,255,136,0.2); border-color: var(--accent-3); }
+        .ep-toggle::after { content: ''; position: absolute; width: 22px; height: 22px; background: #fff; border-radius: 50%; top: 2px; left: 2px; transition: left 0.3s; }
+        .ep-toggle.active::after { left: 26px; }
+
+        .ep-freq { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.8rem; margin-top: 1rem; }
+        .ep-freq-opt { padding: 0.8rem; border-radius: var(--r-md); border: 2px solid var(--glass-border); background: transparent; color: rgba(255,255,255,0.8); cursor: pointer; transition: all 0.25s; text-align: center; font-weight: 700; font-family: var(--font-b); font-size: 0.92rem; }
+        .ep-freq-opt:hover { border-color: var(--accent); background: rgba(0,240,255,0.06); }
+        .ep-freq-opt.active { border-color: var(--accent); background: rgba(0,240,255,0.15); color: var(--accent); }
+
+        .ep-actions { display: flex; gap: 0.8rem; margin-top: 2rem; flex-wrap: wrap; }
+        .ep-btn { padding: 0.85rem 1.5rem; border-radius: var(--r-md); font-family: var(--font-d); font-size: 0.68rem; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; cursor: pointer; transition: all 0.25s; border: 0; }
+        .ep-btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent-3)); color: #00202a; }
+        .ep-btn-primary:hover { box-shadow: 0 0 20px rgba(0,240,255,0.4); transform: translateY(-1px); }
+        .ep-btn-secondary { background: transparent; border: 1px solid var(--glass-border-2); color: rgba(255,255,255,0.8); }
+        .ep-btn-secondary:hover { border-color: rgba(255,255,255,0.5); color: #fff; }
+
+        @media (max-width: 768px) { .ep-shell { padding: 0 1.5rem; } }
+        @media (max-width: 600px) { .ep-shell { padding: 0 1rem; } .ep-item { flex-direction: column; align-items: flex-start; gap: 0.8rem; } }
+        @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--accent), var(--accent-2)); border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <canvas id="three-canvas"></canvas>
+    <div id="header-container"></div>
+    <script src="components.js"></script>
+
+    <main class="page-offset">
+        <div class="ep-shell">
+            <div class="ep-hero">
+                <h1 class="ep-title">Email Preferences</h1>
+                <p class="ep-sub">Choose what emails you receive and how often.</p>
+            </div>
+
+            <div class="ep-card">
+                <div class="ep-card-title"><span>📧</span> Promotional Emails</div>
+                <div class="ep-item"><div class="ep-item-info"><div class="ep-item-label">New Arrivals</div><div class="ep-item-desc">Get notified when new products drop.</div></div><div class="ep-toggle active" onclick="this.classList.toggle('active')"></div></div>
+                <div class="ep-item"><div class="ep-item-info"><div class="ep-item-label">Sales & Discounts</div><div class="ep-item-desc">Be first to know about flash sales and deals.</div></div><div class="ep-toggle active" onclick="this.classList.toggle('active')"></div></div>
+                <div class="ep-item"><div class="ep-item-info"><div class="ep-item-label">Weekly Newsletter</div><div class="ep-item-desc">Curated picks and trend reports.</div></div><div class="ep-toggle" onclick="this.classList.toggle('active')"></div></div>
+            </div>
+
+            <div class="ep-card">
+                <div class="ep-card-title"><span>🔔</span> Transactional Emails</div>
+                <div class="ep-item"><div class="ep-item-info"><div class="ep-item-label">Order Confirmations</div><div class="ep-item-desc">Receipts and order status updates.</div></div><div class="ep-toggle active" onclick="this.classList.toggle('active')"></div></div>
+                <div class="ep-item"><div class="ep-item-info"><div class="ep-item-label">Shipping Updates</div><div class="ep-item-desc">Tracking and delivery notifications.</div></div><div class="ep-toggle active" onclick="this.classList.toggle('active')"></div></div>
+            </div>
+
+            <div class="ep-card">
+                <div class="ep-card-title"><span>🕐</span> Email Frequency</div>
+                <div class="ep-freq">
+                    <button class="ep-freq-opt" onclick="setFreq(this)">Daily</button>
+                    <button class="ep-freq-opt active" onclick="setFreq(this)">Weekly</button>
+                    <button class="ep-freq-opt" onclick="setFreq(this)">Monthly</button>
+                    <button class="ep-freq-opt" onclick="setFreq(this)">Never</button>
+                </div>
+            </div>
+
+            <div class="ep-actions">
+                <button class="ep-btn ep-btn-primary" onclick="savePrefs()">Save Preferences</button>
+                <a href="account.html" class="ep-btn ep-btn-secondary">Back to Account</a>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-container"></div>
+    <script>
+        function setFreq(el) {
+            document.querySelectorAll('.ep-freq-opt').forEach(function (b) { b.classList.remove('active'); });
+            el.classList.add('active');
+        }
+        function savePrefs() {
+            var btn = event.target;
+            btn.textContent = 'Saved!';
+            setTimeout(function () { btn.textContent = 'Save Preferences'; }, 2000);
+        }
+    </script>
+    <script>
+        function hidePreloader() { var p = document.getElementById('preloader'); if (p) p.classList.add('hidden'); }
+        if (document.readyState === 'complete') { setTimeout(hidePreloader, 600); } else { window.addEventListener('load', function () { setTimeout(hidePreloader, 600); }); }
+        setTimeout(hidePreloader, 1500);
+    </script>
+</body>
+</html>

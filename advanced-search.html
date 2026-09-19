@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Redirecting...</title>
+    <script>
+        /* Retired stub - the shop deck (shop.html) fully covers advanced
+           filtering: category facets, budget bands, price envelope, sort,
+           compare and URL-persisted views. Any bookmarked deep link keeps
+           working; a ?q= search term is mapped to the shop's own hash state
+           (#q=...) so the deck opens with the search already applied. */
+        (function () {
+            var to = 'shop.html';
+            var params = new URLSearchParams(window.location.search);
+            var q = params.get('q') || params.get('query') || params.get('search');
+            if (q && q.trim()) {
+                to += '#q=' + encodeURIComponent(q.trim());
+            }
+            window.location.replace(to);
+        })();
+    </script>
+</head>
+<body style="font-family:sans-serif;text-align:center;padding:3rem;color:#555;">
+    <p>Advanced Search has moved into the Shop page. Taking you there...</p>
+    <p><a href="shop.html">Click here if you are not redirected</a></p>
+</body>
+</html>
