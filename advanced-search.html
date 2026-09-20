@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="robots" content="noindex, nofollow">
     <title>Redirecting...</title>
+    <link rel="stylesheet" href="responsive-universal.css">
+    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="styles.css">
     <script>
         /* Retired stub - the shop deck (shop.html) fully covers advanced
            filtering: category facets, budget bands, price envelope, sort,
@@ -20,6 +23,15 @@
             window.location.replace(to);
         })();
     </script>
+    <style>
+        @media(max-width:768px){
+            .search-form{flex-direction:column;}
+            .search-results{grid-template-columns:1fr;}
+        }
+        @media(max-width:600px){
+            .search-container{padding:1rem;}
+        }
+    </style>
 </head>
 <body style="font-family:sans-serif;text-align:center;padding:3rem;color:#555;">
     <p>Advanced Search has moved into the Shop page. Taking you there...</p>

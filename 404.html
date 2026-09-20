@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>404 - Page Not Found | Trendaryo</title>
-    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="responsive-universal.css">
     <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="styles.css">
     <script src="performance.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="bg.js"></script>
@@ -35,6 +36,15 @@
         
         .footer { background: rgba(0,0,0,0.08); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); padding: 2rem; text-align: center; border-top: 1px solid var(--glass-border); }
         .footer p { color: rgba(255,255,255,0.5); }
+
+        @media (max-width: 600px) {
+            .error-container-3d { padding: 1.5rem 1rem; }
+            .error-code-3d { font-size: 5rem; }
+            .error-title-3d { font-size: 1.4rem; }
+            .error-text-3d { font-size: 1rem; }
+            .error-buttons-3d { flex-direction: column; width: 100%; }
+            .btn-home-3d, .btn-back-3d { width: 100%; text-align: center; padding: 0.85rem 1.5rem; font-size: 0.8rem; }
+        }
     </style>
 </head>
 <body>

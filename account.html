@@ -23,7 +23,7 @@
     <meta property="twitter:description" content="Manage your Trendaryo account, view order history, update addresses, and track shipments.">
     <meta property="twitter:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
     <title>My Account - Trendaryo</title>
-    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="responsive-universal.css">
     <link rel="stylesheet" href="shared.css">
     <script src="performance.js"></script>
     <link rel="stylesheet" href="styles.css">
@@ -152,10 +152,9 @@
 <body>
     <script src="components.js"></script>
     <canvas id="three-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;"></canvas>
-    <div id="header-container"></div>
     <div class="preloader-3d" id="preloader"><div class="preloader-logo-3d">TRENDARYO</div><div class="preloader-spinner-3d"></div></div>
-    
-    <!-- Full Navigation Header -->
+
+    <!-- Full Navigation Header (injected by components.js) -->
     <div id="header-container" data-type="full"></div>
 
 

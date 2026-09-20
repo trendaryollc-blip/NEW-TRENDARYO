@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,7 +7,7 @@
     <meta name="robots" content="noindex, follow">
     <link rel="canonical" href="https://trendaryo.com/email-preferences.html">
     <link rel="icon" type="image/svg+xml" href="assets/favicon-crown-star.svg">
-    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="responsive-universal.css">
     <link rel="stylesheet" href="shared.css">
     <link rel="stylesheet" href="styles.css">
     <script src="performance.js"></script>
@@ -63,8 +63,14 @@
         .ep-btn-secondary { background: transparent; border: 1px solid var(--glass-border-2); color: rgba(255,255,255,0.8); }
         .ep-btn-secondary:hover { border-color: rgba(255,255,255,0.5); color: #fff; }
 
-        @media (max-width: 768px) { .ep-shell { padding: 0 1.5rem; } }
-        @media (max-width: 600px) { .ep-shell { padding: 0 1rem; } .ep-item { flex-direction: column; align-items: flex-start; gap: 0.8rem; } }
+        @media(max-width:768px){
+            .ep-shell{padding:1.5rem;}
+        }
+        @media(max-width:600px){
+            body{padding-top:100px;}
+            .ep-shell{padding:1rem;}
+            .ep-item{flex-direction:column;align-items:flex-start;gap:0.8rem;}
+        }
         @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #0a0a0a; }
@@ -84,20 +90,20 @@
             </div>
 
             <div class="ep-card">
-                <div class="ep-card-title"><span>📧</span> Promotional Emails</div>
+                <div class="ep-card-title"><span>??</span> Promotional Emails</div>
                 <div class="ep-item"><div class="ep-item-info"><div class="ep-item-label">New Arrivals</div><div class="ep-item-desc">Get notified when new products drop.</div></div><div class="ep-toggle active" onclick="this.classList.toggle('active')"></div></div>
                 <div class="ep-item"><div class="ep-item-info"><div class="ep-item-label">Sales & Discounts</div><div class="ep-item-desc">Be first to know about flash sales and deals.</div></div><div class="ep-toggle active" onclick="this.classList.toggle('active')"></div></div>
                 <div class="ep-item"><div class="ep-item-info"><div class="ep-item-label">Weekly Newsletter</div><div class="ep-item-desc">Curated picks and trend reports.</div></div><div class="ep-toggle" onclick="this.classList.toggle('active')"></div></div>
             </div>
 
             <div class="ep-card">
-                <div class="ep-card-title"><span>🔔</span> Transactional Emails</div>
+                <div class="ep-card-title"><span>??</span> Transactional Emails</div>
                 <div class="ep-item"><div class="ep-item-info"><div class="ep-item-label">Order Confirmations</div><div class="ep-item-desc">Receipts and order status updates.</div></div><div class="ep-toggle active" onclick="this.classList.toggle('active')"></div></div>
                 <div class="ep-item"><div class="ep-item-info"><div class="ep-item-label">Shipping Updates</div><div class="ep-item-desc">Tracking and delivery notifications.</div></div><div class="ep-toggle active" onclick="this.classList.toggle('active')"></div></div>
             </div>
 
             <div class="ep-card">
-                <div class="ep-card-title"><span>🕐</span> Email Frequency</div>
+                <div class="ep-card-title"><span>??</span> Email Frequency</div>
                 <div class="ep-freq">
                     <button class="ep-freq-opt" onclick="setFreq(this)">Daily</button>
                     <button class="ep-freq-opt active" onclick="setFreq(this)">Weekly</button>

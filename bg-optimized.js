@@ -10,6 +10,69 @@
     var THREE_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
     var CANVAS_ID = 'three-canvas';
     var scene, camera, renderer, particles, mx = 0, my = 0, running = false;
+    var started = false; // three scene OR 2D fallback — never both, never twice
+
+    /* ── 2D fallback: dependency-free starfield (CDN blocked / offline / no WebGL).
+       Guarantees the sky is never blank. Same palette + mouse drift as 3D. ── */
+    function startFallback2D() {
+        if (started) return;
+        started = true;
+        running = true;
+        var canvas = ensureCanvas();
+        ensureThemeBg();
+        var ctx = canvas.getContext('2d');
+        if (!ctx) return;
+        // Small screens hide the canvas via CSS — one static frame is enough.
+        var tinyScreen = window.matchMedia('(max-width: 768px)').matches;
+        var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var COUNT = deviceInfo.isMobile ? 90 : 220;
+        var COLORS = ['0,229,255', '255,61,166', '46,230,168'];
+        var dpr = 1;
+        function sizeCanvas() {
+            dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+            canvas.width = Math.floor(window.innerWidth * dpr);
+            canvas.height = Math.floor(window.innerHeight * dpr);
+        }
+        sizeCanvas();
+        window.addEventListener('resize', sizeCanvas);
+        var stars = [];
+        for (var i = 0; i < COUNT; i++) {
+            stars.push({
+                x: Math.random(), y: Math.random(),
+                r: 0.6 + Math.random() * 1.8,
+                c: COLORS[(Math.random() * COLORS.length) | 0],
+                tw: Math.random() * Math.PI * 2,
+                sp: 0.3 + Math.random() * 0.9
+            });
+        }
+        var t = Math.random() * 100;
+        function paint() {
+            var W = canvas.width, H = canvas.height;
+            ctx.clearRect(0, 0, W, H);
+            ctx.globalCompositeOperation = 'lighter';
+            var px = mx * 0.12 * dpr, py = my * 0.12 * dpr;
+            for (var j = 0; j < stars.length; j++) {
+                var s = stars[j];
+                var y = reduceMotion ? s.y : (s.y + t * 0.004 * s.sp) % 1;
+                var a = reduceMotion ? 0.5 : 0.35 + 0.35 * Math.sin(t * s.sp + s.tw);
+                ctx.beginPath();
+                ctx.fillStyle = 'rgba(' + s.c + ',' + a.toFixed(3) + ')';
+                ctx.arc(s.x * W - px * s.sp, y * H - py * s.sp, s.r * dpr, 0, 6.2832);
+                ctx.fill();
+            }
+            ctx.globalCompositeOperation = 'source-over';
+        }
+        function draw() {
+            requestAnimationFrame(draw);
+            if (document.hidden) return;
+            if (!reduceMotion) { t += 0.016; }
+            paint();
+        }
+        paint();
+        if (!tinyScreen && !reduceMotion) { draw(); }
+        /* tiny screens hide the canvas via CSS and reduced-motion users get
+           the single static frame — no loop, no battery drain. */
+    }
     
     // Device detection
     var deviceInfo = {
@@ -74,17 +137,17 @@
         }
         // Laptops (1.5M - 3M pixels)
         else if (area < 3000000) {
-            performanceSettings.particleCount = 1500;
-            performanceSettings.pixelRatio = Math.min(deviceInfo.dpr, 2);
-            performanceSettings.antialias = true;
+            performanceSettings.particleCount = 1100;
+            performanceSettings.pixelRatio = Math.min(deviceInfo.dpr, 1.5);
+            performanceSettings.antialias = false;
             performanceSettings.renderScale = 1;
             console.log('💻 Laptop detected - High performance mode');
         }
         // Desktops (3M+ pixels)
         else {
-            performanceSettings.particleCount = 2000;
-            performanceSettings.pixelRatio = Math.min(deviceInfo.dpr, 2);
-            performanceSettings.antialias = true;
+            performanceSettings.particleCount = 1400;
+            performanceSettings.pixelRatio = Math.min(deviceInfo.dpr, 1.5);
+            performanceSettings.antialias = false;
             performanceSettings.renderScale = 1;
             console.log('🖥️ Desktop detected - Ultra-high performance mode');
         }
@@ -150,10 +213,10 @@
 
     /* ── Build Three.js scene ── */
     function init() {
-        if (running) return;
+        if (running || started) return;
 
         detectPerformanceLevel();
-        
+
         var canvas = ensureCanvas();
         ensureThemeBg();
 
@@ -161,12 +224,18 @@
         camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         camera.position.z = 100;
 
-        renderer = new THREE.WebGLRenderer({
-            canvas: canvas,
-            alpha: true,
-            antialias: performanceSettings.antialias,
-            powerPreference: deviceInfo.isMobile ? 'low-power' : 'high-performance'
-        });
+        try {
+            renderer = new THREE.WebGLRenderer({
+                canvas: canvas,
+                alpha: true,
+                antialias: performanceSettings.antialias,
+                powerPreference: deviceInfo.isMobile ? 'low-power' : 'high-performance'
+            });
+        } catch (err) {
+            console.warn('bg.js: WebGL unavailable — using 2D fallback background.');
+            startFallback2D();
+            return;
+        }
 
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(performanceSettings.pixelRatio);
@@ -207,6 +276,7 @@
         window.addEventListener('orientationchange', handleOrientationChange);
 
         running = true;
+        started = true;
         animate();
     }
 
@@ -245,11 +315,17 @@
     var lastFrameTime = 0;
     var frameCount = 0;
 
+    var isMobileBg = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     function animate() {
         requestAnimationFrame(animate);
 
+        // Hidden tab: skip render entirely (was still burning GPU on scroll
+        // timelines and keeping the compositor busy on return).
+        if (document.hidden) return;
+
         var now = Date.now();
-        var deltaTime = now - lastFrameTime;
+        // Mobile: cap at ~30fps — halves GPU cost, visually identical for fog.
+        if (isMobileBg && now - lastFrameTime < 33) return;
         lastFrameTime = now;
 
         // Smooth camera movement
@@ -346,9 +422,17 @@
             s.src = THREE_CDN;
             s.onload = init;
             s.onerror = function() {
-                console.warn('bg.js: Three.js CDN failed — no 3D background.');
+                console.warn('bg.js: Three.js CDN failed — using 2D fallback background.');
+                startFallback2D();
             };
             document.head.appendChild(s);
+            // Watchdog: a hanging CDN request (offline/adblock) must not leave a dead sky.
+            setTimeout(function() {
+                if (!started && typeof THREE === 'undefined') {
+                    console.warn('bg.js: Three.js load timed out — using 2D fallback background.');
+                    startFallback2D();
+                }
+            }, 7000);
         }
     });
 

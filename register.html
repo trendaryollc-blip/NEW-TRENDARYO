@@ -23,10 +23,11 @@
     <meta property="twitter:description" content="Create a free Trendaryo account to enjoy faster checkout, order tracking, wishlist, and exclusive offers.">
     <meta property="twitter:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
     <title>Create Account - Trendaryo</title>
-    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="responsive-universal.css">
     <script src="performance.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="styles.css">
     <style>
         :root{--accent:#00f0ff;--accent-2:#ff00aa;--glass:rgba(255,255,255,0.05);--glass-border:rgba(255,255,255,0.1);}
         *{margin:0;padding:0;box-sizing:border-box;}
@@ -56,6 +57,21 @@
         .success.show{display:block;}
         .info-box{background:rgba(0,240,255,0.1);border:1px solid rgba(0,240,255,0.3);color:rgba(255,255,255,0.8);padding:0.8rem;border-radius:8px;margin-bottom:1rem;display:none;font-size:0.85rem;}
         .info-box.show{display:block;}
+        @media(max-width:600px){
+            body{padding-top:100px;}
+            .register-wrapper{padding:1rem;min-height:calc(100vh - 100px);}
+            .register-container{padding:1.5rem;border-radius:14px;}
+            .logo{font-size:1.5rem;margin-bottom:1.5rem;}
+            h1{font-size:1.4rem;margin-bottom:1.5rem;}
+            .form-row{grid-template-columns:1fr;gap:0;}
+            .form-group{margin-bottom:1.2rem;}
+            .form-group input{padding:0.7rem;font-size:0.95rem;}
+            .btn{padding:0.85rem;font-size:0.95rem;}
+        }
+        @media(max-width:480px){
+            .register-container{padding:1.25rem;}
+            .divider:before,.divider:after{width:35%;}
+        }
     </style>
 <script src="bg.js"></script>
 </head>

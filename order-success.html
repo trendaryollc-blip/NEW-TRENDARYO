@@ -9,7 +9,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="responsive-universal.css">
 <link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="styles.css">
 <style>
 body{font-family:'Rajdhani',sans-serif;background:transparent;color:#fff;min-height:100vh;display:flex;flex-direction:column;}
 .page-offset{padding-top:180px;}
@@ -41,6 +43,30 @@ body{font-family:'Rajdhani',sans-serif;background:transparent;color:#fff;min-hei
 .os-next svg{flex-shrink:0;margin-top:0.2rem;color:var(--accent-3);}
 .os-share{text-align:center;color:rgba(255,255,255,0.55);font-size:0.86rem;margin-bottom:1rem;}
 .os-related-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1.25rem;margin-top:1.5rem;text-align:left;}
+@media(max-width:768px){
+    .page-offset{padding-top:130px;}
+    .os-hero{padding:2rem 1rem 1rem;}
+    .os-hero h1{font-size:clamp(1.3rem,5vw,1.8rem);}
+    .os-wrap{padding:0.75rem 1rem 3rem;}
+    .os-card{padding:1.25rem;}
+    .os-card h2{font-size:0.9rem;}
+    .os-row{font-size:0.85rem;padding:0.6rem 0;}
+    .os-row.total{font-size:0.82rem;}
+    .os-row.total b{font-size:1rem;}
+}
+@media(max-width:600px){
+    .page-offset{padding-top:110px;}
+    .os-hero{padding:1.5rem 0.75rem 0.75rem;}
+    .success-icon{width:72px;height:72px;}
+    .success-icon svg{width:32px;height:32px;}
+    .os-num{font-size:0.72rem;padding:0.5rem 1rem;}
+    .os-wrap{padding:0.5rem 0.75rem 2.5rem;}
+    .os-card{padding:1rem;border-radius:14px;}
+    .os-item-name{gap:0.6rem;}
+    .os-thumb{width:40px;height:40px;}
+    .os-actions{flex-direction:column;align-items:stretch;}
+    .os-actions a{text-align:center;padding:0.75rem 1.5rem;font-size:0.72rem;}
+}
 </style>
 </head>
 <body>

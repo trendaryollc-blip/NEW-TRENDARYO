@@ -129,15 +129,18 @@
     function cardHTML(p, rank) {
         var save = num(p.oldPrice) > num(p.price) ? Math.round(num(p.oldPrice) - num(p.price)) : 0;
         var img = P.media(p).replace('<img ', '<img onload="this.previousElementSibling.classList.add(\'is-done\')" ');
+        var url = 'product.html?id=' + encodeURIComponent(P.idOf(p));
         return '<article class="vortex-card vx-card" data-product="' + P.idOf(p) + '">' +
+            '<a class="vx-media-link" href="' + url + '" aria-label="View ' + esc(p.name) + '">' +
             '<div class="vx-media">' +
                 '<div class="media-skeleton" aria-hidden="true"></div>' +
                 img +
                 '<span class="vx-badge">Verdict #' + rank + '</span>' +
             '</div>' +
+            '</a>' +
             '<div class="vx-body">' +
                 '<div class="vx-rating">' + P.stars(p.rating) + '<span>' + num(p.rating).toFixed(1) + ' · ' + fmt(num(p.reviews)) + ' reviews</span></div>' +
-                '<h3 class="vx-name">' + esc(p.name) + '</h3>' +
+                '<h3 class="vx-name"><a href="' + url + '">' + esc(p.name) + '</a></h3>' +
                 '<div class="vx-tags">' +
                     '<span class="vx-tag">' + esc(verdictTag(p, rank)) + '</span>' +
                     (save ? '<span class="vx-tag vx-tag--save">Save ' + P.price(save) + '</span>' : '') +

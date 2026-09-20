@@ -20,12 +20,15 @@
     <meta name="twitter:description" content="The Trendaryo command deck: curated products, live filters, real specifications and side-by-side compare.">
     <meta name="twitter:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
     <link rel="icon" type="image/svg+xml" href="assets/favicon-crown-star.svg">
-    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="responsive-universal.css">
     <link rel="stylesheet" href="shared.css">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="luxury-final.css">
     <script src="performance.js"></script>
     <script src="bg.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* ==================================================================
            TRENDARYO — SHOP "COMMAND DECK" (v2)
@@ -207,6 +210,9 @@
             display: grid; grid-template-columns: repeat(auto-fit, minmax(152px, 1fr));
             gap: 0.85rem; margin-top: 0.5rem;
         }
+        /* Shop has full nav + category bar — the floating Back pill only
+           overlaps the deck text here, so it stays hidden on this page. */
+        #tlBackBtn { display: none !important; }
         .deck-stat {
             position: relative; padding: 0.95rem 1.05rem; border-radius: var(--r-md);
             background: var(--card-grad); border: 1px solid var(--glass-border);
@@ -1277,104 +1283,79 @@
         <section class="deck" aria-labelledby="deckTitle">
             <span class="deck-neb deck-neb-1" aria-hidden="true"></span>
             <span class="deck-neb deck-neb-2" aria-hidden="true"></span>
-            <div class="shop-shell deck-inner">
-                <span class="deck-live">
-                    <span class="deck-live-dot" aria-hidden="true"></span>
-                    <span id="deckLiveText">Live catalogue telemetry</span>
-                </span>
+            <div class="shop-shell deck-inner deck-hero">
+                <div class="deck-copy">
+                    <span class="deck-live">
+                        <span class="deck-live-dot" aria-hidden="true"></span>
+                        <span id="deckLiveText">Live catalogue</span>
+                    </span>
 
-                <h1 class="deck-title" id="deckTitle">Shop the whole catalogue, not just the shelf.</h1>
-                <p class="deck-sub">
-                    Every SKU, its real specifications, its live discount, its position in the price
-                    envelope and its stock state — arranged so you can decide in one pass. Filter,
-                    compare and add to cart without ever losing your place.
-                </p>
-
-                <form class="deck-search" id="deckSearchForm" role="search" novalidate>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-                        <circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>
-                    </svg>
-                    <input type="search" id="deckSearch" placeholder="Search a product, SKU, facet or category…" autocomplete="off" aria-label="Search the catalogue">
-                    <button type="button" class="deck-search-clear" id="deckSearchClear" aria-label="Clear search">×</button>
-                    <button type="submit" class="deck-search-btn">Search</button>
-                </form>
-                <p class="deck-hint">
-                    Every filter, sort and view is written into the page URL (<kbd>#sort=…</kbd>),
-                    so any view you build can be shared or revisited with the browser back button.
-                </p>
-
-                <div class="deck-actions">
-                    <button type="button" class="deck-btn deck-btn--solid" data-scroll="grid">Browse the grid</button>
-                    <a class="deck-btn" href="#intel">Catalogue intelligence</a>
-                </div>
-
-                <div class="facet-rail" id="deckJumps" aria-label="Preset jumps"></div>
-                <div class="deck-stats" id="deckStats"></div>
-            </div>
-        </section>
-<!-- ══════ 2 · SHOP BY CATEGORY CONSTELLATION ═══════ -->
-        <section class="sec shop-shell" id="categories" aria-labelledby="catTitle">
-            <div class="sec-head">
-                <div class="sec-head-txt">
-                    <span class="sec-kicker">Section 02 · Navigate by data</span>
-                    <h2 class="sec-title" id="catTitle">Where does your budget land?</h2>
-                    <p class="sec-sub">
-                        Categories and facets are derived from the live catalogue. Every tile shows how many
-                        products it holds, the entry price and the best rating inside it — so you choose
-                        with context, not guesswork.
+                    <h1 class="deck-title" id="deckTitle">Shop everything.</h1>
+                    <p class="deck-sub">
+                        Every product, its price, rating and discount — filter it down and add to cart
+                        without losing your place.
                     </p>
-                </div>
-                <span class="sec-note">Counts are catalogue-wide, not filtered</span>
-            </div>
-            <div class="cat-grid" id="catGrid"></div>
-            <div class="facet-rail" id="facetRail" aria-label="Facet filters"></div>
-        </section>
 
-        <!-- ═════ 3 · BUDGET BANDS (replaces the fake slider) ═══════ -->
-        <section class="sec shop-shell" id="bands" aria-labelledby="bandTitle">
-            <div class="sec-head">
-                <div class="sec-head-txt">
-                    <span class="sec-kicker">Section 03 · Budget bands</span>
-                    <h2 class="sec-title" id="bandTitle">Pick a band, see exactly what's inside it.</h2>
-                    <p class="sec-sub">
-                        Five real price bands with live counts and the top-rated product in each, plus a true
-                        dual-thumb range and typed inputs — keyboard operators never need to drag anything.
-                    </p>
-                </div>
-            </div>
-            <div class="band-grid" id="bandGrid"></div>
-            <div class="range-block">
-                <div class="range-head">
-                    <span class="range-title">Price envelope</span>
-                    <div class="range-nums">
-                        <label class="sr-only" for="rangeLoNum">Minimum price</label>
-                        <input type="number" id="rangeLoNum" step="1" inputmode="numeric">
-                        <span>to</span>
-                        <label class="sr-only" for="rangeHiNum">Maximum price</label>
-                        <input type="number" id="rangeHiNum" step="1" inputmode="numeric">
+                    <form class="deck-search" id="deckSearchForm" role="search" novalidate>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                            <circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>
+                        </svg>
+                        <input type="search" id="deckSearch" placeholder="Search a product, SKU, facet or category…" autocomplete="off" aria-label="Search the catalogue">
+                        <button type="button" class="deck-search-clear" id="deckSearchClear" aria-label="Clear search">×</button>
+                        <button type="submit" class="deck-search-btn">Search</button>
+                    </form>
+
+                    <div class="deck-actions">
+                        <button type="button" class="deck-btn deck-btn--solid" data-scroll="grid">Browse products</button>
+                        <a class="deck-btn" href="#pricePanel">Price: <span id="heroPriceRange">Any price</span></a>
                     </div>
+
+                    <div class="facet-rail" id="deckJumps" aria-label="Preset jumps"></div>
                 </div>
-                <div class="range-dual">
-                    <span class="range-fill" id="rangeFill" aria-hidden="true"></span>
-                    <input type="range" id="rangeLo" aria-label="Minimum price">
-                    <input type="range" id="rangeHi" aria-label="Maximum price">
-                </div>
-                <div class="range-ticks" id="rangeTicks"></div>
-                <div class="range-actions">
-                    <button type="button" class="f-btn" data-range-apply="1">Apply range</button>
-                    <button type="button" class="f-btn f-btn--ghost" data-range-reset="1">Reset range</button>
+                <div class="deck-visual" aria-hidden="false">
+                    <article class="hero-card" id="dealHeroCard">
+                        <div class="hero-card-media">
+                            <img id="dealHeroImg" src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=max&w=800" alt="Deal of the day">
+                            <span class="hero-card-badge" id="dealHeroBadge">DEAL OF THE DAY</span>
+                        </div>
+                        <div class="hero-card-body">
+                            <div class="hero-card-row">
+                                <div>
+                                    <strong id="dealHeroName">Wireless Headphones</strong>
+                                    <span id="dealHeroMeta">4.8 ★ · 234 reviews</span>
+                                </div>
+                                <div class="hero-card-price"><span id="dealHeroPrice">$149</span> <s id="dealHeroOld">$199</s></div>
+                            </div>
+                            <div class="hero-card-actions">
+                                <a href="product.html?id=1" class="hero-cta hero-cta--primary hero-card-btn" id="dealHeroLink">View deal</a>
+                                <a href="#drops" class="hero-card-link">More deals</a>
+                            </div>
+                        </div>
+                    </article>
+                    <div class="hero-float hero-float--a">✓ Free 30-day returns</div>
+                    <div class="hero-float hero-float--b">✓ Price checked today</div>
                 </div>
             </div>
         </section>
-<!-- ══════ 4 · BIGGEST PRICE DROPS (real reductions only) ═══════ -->
+        <!-- ══════ CATEGORY BAR — sticky below header · category first, price second ══════ -->
+        <div class="catbar" role="navigation" aria-label="Shop by category">
+            <div class="catbar-inner">
+                <button type="button" class="catbar-btn is-on" data-cat="all">All</button>
+                <button type="button" class="catbar-btn" data-cat="electronics">Electronics</button>
+                <button type="button" class="catbar-btn" data-cat="fashion">Fashion</button>
+                <button type="button" class="catbar-btn" data-cat="home">Home</button>
+                <button type="button" class="catbar-btn catbar-btn--sale" data-jump="sale">On Sale</button>
+            </div>
+        </div>
+
+<!-- ══════ ON SALE NOW (shelf 1 — catalogue-wide highlights) ══════ -->
         <section class="sec shop-shell" id="drops" aria-labelledby="dropTitle">
             <div class="rail-head">
                 <div class="sec-head-txt">
-                    <span class="sec-kicker">Section 04 · Verified reductions</span>
-                    <h2 class="sec-title" id="dropTitle">Biggest price drops right now</h2>
+                    <span class="sec-kicker sec-kicker--sale">On sale now</span>
+                    <h2 class="sec-title" id="dropTitle">Today's biggest price drops</h2>
                     <p class="sec-sub">
-                        Ranked by the real saving against the previous price — no "sale" label required.
-                        Every figure below is computed from the catalogue's own old-price data.
+                        Real discounts, ranked by how much you save. Grab them before prices move.
                     </p>
                 </div>
                 <div class="rail-nav">
@@ -1385,15 +1366,14 @@
             <div class="rail" id="dropsRail"></div>
         </section>
 
-        <!-- ══════ 5 · REFINE · 6 · SORT · 7 · GRID (ProductCard v2) ═══════ -->
+        <!-- ══════ BROWSE EVERYTHING (shelf 2 — the full grid + sticky filters) ══════ -->
         <section class="sec shop-shell" id="grid" aria-labelledby="gridTitle">
             <div class="sec-head">
                 <div class="sec-head-txt">
-                    <span class="sec-kicker">Sections 05–07 · Refine · sort · browse</span>
-                    <h2 class="sec-title" id="gridTitle">The full catalogue, arranged for decisions</h2>
+                    <span class="sec-kicker">Browse everything</span>
+                    <h2 class="sec-title" id="gridTitle">Find your next favourite</h2>
                     <p class="sec-sub">
-                        One composed filter state on the left, live counts everywhere, and cards that carry
-                        the numbers you would otherwise open a product page to find.
+                        Use the filters to narrow it down — every card shows its rating, reviews and real discount.
                     </p>
                 </div>
             </div>
@@ -1401,7 +1381,35 @@
             <div class="chip-rail" id="chipsRoot" aria-live="polite"></div>
 
             <div class="shop-layout">
-                <aside class="shop-side" id="filtersRoot" aria-label="Refine the catalogue"></aside>
+                <aside class="shop-side" aria-label="Filters">
+                    <div class="f-panel price-panel" id="pricePanel">
+                        <div class="f-group-title"><span>Price</span></div>
+                        <div class="band-grid band-grid--mini" id="bandGrid"></div>
+                        <div class="range-block range-block--mini">
+                            <div class="range-head">
+                                <span class="range-title">Custom range</span>
+                                <div class="range-nums">
+                                    <label class="sr-only" for="rangeLoNum">Minimum price</label>
+                                    <input type="number" id="rangeLoNum" step="1" inputmode="numeric">
+                                    <span>–</span>
+                                    <label class="sr-only" for="rangeHiNum">Maximum price</label>
+                                    <input type="number" id="rangeHiNum" step="1" inputmode="numeric">
+                                </div>
+                            </div>
+                            <div class="range-dual">
+                                <span class="range-fill" id="rangeFill" aria-hidden="true"></span>
+                                <input type="range" id="rangeLo" aria-label="Minimum price">
+                                <input type="range" id="rangeHi" aria-label="Maximum price">
+                            </div>
+                            <div class="range-ticks" id="rangeTicks"></div>
+                            <div class="range-actions">
+                                <button type="button" class="f-btn" data-range-apply="1">Apply</button>
+                                <button type="button" class="f-btn f-btn--ghost" data-range-reset="1">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="filtersRoot"></div>
+                </aside>
 
                 <div>
                     <div class="toolbar">
@@ -1619,5 +1627,77 @@
     <script src="backend-bridge.js"></script>
     <script src="page-helpers.js"></script>
     <script src="shop.js"></script>
+    <script>
+    /* Deal-of-the-day hero card — biggest real discount, static fallback above */
+    (function () {
+        try {
+            var P = window.TrendaryoProducts;
+            if (!P || typeof P.all !== 'function') return;
+            var list = P.all().filter(function (p) { return +p.oldPrice > +p.price; });
+            if (!list.length) return;
+            list.sort(function (a, b) { return (1 - b.price / b.oldPrice) - (1 - a.price / a.oldPrice); });
+            var p = list[0];
+            var pct = Math.round((1 - p.price / p.oldPrice) * 100);
+            var set = function (id, v) { var n = document.getElementById(id); if (n) n.textContent = v; };
+            var img = document.getElementById('dealHeroImg');
+            if (img && p.image) { img.src = p.image; img.alt = p.name; }
+            var link = document.getElementById('dealHeroLink');
+            if (link) link.href = 'product.html?id=' + encodeURIComponent(p.id);
+            set('dealHeroName', p.name);
+            set('dealHeroMeta', (+p.rating).toFixed(1) + ' ★ · ' + (+p.reviews).toLocaleString('en-US') + ' reviews');
+            set('dealHeroPrice', (P.price ? P.price(p.price) : '$' + p.price));
+            set('dealHeroOld', (P.price ? P.price(p.oldPrice) : '$' + p.oldPrice));
+            set('dealHeroBadge', 'SAVE ' + pct + '% TODAY');
+        } catch (e) { /* static fallback stays */ }
+    })();
+
+    /* Hero price chip — shows the live sidebar range, links to it */
+    function syncHeroPrice() {
+        var s = document.getElementById('heroPriceRange');
+        if (!s) return;
+        try {
+            var shop = window.TrendaryoShop;
+            var st = shop && shop.state ? shop.state : null;
+            if (!st) return;
+            var P = window.TrendaryoProducts;
+            var fmt = function (n) { return (P && P.price) ? P.price(n) : '$' + n; };
+            s.textContent = fmt(st.lo) + ' – ' + fmt(st.hi);
+        } catch (e) {}
+    }
+    window.addEventListener('hashchange', function () { setTimeout(syncHeroPrice, 120); });
+    (function () {
+        var t = null;
+        ['click', 'change', 'input'].forEach(function (ev) {
+            document.addEventListener(ev, function () {
+                if (t) clearTimeout(t);
+                t = setTimeout(syncHeroPrice, 350);
+            }, { passive: true });
+        });
+    })();
+    setTimeout(syncHeroPrice, 600);
+
+    /* Category bar active state — mirrors shop.js filter state (no logic changes) */
+    (function () {
+        function sync() {
+            var bar = document.querySelector('.catbar-inner');
+            if (!bar) return;
+            var shop = window.TrendaryoShop;
+            var st = shop && shop.state ? shop.state : { cat: 'all' };
+            bar.querySelectorAll('.catbar-btn').forEach(function (b) {
+                var on = false;
+                if (b.hasAttribute('data-jump')) { on = (st.sale === 1); }
+                else if (b.getAttribute('data-cat') === 'all') { on = (st.cat === 'all' && !st.sale); }
+                else { on = (b.getAttribute('data-cat') === st.cat && !st.sale); }
+                b.classList.toggle('is-on', on);
+            });
+        }
+        window.addEventListener('hashchange', function () { setTimeout(sync, 60); });
+        document.addEventListener('click', function (e) {
+            if (e.target && e.target.closest && e.target.closest('.catbar-btn')) setTimeout(sync, 60);
+        });
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { setTimeout(sync, 400); });
+        else setTimeout(sync, 400);
+    })();
+    </script>
 </body>
 </html>

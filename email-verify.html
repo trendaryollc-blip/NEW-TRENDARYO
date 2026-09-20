@@ -7,7 +7,7 @@
     <meta name="robots" content="noindex, follow">
     <link rel="canonical" href="https://trendaryo.com/email-verify.html">
     <link rel="icon" type="image/svg+xml" href="assets/favicon-crown-star.svg">
-    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="responsive-universal.css">
     <link rel="stylesheet" href="shared.css">
     <link rel="stylesheet" href="styles.css">
     <script src="performance.js"></script>
@@ -50,7 +50,11 @@
         .ev-link a:hover { color: var(--accent-2); }
         .ev-spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top: 2px solid #fff; border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 0.5rem; vertical-align: middle; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        @media (max-width: 600px) { .ev-shell { padding: 0 1rem; } .ev-card { padding: 1.5rem; } }
+        @media(max-width:600px){
+            body{padding-top:100px;}
+            .ev-shell{padding:1rem;}
+            .ev-card{padding:1.5rem;border-radius:14px;}
+        }
         @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #0a0a0a; }

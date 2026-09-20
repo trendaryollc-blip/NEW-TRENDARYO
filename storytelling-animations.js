@@ -212,109 +212,59 @@
             });
         });
     }
-    // Phase 3: Scroll-Triggered Animations
+    // Phase 3: Scroll-Triggered Animations — scrub removed (scrub:1 makes
+    // scroll feel "stuck" because content lags the wheel by ~1s). One-shot
+    // reveals only; hero parallax killed (nebulas are display:none anyway).
     function initScrollAnimations() {
         if (!window.gsap || !window.ScrollTrigger) return;
 
         gsap.registerPlugin(ScrollTrigger);
+        ScrollTrigger.config({ ignoreMobileResize: true });
 
         const heroSection = document.getElementById('hero');
         if (!heroSection) return;
 
-        // Parallax scroll effect
-        gsap.to('#hero .hero-nebula--1', {
-            scrollTrigger: {
-                trigger: '#hero',
-                start: 'top top',
-                end: 'bottom top',
-                scrub: 1,
-                markers: false
-            },
-            y: -100,
-            opacity: 0.04,
-            ease: 'none'
-        });
-
-        gsap.to('#hero .hero-nebula--2', {
-            scrollTrigger: {
-                trigger: '#hero',
-                start: 'top top',
-                end: 'bottom top',
-                scrub: 1,
-                markers: false
-            },
-            y: 80,
-            opacity: 0.04,
-            ease: 'none'
-        });
-
-        gsap.to('#hero .hero-orbit-ring', {
-            scrollTrigger: {
-                trigger: '#hero',
-                start: 'top top',
-                end: 'bottom top',
-                scrub: 1,
-                markers: false
-            },
-            scale: 0.9,
-            opacity: 0.5,
-            ease: 'none'
-        });
-
-        // Pods fade and scale on scroll
+        // Gentle single fade of category chips on exit — no scrub lag.
         gsap.to('#hero .orbiting-products', {
             scrollTrigger: {
                 trigger: '#hero',
                 start: 'top top',
-                end: 'bottom top',
-                scrub: 1,
+                end: 'bottom 30%',
+                toggleActions: 'play none none reverse',
                 markers: false
             },
-            scale: 0.95,
-            opacity: 0.6,
-            ease: 'none'
-        });
-
-        // Text fade on scroll
-        gsap.to('#hero .hero-content', {
-            scrollTrigger: {
-                trigger: '#hero',
-                start: 'top top',
-                end: 'bottom top',
-                scrub: 1,
-                markers: false
-            },
-            opacity: 0.3,
-            y: -50,
-            ease: 'none'
+            opacity: 0.35,
+            duration: 0.4,
+            ease: 'power1.out',
+            overwrite: 'auto'
         });
     }
 
-    // Phase 4: Continuous Breathing Animation
+    // Phase 4: Continuous Breathing Animation — OFF by default.
+    // Infinite opacity/box-shadow tweens repaint every frame and keep the
+    // main thread busy during scroll. Only run on fine-pointer desktops
+    // that did not request reduced motion, and pause when hero is hidden.
     function initBreathingAnimation() {
         if (!window.gsap) return;
-
-        // Subtle breathing effect on nebulas
-        gsap.to('#hero .hero-nebula', {
-            opacity: '+=0.02',
-            duration: 4,
-            yoyo: true,
-            repeat: -1,
-            ease: 'sine.inOut',
-            stagger: 0.5
-        });
-
-        // Orbit ring subtle pulse
-        gsap.to('#hero .hero-orbit-ring', {
-            opacity: 'random(0.06, 0.12)',
-            duration: 5,
-            yoyo: true,
-            repeat: -1,
-            ease: 'sine.inOut'
-        });
-
-        // Pods subtle float — handled by CSS keyframes on .pod-wrap now
-        // (two competing float systems caused visible position drift).
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+        const hero = document.getElementById('hero');
+        if (!hero) return;
+        let breathing = null;
+        new IntersectionObserver((entries) => {
+            const visible = entries[0].isIntersecting;
+            if (visible && !breathing) {
+                breathing = gsap.to('#hero .hero-visual', {
+                    y: -6,
+                    duration: 3.2,
+                    yoyo: true,
+                    repeat: -1,
+                    ease: 'sine.inOut'
+                });
+            } else if (!visible && breathing) {
+                breathing.kill(); breathing = null;
+            }
+        }, { threshold: 0 }).observe(hero);
     }
 
     // Phase 5: Text Animation with Stagger (simplified - no DOM manipulation)
@@ -385,58 +335,35 @@
         });
     }
 
-    // Phase 8: Scroll Progress Indicator
+    // Phase 8: Scroll Progress Indicator — rAF-throttled, passive, no per-frame gsap
     function initScrollProgress() {
-        document.addEventListener('scroll', () => {
-            const heroSection = document.getElementById('hero');
-            if (!heroSection) return;
-
+        const heroSection = document.getElementById('hero');
+        if (!heroSection) return;
+        const content = heroSection.querySelector('.hero-content');
+        let ticking = false;
+        function update() {
+            ticking = false;
             const rect = heroSection.getBoundingClientRect();
+            // Skip work entirely once hero is off-screen (the common scroll case)
+            if (rect.bottom < 0) return;
             const progress = Math.max(0, Math.min(1, 1 - (rect.bottom / window.innerHeight)));
-
             state.scrollProgress = progress;
-
-            // Update hero opacity based on scroll
-            if (progress > 0.3) {
-                gsap.to('#hero .hero-content', {
-                    opacity: 1 - progress,
-                    duration: 0.1,
-                    overwrite: 'auto'
-                });
+            // Cheap compositor-only fade, written directly (no gsap tween per event)
+            if (content && progress > 0.3) {
+                content.style.opacity = String(1 - progress * 0.7);
+            } else if (content && progress <= 0.01) {
+                content.style.opacity = '';
             }
-        });
+        }
+        document.addEventListener('scroll', () => {
+            if (!ticking) { ticking = true; requestAnimationFrame(update); }
+        }, { passive: true });
     }
 
-    // Phase 9: Emotional Arc - Build Anticipation
-    function initEmotionalArc() {
-        if (!window.gsap) return;
-
-        // Create pulsing effect that builds over time
-        const pulseTimeline = gsap.timeline({ repeat: -1 });
-
-        pulseTimeline.to('#hero .hero-orbit-ring', {
-            boxShadow: '0 0 30px rgba(0,240,255,0.05), inset 0 0 30px rgba(0,240,255,0.02)',
-            duration: 2,
-            ease: 'sine.inOut'
-        })
-        .to('#hero .hero-orbit-ring', {
-            boxShadow: '0 0 50px rgba(0,240,255,0.15), inset 0 0 50px rgba(0,240,255,0.08)',
-            duration: 2,
-            ease: 'sine.inOut'
-        });
-
-        // Pod glow pulse
-        document.querySelectorAll('#hero .product-pod').forEach((pod, idx) => {
-            gsap.to(pod, {
-                boxShadow: 'random([0 0 20px rgba(0,240,255,0.1), 0 0 30px rgba(0,240,255,0.2)])',
-                duration: 'random(3, 5)',
-                yoyo: true,
-                repeat: -1,
-                ease: 'sine.inOut',
-                delay: idx * 0.3
-            });
-        });
-    }
+    // Phase 9: Emotional Arc — DISABLED. Animating box-shadow on infinite
+    // timelines forces a repaint every frame and is the classic scroll-jank
+    // source. The static luxury styling already carries the premium feel.
+    function initEmotionalArc() { return; }
 
     // Phase 10: Reveal Hidden Elements on Scroll
     function initHiddenElementReveals() {

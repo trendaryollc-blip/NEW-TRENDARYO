@@ -17,7 +17,7 @@
     const headerHTML = `
     <header class="store-header" id="store-header">
         <div class="announcement-bar">
-            <span id="announce-msg">FREE SHIPPING ON ORDERS OVER $50</span>
+            <span id="announce-msg">Free shipping over $50 · 30-day returns · WELCOME10 for 10% off</span>
             <span id="announce-countdown" class="announce-countdown" style="display:none;"></span>
         </div>
         <div class="store-header-inner">
@@ -30,7 +30,7 @@
 
             <div class="store-search" role="search">
                 <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-                <input type="search" id="header-search-input" placeholder="Search products..." autocomplete="off" />
+                <input type="search" id="header-search-input" placeholder="Search headphones, watches, sneakers…" autocomplete="off" />
             </div>
 
             <div class="store-actions">
@@ -224,6 +224,32 @@
             </div>
         </div>
     </footer>`;
+
+    /* ── Midnight Luxury 2.0: ensure override layer on every page ── */
+    function ensureLuxuryTheme() {
+        // Each asset injects independently — a page with the CSS already linked
+        // (index.html, shop.html) must still get fonts + cursor trail.
+        if (!document.querySelector('link[href*="luxury-final.css"]')) {
+            var l = document.createElement('link');
+            l.rel = 'stylesheet';
+            l.href = 'luxury-final.css';
+            document.head.appendChild(l);
+        }
+        // Premium fonts (Sora + Inter, Orbitron kept for logo only)
+        if (!document.querySelector('link[href*="Sora"]')) {
+            var f = document.createElement('link');
+            f.rel = 'stylesheet';
+            f.href = 'https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap';
+            document.head.appendChild(f);
+        }
+        // Global glowing cursor trail (desktop only; script self-gates otherwise)
+        if (!document.querySelector('script[src*="cursor-particles.js"]')) {
+            var c = document.createElement('script');
+            c.src = 'cursor-particles.js';
+            c.defer = true;
+            document.head.appendChild(c);
+        }
+    }
 
     /* ── Inject header before body content ── */
     function injectHeader() {
@@ -638,10 +664,32 @@
         document.head.appendChild(link);
     }
 
+    /* ── In-page anchors: smooth only for the click, native (instant) for
+       wheel/trackpad. This is what removes the "stuck" feeling while keeping
+       #vortex / #pipeline jumps pleasant. ── */
+    function initSmoothAnchors() {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        document.addEventListener('click', (e) => {
+            const a = e.target.closest('a[href^="#"]');
+            if (!a) return;
+            const id = a.getAttribute('href');
+            if (id.length < 2) return;
+            const target = document.querySelector(id);
+            if (!target) return;
+            e.preventDefault();
+            document.documentElement.classList.add('smooth-anchors');
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setTimeout(() => document.documentElement.classList.remove('smooth-anchors'), 900);
+            try { history.replaceState(null, '', id); } catch (err) {}
+        });
+    }
+
     /* ── Init everything ── */
     function init() {
+        ensureLuxuryTheme();
         injectHeader();
         injectFooter();
+        initSmoothAnchors();
         initNav();
         initSearch();
         initTheme();

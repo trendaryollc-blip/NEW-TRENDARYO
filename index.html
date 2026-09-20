@@ -39,77 +39,79 @@
     <link rel="stylesheet" href="shared.css">
     <link rel="stylesheet" href="responsive-universal.css">
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ── Design tokens — same system as shop.html "Command Deck" ── */
+        /* ── Midnight Luxury 2.0 tokens — calm, premium, accessible ── */
         :root {
-            --primary: #0a0a0a;
-            --bg-deep: #0a0a2a;
-            --accent: #00f0ff;
-            --accent-2: #ff00aa;
-            --accent-3: #00ff88;
-            --accent-4: #ffd700;
-            --danger: #ff4444;
-            --text: #ffffff;
-            --muted: rgba(255, 255, 255, 0.66);
-            --muted-2: rgba(255, 255, 255, 0.45);
+            --primary: #060614;
+            --bg-deep: #060614;
+            --accent: #00e5ff;
+            --accent-2: #ff3da6;
+            --accent-3: #2ee6a8;
+            --accent-4: #ffd166;
+            --danger: #ff5c7a;
+            --text: #f5f6fa;
+            --muted: rgba(245, 246, 250, 0.74);
+            --muted-2: rgba(245, 246, 250, 0.56);
             --glass: rgba(255, 255, 255, 0.05);
             --glass-2: rgba(255, 255, 255, 0.03);
             --glass-border: rgba(255, 255, 255, 0.1);
-            --glass-border-2: rgba(255, 255, 255, 0.18);
-            --card-grad: linear-gradient(168deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.02));
-            --shadow-lift: 0 18px 44px rgba(0, 0, 0, 0.48);
-            --glow-cyan: 0 0 26px rgba(0, 240, 255, 0.28);
+            --glass-border-2: rgba(255, 255, 255, 0.14);
+            --card-grad: rgba(255, 255, 255, 0.035);
+            --shadow-lift: 0 18px 44px rgba(0, 0, 0, 0.45);
+            --glow-cyan: 0 0 0 rgba(0,0,0,0);
             --r-sm: 10px;
             --r-md: 16px;
-            --r-lg: 22px;
-            --r-pill: 999px;
+            --r-lg: 20px;
+            --r-pill: 14px;
             --ease: cubic-bezier(0.22, 1, 0.36, 1);
-            --font-d: 'Orbitron', sans-serif;
+            --font-d: 'Sora', 'Inter', system-ui, sans-serif;
+            --font-b: 'Inter', system-ui, sans-serif;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Rajdhani', sans-serif; color: #fff; overflow-x: hidden; transition: background 1s ease-in-out; }
-        html { background: #0a0a2a; }
-        #three-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+        body { font-family: 'Inter', system-ui, sans-serif; color: #f5f6fa; overflow-x: hidden; background: #060614; line-height: 1.6; }
+        html { background: #060614; }
+        #three-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.55; }
 
-        .store-header { position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: transparent; border-bottom: 1px solid rgba(255,255,255,0.07); }
-        .store-header-inner { max-width: 1200px; margin: 0 auto; padding: 0.8rem 1.25rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
-        .store-brand { display: flex; align-items: center; gap: 0.75rem; min-width: 180px; }
-        .store-logo { font-family: 'Orbitron', sans-serif; font-size: 1.6rem; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent-2)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; white-space: nowrap; }
+        .store-header { position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: rgba(6,6,20,0.82); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid rgba(255,255,255,0.09); }
+        .store-header-inner { max-width: 1280px; margin: 0 auto; padding: 0.7rem 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+        .store-brand { display: flex; align-items: center; gap: 0.75rem; min-width: 170px; }
+        .store-logo { font-family: 'Orbitron', sans-serif; font-size: 1.35rem; font-weight: 900; letter-spacing: 2px; background: linear-gradient(135deg, #fff, var(--accent)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; white-space: nowrap; }
 
-        .store-search { flex: 1; display: flex; align-items: center; gap: 0.5rem; padding: 0.55rem 0.9rem; border-radius: 999px; background: var(--glass); border: 1px solid var(--glass-border); min-width: 220px; }
-        .store-search input { width: 100%; border: none; outline: none; background: #0a0a2a; color: rgba(255,255,255,0.9); font-family: inherit; font-size: 1rem; }
-        .store-search input::placeholder { color: rgba(255,255,255,0.55); }
+        .store-search { flex: 1; max-width: 520px; display: flex; align-items: center; gap: 0.5rem; padding: 0.55rem 1rem; border-radius: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); min-width: 200px; }
+        .store-search input { width: 100%; border: none; outline: none; background: transparent; color: #fff; font-family: inherit; font-size: 0.95rem; }
+        .store-search input::placeholder { color: rgba(245,246,250,0.5); }
 
-        .store-actions { display: flex; align-items: center; gap: 0.6rem; }
-        .store-icon-btn { width: 42px; height: 42px; border-radius: 999px; background: var(--glass); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.9); text-decoration: none; transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease; }
-        .store-icon-btn:hover { transform: translateY(-1px); border-color: rgba(0,240,255,0.6); background: rgba(0,240,255,0.12); }
+        .store-actions { display: flex; align-items: center; gap: 0.5rem; }
+        .store-icon-btn { width: 40px; height: 40px; border-radius: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; color: #fff; text-decoration: none; transition: border-color 0.2s ease, background 0.2s ease; }
+        .store-icon-btn:hover { border-color: rgba(0,229,255,0.4); background: rgba(0,229,255,0.1); transform: none; }
 
-        .store-nav { max-width: 1200px; margin: 0 auto; padding: 0 1.25rem 0.85rem; }
-        .store-nav-list { display: flex; align-items: center; justify-content: center; gap: 0.25rem; list-style: none; }
+        .store-nav { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem 0.6rem; }
+        .store-nav-list { display: flex; align-items: center; justify-content: flex-start; gap: 0.25rem; list-style: none; }
 
         .store-nav-item { position: relative; }
-        .store-nav-link { font-family: 'Orbitron', sans-serif; font-size: 0.82rem; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; color: rgba(255,255,255,0.85); text-decoration: none; padding: 0.65rem 0.9rem; border-radius: 999px; display: inline-flex; align-items: center; gap: 0.5rem; transition: background 0.2s ease, color 0.2s ease; }
-        .store-nav-link:hover { background: rgba(255,255,255,0.08); color: rgba(255,255,255,1); }
-        .store-nav-link[aria-current="page"] { background: rgba(0,240,255,0.14); color: rgba(255,255,255,1); border: 1px solid rgba(0,240,255,0.25); }
-        .store-caret { font-size: 0.8rem; opacity: 0.85; }
+        .store-nav-link { font-family: 'Inter', sans-serif; font-size: 0.92rem; font-weight: 600; letter-spacing: 0.01em; color: rgba(245,246,250,0.78); text-decoration: none; padding: 0.55rem 0.85rem; border-radius: 10px; display: inline-flex; align-items: center; gap: 0.4rem; }
+        .store-nav-link:hover { background: rgba(255,255,255,0.07); color: #fff; }
+        .store-nav-link[aria-current="page"] { background: rgba(0,229,255,0.12); color: #fff; border: 1px solid rgba(0,229,255,0.22); }
+        .store-caret { font-size: 0.75rem; opacity: 0.7; }
 
-        .store-dropdown { position: absolute; left: 0; top: calc(100% + 10px); min-width: 240px; background: rgba(10,10,42,0.92); border: 1px solid var(--glass-border); border-radius: 14px; padding: 0.5rem; box-shadow: 0 18px 48px rgba(0,0,0,0.45); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease; }
-        .store-dropdown a { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.7rem 0.8rem; border-radius: 10px; color: rgba(255,255,255,0.88); text-decoration: none; transition: background 0.18s ease, color 0.18s ease; }
-        .store-dropdown a:hover { background: rgba(0,240,255,0.12); color: #fff; }
-        .store-dropdown small { color: rgba(255,255,255,0.55); font-size: 0.85rem; }
+        .store-dropdown { position: absolute; left: 0; top: calc(100% + 8px); min-width: 260px; background: rgba(10,10,30,0.96); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 0.5rem; box-shadow: 0 18px 44px rgba(0,0,0,0.5); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease; }
+        .store-dropdown a { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.7rem 0.8rem; border-radius: 10px; color: rgba(245,246,250,0.88); text-decoration: none; font-weight: 500; }
+        .store-dropdown a:hover { background: rgba(0,229,255,0.1); color: #fff; }
+        .store-dropdown small { color: rgba(245,246,250,0.55); font-size: 0.82rem; }
 
         .store-nav-item:hover .store-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
         .store-nav-item.is-open .store-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
 
-        .store-mobile-toggle { display: none; width: 42px; height: 42px; border-radius: 999px; background: var(--glass); border: 1px solid var(--glass-border); color: rgba(255,255,255,0.9); cursor: pointer; }
+        .store-mobile-toggle { display: none; width: 40px; height: 40px; border-radius: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; cursor: pointer; }
 
-        /* Fixed header stack (announcement + bar + nav) is ~165px tall —
-           offset must clear it or hero content slides behind the header. */
-        .page-offset { padding-top: 175px; }
+        /* Slim header: 108px total */
+        .page-offset { padding-top: 112px; }
 
-        .section-wrap { max-width: 1200px; margin: 0 auto; }
-        .section-pad { padding: 3.5rem 1.25rem; }
+        .section-wrap { max-width: 1280px; margin: 0 auto; }
+        .section-pad { padding: clamp(3rem, 6vw, 5rem) 1.5rem; }
         /* ── Slim trust strip (4 pillars) ── */
         .trust-strip { max-width: 1200px; margin: 0 auto; padding: 2.25rem 1.25rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
         .trust-item { display: flex; align-items: center; gap: 0.85rem; padding: 1.1rem 1.25rem; border-radius: 16px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); transition: border-color 0.3s ease, background 0.3s ease; }
@@ -153,107 +155,64 @@
         .preloader-logo-3d { font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent-2)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
         /* ═══════════════════════════════════════════
-           COSMIC HERO — scoped entirely to #hero
-           Does NOT affect any other page
+           MIDNIGHT LUXURY HERO — split editorial, calm
         ═══════════════════════════════════════════ */
         #hero {
             position: relative;
-            min-height: 100vh;
+            min-height: 92vh;
             display: flex;
             align-items: center;
-            justify-content: center;
-            overflow: visible;
-            text-align: center;
-            background: transparent; /* let bg.js Three.js canvas show through */
+            overflow: hidden;
+            text-align: left;
+            background: transparent;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem 3.5rem;
         }
-
-        /* Starfield canvas — hidden, bg.js provides the live particle field */
-        #hero-starfield {
-            display: none;
-        }
-
-        /* Nebula glow orbs — 2 layers only, so the particle field breathes */
-        #hero .hero-nebula {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            pointer-events: none;
-            z-index: 0;
-            animation: heroNebulaDrift 12s ease-in-out infinite alternate;
-            opacity: 0.08;
-        }
-        #hero .hero-nebula--1 {
-            width: 520px;
-            height: 520px;
-            background: radial-gradient(circle, rgba(0,240,255,0.4) 0%, transparent 70%);
-            top: -120px;
-            left: -100px;
-            animation-delay: 0s;
-        }
-        #hero .hero-nebula--2 {
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(0,255,136,0.35) 0%, transparent 70%);
-            bottom: -150px;
-            right: -120px;
-            animation-delay: -4s;
-        }
-        @keyframes heroNebulaDrift {
-            from { transform: scale(1) translateY(0); }
-            to   { transform: scale(1.12) translateY(-30px); }
-        }
-
-        /* Content wrapper */
+        #hero-starfield { display: none; }
+        #hero .hero-nebula { display: none; }
         #hero .hero-content {
             position: relative;
             z-index: 2;
-            max-width: 900px;
-            padding: 0 1.5rem;
-            display: flex;
-            flex-direction: column;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+            gap: 3rem;
             align-items: center;
-            gap: 0.5rem;
         }
-
-        /* Eyebrow - HIDDEN */
-        #hero .hero-eyebrow {
-            display: none;
-            visibility: hidden;
-        }
-
-        /* Main tagline — sized to always fit inside the first viewport */
+        #hero .hero-copy { display: flex; flex-direction: column; align-items: flex-start; gap: 0; }
+        #hero .hero-eyebrow { display: none; visibility: hidden; }
         #hero .hero-tagline {
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(2rem, 4.5vw, 3.1rem);
-            font-weight: 900;
-            letter-spacing: 3px;
-            line-height: 1.08;
-            background: linear-gradient(135deg, #ffffff 0%, #00f0ff 45%, #00ff88 100%);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 1.1rem;
-            padding-bottom: 0.5rem;
-            filter: drop-shadow(0 0 20px rgba(0,240,255,0.3));
-            animation: heroTaglineGlow 4s ease-in-out infinite alternate;
-            pointer-events: auto;
+            font-family: 'Sora', 'Inter', sans-serif;
+            font-size: clamp(2.1rem, 4.6vw, 3.4rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.06;
+            color: #fff;
+            background: none;
+            -webkit-text-fill-color: #fff;
+            margin-bottom: 1rem;
+            padding-bottom: 0;
+            filter: none;
+            animation: none;
         }
-        @keyframes heroTaglineGlow {
-            from { filter: drop-shadow(0 0 15px rgba(0,240,255,0.25)); }
-            to   { filter: drop-shadow(0 0 35px rgba(0,240,255,0.5)); }
-        }
-
-        /* Subtitle */
+        #hero .hero-tagline em { font-style: normal; color: var(--accent); }
         #hero .hero-sub {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: clamp(1.05rem, 2vw, 1.2rem);
-            color: rgba(255,255,255,0.8);
-            max-width: 560px;
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(1rem, 1.6vw, 1.12rem);
+            color: rgba(245,246,250,0.74);
+            max-width: 520px;
             line-height: 1.7;
-            margin-top: 0.75rem;
-            margin-bottom: 1.75rem;
-            padding-top: 0.5rem;
-            pointer-events: auto;
+            margin: 0 0 1.6rem;
+            padding: 0;
+        }
+        #hero .hero-proof { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.4rem; font-size: 0.9rem; color: rgba(245,246,250,0.74); }
+        #hero .hero-proof .stars { color: var(--accent-4); letter-spacing: 2px; }
+        #hero .hero-proof b { color: #fff; }
+        @media (max-width: 960px) {
+            #hero { min-height: auto; padding-top: 2rem; }
+            #hero .hero-content { grid-template-columns: 1fr; gap: 2rem; }
+            #hero { text-align: left; }
         }
 
         /* ── Orbiting product pods — STATIC in position.
@@ -332,112 +291,116 @@
         /* Float animation now lives on .pod-wrap so GSAP owns the
            magnetic transform on .product-pod without conflict. */
 
-        /* ── CTA buttons ── */
+        /* ── CTA: white primary + ghost secondary ── */
         #hero .hero-cta-row {
             display: flex;
-            gap: 1rem;
-            justify-content: center;
+            gap: 0.75rem;
+            justify-content: flex-start;
             flex-wrap: wrap;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
-
         #hero .hero-cta {
             position: relative;
-            padding: 0.78rem 1.5rem;
-            border-radius: var(--r-pill);
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.72rem;
-            font-weight: 800;
-            letter-spacing: 1.2px;
-            text-transform: uppercase;
+            padding: 0.9rem 1.6rem;
+            border-radius: 14px;
+            font-family: 'Sora', 'Inter', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.01em;
             text-decoration: none;
-            overflow: hidden;
-            transition: transform 0.25s var(--ease), box-shadow 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+            transition: transform 0.2s var(--ease), box-shadow 0.2s ease, background 0.2s ease;
             cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
-        #hero .hero-cta:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0, 240, 255, 0.28); }
-
-        /* Solid primary — matches shop's .deck-btn--solid */
         #hero .hero-cta--primary {
-            background: linear-gradient(135deg, var(--accent), var(--accent-3));
-            border: 1px solid transparent;
-            color: #00202a;
+            background: #fff;
+            border: 1px solid #fff;
+            color: #060614;
         }
         #hero .hero-cta--primary:hover {
-            box-shadow: 0 12px 30px rgba(0, 240, 255, 0.35);
+            transform: translateY(-2px);
+            background: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 0 12px 28px rgba(0,229,255,0.25);
         }
-
-        /* Tinted ghost — matches shop's .deck-btn */
         #hero .hero-cta--secondary {
-            background: linear-gradient(135deg, rgba(0,240,255,0.18), rgba(255,0,170,0.18));
-            border: 1px solid rgba(0,240,255,0.45);
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
             color: #fff;
         }
+        #hero .hero-cta--secondary:hover { border-color: rgba(0,229,255,0.4); background: rgba(0,229,255,0.08); transform: translateY(-2px); box-shadow: none; }
+        #hero .hero-cta::after { display: none; }
 
-        /* Ripple on click */
-        #hero .hero-cta::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(0,240,255,0.2);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.5s ease, height 0.5s ease, opacity 0.5s ease;
-            opacity: 1;
-        }
-        #hero .hero-cta:active::after {
-            width: 220px;
-            height: 220px;
-            opacity: 0;
-        }
-
-        /* ── "This vs. the market" — live research widget (was the trust strip) ── */
+        /* ── Hero visual showcase ── */
+        #hero .hero-visual { position: relative; }
+        #hero .hero-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; overflow: hidden; box-shadow: 0 24px 60px rgba(0,0,0,0.45); }
+        #hero .hero-card-media { position: relative; aspect-ratio: 4/3; overflow: hidden; background: #0c0c28; }
+        #hero .hero-card-media img { width: 100%; height: 100%; object-fit: cover; }
+        #hero .hero-card-badge { position: absolute; top: 1rem; left: 1rem; padding: 0.4rem 0.75rem; border-radius: 999px; background: rgba(6,6,20,0.82); border: 1px solid rgba(0,229,255,0.35); color: var(--accent); font-family: 'Sora', sans-serif; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; backdrop-filter: blur(8px); }
+        #hero .hero-card-body { padding: 1.25rem 1.35rem 1.35rem; }
+        #hero .hero-card-row { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; margin-bottom: 1rem; }
+        #hero .hero-card-row strong { display: block; font-family: 'Sora', sans-serif; color: #fff; font-size: 1.05rem; }
+        #hero .hero-card-row span { font-size: 0.85rem; color: rgba(245,246,250,0.6); }
+        #hero .hero-card-price { font-family: 'Sora', sans-serif; font-weight: 800; color: #fff; white-space: nowrap; }
+        #hero .hero-card-price s { color: rgba(245,246,250,0.45); font-weight: 500; font-size: 0.85rem; margin-left: 0.3rem; }
+        #hero .hero-card-actions { display: flex; align-items: center; gap: 1rem; }
+        #hero .hero-card-btn { padding: 0.7rem 1.2rem; font-size: 0.9rem; }
+        #hero .hero-card-link { font-size: 0.9rem; color: var(--accent); text-decoration: none; font-weight: 600; }
+        #hero .hero-card-link:hover { text-decoration: underline; }
+        #hero .hero-float { position: absolute; padding: 0.55rem 0.9rem; border-radius: 999px; background: rgba(10,10,30,0.92); border: 1px solid rgba(255,255,255,0.12); font-size: 0.82rem; font-weight: 600; color: #fff; box-shadow: 0 10px 28px rgba(0,0,0,0.4); }
+        #hero .hero-float--a { top: 22%; right: -14px; }
+        #hero .hero-float--b { bottom: 28%; left: -14px; }
+        @media (max-width: 960px) { #hero .hero-float { display: none; } }
+        /* Category chips replace pods */
+        #hero .orbiting-products { display: flex; gap: 0.6rem; flex-wrap: wrap; margin: 1.25rem 0 0; }
+        #hero .pod-wrap { animation: none; text-decoration: none; }
+        #hero .pod-chip { display: inline-flex; padding: 0.55rem 0.95rem; border-radius: 999px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: rgba(245,246,250,0.82); font-size: 0.88rem; font-weight: 600; transition: border-color 0.2s ease, background 0.2s ease; }
+        #hero .pod-chip:hover { border-color: rgba(0,229,255,0.4); background: rgba(0,229,255,0.08); color: #fff; }
+        #hero .product-pod, #hero .pod-glow, #hero .pod-media, #hero .pod-label { display: none; }
+        /* Market widget — calm card */
         .market-widget {
-            max-width: 640px;
-            margin: 0 auto;
-            padding: 1.1rem 1.35rem;
+            max-width: 560px;
+            margin: 0;
+            padding: 1rem 1.2rem;
             text-align: left;
-            background: var(--card-grad);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--r-lg);
-            box-shadow: var(--shadow-lift);
+            background: rgba(255,255,255,0.035);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            box-shadow: none;
         }
-        .mw-kicker { display: block; font-family: 'Orbitron', sans-serif; font-size: 0.6rem; font-weight: 800; letter-spacing: 2.2px; text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem; }
+        .mw-kicker { display: block; font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem; }
         .mw-row { display: flex; align-items: center; gap: 0.9rem; }
-        .mw-thumb { width: 58px; height: 58px; flex: 0 0 auto; border-radius: 14px; overflow: hidden; border: 1px solid var(--glass-border-2); background: rgba(8, 8, 30, 0.9); }
+        .mw-thumb { width: 52px; height: 52px; flex: 0 0 auto; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.12); background: #0c0c28; }
         .mw-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .mw-main { flex: 1 1 auto; min-width: 0; }
-        .mw-name { display: block; font-family: 'Orbitron', sans-serif; font-size: 0.86rem; font-weight: 900; color: #fff; margin-bottom: 0.15rem; }
-        .mw-sub { display: block; font-size: 0.74rem; color: var(--muted-2); margin-bottom: 0.55rem; }
+        .mw-name { display: block; font-family: 'Sora', sans-serif; font-size: 0.92rem; font-weight: 700; color: #fff; margin-bottom: 0.15rem; }
+        .mw-sub { display: block; font-size: 0.82rem; color: rgba(245,246,250,0.6); margin-bottom: 0.5rem; }
         .mw-bar-row { display: flex; align-items: center; gap: 0.55rem; margin-top: 0.35rem; }
-        .mw-lab { flex: 0 0 52px; font-family: 'Orbitron', sans-serif; font-size: 0.56rem; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); }
-        .mw-bar { position: relative; flex: 1 1 auto; height: 5px; border-radius: var(--r-pill); background: rgba(255, 255, 255, 0.12); }
-        .mw-bar i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: inherit; background: linear-gradient(90deg, var(--accent), var(--accent-3)); box-shadow: 0 0 10px rgba(0, 240, 255, 0.4); }
-        .mw-bar u { position: absolute; top: -3px; width: 2px; height: 11px; background: rgba(255, 255, 255, 0.65); border-radius: 1px; }
-        .mw-val { flex: 0 0 auto; font-family: 'Orbitron', sans-serif; font-size: 0.72rem; font-weight: 900; color: #fff; white-space: nowrap; }
-        .mw-val small { font-size: 0.58rem; font-weight: 700; color: var(--muted-2); }
-        .mw-go { flex: 0 0 auto; font-family: 'Orbitron', sans-serif; font-size: 0.6rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); text-decoration: none; border-left: 1px solid var(--glass-border); padding: 0.4rem 0 0.4rem 0.9rem; transition: color 0.2s ease; white-space: nowrap; }
+        .mw-lab { flex: 0 0 52px; font-family: 'Inter', sans-serif; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(245,246,250,0.6); }
+        .mw-bar { position: relative; flex: 1 1 auto; height: 6px; border-radius: 999px; background: rgba(255, 255, 255, 0.1); }
+        .mw-bar i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: inherit; background: var(--accent); box-shadow: none; }
+        .mw-bar u { position: absolute; top: -3px; width: 2px; height: 12px; background: rgba(255, 255, 255, 0.6); border-radius: 1px; }
+        .mw-val { flex: 0 0 auto; font-family: 'Sora', sans-serif; font-size: 0.88rem; font-weight: 800; color: #fff; white-space: nowrap; }
+        .mw-val small { font-size: 0.72rem; font-weight: 600; color: rgba(245,246,250,0.55); }
+        .mw-go { flex: 0 0 auto; font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 700; color: var(--accent); text-decoration: none; border-left: 1px solid rgba(255,255,255,0.1); padding: 0.4rem 0 0.4rem 0.9rem; white-space: nowrap; }
         .mw-go:hover { color: #fff; }
         @media (max-width: 640px) { .mw-go { display: none; } }
 
 
         @media (max-width: 600px) {
-            #hero .orbiting-products { gap: 1rem; }
-            #hero .product-pod { width: 88px; height: 88px; }
-
-            #hero .hero-cta-row { flex-direction: column; align-items: center; }
-            #hero .hero-trust { font-size: 0.8rem; gap: 0.5rem; }
+            #hero .orbiting-products { gap: 0.5rem; }
+            #hero .hero-cta-row { flex-direction: column; align-items: stretch; }
+            #hero .hero-cta { justify-content: center; }
+            #hero .hero-trust { font-size: 0.85rem; }
         }
-        
         @media(max-width:900px){
             .store-search { display: none; }
             .store-mobile-toggle { display: inline-flex; align-items: center; justify-content: center; }
             .store-nav { display: none; }
             .store-header.is-open .store-nav { display: block; padding-bottom: 1rem; }
-            .store-nav-list { flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 0.5rem; }
+            .store-nav-list { flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 0.4rem; }
             .store-nav-link { width: 100%; justify-content: space-between; }
             .store-dropdown { position: static; opacity: 1; visibility: visible; transform: none; box-shadow: none; background: rgba(255,255,255,0.04); }
             .store-nav-item:hover .store-dropdown { opacity: 1; visibility: visible; transform: none; }
@@ -447,7 +410,7 @@
             .tst-grid { grid-template-columns: 1fr; }
             .trust-strip { grid-template-columns: repeat(2, 1fr); }
             .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
-            .page-offset { padding-top: 125px; }
+            .page-offset { padding-top: 96px; }
         }
         @media (max-width: 600px) {
             .cs-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
@@ -465,28 +428,25 @@
             display: flex; align-items: flex-end; justify-content: space-between;
             gap: 1.25rem; flex-wrap: wrap; margin-bottom: 1.75rem; text-align: left;
         }
-        .sec-head-txt { max-width: 760px; }
+        .sec-head-txt { max-width: 720px; }
         .sec-kicker {
             display: inline-flex; align-items: center; gap: 0.5rem;
-            font-family: 'Orbitron', sans-serif; font-size: 0.66rem; font-weight: 700;
-            letter-spacing: 2.4px; text-transform: uppercase;
-            color: var(--accent); margin-bottom: 0.5rem;
+            font-family: 'Inter', sans-serif; font-size: 0.74rem; font-weight: 700;
+            letter-spacing: 0.14em; text-transform: uppercase;
+            color: var(--accent); margin-bottom: 0.6rem;
         }
         .sec-kicker::before {
-            content: ''; width: 22px; height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent));
+            content: ''; width: 22px; height: 2px; border-radius: 2px;
+            background: var(--accent);
         }
         .sec-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(1.3rem, 2.6vw, 1.95rem);
-            font-weight: 900; line-height: 1.15;
-            background: linear-gradient(135deg, #fff 15%, var(--accent) 60%, var(--accent-2));
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-family: 'Sora', 'Inter', sans-serif;
+            font-size: clamp(1.5rem, 2.8vw, 2.1rem);
+            font-weight: 800; line-height: 1.12; letter-spacing: -0.02em;
+            color: #fff; background: none; -webkit-text-fill-color: #fff;
         }
-        .sec-sub { color: var(--muted); line-height: 1.65; font-size: 0.97rem; margin: 0.5rem 0 0; }
-        .sec-note { font-size: 0.76rem; color: var(--muted-2); }
+        .sec-sub { color: rgba(245,246,250,0.7); line-height: 1.65; font-size: 1rem; margin: 0.6rem 0 0; }
+        .sec-note { font-size: 0.82rem; color: rgba(245,246,250,0.5); }
 
         /* ── #constellations ── */
         #constellations {
@@ -1039,8 +999,8 @@
         @keyframes mediaShimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
         .media-skeleton.is-done { display: none; }
 
-        /* ── Media shimmer + smooth scroll ── */
-        html { scroll-behavior: smooth; }
+        /* ── Media shimmer (native scroll stays auto; anchors smooth via JS) ── */
+        html { scroll-behavior: auto; }
 
         /* ── Sticky cart dock — same pattern as shop.html #cartDock ── */
         .dock { position: fixed; right: 1.1rem; bottom: 1.1rem; z-index: 18500; transform: translateY(170%); transition: transform 0.4s var(--ease), bottom 0.3s ease; }
@@ -1068,8 +1028,8 @@
             .dock-info { max-width: none; }
         }
 
-        /* ── Smooth in-page scroll (See Featured CTA) ── */
-        html { scroll-behavior: smooth; }
+        /* ── In-page anchors: JS adds .smooth-anchors briefly; native stays auto ── */
+        html.smooth-anchors { scroll-behavior: smooth; }
 
         /* ── Reduced motion: honour vestibular preferences everywhere ── */
         @media (prefers-reduced-motion: reduce) {
@@ -1099,6 +1059,7 @@
             .feat-strip { grid-template-columns: 1fr; }
         }
     </style>
+    <link rel="stylesheet" href="luxury-final.css">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -1158,71 +1119,102 @@
         <div class="hero-nebula hero-nebula--1"></div>
         <div class="hero-nebula hero-nebula--2"></div>
 
-        <!-- Content -->
+        <!-- Content — split editorial -->
         <div class="hero-content">
-            <span class="sec-kicker hero-kicker">The store that does the research for you</span>
-            <h1 class="hero-tagline" id="hero-tagline">We compared. You just pick.</h1>
-            <p class="hero-sub">Trendaryo tracks ratings, reviews and prices so you don't have to. If a product is on this shelf, it beat its alternatives &mdash; that's the only way it gets listed.</p>
-
-            <!-- Orbiting product pods with particle interaction -->
-            <div class="orbiting-products" id="orbiting-products">
-                <a class="pod-wrap" href="product.html?id=1" aria-label="Shop audio">                     <div class="product-pod" id="pod1" data-href="product.html?id=1" data-particle-zone="true">                         <div class="pod-glow"></div>                         <div class="pod-media">                             <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop" alt="Wireless Headphones" loading="lazy" decoding="async">                         </div>                         <div class="pod-label">Headphones</div>                     </div>                 </a>
-                <a class="pod-wrap pod-wrap--2" href="product.html?id=6" aria-label="Shop wearables">                     <div class="product-pod" id="pod2" data-href="product.html?id=6" data-particle-zone="true">                         <div class="pod-glow"></div>                         <div class="pod-media">                             <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=400&fit=crop" alt="Smart Watch" loading="lazy" decoding="async">                         </div>                         <div class="pod-label">Smartwatch</div>                     </div>                 </a>
-                <a class="pod-wrap pod-wrap--3" href="product.html?id=7" aria-label="Shop fashion">                     <div class="product-pod" id="pod3" data-href="product.html?id=7" data-particle-zone="true">                         <div class="pod-glow"></div>                         <div class="pod-media">                             <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=400&fit=crop" alt="Premium Sneakers" loading="lazy" decoding="async">                         </div>                         <div class="pod-label">Sneakers</div>                     </div>                 </a>
-                <a class="pod-wrap pod-wrap--4" href="product.html?id=4" aria-label="Shop computing">                     <div class="product-pod" id="pod4" data-href="product.html?id=4" data-particle-zone="true">                         <div class="pod-glow"></div>                         <div class="pod-media">                             <img src="https://images.unsplash.com/photo-1588872657840-790ff3bde08c?w=400&h=400&fit=crop" alt="Gaming Laptop" loading="lazy" decoding="async">                         </div>                         <div class="pod-label">Laptops</div>                     </div>                 </a>
+            <div class="hero-copy">
+                <span class="sec-kicker hero-kicker">The store that does the research for you</span>
+                <h1 class="hero-tagline" id="hero-tagline">We compared. <em>You just pick.</em></h1>
+                <p class="hero-sub">Trendaryo tracks ratings, reviews and prices so you don't have to. If a product is on this shelf, it beat its alternatives — that's the only way it gets listed.</p>
+                <div class="hero-proof" aria-label="Social proof">
+                    <span class="stars" aria-hidden="true">★★★★★</span>
+                    <span><b>4.8/5</b> from 50,000+ verified buyers · Free shipping over $50</span>
+                </div>
+                <!-- CTA buttons -->
+                <div class="hero-cta-row">
+                    <a href="shop.html" class="hero-cta hero-cta--primary">Shop the shortlist →</a>
+                    <a href="#pipeline" class="hero-cta hero-cta--secondary">How we pick</a>
+                </div>
+                <!-- "This vs. the market" — live research widget (rendered by home-engine.js) -->
+                <div class="hero-trust market-widget" id="marketWidget" aria-live="polite"></div>
+                <!-- Categories — compact, keeps #orbiting-products id for home-engine.js -->
+                <div class="orbiting-products" id="orbiting-products">
+                    <a class="pod-wrap" href="shop.html" aria-label="Shop audio"><span class="pod-chip">🎧 Audio</span></a>
+                    <a class="pod-wrap pod-wrap--2" href="shop.html" aria-label="Shop wearables"><span class="pod-chip">⌚ Wearables</span></a>
+                    <a class="pod-wrap pod-wrap--3" href="shop.html" aria-label="Shop fashion"><span class="pod-chip">👟 Fashion</span></a>
+                    <a class="pod-wrap pod-wrap--4" href="shop.html" aria-label="Shop computing"><span class="pod-chip">💻 Computing</span></a>
+                </div>
             </div>
-
-            <!-- CTA buttons — primary opens the shortlist, secondary explains the method -->
-            <div class="hero-cta-row">
-                <a href="#vortex" class="hero-cta hero-cta--primary" data-particle-burst="true">See this week's shortlist</a>
-                <a href="#pipeline" class="hero-cta hero-cta--secondary" data-particle-burst="true">How we pick them</a>
+            <div class="hero-visual" aria-hidden="false">
+                <article class="hero-card">
+                    <div class="hero-card-media">
+                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=800&fit=crop" alt="Wireless Headphones — this week's top pick" fetchpriority="high">
+                        <span class="hero-card-badge">WEEK #1 · 4.8 ★</span>
+                    </div>
+                    <div class="hero-card-body">
+                        <div class="hero-card-row">
+                            <div>
+                                <strong>Wireless Headphones</strong>
+                                <span>Top rated · 2,340 reviews</span>
+                            </div>
+                            <div class="hero-card-price">$149 <s>$199</s></div>
+                        </div>
+                        <div class="hero-card-actions">
+                            <a href="product.html?id=1" class="hero-cta hero-cta--primary hero-card-btn">View product</a>
+                            <a href="shop.html" class="hero-card-link">Compare alternatives</a>
+                        </div>
+                    </div>
+                </article>
+                <div class="hero-float hero-float--a">✓ Free 30-day returns</div>
+                <div class="hero-float hero-float--b">✓ Price checked today</div>
             </div>
-
-            <!-- "This vs. the market" — live research widget (rendered by home-engine.js) -->
-            <div class="hero-trust market-widget" id="marketWidget" aria-live="polite"></div>
         </div>
 
 
     </section>
 
     <!-- ═══════════════════════════════════════════
-         RESEARCH PIPELINE — how a product makes the shelf
+         WHY TRENDARYO — the research promise + live proof + memory hook
     ═══════════════════════════════════════════ -->
     <section id="pipeline" aria-labelledby="pipeTitle">
         <div class="pipe-inner">
             <div class="sec-head">
                 <div class="sec-head-txt">
-                    <span class="sec-kicker">Section 01 · The research behind every listing</span>
-                    <h2 class="sec-title" id="pipeTitle">How a product makes the shelf</h2>
-                    <p class="sec-sub">Four gates, the same rules for everything. No paid placements, no exceptions &mdash; the numbers below are computed from the live catalogue on every visit.</p>
+                    <span class="sec-kicker">Why Trendaryo exists</span>
+                    <h2 class="sec-title" id="pipeTitle">We read the reviews so you don't have to.</h2>
+                    <p class="sec-sub">Buying online usually means dozens of open tabs, fake reviews, and hours of second-guessing. So we do all of it <em>before</em> anything reaches this shelf &mdash; hunt down every option, compare them on quality and price, throw out the losers, and list only the winner. If it's here, it's the best of its kind. You won't find better anywhere else.</p>
                 </div>
-                <span class="sec-note">Live catalogue &middot; re-checked on every visit</span>
+                <span class="sec-note">Live numbers &middot; re-checked on every visit</span>
             </div>
             <div class="pipe-grid">
                 <div class="pipe-step">
-                    <span class="pipe-num">Gate 01</span>
-                    <h3 class="pipe-name">Track</h3>
-                    <p class="pipe-desc">Every candidate's rating, review volume and price enters the ledger. Signals first, opinions later.</p>
-                    <div class="pipe-stat"><b data-pipe="reviews">&mdash;</b><span>review signals aggregated across the shelf</span></div>
+                    <span class="pipe-num">Step 01</span>
+                    <h3 class="pipe-name">We hunt</h3>
+                    <p class="pipe-desc">We scan the whole market in every category &mdash; ratings, review counts, real prices. Nothing gets listed on reputation alone.</p>
+                    <div class="pipe-stat"><b data-pipe="reviews">&mdash;</b><span>reviews read for you, not by you</span></div>
                 </div>
                 <div class="pipe-step">
-                    <span class="pipe-num">Gate 02</span>
-                    <h3 class="pipe-name">Score</h3>
-                    <p class="pipe-desc">Rating &times; review volume decides demand; value is measured against the catalogue median. Math, not vibes.</p>
-                    <div class="pipe-stat"><b data-pipe="median">&mdash;</b><span>median price &mdash; the value yardstick</span></div>
+                    <span class="pipe-num">Step 02</span>
+                    <h3 class="pipe-name">We compare</h3>
+                    <p class="pipe-desc">Every contender is scored against the true median price. Overpriced hype loses to honest value &mdash; math, not marketing.</p>
+                    <div class="pipe-stat"><b data-pipe="median">&mdash;</b><span>median price &mdash; our fairness yardstick</span></div>
                 </div>
                 <div class="pipe-step">
-                    <span class="pipe-num">Gate 03</span>
-                    <h3 class="pipe-name">Cut</h3>
-                    <p class="pipe-desc">Products that lose their standing leave the shelf. A short shelf is the whole point.</p>
+                    <span class="pipe-num">Step 03</span>
+                    <h3 class="pipe-name">We reject</h3>
+                    <p class="pipe-desc">Most products fail &mdash; and leave. No brand can pay its way back onto this shelf.</p>
                     <div class="pipe-stat"><b>0</b><span>paid placements. Ever.</span></div>
                 </div>
                 <div class="pipe-step">
-                    <span class="pipe-num">Gate 04</span>
-                    <h3 class="pipe-name">Shelf</h3>
-                    <p class="pipe-desc">What survives is the entire store. If it's listed here, it beat its class &mdash; buy with confidence.</p>
-                    <div class="pipe-stat"><b data-pipe="shelf">&mdash;</b><span>products listed &middot; zero filler</span></div>
+                    <span class="pipe-num">Step 04</span>
+                    <h3 class="pipe-name">You win</h3>
+                    <p class="pipe-desc">What survives is all you ever see: a short shelf of proven winners. Pick any one with total confidence.</p>
+                    <div class="pipe-stat"><b data-pipe="shelf">&mdash;</b><span>winners listed &middot; zero filler</span></div>
                 </div>
+            </div>
+            <div class="pipe-punch">
+                <p class="pipe-punch-line">You'd open 50 tabs. <span>We already closed 49.</span></p>
+                <p class="pipe-punch-sub">That's the entire business model &mdash; hours of research, done before you arrive, free with every order.</p>
+                <a class="pipe-punch-cta" href="shop.html">See this week's winners &rarr;</a>
             </div>
         </div>
     </section>
@@ -1373,7 +1365,7 @@
         <div class="bh-inner">
             <span class="sec-kicker">The shelf is the shortlist</span>
             <h2 class="bh-title">Your research ends here.</h2>
-            <p class="bh-sub">Every listing on this shelf beat its alternatives &mdash; and is re-checked on every visit. Free shipping over $50 &middot; 30-day returns &middot; secure checkout.</p>
+            <p class="bh-sub">Every product on this shelf beat its rivals on quality and price &mdash; re-checked on every visit. Stop researching. Start owning. Free shipping over $50 &middot; 30-day returns.</p>
             <a href="shop.html" class="bh-cta">Open the Shortlist</a>
         </div>
     </div>
@@ -1422,6 +1414,7 @@
     <script src="advanced-features.js"></script>
     <script src="components.js"></script>
     <script src="bg-optimized.js"></script>
+    <script src="cursor-particles.js"></script>
     <script src="hero-particles.js"></script>
     <script src="storytelling-animations.js"></script>
     <script src="surprise-interactions.js"></script>
@@ -1472,6 +1465,7 @@
         if (typeof gsap === 'undefined') return;
 
         gsap.registerPlugin(ScrollTrigger);
+        ScrollTrigger.config({ ignoreMobileResize: true });
 
         /* ── Vortex card spotlight — cursor-tracking glow, same as the
               shop's .pc-card spotlight. CSS owns the hover transform now,
@@ -1525,6 +1519,21 @@
                 setTimeout(() => { btn.classList.remove('added'); btn.innerHTML = prev; }, 1800);
             });
         });
+
+        /* ── Card → product page: click anywhere on a card (except Add to Cart
+           or an inner link) opens product.html?id=…. Covers the static
+           pre-render cards and any dynamically rendered ones. ── */
+        (function () {
+            const grid = document.querySelector('#vortex .vx-grid');
+            if (!grid) return;
+            grid.addEventListener('click', (e) => {
+                if (e.target.closest('button, a')) return;
+                const card = e.target.closest('.vx-card[data-product]');
+                if (!card) return;
+                const id = card.getAttribute('data-product');
+                if (id) window.location.href = 'product.html?id=' + encodeURIComponent(id);
+            });
+        })();
 
         /* ── Sticky cart dock — mirrors shop.js renderDock() ── */
         function renderDock() {
@@ -1608,26 +1617,27 @@
             setInterval(tick, 1000);
         })();
 
-        /* ── ScrollTrigger entrance animations ── */
+        /* ── ScrollTrigger entrance animations (once:true — never re-fire on
+           scroll-up, which read as "sticking") ── */
         // Constellations fade-in stagger
         gsap.from('.constellation', {
-            scrollTrigger: { trigger: '#constellations', start: 'top 80%' },
-            opacity: 0, y: 40, scale: 0.85,
-            duration: 0.6, stagger: 0.08, ease: 'power3.out'
+            scrollTrigger: { trigger: '#constellations', start: 'top 85%', once: true },
+            opacity: 0, y: 24, scale: 0.97,
+            duration: 0.5, stagger: 0.06, ease: 'power2.out', overwrite: 'auto'
         });
 
         // Vortex cards slide up
         gsap.from('.vortex-card', {
-            scrollTrigger: { trigger: '#vortex', start: 'top 80%' },
-            opacity: 0, y: 60,
-            duration: 0.7, stagger: 0.15, ease: 'power3.out'
+            scrollTrigger: { trigger: '#vortex', start: 'top 85%', once: true },
+            opacity: 0, y: 32,
+            duration: 0.55, stagger: 0.08, ease: 'power2.out', overwrite: 'auto'
         });
 
         // Meteors slide in from left
         gsap.from('.meteor', {
-            scrollTrigger: { trigger: '#deals', start: 'top 80%' },
-            opacity: 0, x: -80,
-            duration: 0.6, stagger: 0.15, ease: 'power3.out'
+            scrollTrigger: { trigger: '#deals', start: 'top 85%', once: true },
+            opacity: 0, x: -40,
+            duration: 0.5, stagger: 0.1, ease: 'power2.out', overwrite: 'auto'
         });
 
         /* ── Hologram hover pulse ── */
@@ -1636,13 +1646,13 @@
             holo.addEventListener('mouseleave', () => gsap.to(holo, { scale: 1, duration: 0.4, ease: 'elastic.out(1,0.5)' }));
         });
         gsap.from('.hologram', {
-            scrollTrigger: { trigger: '#testimonials', start: 'top 80%' },
-            opacity: 0, y: 50, duration: 0.7, stagger: 0.15, ease: 'power3.out'
+            scrollTrigger: { trigger: '#testimonials', start: 'top 85%', once: true },
+            opacity: 0, y: 28, duration: 0.55, stagger: 0.08, ease: 'power2.out', overwrite: 'auto'
         });
 
         gsap.from('#blackhole .bh-inner > *', {
-            scrollTrigger: { trigger: '#blackhole', start: 'top 80%' },
-            opacity: 0, y: 40, duration: 0.7, stagger: 0.12, ease: 'power3.out'
+            scrollTrigger: { trigger: '#blackhole', start: 'top 85%', once: true },
+            opacity: 0, y: 24, duration: 0.55, stagger: 0.08, ease: 'power2.out', overwrite: 'auto'
         });
     })();
     </script>
@@ -1688,49 +1698,9 @@
             });
         });
 
-        /* ── Parallax — synced to bg.js Three.js camera via window.__bgMouse ──
-           bg.js writes __bgMouse.nx / .ny (normalised -1..1) on every mousemove.
-           We read those same values each rAF frame so the hero nebulas move in
-           exact lockstep with the 3D particle field. The loop PAUSES while the
-           hero is offscreen (IntersectionObserver) — no hidden battery drain. */
-        let heroRafId = null;
-        let heroVisible = true;
-        const heroParallaxTargets = {
-            neb1: { el: document.querySelector('.hero-nebula--1'), sx: 30,  sy: 22  },
-            neb2: { el: document.querySelector('.hero-nebula--2'), sx: -24, sy: -18 }
-        };
-
-        // Smoothed values that lerp toward __bgMouse each frame (same 5% lerp as bg.js camera)
-        let hx = 0, hy = 0;
-
-        function heroSyncLoop() {
-            const m = window.__bgMouse || { nx: 0, ny: 0 };
-            // Match bg.js lerp factor exactly (0.05)
-            hx += (m.nx - hx) * 0.05;
-            hy += (m.ny - hy) * 0.05;
-
-            const t = heroParallaxTargets;
-            if (t.neb1.el) gsap.set(t.neb1.el, { x: hx * t.neb1.sx, y: hy * t.neb1.sy });
-            if (t.neb2.el) gsap.set(t.neb2.el, { x: hx * t.neb2.sx, y: hy * t.neb2.sy });
-
-            heroRafId = requestAnimationFrame(heroSyncLoop);
-        }
-
-        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (!reduceMotion) {
-            if ('IntersectionObserver' in window) {
-                new IntersectionObserver(entries => {
-                    const vis = entries[0].isIntersecting;
-                    if (vis && !heroVisible && heroRafId === null) heroSyncLoop();
-                    if (!vis && heroVisible && heroRafId !== null) {
-                        cancelAnimationFrame(heroRafId);
-                        heroRafId = null;
-                    }
-                    heroVisible = vis;
-                }, { threshold: 0.02 }).observe(document.getElementById('hero'));
-            }
-            heroSyncLoop();
-        }
+        /* ── Parallax — RETIRED: nebulas are display:none in Luxury 2.0, so this
+           infinite rAF + gsap.set loop burned a frame budget doing nothing
+           visible while users scrolled. bg.js camera drift continues alone. */
     })();
     </script>
 </body>

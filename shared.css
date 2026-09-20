@@ -4,31 +4,38 @@
    ============================================================ */
 
 :root {
-    --accent: #00f0ff;
-    --accent-2: #ff00aa;
-    --accent-3: #00ff88;
+    --accent: #00e5ff;
+    --accent-2: #ff3da6;
+    --accent-3: #2ee6a8;
+    --gold: #ffd166;
+    --ink: #f5f6fa;
+    --muted: rgba(245, 246, 250, 0.74);
     --glass: rgba(255,255,255,0.05);
     --glass-border: rgba(255,255,255,0.1);
+    --line: rgba(255, 255, 255, 0.09);
+    --header-h: 68px;
+    --font-display: 'Sora', 'Space Grotesk', 'Rajdhani', system-ui, sans-serif;
+    --font-body: 'Inter', 'Rajdhani', system-ui, sans-serif;
 }
 
-/* ── Sticky Header ── */
+/* ── Sticky Header — Midnight Luxury 2.0: slim 68px, calm border ── */
 .store-header {
     position: fixed;
     top: 0; left: 0; right: 0;
     z-index: 10000;
-    background: rgba(10, 10, 42, 0.88);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border-bottom: 1px solid rgba(0, 240, 255, 0.2);
-    box-shadow: 0 4px 60px rgba(0, 240, 255, 0.15);
-    transition: background 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+    background: rgba(6, 6, 20, 0.82);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border-bottom: 1px solid var(--line, rgba(255,255,255,0.09));
+    box-shadow: none;
+    transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 /* Stronger tint on scroll for maximum readability */
 .store-header.scrolled {
-    background: rgba(10, 10, 42, 0.88);
-    box-shadow: 0 4px 60px rgba(0, 240, 255, 0.18);
-    border-bottom-color: rgba(0, 240, 255, 0.25);
+    background: rgba(6, 6, 20, 0.94);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    border-bottom-color: rgba(255,255,255,0.12);
 }
 
 .store-header-inner {
@@ -219,32 +226,31 @@
 .store-nav-item { position: relative; }
 
 .store-nav-link {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.82rem;
-    font-weight: 700;
-    letter-spacing: 1.6px;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.85);
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 0.92rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: rgba(245,246,250,0.78);
     text-decoration: none;
-    padding: 0.65rem 0.9rem;
-    border-radius: 999px;
+    padding: 0.55rem 0.85rem;
+    border-radius: 10px;
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+    gap: 0.4rem;
+    transition: background 0.2s ease, color 0.2s ease;
     border: 1px solid transparent;
 }
 
 .store-nav-link:hover {
-    background: rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.07);
     color: #fff;
 }
 
 .store-nav-link[aria-current="page"] {
-    background: rgba(0,240,255,0.14);
+    background: rgba(0,229,255,0.12);
     color: #fff;
-    border-color: rgba(0,240,255,0.3);
-    box-shadow: 0 0 20px rgba(0,240,255,0.1);
+    border-color: rgba(0,229,255,0.22);
+    box-shadow: none;
 }
 
 .store-caret { font-size: 0.75rem; opacity: 0.8; transition: transform 0.2s ease; }
@@ -322,27 +328,28 @@
     border-color: rgba(0,240,255,0.4);
 }
 
-/* ── Announcement Bar ── */
+/* ── Announcement Bar — slim, dismissible, no pulse ── */
 .announcement-bar {
-    background: rgba(0, 240, 255, 0.05);
+    background: rgba(255,255,255,0.04);
     border-bottom: 1px solid rgba(255,255,255,0.06);
-    padding: 0.5rem 1.25rem;
+    padding: 0.45rem 1.25rem;
     text-align: center;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    color: rgba(255,255,255,0.75);
-    animation: announcePulse 4s ease-in-out infinite;
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: rgba(245,246,250,0.78);
+    animation: none;
 }
 
 @keyframes announcePulse {
-    0%, 100% { color: rgba(255,255,255,0.75); }
-    50%       { color: rgba(255,255,255,1); }  
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 1; }
 }
 
-/* ── Page offset (accounts for sticky header height) ── */
-.page-offset { padding-top: 0; }
+/* ── Page offset (slim 68px header + 33px announcement) ── */
+.page-offset { padding-top: 108px; }
+@media (max-width: 900px) { .page-offset { padding-top: 96px; } }
 
 /* ── Footer ── */
 .site-footer {

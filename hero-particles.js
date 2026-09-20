@@ -244,35 +244,41 @@
         document.head.appendChild(style);
     }
 
-    // Create cosmic dust trail following mouse
+    // Cosmic dust trail — throttled + desktop-only. Previously every mousemove
+    // did getBoundingClientRect + DOM insert + its own rAF chain, which
+    // janked scroll on trackpads that emit hundreds of events/sec.
     function initCosmicTrail() {
-        let lastX = 0, lastY = 0;
-        let trailTimeout;
+        // Global trail (cursor-particles.js, every page) already covers the hero —
+        // running both would double-emit dust on the homepage.
+        if (window.__cursorTrailActive) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+        let lastX = 0, lastY = 0, pending = null, heroRect = null;
+
+        const heroSection = document.getElementById('hero');
+        if (!heroSection) return;
+        // Cache hero rect on scroll/resize instead of per-mousemove.
+        const measure = () => { heroRect = heroSection.getBoundingClientRect(); };
+        measure();
+        document.addEventListener('scroll', measure, { passive: true });
+        window.addEventListener('resize', measure);
 
         document.addEventListener('mousemove', (e) => {
-            const heroSection = document.getElementById('hero');
-            if (!heroSection) return;
-
-            const heroRect = heroSection.getBoundingClientRect();
-            const isInHero = e.clientY >= heroRect.top && e.clientY <= heroRect.bottom;
-
-            if (!isInHero) return;
-
-            clearTimeout(trailTimeout);
-
-            // Create dust particle every 30px
-            const distance = Math.hypot(e.clientX - lastX, e.clientY - lastY);
-            if (distance > 30) {
-                createDustParticle(e.clientX, e.clientY);
-                lastX = e.clientX;
-                lastY = e.clientY;
-            }
-
-            trailTimeout = setTimeout(() => {
-                lastX = 0;
-                lastY = 0;
-            }, 100);
-        });
+            if (pending) return; // one dust check per frame max
+            pending = requestAnimationFrame(() => {
+                pending = null;
+                if (window.__cursorTrailActive) return; // global trail took over
+                if (!heroRect) return;
+                const isInHero = e.clientY >= heroRect.top && e.clientY <= heroRect.bottom;
+                if (!isInHero) return;
+                const distance = Math.hypot(e.clientX - lastX, e.clientY - lastY);
+                if (distance > 60) {
+                    createDustParticle(e.clientX, e.clientY);
+                    lastX = e.clientX;
+                    lastY = e.clientY;
+                }
+            });
+        }, { passive: true });
     }
 
     // Create individual dust particle
@@ -323,10 +329,16 @@
         animate();
     }
 
-    // Particle attraction zone update (runs every frame)
+    // Particle attraction zone update — only while hero is on screen AND a
+    // zone is active. Previously this ran an infinite rAF loop on every page
+    // for the whole session, stealing frames from scroll.
+    var heroVisible = true;
     function updateParticleZones() {
+        if (!heroVisible) return; // re-armed by IntersectionObserver below
+        var anyActive = false;
         burstZones.forEach(zone => {
             if (!zone.active) return;
+            anyActive = true;
 
             const rect = zone.element.getBoundingClientRect();
             const centerX = rect.left + rect.width / 2;
@@ -345,7 +357,17 @@
             }));
         });
 
-        requestAnimationFrame(updateParticleZones);
+        // Idle: poll cheaply until something activates; active: full rate.
+        setTimeout(() => requestAnimationFrame(updateParticleZones), anyActive ? 16 : 250);
+    }
+    function watchHeroVisibility() {
+        const hero = document.getElementById('hero');
+        if (!hero || !('IntersectionObserver' in window)) return;
+        new IntersectionObserver((entries) => {
+            const vis = entries[0].isIntersecting;
+            if (vis && !heroVisible) { heroVisible = true; requestAnimationFrame(updateParticleZones); }
+            else if (!vis) { heroVisible = false; }
+        }, { threshold: 0 }).observe(hero);
     }
 
     // Initialize on DOM ready
@@ -359,6 +381,7 @@
         addAnimationStyles();
         initHeroElements();
         initCosmicTrail();
+        watchHeroVisibility();
         updateParticleZones();
 
         console.log('✨ Hero particle system initialized');

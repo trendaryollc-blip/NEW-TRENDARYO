@@ -1,26 +1,184 @@
-/* Main Styles */
+/* ============================================================
+   TRENDARYO — MIDNIGHT LUXURY 2.0 (global theme)
+   Loaded on every page after shared.css. Single source of truth.
+   Goal: premium, calm, high-contrast, fast. One accent, not four.
+   ============================================================ */
 :root {
-  --accent: #00f0ff;
-  --accent-2: #ff00aa;
-  --accent-3: #00ff88;
+  --bg-0: #060614;
+  --bg-1: #0a0a24;
+  --bg-2: #121231;
+  --ink: #f5f6fa;
+  --muted: rgba(245, 246, 250, 0.74);
+  --muted-2: rgba(245, 246, 250, 0.56);
+  --accent: #00e5ff;
+  --accent-ink: #00202a;
+  --accent-2: #ff3da6;
+  --accent-3: #2ee6a8;
+  --gold: #ffd166;
+  --danger: #ff5c7a;
+  --line: rgba(255, 255, 255, 0.09);
+  --line-soft: rgba(255, 255, 255, 0.06);
+  --card: rgba(255, 255, 255, 0.035);
+  --card-solid: #10102a;
   --glass: rgba(255, 255, 255, 0.05);
   --glass-border: rgba(255, 255, 255, 0.1);
+  --shadow-lift: 0 18px 44px rgba(0, 0, 0, 0.45);
+  --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --r-sm: 10px;
+  --r-md: 16px;
+  --r-lg: 20px;
+  --r-pill: 999px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --header-h: 68px;
+  --container: 1280px;
+  --font-display: 'Sora', 'Space Grotesk', 'Rajdhani', system-ui, sans-serif;
+  --font-body: 'Inter', 'Rajdhani', system-ui, sans-serif;
+  --font-logo: 'Orbitron', sans-serif;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background: var(--bg-0);
+  scroll-behavior: auto;
+  -webkit-text-size-adjust: 100%;
 }
+html.smooth-anchors { scroll-behavior: smooth; }
 
 body {
-  font-family: 'Rajdhani', sans-serif;
-  background: #0a0a2a;
-  color: #fff;
+  font-family: var(--font-body);
+  background:
+    radial-gradient(900px 500px at 15% -5%, rgba(0, 229, 255, 0.07), transparent 60%),
+    radial-gradient(800px 500px at 90% 0%, rgba(255, 61, 166, 0.05), transparent 60%),
+    var(--bg-0);
+  color: var(--ink);
   overflow-x: hidden;
+  line-height: 1.6;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
 }
 
-html, body {
-  width: 100%;
-  height: 100%;
+html, body { width: 100%; min-height: 100%; }
+
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+
+::selection { background: rgba(0, 229, 255, 0.28); }
+
+/* ── Typography: display only for headings, never body ── */
+h1, h2, h3, .display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+  color: #fff;
+  text-wrap: balance;
+}
+h1 { font-size: clamp(2rem, 4.6vw, 3.4rem); font-weight: 800; }
+h2 { font-size: clamp(1.4rem, 2.8vw, 2rem); font-weight: 800; }
+h3 { font-size: 1.05rem; font-weight: 700; }
+p { color: var(--muted); }
+
+/* Logo keeps Orbitron — nothing else uses it */
+.store-logo-text, .footer-logo-text, .preloader-logo-3d {
+  font-family: var(--font-logo) !important;
+}
+
+/* ── Layout ── */
+.container, .section-wrap, .shop-shell {
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+.section-pad { padding: clamp(3rem, 6vw, 5rem) 1.5rem; }
+
+/* ── Buttons: clear hierarchy ── */
+.btn, .hero-cta, .bh-cta, .dl-cta, .vx-btn, .pm-add {
+  font-family: var(--font-display) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em !important;
+  text-transform: none !important;
+  border-radius: 14px !important;
+}
+.btn-primary, .hero-cta--primary, .bh-cta, .dl-cta {
+  background: #fff !important;
+  color: #060614 !important;
+  border: 1px solid #fff !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35) !important;
+}
+.btn-primary:hover, .hero-cta--primary:hover, .bh-cta:hover, .dl-cta:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 14px 32px rgba(0, 229, 255, 0.22) !important;
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+  color: var(--accent-ink) !important;
+}
+.btn-ghost, .hero-cta--secondary {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid var(--line) !important;
+  color: #fff !important;
+}
+.btn-ghost:hover, .hero-cta--secondary:hover {
+  border-color: rgba(0, 229, 255, 0.5) !important;
+  background: rgba(0, 229, 255, 0.1) !important;
+  box-shadow: none !important;
+}
+
+/* ── Cards: calm, photo-first ── */
+.vortex-card, .pm-card, .blog-card, .hologram, .constellation,
+.pipe-step, .tier-card, .step-card, .feat-item, .trust-item {
+  background: var(--card) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--r-lg) !important;
+  box-shadow: none !important;
+}
+.vortex-card:hover, .pm-card:hover, .blog-card:hover, .constellation:hover {
+  transform: translateY(-4px) !important;
+  border-color: rgba(0, 229, 255, 0.35) !important;
+  box-shadow: var(--shadow-card) !important;
+}
+/* Kill cursor spotlight + conic glow noise */
+.vortex-card::after { display: none !important; }
+.pod-glow, .vx-glow, .holo-scan, .meteor-tail { display: none !important; }
+
+/* ── Section headers: white, not gradient ── */
+.sec-title, .bh-title, .page-intro h1 {
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+  -webkit-text-fill-color: #fff !important;
+  color: #fff !important;
+  filter: none !important;
+}
+.sec-kicker {
+  color: var(--accent) !important;
+  font-family: var(--font-display) !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 0.14em !important;
+}
+.sec-sub { color: var(--muted) !important; }
+.sec-note { color: var(--muted-2) !important; }
+
+/* ── Prices: white price, muted compare ── */
+.vx-price, .pm-price span:first-child { color: #fff !important; }
+.vx-price-old, .pm-old { color: var(--muted-2) !important; }
+
+/* ── Forms ── */
+input, select, textarea {
+  font-family: var(--font-body) !important;
+  color-scheme: dark;
+}
+a:focus-visible, button:focus-visible, input:focus-visible,
+select:focus-visible, summary:focus-visible {
+  outline: 2px solid var(--accent) !important;
+  outline-offset: 2px !important;
+}
+
+/* ── Motion discipline ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

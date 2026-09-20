@@ -1,0 +1,364 @@
+/* MIDNIGHT LUXURY 2.0 — final override layer (loads last, wins over inline) */
+:root {
+  --accent: #00e5ff !important;
+  --accent-3: #2ee6a8 !important;
+  --muted: rgba(245,246,250,0.74) !important;
+  --muted-2: rgba(245,246,250,0.56) !important;
+}
+
+/* Kill all neon noise */
+.vortex-card::after, .pod-glow, .vx-glow, .holo-scan, .meteor-tail,
+.hero-nebula, .bh-ring, .bh-core, .deck-neb, .media-skeleton { display: none !important; }
+#hero .hero-tagline, .sec-title, .bh-title { animation: none !important; filter: none !important; }
+
+/* Sections: calm rhythm */
+#constellations, #vortex, #deals, #testimonials { padding: clamp(3rem,6vw,5rem) 1.5rem !important; }
+#constellations .cs-inner, #vortex .vx-inner, #deals .dl-inner, #testimonials .tst-inner,
+.pipe-inner { max-width: 1280px !important; margin: 0 auto !important; }
+
+/* Category tiles: clean, no square aspect */
+.constellation {
+  aspect-ratio: auto !important; min-height: 150px !important;
+  background: rgba(255,255,255,0.035) !important;
+  border: 1px solid rgba(255,255,255,0.09) !important;
+  border-radius: 18px !important; box-shadow: none !important;
+}
+.constellation:hover { transform: translateY(-3px) !important; border-color: rgba(0,229,255,0.35) !important; box-shadow: 0 12px 28px rgba(0,0,0,0.35) !important; }
+.cs-orb { background: rgba(0,229,255,0.08) !important; border-color: rgba(0,229,255,0.22) !important; color: var(--accent) !important; }
+.cs-name { font-family: 'Sora',sans-serif !important; font-size: 0.92rem !important; letter-spacing: 0 !important; text-transform: none !important; color: #fff !important; }
+.cs-count { color: rgba(245,246,250,0.6) !important; font-size: 0.85rem !important; }
+
+/* Product cards: photo-first, clear price, always-visible ATC on touch */
+.vortex-card, .vx-card { background: rgba(255,255,255,0.035) !important; border: 1px solid rgba(255,255,255,0.09) !important; border-radius: 20px !important; }
+.vx-name { font-family: 'Sora',sans-serif !important; font-size: 1.02rem !important; }
+.vx-desc { color: rgba(245,246,250,0.66) !important; }
+.vx-price span:first-child { color: #fff !important; font-family: 'Sora',sans-serif !important; }
+.vx-badge { font-family: 'Inter',sans-serif !important; font-size: 0.7rem !important; letter-spacing: 0.06em !important; background: rgba(6,6,20,0.85) !important; border: 1px solid rgba(255,255,255,0.16) !important; color: #fff !important; }
+.vx-btn, .vx-add {
+  opacity: 1 !important; transform: none !important;
+  background: #fff !important; color: #060614 !important;
+  border: 1px solid #fff !important; border-radius: 12px !important;
+  font-family: 'Sora',sans-serif !important; text-transform: none !important; letter-spacing: 0 !important;
+}
+.vx-btn:hover, .vx-add:hover { background: var(--accent) !important; border-color: var(--accent) !important; box-shadow: none !important; }
+/* Clickable cards: media + title link to the product page (button excluded) */
+.vx-media-link { display: block; border-radius: 0; text-decoration: none; }
+.vx-card[data-product] .vx-media { cursor: pointer; }
+.vx-name a { color: inherit; text-decoration: none; }
+.vx-name a:hover { color: var(--accent, #00e5ff); text-decoration: underline; }
+.vx-card[data-product]:not(:has(a)) { cursor: pointer; }
+
+/* Pipeline: remove arrows noise on mobile already handled; calm numbers */
+.pipe-step { background: rgba(255,255,255,0.035) !important; border: 1px solid rgba(255,255,255,0.09) !important; border-radius: 20px !important; }
+.pipe-step:not(:last-child)::after { color: rgba(255,255,255,0.25) !important; text-shadow: none !important; }
+.pipe-num { font-family: 'Inter',sans-serif !important; color: var(--accent) !important; letter-spacing: 0.12em !important; }
+.pipe-name { font-family: 'Sora',sans-serif !important; }
+.pipe-stat b { font-family: 'Sora',sans-serif !important; color: #fff !important; }
+
+/* Deals: single calm offer card, no shimmer bar */
+.meteor {
+  height: auto !important; min-height: 72px !important; padding: 1rem 1.25rem !important;
+  background: rgba(255,209,102,0.07) !important;
+  border: 1px solid rgba(255,209,102,0.28) !important;
+  border-radius: 18px !important;
+}
+.meteor-label { color: #ffd166 !important; text-shadow: none !important; font-family: 'Sora',sans-serif !important; letter-spacing: 0.04em !important; font-size: 0.95rem !important; }
+.dl-cta, .bh-cta { background: #fff !important; color: #060614 !important; border: 1px solid #fff !important; border-radius: 14px !important; font-family: 'Sora',sans-serif !important; text-transform: none !important; letter-spacing: 0 !important; }
+.dl-cta:hover, .bh-cta:hover { background: var(--accent) !important; border-color: var(--accent) !important; transform: translateY(-2px) !important; box-shadow: 0 12px 28px rgba(0,229,255,0.22) !important; }
+
+/* Testimonials + stats */
+.hologram { background: rgba(255,255,255,0.035) !important; border: 1px solid rgba(255,255,255,0.09) !important; border-radius: 20px !important; }
+.holo-quote { color: rgba(245,246,250,0.8) !important; font-style: normal !important; }
+.holo-name { font-family: 'Sora',sans-serif !important; color: #fff !important; }
+.holo-stars { color: #ffd166 !important; }
+.stat-num { font-family: 'Sora',sans-serif !important; background: none !important; -webkit-text-fill-color: #fff !important; color: #fff !important; font-size: 2.2rem !important; }
+.stat-label { color: rgba(245,246,250,0.66) !important; }
+
+/* Blackhole CTA: calm centered band */
+#blackhole { padding: clamp(3.5rem,7vw,5.5rem) 1.5rem !important; }
+.bh-title { font-family: 'Sora',sans-serif !important; color: #fff !important; background: none !important; -webkit-text-fill-color: #fff !important; }
+.bh-sub { color: rgba(245,246,250,0.7) !important; }
+
+/* Feature strip */
+.feat-strip { max-width: 1280px !important; }
+.feat-item { background: rgba(255,255,255,0.035) !important; border: 1px solid rgba(255,255,255,0.09) !important; border-radius: 16px !important; }
+.feat-item strong { font-family: 'Sora',sans-serif !important; text-transform: none !important; letter-spacing: 0 !important; }
+.feat-item span { color: rgba(245,246,250,0.62) !important; }
+
+/* Shop page command deck inherits calm */
+.deck-neb { display: none !important; }
+.sec-title { font-family: 'Sora',sans-serif !important; background: none !important; -webkit-text-fill-color: #fff !important; color: #fff !important; }
+.sec-kicker { font-family: 'Inter',sans-serif !important; letter-spacing: 0.12em !important; }
+
+/* Footer: quieter */
+.site-footer::before { display: none !important; }
+.footer-col h4 { font-family: 'Inter',sans-serif !important; letter-spacing: 0.1em !important; }
+.announcement-bar { animation: none !important; }
+
+/* Performance: reduce blur cost */
+.store-header, .store-dropdown, .account-dropdown, .dock-inner { backdrop-filter: blur(12px) !important; -webkit-backdrop-filter: blur(12px) !important; }
+#three-canvas { opacity: 0.5 !important; }
+@media (max-width: 768px) { #three-canvas { display: none !important; } }
+
+/* ═════════ SMOOTH-SCROLL FIX — native scroll must stay on compositor ═════════
+   Reason for "sticking": html{scroll-behavior:smooth} + GSAP scrub + blur
+   repaint on every frame. Native wheel scroll must be instant (auto);
+   in-page anchors get smooth scroll via JS only. */
+html { scroll-behavior: auto !important; }
+html.smooth-anchors { scroll-behavior: smooth !important; }
+body { overscroll-behavior-y: none; }
+
+/* Promote fixed layers to their own compositor layer — no repaint on scroll */
+.store-header, .dock, #three-canvas, #__theme-bg {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+/* Header blur is the #1 scroll cost: keep it, but isolate repaints */
+.store-header { contain: layout style; will-change: transform; }
+.dock { contain: layout style paint; }
+
+/* Skip rendering off-screen sections entirely (biggest scroll win) */
+#pipeline, #constellations, #vortex, #deals, #testimonials, #blackhole,
+.shop-shell .sec, .pm-section, .cta-band {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 800px;
+}
+/* Never let content-visibility trap the scrolled-to anchor */
+#vortex:target, #pipeline:target { content-visibility: visible; }
+
+/* Kill every remaining infinite repaint animation (filter/box-shadow) */
+.hero-nebula, .pod-glow, .vx-glow, .holo-scan, .meteor-tail, .media-skeleton,
+.bh-ring, .bh-core, .deck-neb, .preloader-logo-3d {
+  animation: none !important;
+}
+/* ...except one cheap opacity pulse, GPU-friendly */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+/* Images must not cause layout shift during scroll */
+img { content-visibility: auto; }
+.vx-media img, .pm-media img, .hero-card-media img { will-change: transform; }
+
+/* ═════════ HEADER CONSISTENCY — one design on every page ═════════
+   Every page injects the same header HTML from components.js, but ~10 pages
+   carry inline .store-header overrides (transparent vs black vs navy) and
+   shop loads responsive.css while index loads responsive-universal.css.
+   This block normalizes all of it; it loads last with !important so it wins
+   over every per-page <style>. Do NOT re-override .store-header per page —
+   edit this block instead. */
+.store-header {
+  position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important;
+  z-index: 10000 !important;
+  background: rgba(6, 6, 20, 0.82) !important;
+  backdrop-filter: blur(12px) !important; -webkit-backdrop-filter: blur(12px) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09) !important;
+  box-shadow: none !important;
+}
+.store-header.scrolled {
+  background: rgba(6, 6, 20, 0.94) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+}
+.store-header-inner {
+  max-width: 1280px !important; margin: 0 auto !important;
+  padding: 0.7rem 1.5rem !important;
+  display: flex !important; align-items: center !important;
+  justify-content: space-between !important; gap: 1rem !important;
+}
+.store-brand { min-width: 170px !important; }
+.store-logo {
+  font-family: 'Orbitron', sans-serif !important;
+  font-size: 1.35rem !important; font-weight: 900 !important; letter-spacing: 2px !important;
+}
+.store-search {
+  flex: 1 !important; max-width: 520px !important; min-width: 200px !important;
+  border-radius: 12px !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+.store-search input { background: transparent !important; font-size: 0.95rem !important; }
+.store-icon-btn { width: 40px !important; height: 40px !important; border-radius: 12px !important; }
+.store-nav { max-width: 1280px !important; margin: 0 auto !important; padding: 0 1.5rem 0.6rem !important; }
+.store-nav-list { justify-content: flex-start !important; }
+.store-nav-link { font-family: 'Inter', sans-serif !important; font-size: 0.92rem !important; font-weight: 600 !important; letter-spacing: 0.01em !important; }
+.announcement-bar {
+  background: rgba(255, 255, 255, 0.04) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 0.82rem !important; font-weight: 600 !important; letter-spacing: 0.02em !important;
+  animation: none !important;
+}
+/* One offset everywhere (slim header + announcement) */
+.page-offset { padding-top: 112px !important; }
+@media (max-width: 900px) { .page-offset { padding-top: 96px !important; } }
+
+/* ═════════ SHOP DECK SEARCH — keep it, it's the in-page live filter ═════════
+   Header search = global navigation (goes to shop.html?q=…, seeded into state
+   by shop.js seedFromQuery). Deck search = live catalogue filter driving the
+   grid + URL hash + clear button + "/" shortcut. Different jobs — both stay.
+   Restyled to Luxury 2.0 so they read as one system. */
+.deck-search {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+}
+.deck-search:focus-within { border-color: rgba(0, 229, 255, 0.4) !important; box-shadow: none !important; }
+.deck-search input { background: transparent !important; color: #fff !important; font-family: 'Inter', sans-serif !important; }
+.deck-search input::placeholder { color: rgba(245, 246, 250, 0.5) !important; }
+.deck-search-btn {
+  background: #fff !important; color: #060614 !important;
+  border: 1px solid #fff !important; border-radius: 10px !important;
+  font-family: 'Sora', sans-serif !important; font-weight: 700 !important;
+}
+.deck-search-btn:hover { background: var(--accent, #00e5ff) !important; border-color: var(--accent, #00e5ff) !important; transform: none !important; opacity: 1 !important; }
+
+/* ═════════ GLOBAL CURSOR PARTICLES — tiny, capped, compositor-only ═════════
+   The JS trail (components.js initCursorTrail) inserts .cursor-dust nodes.
+   Motion is transform+opacity only so it never blocks scrolling. */
+.cursor-dust {
+  position: fixed; top: 0; left: 0;
+  border-radius: 50%; pointer-events: none;
+  z-index: 9996; will-change: transform, opacity;
+}
+@media (prefers-reduced-motion: reduce) { .cursor-dust { display: none !important; } }
+
+/* ═════════ SHOP 2.0 — category first, price second, grid first ═════════
+   Order on page: slim deck → sticky category bar → "On sale" shelf →
+   "Browse everything" grid + sticky sidebar (price panel on top).
+   All controls reuse shop.js IDs + delegated [data-*] hooks — no JS changes. */
+
+/* Slim deck: title + search + stats, no essays */
+.deck { padding: 1.75rem 0 1.25rem !important; position: relative; overflow: hidden; }
+/* Shop hero: copy left, deal card right */
+.deck-hero { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 2.5rem; align-items: center; }
+.deck-copy { min-width: 0; }
+.deck-visual { position: relative; min-width: 0; }
+.deck-visual .hero-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; overflow: hidden; box-shadow: 0 24px 60px rgba(0,0,0,0.45); }
+.deck-visual .hero-card-media { position: relative; aspect-ratio: 16/10; overflow: hidden; background: #0c0c28; }
+.deck-visual .hero-card-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.deck-visual .hero-card-badge { position: absolute; top: 1rem; left: 1rem; padding: 0.4rem 0.75rem; border-radius: 999px; background: rgba(6,6,20,0.85); border: 1px solid rgba(46,230,168,0.4); color: #2ee6a8; font-family: 'Sora',sans-serif; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; }
+.deck-visual .hero-card-body { padding: 1.15rem 1.25rem 1.25rem; }
+.deck-visual .hero-card-row { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; margin-bottom: 1rem; }
+.deck-visual .hero-card-row strong { display: block; font-family: 'Sora',sans-serif; color: #fff; font-size: 1.02rem; }
+.deck-visual .hero-card-row span { font-size: 0.84rem; color: rgba(245,246,250,0.6); }
+.deck-visual .hero-card-price { font-family: 'Sora',sans-serif; font-weight: 800; color: #fff; white-space: nowrap; }
+.deck-visual .hero-card-price s { color: rgba(245,246,250,0.45); font-weight: 500; font-size: 0.82rem; margin-left: 0.3rem; }
+.deck-visual .hero-card-actions { display: flex; align-items: center; gap: 1rem; }
+.deck-visual .hero-card-btn { display: inline-flex; align-items: center; padding: 0.7rem 1.25rem; border-radius: 14px; background: #fff; border: 1px solid #fff; color: #060614; font-family: 'Sora',sans-serif; font-size: 0.9rem; font-weight: 700; text-decoration: none; transition: background 0.2s ease, transform 0.2s ease; }
+.deck-visual .hero-card-btn:hover { background: var(--accent, #00e5ff); border-color: var(--accent, #00e5ff); transform: translateY(-2px); }
+.deck-visual .hero-card-link { font-size: 0.9rem; color: var(--accent, #00e5ff); text-decoration: none; font-weight: 600; }
+.deck-visual .hero-card-link:hover { text-decoration: underline; }
+.deck-visual .hero-float { position: absolute; padding: 0.55rem 0.9rem; border-radius: 999px; background: rgba(10,10,30,0.92); border: 1px solid rgba(255,255,255,0.12); font-size: 0.8rem; font-weight: 600; color: #fff; box-shadow: 0 10px 28px rgba(0,0,0,0.4); white-space: nowrap; }
+.deck-visual .hero-float--a { top: 20%; right: -10px; }
+.deck-visual .hero-float--b { bottom: 26%; left: -10px; }
+@media (max-width: 960px) {
+  .deck-hero { grid-template-columns: 1fr; gap: 1.75rem; }
+  .deck-visual .hero-float { display: none; }
+}
+.deck-title { font-family: 'Sora', sans-serif !important; font-size: clamp(1.6rem, 3.4vw, 2.3rem) !important; letter-spacing: -0.02em !important; }
+.deck-sub { font-size: 0.98rem !important; max-width: 560px !important; }
+.deck-hint { display: none !important; }
+.deck-actions { margin-top: 1rem !important; }
+.deck-stats { gap: 0.75rem !important; }
+.deck-stat { padding: 0.7rem 0.9rem !important; }
+
+/* Category bar: sticky below the slim header, horizontal scroll */
+.catbar {
+  position: sticky; top: 104px; z-index: 60;
+  background: rgba(6, 6, 20, 0.88);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+}
+.catbar-inner {
+  max-width: 1440px; margin: 0 auto; padding: 0.6rem 1.5rem;
+  display: flex; gap: 0.5rem; overflow-x: auto; scrollbar-width: none;
+}
+.catbar-inner::-webkit-scrollbar { display: none; }
+.catbar-btn {
+  flex: 0 0 auto; padding: 0.5rem 1.05rem; border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(245, 246, 250, 0.8); font-family: 'Inter', sans-serif;
+  font-size: 0.88rem; font-weight: 600; cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+.catbar-btn:hover { border-color: rgba(0, 229, 255, 0.4); color: #fff; }
+.catbar-btn.is-on { background: #fff; border-color: #fff; color: #060614; }
+.catbar-btn--sale.is-on { background: #2ee6a8; border-color: #2ee6a8; color: #04240f; }
+@media (max-width: 900px) { .catbar { top: 88px; } }
+
+/* Sidebar keeps its sticky scroll; inner filter host stacks panels */
+#filtersRoot { display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
+.price-panel { padding: 1rem 1.05rem !important; }
+.price-panel .f-group-title { margin-bottom: 0.7rem !important; }
+
+/* Compact band presets: name + count + bar only */
+.band-grid--mini { display: flex !important; flex-direction: column !important; gap: 0.4rem !important; margin-bottom: 0.9rem !important; }
+.band-grid--mini .band-card { padding: 0.55rem 0.7rem !important; text-align: left !important; }
+.band-grid--mini .band-pick { display: none !important; }
+.band-grid--mini .band-count { font-size: 0.75rem !important; }
+
+/* Compact price slider: slim track, small thumbs, inline numbers */
+.range-block--mini { margin: 0 !important; padding: 0 !important; background: none !important; border: none !important; }
+.range-block--mini .range-head { margin-bottom: 0.55rem !important; }
+.range-block--mini .range-title { font-family: 'Inter', sans-serif !important; font-size: 0.72rem !important; letter-spacing: 0.1em !important; }
+.range-block--mini .range-nums input { width: 64px !important; padding: 0.35rem 0.4rem !important; font-size: 0.78rem !important; }
+.range-block--mini .range-dual { height: 20px !important; }
+.range-block--mini .range-dual::before { height: 4px !important; }
+.range-block--mini .range-fill { height: 4px !important; box-shadow: none !important; background: var(--accent, #00e5ff) !important; }
+.range-block--mini .range-dual input[type="range"]::-webkit-slider-thumb { width: 14px !important; height: 14px !important; border-width: 2px !important; box-shadow: none !important; }
+.range-block--mini .range-dual input[type="range"]::-moz-range-thumb { width: 12px !important; height: 12px !important; box-shadow: none !important; }
+.range-block--mini .range-ticks { display: none !important; }
+.range-block--mini .range-actions { margin-top: 0.6rem !important; }
+.range-block--mini .range-actions .f-btn { padding: 0.45rem 0.8rem !important; font-size: 0.75rem !important; }
+
+/* Sidebar polish: readable Inter group titles */
+.shop-side .f-group-title { font-family: 'Inter', sans-serif !important; font-size: 0.74rem !important; letter-spacing: 0.1em !important; }
+.shop-side .f-live-num { font-family: 'Sora', sans-serif !important; }
+
+/* Shelf headings: sale kicker in green, tighter sections */
+.sec-kicker--sale { color: #2ee6a8 !important; }
+.sec-kicker--sale::before { background: #2ee6a8 !important; }
+
+/* ═════════ PIPELINE PUNCHLINE — the one line that sticks ═════════ */
+.pipe-punch {
+  margin-top: 2.5rem; padding: clamp(2rem, 5vw, 3rem) 1.5rem;
+  text-align: center; border-radius: 24px;
+  background: linear-gradient(135deg, rgba(0,229,255,0.07), rgba(255,61,166,0.06));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.pipe-punch-line {
+  font-family: 'Sora', sans-serif; font-weight: 800; letter-spacing: -0.02em;
+  font-size: clamp(1.4rem, 3.4vw, 2.2rem); color: #fff; line-height: 1.2;
+  max-width: 640px; margin: 0 auto 0.75rem;
+}
+.pipe-punch-line span { color: var(--accent, #00e5ff); }
+.pipe-punch-sub {
+  color: rgba(245, 246, 250, 0.7); font-size: 1rem; line-height: 1.65;
+  max-width: 520px; margin: 0 auto 1.5rem;
+}
+.pipe-punch-cta {
+  display: inline-flex; align-items: center; padding: 0.85rem 1.7rem;
+  border-radius: 14px; background: #fff; border: 1px solid #fff;
+  color: #060614 !important; font-family: 'Sora', sans-serif;
+  font-size: 0.95rem; font-weight: 700; text-decoration: none;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.pipe-punch-cta:hover { background: var(--accent, #00e5ff); border-color: var(--accent, #00e5ff); transform: translateY(-2px); }
+#drops { margin-top: 2.5rem !important; margin-bottom: 2.5rem !important; }
+#grid { margin-top: 2.5rem !important; }
+
+/* ═════════ CENTERED PAGE COLUMN — equal left/right on every section ═════════
+   Root cause of the left-hug: `.sec { margin: 4rem 0 }` sits AFTER
+   `.shop-shell { margin: 0 auto }` at equal specificity, so it silently killed
+   the auto margins. This restores one centered 1440px column everywhere. */
+.sec.shop-shell, section.shop-shell, div.shop-shell {
+  width: 100% !important;
+  max-width: 1440px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: clamp(1rem, 4vw, 2rem) !important;
+  padding-right: clamp(1rem, 4vw, 2rem) !important;
+}
+main.page-offset { width: 100% !important; margin: 0 !important; }
+/* Rails always span the full centered column, never shrink to content */
+.rail, .shop-grid, .toolbar, .chip-rail, .deck-hero { width: 100% !important; max-width: 100% !important; }

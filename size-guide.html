@@ -25,7 +25,7 @@
     
     <title>Size Guide - Trendaryo | Find Your Perfect Fit</title>
     <link rel="stylesheet" href="shared.css">
-    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="responsive-universal.css">
     <script src="performance.js"></script>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="assets/favicon-crown-star.svg">
@@ -248,6 +248,25 @@
         
         section p {
             color: rgba(255, 255, 255, 0.85);
+        }
+
+        @media(max-width:768px){
+            body{padding-top:130px;}
+            .size-guide-nav{flex-wrap:wrap;gap:0.5rem;}
+            .size-guide-nav button{padding:0.6rem 1rem;font-size:0.88rem;}
+            .size-chart-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1rem -0.5rem;padding:0 0.5rem;}
+            .size-chart{min-width:550px;}
+            .measurement-guide{grid-template-columns:1fr;gap:1.5rem;}
+            .measurement-card{padding:1.5rem;}
+        }
+        @media(max-width:600px){
+            body{padding-top:110px;}
+            .size-guide-nav{flex-direction:row;overflow-x:auto;scrollbar-width:none;}
+            .size-guide-nav::-webkit-scrollbar{display:none;}
+            .size-guide-nav button{flex:0 0 auto;padding:0.5rem 0.85rem;font-size:0.82rem;}
+            .page-header h1{font-size:1.5rem;}
+            .size-chart{min-width:480px;}
+            .size-chart th,.size-chart td{padding:0.6rem 0.5rem;font-size:0.82rem;}
         }
     </style>
 <script src="bg.js"></script>

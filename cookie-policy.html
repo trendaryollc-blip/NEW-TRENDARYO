@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -20,7 +20,7 @@
     <meta property="twitter:description" content="No mystery trackers: every storage key this site writes, what it holds and a one-click wipe button.">
     <meta property="twitter:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
     <link rel="icon" type="image/svg+xml" href="assets/favicon-crown-star.svg">
-    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="responsive-universal.css">
     <link rel="stylesheet" href="shared.css">
     <link rel="stylesheet" href="styles.css">
     <script src="performance.js"></script>
@@ -119,12 +119,12 @@
 
     <main class="page-offset">
 
-    <!-- 00 · DECK HERO -->
+    <!-- 00 � DECK HERO -->
     <section class="deck" aria-labelledby="ckTitle">
         <div class="deck-neb deck-neb-1"></div>
         <div class="deck-neb deck-neb-2"></div>
         <div class="deck-inner">
-            <span class="deck-live"><span class="deck-live-dot"></span>Storage ledger · Complete</span>
+            <span class="deck-live"><span class="deck-live-dot"></span>Storage ledger � Complete</span>
             <h1 class="deck-title" id="ckTitle">Every cookie, on the record.</h1>
             <p class="deck-sub">Trendaryo is a static-first store. There is no consent banner to click because there is almost nothing to consent to - no advertising cookies, no cross-site trackers. Everything this site can store on your device is listed below, with its purpose and its expiry. That is the whole list.</p>
             <div class="deck-actions">
@@ -143,7 +143,7 @@
 
     <div class="legal-shell">
 
-    <!-- 00b · THE SHORT VERSION -->
+    <!-- 00b � THE SHORT VERSION -->
     <section class="sec" id="quickread">
         <div class="summary-box">
             <h2>The short version</h2>
@@ -155,41 +155,41 @@
                 <li>Questions? <a href="mailto:privacy@trendaryo.com">privacy@trendaryo.com</a> answers within 24 hours.</li>
             </ul>
         </div>
-        <span class="last-updated">Last updated: 1 January 2024 · This page supersedes every earlier version.</span>
+        <span class="last-updated">Last updated: 1 January 2024 � This page supersedes every earlier version.</span>
     </section>
 
-    <!-- 01 · MECHANICS -->
+    <!-- 01 � MECHANICS -->
     <section class="sec" id="mechanics" aria-labelledby="mecTitle">
         <div class="sec-head">
             <div class="sec-head-txt">
-                <span class="sec-kicker">Section 01 · The two mechanisms</span>
+                <span class="sec-kicker">Section 01 � The two mechanisms</span>
                 <h2 class="sec-title" id="mecTitle">Cookies vs localStorage</h2>
                 <p class="sec-sub">Two different storage mechanisms, two very different levels of invasiveness. This site leans almost entirely on the gentle one.</p>
             </div>
         </div>
         <div class="pgrid">
             <div class="pcard">
-                <div class="pc-ico">🍪</div>
+                <div class="pc-ico">??</div>
                 <h3>Cookies</h3>
                 <p>Small text files that your browser sends back to a server on <em>every</em> request - the classic mechanics behind sessions and, infamously, cross-site advertising. Trendaryo sets <strong>no advertising or tracking cookies</strong>. When you sign in, your session is handled by Firebase Auth tokens, which exist to keep you signed in and nothing else.</p>
             </div>
             <div class="pcard pcard--green">
-                <div class="pc-ico">🗄️</div>
+                <div class="pc-ico">???</div>
                 <h3>localStorage</h3>
                 <p>A larger store that <strong>stays on your device</strong> and is only read by the pages that wrote it. This is where Trendaryo keeps almost everything - and it's why there is no consent banner on this site: nothing here needs one, because nothing leaves your device until you press Pay.</p>
             </div>
         </div>
     </section>
 
-    <!-- 02 · THE STORAGE LEDGER -->
+    <!-- 02 � THE STORAGE LEDGER -->
     <section class="sec" id="ledger" aria-labelledby="ledTitle">
         <div class="sec-head">
             <div class="sec-head-txt">
-                <span class="sec-kicker">Section 02 · What this site writes to your device</span>
+                <span class="sec-kicker">Section 02 � What this site writes to your device</span>
                 <h2 class="sec-title" id="ledTitle">The storage ledger</h2>
                 <p class="sec-sub">Eleven entries, as written by this site's code. Keys that belong to one feature family share a row - and no key is omitted. If a future feature adds a key, it appears here first.</p>
             </div>
-            <span class="sec-note">Verify it yourself: browser DevTools → Application → Local Storage</span>
+            <span class="sec-note">Verify it yourself: browser DevTools ? Application ? Local Storage</span>
         </div>
         <div class="ledger-scroll">
             <table class="ledger">
@@ -212,45 +212,45 @@
         <div class="note-strip">About the demo orders: if you have never placed an order, <code>trendaryo_orders</code> holds two seeded samples so the orders and tracking pages don't look broken to a first-time visitor. They contain no real personal data - the shipping name is literally "Demo Customer".</div>
     </section>
 
-    <!-- 03 · THIRD PARTIES -->
+    <!-- 03 � THIRD PARTIES -->
     <section class="sec" id="thirdparties" aria-labelledby="tpTitle">
         <div class="sec-head">
             <div class="sec-head-txt">
-                <span class="sec-kicker">Section 03 · Requests that leave this site</span>
+                <span class="sec-kicker">Section 03 � Requests that leave this site</span>
                 <h2 class="sec-title" id="tpTitle">Third-party services</h2>
                 <p class="sec-sub">Four services receive a request from your browser when you use Trendaryo. None of them is an ad network.</p>
             </div>
         </div>
         <div class="pgrid">
-            <div class="pcard"><div class="pc-ico">🔤</div><h3>Google Fonts</h3><p>Your browser fetches the Orbitron and Rajdhani font files from Google's CDN. Google sees the request - your IP and user agent, as with any web asset - and this site sets no cookies for it.</p></div>
-            <div class="pcard pcard--green"><div class="pc-ico">🖼️</div><h3>Unsplash</h3><p>Product and hero photography loads from Unsplash's CDN under the same rules: a plain image request, no identifiers attached by us.</p></div>
-            <div class="pcard pcard--pink"><div class="pc-ico">🔑</div><h3>Firebase Auth</h3><p>Handles sign-in sessions when you choose to sign in. It sees your email and a hashed credential - and nothing about your browsing. Guest shoppers never touch it.</p></div>
-            <div class="pcard pcard--gold"><div class="pc-ico">💳</div><h3>Payment processor</h3><p>Only at checkout. Card details travel directly from your browser to the processor over TLS; our servers receive a result code, never a card number.</p></div>
+            <div class="pcard"><div class="pc-ico">??</div><h3>Google Fonts</h3><p>Your browser fetches the Orbitron and Rajdhani font files from Google's CDN. Google sees the request - your IP and user agent, as with any web asset - and this site sets no cookies for it.</p></div>
+            <div class="pcard pcard--green"><div class="pc-ico">???</div><h3>Unsplash</h3><p>Product and hero photography loads from Unsplash's CDN under the same rules: a plain image request, no identifiers attached by us.</p></div>
+            <div class="pcard pcard--pink"><div class="pc-ico">??</div><h3>Firebase Auth</h3><p>Handles sign-in sessions when you choose to sign in. It sees your email and a hashed credential - and nothing about your browsing. Guest shoppers never touch it.</p></div>
+            <div class="pcard pcard--gold"><div class="pc-ico">??</div><h3>Payment processor</h3><p>Only at checkout. Card details travel directly from your browser to the processor over TLS; our servers receive a result code, never a card number.</p></div>
         </div>
     </section>
 
-    <!-- 04 · BROWSER CONTROLS -->
+    <!-- 04 � BROWSER CONTROLS -->
     <section class="sec" id="browsers" aria-labelledby="brwTitle">
         <div class="sec-head">
             <div class="sec-head-txt">
-                <span class="sec-kicker">Section 04 · The manual route</span>
+                <span class="sec-kicker">Section 04 � The manual route</span>
                 <h2 class="sec-title" id="brwTitle">Browser controls</h2>
                 <p class="sec-sub">If you'd rather use your browser's own tools, every mainstream one can clear site data - here's where the switch lives.</p>
             </div>
         </div>
         <div class="tl-list">
-            <div class="tl-row"><div class="tl-when">Chrome</div><div class="tl-what"><b>Settings → Privacy → Clear browsing data</b><p>Or Settings → Privacy → Third-party cookies / Site settings → View permissions and data stored across sites → pick trendaryo.com.</p></div></div>
-            <div class="tl-row tl-row--green"><div class="tl-when">Firefox</div><div class="tl-what"><b>Settings → Privacy &amp; Security → Cookies and Site Data</b><p>"Manage Data" lets you remove storage per site - search for trendaryo and remove it.</p></div></div>
-            <div class="tl-row tl-row--gold"><div class="tl-when">Safari</div><div class="tl-what"><b>Preferences → Privacy → Manage Website Data</b><p>Per-site removal, including local storage, in one panel.</p></div></div>
-            <div class="tl-row tl-row--pink"><div class="tl-when">DevTools</div><div class="tl-what"><b>Application → Storage → Local Storage</b><p>The power route: see exactly which keys from Section 02 exist on your device before you clear anything. The ledger makes no claims you can't check.</p></div></div>
+            <div class="tl-row"><div class="tl-when">Chrome</div><div class="tl-what"><b>Settings ? Privacy ? Clear browsing data</b><p>Or Settings ? Privacy ? Third-party cookies / Site settings ? View permissions and data stored across sites ? pick trendaryo.com.</p></div></div>
+            <div class="tl-row tl-row--green"><div class="tl-when">Firefox</div><div class="tl-what"><b>Settings ? Privacy &amp; Security ? Cookies and Site Data</b><p>"Manage Data" lets you remove storage per site - search for trendaryo and remove it.</p></div></div>
+            <div class="tl-row tl-row--gold"><div class="tl-when">Safari</div><div class="tl-what"><b>Preferences ? Privacy ? Manage Website Data</b><p>Per-site removal, including local storage, in one panel.</p></div></div>
+            <div class="tl-row tl-row--pink"><div class="tl-when">DevTools</div><div class="tl-what"><b>Application ? Storage ? Local Storage</b><p>The power route: see exactly which keys from Section 02 exist on your device before you clear anything. The ledger makes no claims you can't check.</p></div></div>
         </div>
     </section>
 
-    <!-- 05 · THE WIPE BUTTON -->
+    <!-- 05 � THE WIPE BUTTON -->
     <section class="sec" id="wipe" aria-labelledby="wipeTitle">
         <div class="sec-head">
             <div class="sec-head-txt">
-                <span class="sec-kicker">Section 05 · Erase in one click</span>
+                <span class="sec-kicker">Section 05 � Erase in one click</span>
                 <h2 class="sec-title" id="wipeTitle">The wipe button</h2>
                 <p class="sec-sub">The honest way to prove Section 02 was complete: press it, refresh, and check DevTools - the keys are gone.</p>
             </div>
@@ -263,22 +263,22 @@
         </div>
     </section>
 
-    <!-- 06 · DO NOT TRACK -->
+    <!-- 06 � DO NOT TRACK -->
     <section class="sec" id="dnt" aria-labelledby="dntTitle">
         <div class="sec-head">
             <div class="sec-head-txt">
-                <span class="sec-kicker">Section 06 · A signal with nothing to do</span>
+                <span class="sec-kicker">Section 06 � A signal with nothing to do</span>
                 <h2 class="sec-title" id="dntTitle">Do Not Track</h2>
             </div>
         </div>
         <div class="note-strip">Your browser's Do Not Track signal asks every site to stop tracking you. On Trendaryo it changes nothing - there are no trackers to switch off. That's not compliance theatre; it's the design of the store. The same promise the <a href="privacy.html">privacy policy</a> makes in Section 03.</div>
     </section>
 
-    <!-- 07 · FAQ + TRUST + CTA -->
+    <!-- 07 � FAQ + TRUST + CTA -->
     <section class="sec" id="faq" aria-labelledby="faqTitle">
         <div class="sec-head">
             <div class="sec-head-txt">
-                <span class="sec-kicker">Section 07 · Asked and answered</span>
+                <span class="sec-kicker">Section 07 � Asked and answered</span>
                 <h2 class="sec-title" id="faqTitle">The questions this page gets</h2>
             </div>
         </div>
