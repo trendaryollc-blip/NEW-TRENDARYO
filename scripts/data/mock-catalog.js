@@ -11,6 +11,7 @@
  */
 
 const { settings, enrich } = require('./catalog');
+const { photoFor } = require('./product-images');
 
 /* Deterministic PRNG (mulberry32) — the same count always yields the same list. */
 function mulberry32(a) {
@@ -77,7 +78,6 @@ const CATEGORY_META = {
 };
 
 const BADGES = ['hot', 'trending', 'new', 'premium'];
-const IMG = (seedId) => 'https://picsum.photos/seed/' + seedId + '/900/900';
 const FREE_SHIPPING_THRESHOLD = settings.freeShippingThreshold || 50;
 
 function pick(rnd, arr) { return arr[Math.floor(rnd() * arr.length)]; }
@@ -88,6 +88,7 @@ function generateMockProducts(targetCount) {
   const rnd = mulberry32(0x7e57); // fixed seed → reproducible
   const seen = new Set();
   const out = [];
+  const catSeen = {}; // counts per category so photos cycle and neighbours differ
 
   let n = 0;
   let attempts = 0;
@@ -110,7 +111,9 @@ function generateMockProducts(targetCount) {
     const price = pick(rnd, pool.price);
     const discounted = rnd() < 0.55;
     const originalPrice = discounted ? Math.round((price * (100 + between(rnd, 10, 60))) / 5) * 5 : null;
-    const hasPhoto = rnd() > 0.22; // ~22% no-photo → exercises emoji fallback
+    // Every mock product gets a real, verified product photo (no emoji tiles).
+    const catPhotoN = (catSeen[category] = (catSeen[category] || 0) + 1);
+    const image = photoFor(category, catPhotoN);
     const rating = Math.round((3.5 + rnd() * 1.45) * 10) / 10;
     const reviewCount = between(rnd, 2, 820);
     const stock = rnd() < 0.05 ? 0 : (rnd() < 0.09 ? between(rnd, 2, 8) : between(rnd, 15, 900));
@@ -144,8 +147,8 @@ function generateMockProducts(targetCount) {
       emoji,
       price,
       originalPrice,
-      image: hasPhoto ? IMG('trendaryo-' + attempts) : '',
-      images: hasPhoto ? [IMG('trendaryo-' + attempts)] : [],
+      image,
+      images: [image],
       badge,
       rating,
       reviewCount,

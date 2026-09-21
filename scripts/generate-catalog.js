@@ -8,7 +8,7 @@
      - all four badges (hot / trending / new / premium) + none
      - price bands spanning cheap accessories to premium tech
      - rating 3.5–4.9 and review counts from a handful to ~1000
-     - ~30% records with no photo (exercise the emoji tile fallback)
+     - every record gets a real, verified product photo (no emoji tiles)
      - ~8% out-of-stock / low-stock (exercise "Only a few left" + disable flows)
      - category, brand, sku, specs, features like the backend catalogue
 
@@ -25,6 +25,7 @@
 
 var fs = require('fs');
 var path = require('path');
+var PHOTO = require('./data/product-images');
 
 var PREFIXES = [
   'Pro ', 'Ultra ', 'Elite ', 'Smart ', 'Portable ', 'Wireless ', 'Premium ',
@@ -86,7 +87,7 @@ function makeProduct(rnd, n, seen) {
   var price = between(rnd, pool.cat === 'electronics' ? 15 : 9, 1499);
   var discounted = rnd() < 0.55;
   var oldPrice = discounted ? Math.round((price * (100 + between(rnd, 10, 60))) / 5) * 5 : undefined;
-  var hasPhoto = rnd() > 0.3;
+  var hasPhoto = true;
   var rating = Math.round((3.5 + rnd() * 1.4) * 10) / 10;
   var reviews = between(rnd, 3, 998);
   var stock = rnd() < 0.05 ? 0 : (rnd() < 0.08 ? between(rnd, 2, 8) : between(rnd, 25, 900));
@@ -117,7 +118,7 @@ function makeProduct(rnd, n, seen) {
   };
   if (oldPrice) rec.oldPrice = oldPrice;
   if (hasPhoto) {
-    rec.image = 'https://picsum.photos/seed/' + n + '/800/800';
+    rec.image = PHOTO.photoFor(pool.cat, n);
   } else {
     rec.emoji = rec.emoji;
   }
