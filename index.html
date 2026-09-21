@@ -405,7 +405,7 @@
             .store-dropdown { position: static; opacity: 1; visibility: visible; transform: none; box-shadow: none; background: rgba(255,255,255,0.04); }
             .store-nav-item:hover .store-dropdown { opacity: 1; visibility: visible; transform: none; }
             .cs-grid { grid-template-columns: repeat(3, 1fr); }
-            .vx-grid { grid-template-columns: 1fr; }
+            .vx-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
             .jn-grid { grid-template-columns: 1fr; }
             .tst-grid { grid-template-columns: 1fr; }
             .trust-strip { grid-template-columns: repeat(2, 1fr); }
@@ -1049,10 +1049,24 @@
         /* Responsive for new sections */
         @media (max-width: 900px) {
             .cs-grid { grid-template-columns: repeat(3, 1fr); }
-            .vx-grid { grid-template-columns: 1fr; }
+            .vx-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
             .tst-grid { grid-template-columns: 1fr; }
             .bh-ring--2 { display: none; }
             .feat-strip { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 600px) {
+            .vx-card { border-radius: 14px; }
+            .vx-media { aspect-ratio: 4 / 3; }
+            .vx-body { padding: 0.7rem 0.75rem 0.8rem; }
+            .vx-rating { font-size: 0.66rem; margin-bottom: 0.2rem; gap: 0.3rem; }
+            .vx-price { font-size: 0.95rem; margin: 0.4rem 0; }
+            .vx-price-old { font-size: 0.68rem; }
+            .vx-name { font-size: 0.78rem; line-height: 1.2; margin-bottom: 0.25rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+            .vx-desc { display: none; }
+            .vx-tags { display: none; }
+            .vx-foot { gap: 0.35rem; flex-wrap: wrap; }
+            .vx-btn { padding: 0.45rem 0.5rem; font-size: 0.56rem; letter-spacing: 0.5px; border-radius: 9px; }
+            #vortex .vx-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.7rem; }
         }
         @media (max-width: 480px) {
             .cs-grid { grid-template-columns: repeat(2, 1fr); }

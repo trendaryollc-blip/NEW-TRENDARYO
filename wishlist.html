@@ -179,9 +179,27 @@
         }
         @media (max-width: 600px) {
             .wish-shell { padding: 0 1rem; }
-            .wish-grid { grid-template-columns: 1fr; }
+            .wish-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; }
             .wish-stats { grid-template-columns: repeat(2, 1fr); }
             .wish-share-grid { grid-template-columns: repeat(2, 1fr); }
+            .wish-card-media { height: 118px; }
+            .wish-card-badge { font-size: 0.5rem; padding: 0.2rem 0.45rem; bottom: 6px; left: 6px; }
+            .wish-card-check { top: 6px; left: 6px; width: 24px; height: 24px; }
+            .wish-card-remove { top: 6px; right: 6px; width: 26px; height: 26px; font-size: 0.8rem; }
+            .wish-card-body { padding: 0.6rem 0.65rem 0.55rem; }
+            .wish-card-cat { font-size: 0.5rem; letter-spacing: 1.1px; }
+            .wish-card-name { font-size: 0.72rem; line-height: 1.2; margin-bottom: 0.3rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+            .wish-card-rating { margin-bottom: 0.35rem; }
+            .wish-card-stars { font-size: 0.6rem; }
+            .wish-card-rating span { font-size: 0.6rem; }
+            .wish-card-prices { flex-direction: column; align-items: flex-start; gap: 0.15rem; margin-bottom: 0.5rem; }
+            .wish-card-price { font-size: 0.85rem; }
+            .wish-card-old { font-size: 0.65rem; }
+            .wish-card-saved { font-size: 0.6rem; }
+            .wish-card-actions { flex-direction: column; gap: 0.35rem; }
+            .wish-card-cart { padding: 0.5rem 0.3rem; font-size: 0.55rem; letter-spacing: 0.6px; }
+            .wish-card-view { padding: 0.5rem 0.6rem; font-size: 0.55rem; letter-spacing: 0.6px; text-align: center; }
+            .wish-suggest-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; }
         }
         @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
         ::-webkit-scrollbar { width: 8px; }

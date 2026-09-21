@@ -21,6 +21,10 @@
             <span id="announce-countdown" class="announce-countdown" style="display:none;"></span>
         </div>
         <div class="store-header-inner">
+            <button class="store-mobile-toggle" id="store-mobile-toggle" aria-label="Toggle menu" aria-expanded="false">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+
             <div class="store-brand">
                 <a href="index.html" class="store-logo">
                     <img src="assets/trendaryo-crown-star-logo.svg" alt="" class="store-logo-img" onerror="this.style.display='none'">
@@ -51,9 +55,6 @@
                 </div>
                 <button class="store-icon-btn" id="header-theme-btn" data-theme-toggle aria-label="Toggle Theme" title="Toggle Theme">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2Z"/></svg>
-                </button>
-                <button class="store-mobile-toggle" id="store-mobile-toggle" aria-label="Toggle menu" aria-expanded="false">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
                 </button>
             </div>
         </div>
@@ -271,25 +272,36 @@
     /* ── Nav interactions ── */
     function initNav() {
         const header = document.getElementById('store-header');
-        const mobileToggle = document.getElementById('store-mobile-toggle');
         const dropdownItems = Array.from(document.querySelectorAll('.store-nav-item[data-dropdown]'));
 
         if (!header) return;
 
-        // Mobile menu toggle
-        if (mobileToggle) {
-            const iconOpen = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>';
-            const iconClose = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>';
-            mobileToggle.innerHTML = iconOpen;
-            mobileToggle.addEventListener('click', () => {
-                const isOpen = header.classList.toggle('is-open');
-                mobileToggle.setAttribute('aria-expanded', String(isOpen));
-                mobileToggle.innerHTML = isOpen ? iconClose : iconOpen;
-                if (!isOpen) dropdownItems.forEach(i => i.classList.remove('is-open'));
-            });
-        }
+        const iconOpen = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>';
+        const iconClose = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>';
 
-        // Mobile dropdown tap-to-open
+        // Mobile menu toggle — delegated so it survives header re-renders
+        document.addEventListener('click', (e) => {
+            const headerLive = document.getElementById('store-header');
+            if (!headerLive) return;
+            const toggleLive = document.getElementById('store-mobile-toggle');
+
+            if (toggleLive && e.target.closest('#store-mobile-toggle')) {
+                const isOpen = headerLive.classList.toggle('is-open');
+                toggleLive.setAttribute('aria-expanded', String(isOpen));
+                toggleLive.innerHTML = isOpen ? iconClose : iconOpen;
+                if (!isOpen) dropdownItems.forEach(i => i.classList.remove('is-open'));
+                return;
+            }
+            if (headerLive.contains(e.target)) return;
+            dropdownItems.forEach(i => i.classList.remove('is-open'));
+            headerLive.classList.remove('is-open');
+            if (toggleLive) {
+                toggleLive.setAttribute('aria-expanded', 'false');
+                toggleLive.innerHTML = iconOpen;
+            }
+        });
+
+        // Desktop: hover-only — disable tap-to-open accidentally firing on wide screens
         dropdownItems.forEach(item => {
             const link = item.querySelector('.store-nav-link');
             if (!link) return;
@@ -301,18 +313,6 @@
                     item.classList.add('is-open');
                 }
             });
-        });
-
-        // Close on outside click
-        document.addEventListener('click', (e) => {
-            if (header.contains(e.target)) return;
-            dropdownItems.forEach(i => i.classList.remove('is-open'));
-            header.classList.remove('is-open');
-            if (mobileToggle) {
-                mobileToggle.setAttribute('aria-expanded', 'false');
-                const iconOpen = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>';
-                mobileToggle.innerHTML = iconOpen;
-            }
         });
 
         // Scroll: add .scrolled class for enhanced shadow
