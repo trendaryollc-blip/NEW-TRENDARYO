@@ -75,13 +75,40 @@
 
   Backend.mapProduct = toFrontendProduct;
 
+  /* Guard rails for the paginated catalogue sweep. PAGE_SIZE must stay within
+     the API server's max page limit; MAX_FETCH caps the total so a misbehaving
+     server (or bogus hasNext flag) can never trigger an infinite loop. */
+  var PAGE_SIZE = 250;
+  var MAX_FETCH = 20000;
+
   Backend.hydrateCatalog = function () {
     if (!haveApi()) return Promise.resolve(false);
-    return api().getProducts(1, 500, { status: 'active' }).then(function (res) {
-      var list = (res && res.data) || [];
-      if (!Array.isArray(list) || !list.length) return false;
 
-      var mapped = list.map(toFrontendProduct);
+    var collected = [];
+    var page = 1;
+
+    function fetchPage() {
+      return api().getProducts(page, PAGE_SIZE, { status: 'active' }).then(function (res) {
+        var body = (res && res.data) || res || [];
+        if (!Array.isArray(body)) return false;
+
+        collected = collected.concat(body);
+
+        // End conditions: short page (classic cursor), a server-declared total
+        // we have already covered, or the safety cap. Anything else keeps going.
+        var meta = (res && res.meta) || {};
+        if (body.length < PAGE_SIZE) return true;
+        if (Number(meta.total) > 0 && collected.length >= Number(meta.total)) return true;
+        if (collected.length >= MAX_FETCH) return true;
+        page += 1;
+        return fetchPage();
+      });
+    }
+
+    return fetchPage().then(function (fetched) {
+      if (!fetched || !collected.length) return false;
+
+      var mapped = collected.map(toFrontendProduct);
       var serialized = JSON.stringify(mapped);
       var version = hashString(serialized);
       var knownVersion = window.__CATALOG_VERSION__ || null;

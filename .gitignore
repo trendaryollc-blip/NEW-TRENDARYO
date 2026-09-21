@@ -50,3 +50,8 @@ temp/
 # Lock files
 yarn.lock
 pnpm-lock.yaml
+
+# Local service-account key (never commit)
+service-account.json
+.firebase
+

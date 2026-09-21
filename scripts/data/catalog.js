@@ -19,18 +19,64 @@ const categories = [
   { id: 'accessories', name: 'Accessories', description: 'The small things that matter.', order: 5, status: 'active' },
 ];
 
-function p(data) {
-  const slug = data.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+/* Deterministic pseudo-random derived from a string (best-effort stable values
+   like weight / popularity across re-seeds, per product rather than random). */
+function hashCode(str) {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) { h = ((h << 5) - h + str.charCodeAt(i)) | 0; }
+  return Math.abs(h);
+}
+
+/* Turn a raw product record into the canonical Firestore `products` document.
+   Convention mirrors what big catalogues do:
+     - doc id      = SEO slug (shopify-style handle): sony-wh-1000xm5
+     - searchTerms = lowercase token array for array-contains queries
+     - nameLower / brandLower / categoryLower for fast case-insensitive sort+filter
+     - metaTitle / metaDescription / tags for SEO and on-platform search */
+function enrich(data) {
+  // Doc id = clean SEO slug derived from the NAME only (stable, preserves the
+  // original 25 curated handles that pages already link to).
+  const slug = data.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-+|-+$)/g, '');
+
+  // Search tokens from name + brand + category + specs + features + tags.
+  const words = new Set();
+  const hay = data.name + ' ' + (data.brand || '') + ' ' + (data.category || '');
+  hay.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean).forEach((w) => words.add(w));
+  (data.specs || []).forEach((s) => {
+    String(s.value || '').toLowerCase().split(/[^a-z0-9]+/).filter(Boolean).forEach((w) => words.add(w));
+  });
+  (data.features || []).forEach((f) => {
+    f.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean).forEach((w) => words.add(w));
+  });
+  (data.tags || []).forEach((t) => words.add(String(t).toLowerCase()));
+  const searchTerms = Array.from(words).filter((w) => w.length > 1).slice(0, 40);
+
+  const h = hashCode(slug);
   return {
     slug,
     currency: 'USD',
-    status: 'active',
+    status: data.status || 'active',
     brand: data.brand || 'Trendaryo',
     images: data.images || [data.image].filter(Boolean),
     features: data.features || [],
     specs: data.specs || [],
+    // Search & SEO
+    searchTerms,
+    nameLower: data.name.toLowerCase(),
+    brandLower: (data.brand || '').toLowerCase(),
+    categoryLower: (data.category || '').toLowerCase(),
+    metaTitle: (data.metaTitle || data.name + ' | Trendaryo'),
+    metaDescription: (data.metaDescription || String(data.description || '').slice(0, 150)),
+    tags: data.tags || [],
+    // Logistics / dropshipping
+    weight: data.weight != null ? data.weight : 100 + (h % 140) + (h % 7) * 100,
+    vendor: data.vendor || '',
     ...data,
   };
+}
+
+function p(data) {
+  return enrich(data);
 }
 
 const products = [
@@ -240,4 +286,4 @@ const reviewSamples = [
   { rating: 5, title: 'Love it', comment: 'This has become part of my daily routine. Highly recommended.' },
 ];
 
-module.exports = { products, categories, coupons, settings, reviewSamples };
+module.exports = { products, categories, coupons, settings, reviewSamples, enrich, p };

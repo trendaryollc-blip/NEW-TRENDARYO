@@ -13,22 +13,44 @@ module.exports = async function handler(req, res) {
     if (req.method === 'GET') {
       const { page = 1, limit = 20, category, minPrice, maxPrice, search, sort, status = 'active' } = req.query;
 
-      let query = db.collection('products');
-      if (status !== 'all') query = query.where('status', '==', status);
-      if (category) query = query.where('category', '==', category);
+      let searchTokens = [];
+      if (req.query.search) {
+        searchTokens = String(req.query.search).toLowerCase().split(/\s+/).filter(Boolean);
+      }
 
-      const snapshot = await query.get();
+      // Base scoped query (status + optional category).
+      const buildBaseQuery = () => {
+        let q = db.collection('products');
+        if (status !== 'all') q = q.where('status', '==', status);
+        if (category) q = q.where('category', '==', category);
+        return q;
+      };
+
+      // Search path: first token uses the indexed searchTerms (array-contains);
+      // if the needed composite index isn't deployed yet, gracefully fall back
+      // to a full in-memory scan so the storefront keeps working.
+      let snapshot;
+      if (searchTokens.length) {
+        try {
+          let q = buildBaseQuery().where('searchTerms', 'array-contains', searchTokens[0]);
+          snapshot = await q.get();
+        } catch (err) {
+          snapshot = null;
+        }
+      }
+      if (!snapshot) {
+        snapshot = await buildBaseQuery().get();
+      }
       let products = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
       if (minPrice) products = products.filter(p => p.price >= parseFloat(minPrice));
       if (maxPrice) products = products.filter(p => p.price <= parseFloat(maxPrice));
-      if (search) {
-        const q = search.toLowerCase();
-        products = products.filter(p =>
-          (p.name && p.name.toLowerCase().includes(q)) ||
-          (p.description && p.description.toLowerCase().includes(q)) ||
-          (p.brand && p.brand.toLowerCase().includes(q))
-        );
+      if (searchTokens.length) {
+        products = products.filter(p => {
+          const hay = ((p.name || '') + ' ' + (p.description || '') + ' ' + (p.brand || '') + ' ' +
+            String((p.searchTerms || []).join(' '))).toLowerCase();
+          return searchTokens.every(t => hay.indexOf(t) !== -1);
+        });
       }
 
       if (sort === 'price_asc') products.sort((a, b) => a.price - b.price);
@@ -39,7 +61,8 @@ module.exports = async function handler(req, res) {
         return bTime - aTime;
       });
       else if (sort === 'rating') products.sort((a, b) => (b.rating || 0) - (a.rating || 0));
-      else if (sort === 'name') products.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+      else if (sort === 'name') products.sort((a, b) =>
+        (a.nameLower || (a.name || '').toLowerCase()).localeCompare(b.nameLower || (b.name || '').toLowerCase()));
       else products.sort((a, b) => {
         const aTime = a.createdAt ? (typeof a.createdAt === 'string' ? new Date(a.createdAt).getTime() : a.createdAt.seconds * 1000) : 0;
         const bTime = b.createdAt ? (typeof b.createdAt === 'string' ? new Date(b.createdAt).getTime() : b.createdAt.seconds * 1000) : 0;
