@@ -519,7 +519,12 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 }).then(function (res) {
-                    return res.json().then(function (json) {
+                    return res.text().then(function (text) {
+                        var json = null;
+                        try { json = text ? JSON.parse(text) : null; } catch (e) { json = null; }
+                        if (!json) {
+                            throw new Error('The server is having trouble right now (error ' + res.status + '). Please try again in a moment.');
+                        }
                         return { ok: res.ok, json: json };
                     });
                 }).then(function (result) {
@@ -596,7 +601,12 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 }).then(function (res) {
-                    return res.json().then(function (json) { return { ok: res.ok, json: json }; });
+                    return res.text().then(function (text) {
+                        var json = null;
+                        try { json = text ? JSON.parse(text) : null; } catch (e) { json = null; }
+                        if (!json) throw new Error('unavailable');
+                        return { ok: res.ok, json: json };
+                    });
                 }).then(function (result) {
                     if (!result.ok) {
                         throw new Error((result.json && result.json.error && result.json.error.message) || 'Chat unavailable right now.');

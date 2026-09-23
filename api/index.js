@@ -33,38 +33,66 @@ const ROUTES = {
   '/config/public': require('./config/public'),
 };
 
+function ensureResHelpers(res) {
+  if (typeof res.status !== 'function') {
+    res.status = function (code) {
+      this.statusCode = code;
+      return this;
+    };
+  }
+  if (typeof res.json !== 'function') {
+    res.json = function (obj) {
+      if (!this.getHeader('Content-Type')) {
+        this.setHeader('Content-Type', 'application/json; charset=utf-8');
+      }
+      this.end(JSON.stringify(obj));
+      return this;
+    };
+  }
+}
+
 module.exports = async function handler(req, res) {
-  if (!req.query) req.query = {};
+  ensureResHelpers(res);
 
-  const routePath = (String(req.query.__route || '').split('?')[0] || '').replace(/\/+$/, '') || '/';
-  const method = (req.method || 'GET').toUpperCase();
+  try {
+    if (!req.query) req.query = {};
 
-  if (method === 'OPTIONS') {
-    handleCors(req, res);
-    return;
-  }
+    const routePath = (String(req.query.__route || '').split('?')[0] || '').replace(/\/+$/, '') || '/';
+    const method = (req.method || 'GET').toUpperCase();
 
-  let target = ROUTES[routePath];
-  let id;
-  if (!target) {
-    const segments = routePath.split('/').filter(Boolean);
-    if (segments.length === 2) {
-      target = ROUTES[`/${segments[0]}/:id`];
-      if (target) id = segments[1];
-    } else if (segments.length === 3) {
-      target = ROUTES[`/${segments[0]}/${segments[1]}/:id`];
-      if (target) id = segments[2];
+    if (method === 'OPTIONS') {
+      handleCors(req, res);
+      return;
     }
+
+    let target = ROUTES[routePath];
+    let id;
+    if (!target) {
+      const segments = routePath.split('/').filter(Boolean);
+      if (segments.length === 2) {
+        target = ROUTES[`/${segments[0]}/:id`];
+        if (target) id = segments[1];
+      } else if (segments.length === 3) {
+        target = ROUTES[`/${segments[0]}/${segments[1]}/:id`];
+        if (target) id = segments[2];
+      }
+    }
+
+    if (!target) {
+      res.statusCode = 404;
+      return res.json({ error: { message: 'Not found' } });
+    }
+
+    if (id !== undefined) req.query.id = id;
+
+    return await target(req, res);
+  } catch (error) {
+    console.error('Gateway error:', error);
+    if (res.headersSent) {
+      return res.end();
+    }
+    res.status(500).json({ error: { message: 'Internal server error' } });
   }
-
-  if (!target) {
-    res.statusCode = 404;
-    return res.json({ error: { message: 'Not found' } });
-  }
-
-  if (id !== undefined) req.query.id = id;
-
-  return target(req, res);
 };
 
 module.exports.config = {
