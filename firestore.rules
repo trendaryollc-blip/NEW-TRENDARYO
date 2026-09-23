@@ -121,6 +121,14 @@ service cloud.firestore {
       allow read, update, delete: if isAdmin();
     }
 
+    /* ---------- contact messages ---------- */
+    // Contact submissions are written by the serverless API (Admin SDK) only.
+    // Admins view them; clients never read or write this collection directly.
+    match /contact_messages/{entryId} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+
     /* ---------- admin activity log ---------- */
     match /adminLogs/{logId} {
       allow read, write: if isAdmin();

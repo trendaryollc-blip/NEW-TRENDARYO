@@ -27,6 +27,7 @@ const ROUTES = {
   '/admin/products': require('./admin/products'),
   '/wishlist': require('./wishlist/index'),
   '/newsletter': require('./newsletter/index'),
+  '/contact': require('./contact/index'),
   '/settings': require('./settings'),
   '/upload': require('./upload'),
   '/config/public': require('./config/public'),

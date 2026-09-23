@@ -3,29 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Get in touch with Trendaryo customer support. Email, phone, live chat available 24/7. We are here to help with orders, returns, and questions.">
-    <meta name="keywords" content="contact, customer support, help, email, phone">
+    <meta name="description" content="Get in touch with Trendaryo customer support. Email, phone and live chat available. We are here to help with orders, returns and questions.">
+    <meta name="keywords" content="contact, customer support, help, email, phone, live chat">
     <meta name="robots" content="index, follow">
     <meta name="author" content="Trendaryo">
     <link rel="canonical" href="https://trendaryo.com/contact.html">
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://trendaryo.com/contact.html">
-    <meta property="og:title" content="Contact Us - Trendaryo | 24/7 Customer Support">
-    <meta property="og:description" content="Get in touch with Trendaryo customer support. Email, phone, live chat available 24/7. We are here to help with orders, returns, and questions.">
+    <meta property="og:title" content="Contact Us - Trendaryo | Customer Support">
+    <meta property="og:description" content="Get in touch with Trendaryo customer support. Email, phone and live chat available. We are here to help with orders, returns and questions.">
     <meta property="og:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
-    
+
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://trendaryo.com/contact.html">
-    <meta property="twitter:title" content="Contact Us - Trendaryo | 24/7 Customer Support">
-    <meta property="twitter:description" content="Get in touch with Trendaryo customer support. Email, phone, live chat available 24/7. We are here to help with orders, returns, and questions.">
+    <meta property="twitter:title" content="Contact Us - Trendaryo | Customer Support">
+    <meta property="twitter:description" content="Get in touch with Trendaryo customer support. Email, phone and live chat available. We are here to help with orders, returns and questions.">
     <meta property="twitter:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Contact Us - Trendaryo | 24/7 Customer Support</title>
+    <title>Contact Us - Trendaryo | Customer Support</title>
     <link rel="stylesheet" href="responsive-universal.css">
     <link rel="stylesheet" href="shared.css">
     <script src="performance.js"></script>
@@ -37,7 +37,7 @@
         :root { --accent: #00f0ff; --accent-2: #ff00aa; --accent-3: #00ff88; --glass: rgba(255,255,255,0.05); --glass-border: rgba(255,255,255,0.1); }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Rajdhani', sans-serif; background: #0a0a2a; color: #fff; overflow-x: hidden; transition: background 1s ease-in-out; }
-        #three-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none;}
+        #three-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
 
         .store-header { position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: rgba(10,10,42,0.85); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid var(--glass-border); }
         .store-header-inner { max-width: 1200px; margin: 0 auto; padding: 0.8rem 1.25rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
@@ -66,43 +66,137 @@
         .store-nav-item.is-open .store-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
 
         .page-offset { padding-top: 150px; }
-        
-        .page-header-3d { padding: 10rem 2rem 4rem; text-align: center; }
-        .page-title-3d { font-family: 'Orbitron', sans-serif; font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 900; background: linear-gradient(135deg, #fff, var(--accent)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; }
-        
+
+        .page-header-3d { padding: 4.5rem 2rem 2.5rem; text-align: center; }
+        .breadcrumb-3d { display: inline-flex; align-items: center; gap: 0.6rem; font-size: 0.95rem; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.55); margin-bottom: 1.25rem; }
+        .breadcrumb-3d a { color: var(--accent); text-decoration: none; }
+        .breadcrumb-3d a:hover { text-decoration: underline; }
+        .page-subtitle-3d { color: rgba(255,255,255,0.7); max-width: 640px; margin: 1rem auto 0; font-size: 1.15rem; line-height: 1.7; }
+        .page-title-3d { font-family: 'Orbitron', sans-serif; font-size: clamp(2.2rem, 6vw, 3.4rem); font-weight: 900; background: linear-gradient(135deg, #fff, var(--accent)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* Channel cards */
+        .channels-section-3d { padding: 1rem 2rem 2rem; max-width: 1200px; margin: 0 auto; }
+        .channels-grid-3d { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+        .channel-card-3d { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 18px; padding: 2rem; text-align: center; text-decoration: none; color: inherit; display: block; transition: all 0.3s ease; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+        .channel-card-3d:hover { transform: translateY(-5px); border-color: rgba(0,240,255,0.5); }
+        .channel-icon-3d { width: 64px; height: 64px; margin: 0 auto 1.25rem; background: linear-gradient(135deg, rgba(0,240,255,0.18), rgba(255,0,170,0.18)); border: 1px solid var(--glass-border); border-radius: 18px; display: flex; align-items: center; justify-content: center; }
+        .channel-icon-3d svg { width: 28px; height: 28px; color: var(--accent); }
+        .channel-title-3d { font-family: 'Orbitron', sans-serif; font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .channel-desc-3d { color: rgba(255,255,255,0.65); font-size: 0.98rem; line-height: 1.6; margin-bottom: 1rem; }
+        .channel-link-3d { color: var(--accent); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; font-size: 0.85rem; }
+
+        /* Form + info */
         .contact-section-3d { padding: 2rem; max-width: 1200px; margin: 0 auto; }
-        .contact-grid-3d { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
-        
-        .contact-info-3d h2 { font-family: 'Orbitron', sans-serif; font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--accent); }
-        .contact-item-3d { display: flex; gap: 1.5rem; margin-bottom: 2rem; }
-        .contact-icon-3d { width: 60px; height: 60px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .contact-icon-3d svg { width: 24px; height: 24px; color: var(--accent); }
-        .contact-text-3d h4 { font-size: 1.1rem; margin-bottom: 0.25rem; }
-        .contact-text-3d p { color: #888; }
-        
-        .social-links-3d { display: flex; gap: 1rem; margin-top: 2rem; }
-        .social-link-3d { width: 50px; height: 50px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 12px; display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
-        .social-link-3d:hover { border-color: var(--accent); background: rgba(0,240,255,0.1); transform: translateY(-3px); }
-        
-        .contact-form-3d { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 24px; padding: 2.5rem; backdrop-filter: blur(10px); }
-        .contact-form-3d h2 { font-family: 'Orbitron', sans-serif; font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--accent); }
-        
+        .contact-grid-3d { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+
+        .contact-form-3d { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 24px; padding: 2.5rem; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+        .contact-form-3d h2 { font-family: 'Orbitron', sans-serif; font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent); }
+        .contact-form-3d .form-intro-3d { color: rgba(255,255,255,0.6); margin-bottom: 1.75rem; font-size: 1.02rem; }
         .form-group-3d { margin-bottom: 1.25rem; }
-        .form-label-3d { display: block; margin-bottom: 0.5rem; color: #aaa; }
-        .form-input-3d, .form-textarea-3d { width: 100%; padding: 1rem 1.25rem; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); border-radius: 12px; color: #fff; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; outline: none; transition: all 0.3s; }
-        .form-input-3d:focus, .form-textarea-3d:focus { border-color: var(--accent); box-shadow: 0 0 25px rgba(0,240,255,0.2); }
+        .form-label-3d { display: block; margin-bottom: 0.5rem; color: rgba(255,255,255,0.8); font-weight: 600; }
+        .form-label-3d .opt-3d { color: rgba(255,255,255,0.45); font-weight: 400; }
+        .form-input-3d, .form-textarea-3d, .form-select-3d { width: 100%; padding: 0.9rem 1.1rem; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); border-radius: 12px; color: #fff; font-family: 'Rajdhani', sans-serif; font-size: 1.05rem; outline: none; transition: all 0.3s; }
+        .form-input-3d:focus, .form-textarea-3d:focus, .form-select-3d:focus { border-color: var(--accent); box-shadow: 0 0 25px rgba(0,240,255,0.2); }
         .form-textarea-3d { min-height: 150px; resize: vertical; }
-        
-        .btn-submit-3d { width: 100%; padding: 1.2rem; background: linear-gradient(135deg, var(--accent), var(--accent-3)); border: none; border-radius: 12px; font-family: 'Orbitron', sans-serif; font-size: 1rem; font-weight: 700; color: #000; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s; }
+        .form-select-3d { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2300f0ff' stroke-width='3'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat: no-repeat; background-position: right 1rem center; }
+        .form-select-3d option { background: #12123a; color: #fff; }
+        .btn-submit-3d { width: 100%; padding: 1.1rem; background: linear-gradient(135deg, var(--accent), var(--accent-3)); border: none; border-radius: 12px; font-family: 'Orbitron', sans-serif; font-size: 1rem; font-weight: 700; color: #000; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s; }
         .btn-submit-3d:hover { box-shadow: 0 0 40px rgba(0,240,255,0.5); transform: translateY(-2px); }
-        
+        .btn-submit-3d:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .form-status-3d { display: none; margin-top: 1rem; padding: 0.9rem 1.1rem; border-radius: 12px; font-size: 1.02rem; line-height: 1.5; }
+        .form-status-3d.success { display: block; background: rgba(0,255,136,0.12); border: 1px solid rgba(0,255,136,0.4); color: #7dffbe; }
+        .form-status-3d.error { display: block; background: rgba(255,63,63,0.12); border: 1px solid rgba(255,63,63,0.4); color: #ff9c9c; }
+        .form-success-3d { display: none; text-align: center; padding: 2rem 0; }
+        .form-success-3d.active { display: block; }
+        .form-success-icon-3d { width: 72px; height: 72px; margin: 0 auto 1.25rem; background: linear-gradient(135deg, rgba(0,255,136,0.2), rgba(0,240,255,0.2)); border: 2px solid var(--accent-3); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .form-success-icon-3d svg { width: 34px; height: 34px; color: var(--accent-3); }
+        .form-success-3d h3 { font-family: 'Orbitron', sans-serif; font-size: 1.3rem; margin-bottom: 0.75rem; color: var(--accent-3); }
+        .form-success-3d p { color: rgba(255,255,255,0.7); line-height: 1.7; margin-bottom: 1.5rem; }
+        .btn-secondary-3d { padding: 0.8rem 2rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 999px; color: #fff; font-family: 'Orbitron', sans-serif; font-size: 0.8rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; transition: all 0.3s; }
+        .btn-secondary-3d:hover { border-color: var(--accent); background: rgba(0,240,255,0.1); }
+
+        .contact-info-3d h2 { font-family: 'Orbitron', sans-serif; font-size: 1.5rem; margin-bottom: 1.25rem; color: var(--accent); }
+        .company-card-3d { background: linear-gradient(135deg, rgba(0,240,255,0.1), rgba(255,0,170,0.1)); border: 1px solid rgba(0,240,255,0.4); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .company-card-3d h3 { font-family: 'Orbitron', sans-serif; font-size: 1.15rem; color: var(--accent); margin-bottom: 0.75rem; }
+        .company-card-3d p { color: rgba(255,255,255,0.85); font-size: 1rem; line-height: 1.7; margin: 0; }
+        .contact-item-3d { display: flex; gap: 1.25rem; margin-bottom: 1.4rem; align-items: flex-start; }
+        .contact-item-3d a { color: var(--accent); text-decoration: none; }
+        .contact-item-3d a:hover { text-decoration: underline; }
+        .contact-icon-3d { width: 52px; height: 52px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .contact-icon-3d svg { width: 22px; height: 22px; color: var(--accent); }
+        .contact-text-3d h4 { font-size: 1.08rem; margin-bottom: 0.25rem; }
+        .contact-text-3d p { color: rgba(255,255,255,0.62); line-height: 1.6; }
+
+        .social-links-3d { display: flex; gap: 0.9rem; margin-top: 1.5rem; }
+        .social-link-3d { width: 46px; height: 46px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.8); transition: all 0.3s; }
+        .social-link-3d:hover { border-color: var(--accent); background: rgba(0,240,255,0.1); transform: translateY(-3px); color: var(--accent); }
+
+        /* Expectation strip */
+        .expect-section-3d { padding: 0 2rem; max-width: 1200px; margin: 2rem auto 0; }
+        .expect-grid-3d { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+        .expect-item-3d { background: rgba(0,240,255,0.04); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); border-radius: 14px; padding: 1.5rem; text-align: center; }
+        .expect-item-3d svg { width: 26px; height: 26px; color: var(--accent); margin-bottom: 0.8rem; }
+        .expect-item-3d h4 { font-family: 'Orbitron', sans-serif; font-size: 1rem; margin-bottom: 0.4rem; }
+        .expect-item-3d p { color: rgba(255,255,255,0.6); font-size: 0.95rem; line-height: 1.5; }
+
+        /* Map */
+        .map-section-3d { padding: 3rem 2rem; max-width: 1200px; margin: 0 auto; }
+        .map-wrap-3d { border: 1px solid var(--glass-border); border-radius: 20px; overflow: hidden; background: var(--glass); }
+        .map-wrap-3d iframe { display: block; width: 100%; height: 380px; border: 0; filter: saturate(0.85) contrast(1.05); }
+
+        /* FAQ */
+        .faq-section-3d { padding: 2rem; max-width: 800px; margin: 0 auto; }
+        .faq-item-3d { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; margin-bottom: 1rem; overflow: hidden; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+        .faq-question-3d { padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-family: 'Orbitron', sans-serif; font-weight: 600; font-size: 1.05rem; transition: all 0.3s; }
+        .faq-question-3d:hover { color: var(--accent); }
+        .faq-answer-3d { padding: 0 1.5rem 1.5rem; color: rgba(255,255,255,0.72); line-height: 1.8; display: none; }
+        .faq-item-3d.active .faq-answer-3d { display: block; }
+        .faq-item-3d.active .faq-icon-3d { transform: rotate(45deg); }
+        .faq-icon-3d { width: 24px; height: 24px; border: 2px solid var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: transform 0.3s; flex-shrink: 0; margin-left: 1rem; }
+        .cs-eyebrow { display: block; font-family: 'Orbitron', sans-serif; font-size: 0.85rem; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); margin: 0 0 1.25rem; }
+        .faq-eyebrow { text-align: center; margin-top: 2.5rem; }
+        .faq-eyebrow:first-child { margin-top: 0; }
+
+        /* Chat widget */
+        .chat-launcher { position: fixed; bottom: 24px; right: 24px; z-index: 9500; width: 62px; height: 62px; border-radius: 50%; border: none; background: linear-gradient(135deg, var(--accent), var(--accent-2)); display: flex; align-items: center; justify-content: center; color: #000; cursor: pointer; box-shadow: 0 8px 30px rgba(0,240,255,0.45); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .chat-launcher:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 12px 40px rgba(0,240,255,0.6); }
+        .chat-launcher svg { width: 28px; height: 28px; }
+        .chat-window { position: fixed; bottom: 100px; right: 24px; z-index: 9600; width: 360px; max-width: calc(100vw - 48px); height: 480px; max-height: calc(100vh - 130px); background: rgba(12,12,40,0.96); border: 1px solid var(--glass-border); border-radius: 20px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 24px 70px rgba(0,0,0,0.6); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); opacity: 0; visibility: hidden; transform: translateY(14px); transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease; }
+        .chat-window.open { opacity: 1; visibility: visible; transform: translateY(0); }
+        .chat-head { padding: 1rem 1.25rem; background: linear-gradient(135deg, rgba(0,240,255,0.15), rgba(255,0,170,0.15)); border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: space-between; }
+        .chat-head-title { font-family: 'Orbitron', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--accent); }
+        .chat-head-sub { color: rgba(255,255,255,0.55); font-size: 0.85rem; margin-top: 0.15rem; }
+        .chat-close { background: none; border: none; color: rgba(255,255,255,0.7); font-size: 1.4rem; cursor: pointer; line-height: 1; padding: 0.25rem; }
+        .chat-close:hover { color: #fff; }
+        .chat-body { flex: 1; overflow-y: auto; padding: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; }
+        .chat-msg { max-width: 82%; padding: 0.75rem 1rem; border-radius: 14px; font-size: 0.98rem; line-height: 1.5; }
+        .chat-msg.bot { align-self: flex-start; background: rgba(255,255,255,0.07); border: 1px solid var(--glass-border); border-bottom-left-radius: 4px; }
+        .chat-msg.bot a { color: var(--accent); }
+        .chat-msg.user { align-self: flex-end; background: linear-gradient(135deg, rgba(0,240,255,0.25), rgba(255,0,170,0.25)); border-bottom-right-radius: 4px; }
+        .chat-suggestions { display: flex; flex-wrap: wrap; gap: 0.5rem; padding: 0 1.25rem 0.75rem; }
+        .chat-chip { padding: 0.45rem 0.9rem; border-radius: 999px; background: var(--glass); border: 1px solid var(--glass-border); color: rgba(255,255,255,0.85); font-family: inherit; font-size: 0.88rem; cursor: pointer; transition: all 0.25s; }
+        .chat-chip:hover { border-color: var(--accent); color: var(--accent); }
+        .chat-input-row { display: flex; gap: 0.6rem; padding: 0.9rem 1.25rem 1.1rem; border-top: 1px solid var(--glass-border); }
+        .chat-input { flex: 1; padding: 0.7rem 1rem; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); border-radius: 999px; color: #fff; font-family: 'Rajdhani', sans-serif; font-size: 1rem; outline: none; transition: border-color 0.25s; }
+        .chat-input:focus { border-color: var(--accent); }
+        .chat-send { width: 44px; height: 44px; border-radius: 50%; border: none; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #000; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.2s; }
+        .chat-send:hover { transform: scale(1.08); }
+        .chat-send svg { width: 20px; height: 20px; }
+        .chat-typing { display: none; align-self: flex-start; background: rgba(255,255,255,0.07); border: 1px solid var(--glass-border); border-radius: 14px; border-bottom-left-radius: 4px; padding: 0.85rem 1.2rem; }
+        .chat-typing span { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); margin-right: 4px; animation: typingBlink 1.2s infinite ease-in-out; }
+        .chat-typing span:nth-child(2) { animation-delay: 0.15s; }
+        .chat-typing span:nth-child(3) { animation-delay: 0.3s; }
+        @keyframes typingBlink { 0%, 70%, 100% { opacity: 0.3; } 30% { opacity: 1; } }
+
         .preloader-3d { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 2rem; }
         .preloader-3d.hidden { opacity: 0; pointer-events: none; transition: opacity 0.5s; }
         .preloader-logo-3d { font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent-2)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .preloader-spinner-3d { width: 50px; height: 50px; border: 3px solid var(--glass-border); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
-        
+
         @media (max-width: 900px) {
+            .channels-grid-3d { grid-template-columns: 1fr; }
             .contact-grid-3d { grid-template-columns: 1fr; }
+            .expect-grid-3d { grid-template-columns: 1fr; }
             .store-search { display: none; }
             .store-mobile-toggle { display: inline-flex; align-items: center; justify-content: center; }
             .store-nav { display: none; }
@@ -112,6 +206,8 @@
             .store-dropdown { position: static; opacity: 1; visibility: visible; transform: none; box-shadow: none; background: rgba(255,255,255,0.04); }
             .store-nav-item:hover .store-dropdown { opacity: 1; visibility: visible; transform: none; }
             .page-offset { padding-top: 120px; }
+            .chat-launcher { bottom: 18px; right: 18px; }
+            .chat-window { bottom: 92px; right: 18px; }
         }
         @keyframes spin { to { transform: rotate(360deg); } }
     </style>
@@ -119,9 +215,22 @@
 {
   "@context": "https://schema.org",
   "@type": "ContactPage",
-  "name": "Contact Us",
-  "description": "Get in touch with Trendaryo customer support",
-  "url": "https://trendaryo.com/contact.html"
+  "name": "Contact Trendaryo",
+  "description": "Contact Trendaryo customer support by email, phone or live chat.",
+  "url": "https://trendaryo.com/contact.html",
+  "mainEntity": {
+    "@type": "Organization",
+    "name": "TRENDARYO LLC",
+    "telephone": "+1-307-533-4512",
+    "email": "admin@trendaryo.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Al Maabela, Wilayat Al Seeb",
+      "addressLocality": "Muscat Governorate",
+      "addressCountry": "OMAN"
+    },
+    "openingHours": "Mo-Fr 09:00-18:00"
+  }
 }
 </script>
 </head>
@@ -129,286 +238,422 @@
     <script src="components.js"></script>
     <div class="preloader-3d" id="preloader"><div class="preloader-logo-3d">TRENDARYO</div><div class="preloader-spinner-3d"></div></div>
     <canvas id="three-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;"></canvas>
-    
+
     <!-- Full Navigation Header -->
     <div id="header-container" data-type="full"></div>
 
     <main class="page-offset">
-    
+
     <section class="page-header-3d">
+        <nav class="breadcrumb-3d" aria-label="Breadcrumb">
+            <a href="index.html">Home</a>
+            <span aria-hidden="true">/</span>
+            <span>Contact</span>
+        </nav>
         <h1 class="page-title-3d">CONTACT US</h1>
+        <p class="page-subtitle-3d">Questions, orders or feedback - pick the channel that suits you. Real people answer by email and phone during support hours, and our chat assistant is here around the clock.</p>
     </section>
-    
+
+    <section class="channels-section-3d">
+        <div class="channels-grid-3d">
+            <a class="channel-card-3d" href="mailto:admin@trendaryo.com">
+                <div class="channel-icon-3d">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                </div>
+                <div class="channel-title-3d">Email Support</div>
+                <div class="channel-desc-3d">Send us a message for orders, returns and anything else. We reply within 1 business day.</div>
+                <div class="channel-link-3d">admin@trendaryo.com</div>
+            </a>
+            <a class="channel-card-3d" href="tel:+13075334512">
+                <div class="channel-icon-3d">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                </div>
+                <div class="channel-title-3d">Call Us</div>
+                <div class="channel-desc-3d">Speak to a member of the team about your order or account.</div>
+                <div class="channel-link-3d">+1 (307) 533-4512</div>
+            </a>
+            <a class="channel-card-3d" href="#" id="openLiveChat" role="button" aria-haspopup="dialog">
+                <div class="channel-icon-3d">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                </div>
+                <div class="channel-title-3d">Live Chat</div>
+                <div class="channel-desc-3d">Get instant answers from our chat assistant 24/7 - it can track orders, explain returns and more.</div>
+                <div class="channel-link-3d">Start now</div>
+            </a>
+        </div>
+    </section>
+
     <section class="contact-section-3d">
         <div class="contact-grid-3d">
+            <div class="contact-form-3d" id="contactFormWrap">
+                <h2>Send a Message</h2>
+                <p class="form-intro-3d">Fill in the form and we'll get back to you by email within 1 business day.</p>
+                <form id="contactForm" novalidate>
+                    <div class="form-group-3d">
+                        <label class="form-label-3d" for="f-name">Your Name</label>
+                        <input type="text" id="f-name" name="name" class="form-input-3d" placeholder="John Doe" maxlength="100" required>
+                    </div>
+                    <div class="form-group-3d">
+                        <label class="form-label-3d" for="f-email">Email Address</label>
+                        <input type="email" id="f-email" name="email" class="form-input-3d" placeholder="john@example.com" required>
+                    </div>
+                    <div class="form-group-3d">
+                        <label class="form-label-3d" for="f-order">Order Number <span class="opt-3d">(optional)</span></label>
+                        <input type="text" id="f-order" name="orderId" class="form-input-3d" placeholder="TRD-2024-1234">
+                    </div>
+                    <div class="form-group-3d">
+                        <label class="form-label-3d" for="f-topic">Topic</label>
+                        <select id="f-topic" name="topic" class="form-select-3d" required>
+                            <option value="" disabled selected>Choose a topic...</option>
+                            <option value="orders">Orders &amp; Shipping</option>
+                            <option value="returns">Returns &amp; Refunds</option>
+                            <option value="payments">Payments &amp; Billing</option>
+                            <option value="product">Product &amp; Warranty</option>
+                            <option value="account">Account &amp; Privacy</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group-3d">
+                        <label class="form-label-3d" for="f-message">Message</label>
+                        <textarea id="f-message" name="message" class="form-textarea-3d" placeholder="How can we help?" maxlength="2000" required></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit-3d" id="f-submit">Send Message</button>
+                    <div class="form-status-3d" id="formStatus" role="status"></div>
+                </form>
+                <div class="form-success-3d" id="formSuccess" role="status">
+                    <div class="form-success-icon-3d">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"></path></svg>
+                    </div>
+                    <h3>Message sent</h3>
+                    <p id="formSuccessText">Thanks! Your message is on its way.</p>
+                    <button type="button" class="btn-secondary-3d" id="sendAnother">Send another message</button>
+                </div>
+            </div>
+
             <div class="contact-info-3d">
                 <h2>Get In Touch</h2>
-                <p style="color:#888;margin-bottom:2rem;">Have questions? We'd love to hear from you!</p>
-                
-                <div style="background: linear-gradient(135deg, rgba(0,240,255,0.1), rgba(255,0,170,0.1)); border: 2px solid var(--accent); border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem;">
-                    <h3 style="font-family: 'Orbitron', sans-serif; font-size: 1.2rem; color: var(--accent); margin-bottom: 1rem;">TRENDARYO LLC</h3>
-                    <p style="color: rgba(255,255,255,0.9); font-size: 1rem; line-height: 1.7; margin: 0;"><strong>Customer Support:</strong> <a href="mailto:admin@trendaryo.com" style="color: var(--accent); text-decoration: none;">admin@trendaryo.com</a></p>
+                <div class="company-card-3d">
+                    <h3>TRENDARYO LLC</h3>
+                    <p>Customer support is handled by our support team from our Muscat warehouse. Include your <strong>order number</strong> to help us help you faster.</p>
                 </div>
-                
+
                 <div class="contact-item-3d">
                     <div class="contact-icon-3d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></div>
                     <div class="contact-text-3d"><h4>Business Address</h4><p>Al Maabela, Wilayat Al Seeb<br>Muscat Governorate, OMAN</p></div>
                 </div>
-                
-                <div class="contact-item-3d">
-                    <div class="contact-icon-3d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></div>
-                    <div class="contact-text-3d"><h4>Call Us</h4><p>+1 (307) 533-4512<br>Mon-Fri: 9AM-6PM EST</p></div>
-                </div>
-                
+
                 <div class="contact-item-3d">
                     <div class="contact-icon-3d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></div>
-                    <div class="contact-text-3d"><h4>Email Us</h4><p>admin@trendaryo.com<br>support@trendaryo.com</p></div>
+                    <div class="contact-text-3d">
+                        <h4>Email Us</h4>
+                        <p><a href="mailto:admin@trendaryo.com">admin@trendaryo.com</a><br><a href="mailto:support@trendaryo.com">support@trendaryo.com</a></p>
+                    </div>
                 </div>
-                
+
+                <div class="contact-item-3d">
+                    <div class="contact-icon-3d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></div>
+                    <div class="contact-text-3d"><h4>Call Us</h4><p><a href="tel:+13075334512">+1 (307) 533-4512</a><br>Mon-Fri, 9AM-6PM EST</p></div>
+                </div>
+
                 <div class="social-links-3d">
-                    <a href="#" class="social-link-3d"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
-                    <a href="#" class="social-link-3d"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg></a>
-                    <a href="#" class="social-link-3d"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.4.861.586.061-061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z"/></svg></a>
-                </div>
-            </div>
-            
-            <div class="contact-form-3d">
-                <h2>Send Message</h2>
-                <form onsubmit="handleSubmit(event)">
-                    <div class="form-group-3d">
-                        <label class="form-label-3d">Your Name</label>
-                        <input type="text" class="form-input-3d" placeholder="John Doe" required>
-                    </div>
-                    <div class="form-group-3d">
-                        <label class="form-label-3d">Email Address</label>
-                        <input type="email" class="form-input-3d" placeholder="john@example.com" required>
-                    </div>
-                    <div class="form-group-3d">
-                        <label class="form-label-3d">Subject</label>
-                        <input type="text" class="form-input-3d" placeholder="How can we help?" required>
-                    </div>
-                    <div class="form-group-3d">
-                        <label class="form-label-3d">Message</label>
-                        <textarea class="form-textarea-3d" placeholder="Your message here..." required></textarea>
-                    </div>
-                    <button type="submit" class="btn-submit-3d">Send Message</button>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <!-- Live Support Section -->
-    <section style="max-width: 1200px; margin: 4rem auto; padding: 2rem;">
-        <div style="background: linear-gradient(135deg, rgba(0,240,255,0.08), rgba(255,0,170,0.08)); border: 2px solid var(--glass-border); border-radius: 24px; padding: 3rem 2rem; text-align: center;">
-            <div style="width: 80px; height: 80px; margin: 0 auto 1.5rem; background: linear-gradient(135deg, var(--accent), var(--accent-2)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; animation: pulse 2s infinite;">??</div>
-            <h2 style="font-family: 'Orbitron', sans-serif; font-size: 2rem; margin-bottom: 1rem; background: linear-gradient(135deg, var(--accent), var(--accent-2)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Need Instant Help?</h2>
-            <p style="color: #aaa; font-size: 1.1rem; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.6;">Our support team is online 24/7 to assist you with any questions or concerns.</p>
-            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                <button style="padding: 1rem 2.5rem; border-radius: 999px; background: linear-gradient(135deg, rgba(0,240,255,0.25), rgba(255,0,170,0.25)); border: 1px solid var(--glass-border); color: #fff; font-weight: 700; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; cursor: pointer;">Start Live Chat</button>
-                <button style="padding: 1rem 2.5rem; border-radius: 999px; background: var(--glass); border: 1px solid var(--glass-border); color: #fff; font-weight: 700; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; cursor: pointer;">Call Now</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- FAQ Quick Links -->
-    <section style="max-width: 1200px; margin: 4rem auto; padding: 2rem;">
-        <h2 style="font-family: 'Orbitron', sans-serif; font-size: 2rem; text-align: center; margin-bottom: 3rem;">Quick Answers</h2>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
-            <a href="faq.html" style="background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; text-decoration: none; color: inherit; transition: all 0.3s; display: block;" onmouseover="this.style.borderColor='rgba(0,240,255,0.4)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.borderColor=''; this.style.transform='';">
-                <div style="font-size: 2.5rem; margin-bottom: 1rem;">??</div>
-                <h3 style="font-family: 'Orbitron', sans-serif; font-size: 1.2rem; margin-bottom: 0.5rem; color: var(--accent);">Shipping & Delivery</h3>
-                <p style="color: #888; line-height: 1.7; margin: 0;">Track orders, shipping times, and delivery options.</p>
-            </a>
-            <a href="returns.html" style="background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; text-decoration: none; color: inherit; transition: all 0.3s; display: block;" onmouseover="this.style.borderColor='rgba(255,0,170,0.4)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.borderColor=''; this.style.transform='';">
-                <div style="font-size: 2.5rem; margin-bottom: 1rem;">??</div>
-                <h3 style="font-family: 'Orbitron', sans-serif; font-size: 1.2rem; margin-bottom: 0.5rem; color: var(--accent-2);">Returns & Refunds</h3>
-                <p style="color: #888; line-height: 1.7; margin: 0;">Easy returns within 30 days, hassle-free refunds.</p>
-            </a>
-            <a href="account.html" style="background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; text-decoration: none; color: inherit; transition: all 0.3s; display: block;" onmouseover="this.style.borderColor='rgba(0,255,136,0.4)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.borderColor=''; this.style.transform='';">
-                <div style="font-size: 2.5rem; margin-bottom: 1rem;">??</div>
-                <h3 style="font-family: 'Orbitron', sans-serif; font-size: 1.2rem; margin-bottom: 0.5rem; color: var(--accent-3);">Account Help</h3>
-                <p style="color: #888; line-height: 1.7; margin: 0;">Manage your account, orders, and preferences.</p>
-            </a>
-            <a href="faq.html" style="background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; text-decoration: none; color: inherit; transition: all 0.3s; display: block;" onmouseover="this.style.borderColor='rgba(0,240,255,0.4)'; this.style.transform='translateY(-5px)';" onmouseout="this.style.borderColor=''; this.style.transform='';">
-                <div style="font-size: 2.5rem; margin-bottom: 1rem;">??</div>
-                <h3 style="font-family: 'Orbitron', sans-serif; font-size: 1.2rem; margin-bottom: 0.5rem; color: var(--accent);">Payment & Security</h3>
-                <p style="color: #888; line-height: 1.7; margin: 0;">Secure payments, accepted methods, and safety.</p>
-            </a>
-        </div>
-    </section>
-
-    <!-- Response Time Stats -->
-    <section style="max-width: 1200px; margin: 4rem auto; padding: 2rem;">
-        <div style="background: rgba(0,240,255,0.03); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); padding: 3rem 2rem; border-radius: 20px;">
-            <h2 style="font-family: 'Orbitron', sans-serif; font-size: 2rem; text-align: center; margin-bottom: 3rem;">Our Commitment to You</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem;">
-                <div style="text-align: center;">
-                    <div style="font-family: 'Orbitron', sans-serif; font-size: 3rem; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent-2)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem;">&lt;2min</div>
-                    <div style="color: #888; font-size: 1rem;">Average Response Time</div>
-                </div>
-                <div style="text-align: center;">
-                    <div style="font-family: 'Orbitron', sans-serif; font-size: 3rem; font-weight: 900; background: linear-gradient(135deg, var(--accent-2), var(--accent-3)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem;">24/7</div>
-                    <div style="color: #888; font-size: 1rem;">Support Available</div>
-                </div>
-                <div style="text-align: center;">
-                    <div style="font-family: 'Orbitron', sans-serif; font-size: 3rem; font-weight: 900; background: linear-gradient(135deg, var(--accent-3), var(--accent)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem;">98%</div>
-                    <div style="color: #888; font-size: 1rem;">Customer Satisfaction</div>
-                </div>
-                <div style="text-align: center;">
-                    <div style="font-family: 'Orbitron', sans-serif; font-size: 3rem; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent-3)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem;">50K+</div>
-                    <div style="color: #888; font-size: 1rem;">Issues Resolved</div>
+                    <a href="https://www.facebook.com/trendaryo" target="_blank" rel="noopener noreferrer" class="social-link-3d" aria-label="Facebook" title="Facebook"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-7h2.4l.4-3h-2.8V9.1c0-.9.3-1.5 1.6-1.5h1.3V4.9c-.3 0-1.1-.1-2.1-.1-2.1 0-3.6 1.3-3.6 3.7V11H8.2v3h2.5v7h2.8Z"/></svg></a>
+                    <a href="https://twitter.com/trendaryo" target="_blank" rel="noopener noreferrer" class="social-link-3d" aria-label="Twitter / X" title="Twitter / X"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.7 3h3l-6.6 7.6L21.9 21h-6.1l-4.8-6.3L5.5 21h-3l7.1-8.1L2.3 3h6.2l4.3 5.7L17.7 3Zm-1.1 16.2h1.7L7.6 4.7H5.8l10.8 14.5Z"/></svg></a>
+                    <a href="https://www.instagram.com/trendaryo" target="_blank" rel="noopener noreferrer" class="social-link-3d" aria-label="Instagram" title="Instagram"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="0.9" fill="currentColor" stroke="none"/></svg></a>
+                    <a href="https://www.linkedin.com/company/trendaryo" target="_blank" rel="noopener noreferrer" class="social-link-3d" aria-label="LinkedIn" title="LinkedIn"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6.9 8.6H3.6V21h3.3V8.6ZM5.2 3a1.9 1.9 0 1 0 0 3.8 1.9 1.9 0 0 0 0-3.8ZM13 8.6H9.8V21H13v-6.5c0-1.7.9-2.6 2.2-2.6 1.2 0 1.9.8 1.9 2.6V21h3.3v-7.2c0-3.2-1.7-5.4-4.4-5.4-1.6 0-2.6.7-3 1.5V8.6Z"/></svg></a>
+                    <a href="https://www.youtube.com/@trendaryo" target="_blank" rel="noopener noreferrer" class="social-link-3d" aria-label="YouTube" title="YouTube"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12c0 1.6.1 3.2.4 4.8a2.5 2.5 0 0 0 1.8 1.8c1.6.4 7.8.4 7.8.4s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8c.3-1.6.4-3.2.4-4.8 0-1.6-.1-3.2-.4-4.8ZM10 15.2V8.8l5.2 3.2L10 15.2Z"/></svg></a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Office Hours -->
-    <section style="max-width: 800px; margin: 4rem auto 6rem; padding: 2rem;">
-        <div style="background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px; padding: 3rem 2rem;">
-            <h2 style="font-family: 'Orbitron', sans-serif; font-size: 1.8rem; text-align: center; margin-bottom: 2rem; color: var(--accent);">Office Hours</h2>
-            <div style="display: grid; gap: 1rem;">
-                <div style="display: flex; justify-content: space-between; padding: 1rem; background: rgba(0,0,0,0.3); border-radius: 12px; flex-wrap: wrap; gap: 1rem;">
-                    <span style="font-weight: 700;">Monday - Friday</span>
-                    <span style="color: var(--accent);">9:00 AM - 6:00 PM EST</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; padding: 1rem; background: rgba(0,0,0,0.3); border-radius: 12px; flex-wrap: wrap; gap: 1rem;">
-                    <span style="font-weight: 700;">Saturday</span>
-                    <span style="color: var(--accent);">10:00 AM - 4:00 PM EST</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; padding: 1rem; background: rgba(0,0,0,0.3); border-radius: 12px; flex-wrap: wrap; gap: 1rem;">
-                    <span style="font-weight: 700;">Sunday</span>
-                    <span style="color: var(--accent);">Closed</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; padding: 1rem; background: rgba(0,240,255,0.1); border: 1px solid var(--accent); border-radius: 12px; flex-wrap: wrap; gap: 1rem;">
-                    <span style="font-weight: 700;">Live Chat & Email</span>
-                    <span style="color: var(--accent);">24/7 Available</span>
-                </div>
+    <section class="expect-section-3d">
+        <div class="expect-grid-3d">
+            <div class="expect-item-3d">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <h4>Reply within 1 business day</h4>
+                <p>Emails and the contact form are answered within one business day, every week of the year.</p>
+            </div>
+            <div class="expect-item-3d">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg>
+                <h4>Order number = faster help</h4>
+                <p>Adding your order number (TRD-2024-1234) lets us pull up your order instantly and skip the back-and-forth.</p>
+            </div>
+            <div class="expect-item-3d">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                <h4>Chat assistant 24/7</h4>
+                <p>Instant answers on tracking, returns, shipping and payments any time of day or night.</p>
             </div>
         </div>
     </section>
 
-    <style>
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-    </style>
+    <section class="map-section-3d">
+        <div class="map-wrap-3d">
+            <iframe
+                title="Trendaryo location in Al Maabela, Muscat, Oman"
+                src="https://www.google.com/maps?q=Al%20Maabela%2C%20Wilayat%20Al%20Seeb%2C%20Muscat%2C%20Oman&output=embed"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                allowfullscreen></iframe>
+        </div>
+    </section>
 
-    <script>
-        const storeHeader = document.getElementById('store-header');
-        const mobileToggle = document.getElementById('store-mobile-toggle');
-        const dropdownItems = Array.from(document.querySelectorAll('.store-nav-item[data-dropdown]'));
+    <section class="faq-section-3d">
+        <p class="cs-eyebrow faq-eyebrow">Quick Answers</p>
 
-        if (mobileToggle && storeHeader) {
-            mobileToggle.addEventListener('click', () => {
-                const isOpen = storeHeader.classList.toggle('is-open');
-                mobileToggle.setAttribute('aria-expanded', String(isOpen));
-                if (!isOpen) dropdownItems.forEach(i => i.classList.remove('is-open'));
-            });
-        }
+        <div class="faq-item-3d" onclick="this.classList.toggle('active')">
+            <div class="faq-question-3d">How do I track my order?<div class="faq-icon-3d">+</div></div>
+            <div class="faq-answer-3d">Visit the <a href="track-order.html">Track Order</a> page and enter the order number from your confirmation email (it looks like TRD-2024-1234). You will see a live status timeline plus the carrier and estimated delivery date. Tracking usually activates within 24 hours of dispatch.</div>
+        </div>
+        <div class="faq-item-3d" onclick="this.classList.toggle('active')">
+            <div class="faq-question-3d">How long does shipping take?<div class="faq-icon-3d">+</div></div>
+            <div class="faq-answer-3d">Orders are packed within 24 hours on business days. Standard shipping arrives in 5-7 business days and is free on orders over $50. Express shipping is 2-3 business days. We ship worldwide - GCC deliveries typically arrive in 3-5 business days.</div>
+        </div>
+        <div class="faq-item-3d" onclick="this.classList.toggle('active')">
+            <div class="faq-question-3d">What is your return policy?<div class="faq-icon-3d">+</div></div>
+            <div class="faq-answer-3d">You have 30 days from delivery to return any unused item in its original packaging. Start the process on the <a href="return-request.html">Return Request</a> page. Faulty, damaged or incorrect items ship back free; approved refunds are issued within 3-5 business days.</div>
+        </div>
+        <div class="faq-item-3d" onclick="this.classList.toggle('active')">
+            <div class="faq-question-3d">Is checkout secure?<div class="faq-icon-3d">+</div></div>
+            <div class="faq-answer-3d">All transactions are encrypted end-to-end and processed by PCI-DSS compliant payment providers. We accept Visa, Mastercard, American Express, PayPal, Apple Pay and Google Pay, and your full card number is never stored on our servers.</div>
+        </div>
+        <div class="faq-item-3d" onclick="this.classList.toggle('active')">
+            <div class="faq-question-3d">How do I use the WELCOME10 discount code?<div class="faq-icon-3d">+</div></div>
+            <div class="faq-answer-3d">Add items to your cart, open the <a href="cart.html">cart page</a>, paste <strong>WELCOME10</strong> into the promo field and click Apply. The 10% discount comes off your subtotal before shipping and is valid once per customer.</div>
+        </div>
+        <div class="faq-item-3d" onclick="this.classList.toggle('active')">
+            <div class="faq-question-3d">Do your products come with a warranty?<div class="faq-icon-3d">+</div></div>
+            <div class="faq-answer-3d">Every item includes a 12-month manufacturer warranty covering manufacturing defects. Electronics such as headphones, smartwatches and laptops carry the full manufacturer term. Keep your order number - it is all we need to process a claim.</div>
+        </div>
 
-        dropdownItems.forEach(item => {
-            const link = item.querySelector('.store-nav-link');
-            if (!link) return;
+        <div class="cta-band" style="margin-top:3rem;">
+            <h2>Still have a question?</h2>
+            <p>Browse the full FAQ or start a live chat below - our assistant answers instantly and a human hands over when needed.</p>
+            <a class="btn-band" href="faq.html">Visit Full FAQ</a>
+        </div>
+    </section>
 
-            link.addEventListener('click', (e) => {
-                const isMobile = window.matchMedia('(max-width: 900px)').matches;
-                if (!isMobile) return;
+    </main>
 
-                const isOpen = item.classList.contains('is-open');
-                if (!isOpen) {
-                    e.preventDefault();
-                    dropdownItems.forEach(i => i.classList.remove('is-open'));
-                    item.classList.add('is-open');
-                }
-            });
-        });
+    <!-- Floating Live Chat -->
+    <button class="chat-launcher" id="chatLauncher" aria-label="Open live chat" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><path d="M8 9h8M8 13h5"></path></svg>
+    </button>
 
-        document.addEventListener('click', (e) => {
-            if (!storeHeader) return;
-            if (storeHeader.contains(e.target)) return;
-            dropdownItems.forEach(i => i.classList.remove('is-open'));
-            storeHeader.classList.remove('is-open');
-            if (mobileToggle) mobileToggle.setAttribute('aria-expanded', 'false');
-        });
-
-        function handleSubmit(event) {
-            event.preventDefault();
-            const form = event.target;
-            const name = form.querySelector('input[type="text"]').value;
-            const email = form.querySelector('input[type="email"]').value;
-            const subject = form.querySelectorAll('input[type="text"]')[1].value;
-            const message = form.querySelector('textarea').value;
-
-            if (name && email && subject && message) {
-                alert(`Thank you ${name}! Your message has been sent. We'll get back to you at ${email} soon.`);
-                form.reset();
-            }
-        }
-
-        // Theme toggle logic
-        const themes = [
-            "linear-gradient(180deg, #0a0a2a 0%, #1a1a40 100%)",
-            "linear-gradient(180deg, #2a003f 0%, #3b0066 100%)",
-            "linear-gradient(180deg, #002b36 0%, #004f66 100%)",
-            "linear-gradient(180deg, #2a003f 0%, #1a1a40 100%)"
-        ];
-
-        let currentTheme = 0;
-        const themeToggle = document.getElementById("theme-toggle");
-        if (themeToggle) {
-            themeToggle.addEventListener("click", () => {
-                currentTheme = (currentTheme + 1) % themes.length;
-                (window.__themeBgDiv || document.body).style.background = themes[currentTheme];
-
-                if (currentTheme === 3) {
-                    document.querySelectorAll("h1, h2, h3, .product-title, .hero-title-3d, .page-title-3d").forEach(el => {
-                        el.style.color = "#FFD700";
-                    });
-                    document.querySelectorAll("button, .btn-3d").forEach(btn => {
-                        btn.style.background = "#6a0dad";
-                        btn.style.color = "#FFD700";
-                    });
-                } else {
-                    document.querySelectorAll("h1, h2, h3, .product-title, .hero-title-3d, .page-title-3d").forEach(el => {
-                        el.style.color = "";
-                    });
-                    document.querySelectorAll("button, .btn-3d").forEach(btn => {
-                        btn.style.background = "";
-                        btn.style.color = "";
-                    });
-                }
-            });
-        }
-    </script>
-</main>
+    <div class="chat-window" id="chatWindow" role="dialog" aria-label="Live chat support" aria-hidden="true">
+        <div class="chat-head">
+            <div>
+                <div class="chat-head-title">TRENDARYO Support</div>
+                <div class="chat-head-sub">Online - replies in seconds</div>
+            </div>
+            <button class="chat-close" id="chatClose" aria-label="Close chat">&#10005;</button>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <div class="chat-msg bot">Hi there! I can help with <strong>tracking an order</strong>, <strong>returns</strong>, <strong>shipping</strong>, <strong>payments</strong> and more. What do you need?</div>
+        </div>
+        <div class="chat-suggestions" id="chatSuggestions">
+            <button type="button" class="chat-chip">Where is my order?</button>
+            <button type="button" class="chat-chip">Return policy</button>
+            <button type="button" class="chat-chip">Shipping times</button>
+            <button type="button" class="chat-chip">Talk to a human</button>
+        </div>
+        <div class="chat-typing" id="chatTyping"><span></span><span></span><span></span></div>
+        <div class="chat-input-row">
+            <input type="text" class="chat-input" id="chatInput" placeholder="Type your message..." aria-label="Chat message" maxlength="500">
+            <button class="chat-send" id="chatSend" aria-label="Send message">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"></path></svg>
+            </button>
+        </div>
+    </div>
 
     <!-- Footer is injected by components.js -->
 
     <script>
+        (function () {
+            'use strict';
+
+            /* ---------- Contact form ---------- */
+            var form = document.getElementById('contactForm');
+            var status = document.getElementById('formStatus');
+            var submitBtn = document.getElementById('f-submit');
+            var formWrap = document.getElementById('contactFormWrap');
+            var formSuccess = document.getElementById('formSuccess');
+            var formSuccessText = document.getElementById('formSuccessText');
+
+            function setStatus(klass, html) {
+                status.className = 'form-status-3d ' + klass;
+                status.innerHTML = html;
+            }
+
+            function resetStatus() {
+                status.className = 'form-status-3d';
+                status.innerHTML = '';
+            }
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                resetStatus();
+
+                var name = document.getElementById('f-name').value.trim();
+                var email = document.getElementById('f-email').value.trim();
+                var topic = document.getElementById('f-topic').value;
+                var message = document.getElementById('f-message').value.trim();
+                var orderId = document.getElementById('f-order').value.trim();
+
+                if (!name || !email || !topic || !message) {
+                    setStatus('error', 'Please fill in your name, email, topic and message.');
+                    return;
+                }
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    setStatus('error', 'Please enter a valid email address.');
+                    return;
+                }
+
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Sending...';
+
+                var payload = { name: name, email: email, topic: topic, message: message, type: 'message' };
+                if (orderId) payload.orderId = orderId;
+
+                fetch('/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                }).then(function (res) {
+                    return res.json().then(function (json) {
+                        return { ok: res.ok, json: json };
+                    });
+                }).then(function (result) {
+                    if (!result.ok) {
+                        throw new Error((result.json && result.json.error && result.json.error.message) || 'Something went wrong. Please try again.');
+                    }
+                    formSuccessText.textContent = result.json.data.message || 'Thanks! Your message is on its way.';
+                    form.classList.add('hidden');
+                    form.hidden = true;
+                    formSuccess.classList.add('active');
+                    status.className = 'form-status-3d';
+                }).catch(function (err) {
+                    setStatus('error', err.message || 'Something went wrong. Please try again.');
+                }).finally(function () {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Send Message';
+                });
+            });
+
+            document.getElementById('sendAnother').addEventListener('click', function () {
+                form.hidden = false;
+                formSuccess.classList.remove('active');
+                form.reset();
+                resetStatus();
+            });
+
+            /* ---------- Live chat ---------- */
+            var launcher = document.getElementById('chatLauncher');
+            var windowEl = document.getElementById('chatWindow');
+            var closeBtn = document.getElementById('chatClose');
+            var bodyEl = document.getElementById('chatBody');
+            var inputEl = document.getElementById('chatInput');
+            var sendBtn = document.getElementById('chatSend');
+            var typingEl = document.getElementById('chatTyping');
+            var chips = document.querySelectorAll('.chat-chip');
+
+            function openChat() {
+                windowEl.classList.add('open');
+                windowEl.setAttribute('aria-hidden', 'false');
+                launcher.setAttribute('aria-expanded', 'true');
+                inputEl.focus();
+            }
+
+            function closeChat() {
+                windowEl.classList.remove('open');
+                windowEl.setAttribute('aria-hidden', 'true');
+                launcher.setAttribute('aria-expanded', 'false');
+            }
+
+            function addMsg(html, who) {
+                var div = document.createElement('div');
+                div.className = 'chat-msg ' + who;
+                div.innerHTML = html;
+                bodyEl.appendChild(div);
+                bodyEl.scrollTop = bodyEl.scrollHeight;
+            }
+
+            function showTyping() { typingEl.style.display = 'block'; bodyEl.scrollTop = bodyEl.scrollHeight; }
+            function hideTyping() { typingEl.style.display = 'none'; }
+
+            function sendChat() {
+                var text = inputEl.value.trim();
+                if (!text) return;
+                inputEl.value = '';
+                addMsg(text.replace(/[<>&]/g, function (c) { return { '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]; }), 'user');
+                showTyping();
+
+                var payload = { type: 'chat', message: text };
+                try { payload.name = (JSON.parse(localStorage.getItem('trendaryo_user') || 'null') || {}).name || ''; } catch (e) { payload.name = ''; }
+                try { payload.email = (JSON.parse(localStorage.getItem('trendaryo_user') || 'null') || {}).email || ''; } catch (e) { payload.email = ''; }
+
+                fetch('/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                }).then(function (res) {
+                    return res.json().then(function (json) { return { ok: res.ok, json: json }; });
+                }).then(function (result) {
+                    if (!result.ok) {
+                        throw new Error((result.json && result.json.error && result.json.error.message) || 'Chat unavailable right now.');
+                    }
+                    hideTyping();
+                    addMsg(result.json.data.reply || 'Thanks for the message!', 'bot');
+                }).catch(function () {
+                    hideTyping();
+                    addMsg('Chat is temporarily unavailable. Email <strong>admin@trendaryo.com</strong> and we will reply within 1 business day.', 'bot');
+                });
+            }
+
+            launcher.addEventListener('click', function () {
+                windowEl.classList.contains('open') ? closeChat() : openChat();
+            });
+            closeBtn.addEventListener('click', closeChat);
+            sendBtn.addEventListener('click', sendChat);
+            inputEl.addEventListener('keydown', function (e) { if (e.key === 'Enter') sendChat(); });
+            document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeChat(); });
+
+            chips.forEach(function (chip) {
+                chip.addEventListener('click', function () {
+                    inputEl.value = chip.textContent;
+                    sendChat();
+                });
+            });
+
+            document.getElementById('openLiveChat').addEventListener('click', function (e) {
+                e.preventDefault();
+                openChat();
+            });
+        })();
+    </script>
+
+    <script>
         // Force cache refresh
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                for(let registration of registrations) {
-                    registration.unregister();
+            navigator.serviceWorker.getRegistrations().then(function (registrations) {
+                for (var i = 0; i < registrations.length; i++) {
+                    registrations[i].unregister();
                 }
             });
         }
     </script>
 
-    <script src="bg.js"></script>
     <!-- Self-Healing System -->
-<script>
-window.onerror = function(msg, url, lineNo, columnNo, error) {
-  console.log('Error caught:', msg);
-  const errorDiv = document.createElement('div');
-  errorDiv.style.cssText = 'position:fixed; bottom:20px; right:20px; background:#f3f4f6; padding:10px; border-radius:5px; z-index:9999; border:1px solid #ccc;';
-  errorDiv.innerHTML = '?? Something went wrong. Retrying...';
-  document.body.appendChild(errorDiv);
-  setTimeout(() => errorDiv.remove(), 3000);
-  return false;
-};
-</script>
+    <script>
+        window.onerror = function (msg) {
+            console.log('Error caught:', msg);
+            var errorDiv = document.createElement('div');
+            errorDiv.style.cssText = 'position:fixed; bottom:20px; right:20px; background:#f3f4f6; padding:10px; border-radius:5px; z-index:9999; border:1px solid #ccc; color:#111;';
+            errorDiv.textContent = 'Something went wrong. Retrying...';
+            document.body.appendChild(errorDiv);
+            setTimeout(function () { errorDiv.remove(); }, 3000);
+            return false;
+        };
+    </script>
     <script>
         // Preloader: failsafe ensures it always hides
         function hidePreloader() { var p = document.getElementById('preloader'); if (p) p.classList.add('hidden'); }
@@ -418,5 +663,3 @@ window.onerror = function(msg, url, lineNo, columnNo, error) {
     </script>
 </body>
 </html>
-
-
