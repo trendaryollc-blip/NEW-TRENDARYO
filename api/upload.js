@@ -1,7 +1,7 @@
-const { configureCloudinary } = require('../_lib/cloudinary');
-const { handleCors } = require('../_lib/cors');
-const { requireAuth } = require('../_lib/auth');
-const { applyRateLimit, sanitizeError } = require('../_lib/security');
+const { configureCloudinary } = require('./_lib/cloudinary');
+const { handleCors } = require('./_lib/cors');
+const { requireAuth } = require('./_lib/auth');
+const { applyRateLimit, sanitizeError } = require('./_lib/security');
 
 module.exports = async function handler(req, res) {
   if (handleCors(req, res)) return;

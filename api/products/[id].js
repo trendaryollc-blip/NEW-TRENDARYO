@@ -1,7 +1,7 @@
-const { initFirebase } = require('../../_lib/firebase');
-const { handleCors } = require('../../_lib/cors');
-const { requireAuth, requireAdmin } = require('../../_lib/auth');
-const { applyRateLimit } = require('../../_lib/security');
+const { initFirebase } = require('../_lib/firebase');
+const { handleCors } = require('../_lib/cors');
+const { requireAuth, requireAdmin } = require('../_lib/auth');
+const { applyRateLimit } = require('../_lib/security');
 
 module.exports = async function handler(req, res) {
   if (handleCors(req, res)) return;

@@ -1,8 +1,8 @@
-const { initFirebase } = require('../_lib/firebase');
-const { handleCors } = require('../_lib/cors');
-const { requireAdmin } = require('../_lib/auth');
-const { applyRateLimit } = require('../_lib/security');
-const { getSettings, round2 } = require('../_lib/pricing');
+const { initFirebase } = require('./_lib/firebase');
+const { handleCors } = require('./_lib/cors');
+const { requireAdmin } = require('./_lib/auth');
+const { applyRateLimit } = require('./_lib/security');
+const { getSettings, round2 } = require('./_lib/pricing');
 
 const WRITABLE = [
   'storeName',
