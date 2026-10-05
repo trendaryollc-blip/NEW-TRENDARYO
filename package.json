@@ -24,5 +24,8 @@
   },
   "devDependencies": {
     "dotenv": "^16.6.1"
+  },
+  "overrides": {
+    "jose": "^4.15.9"
   }
 }
