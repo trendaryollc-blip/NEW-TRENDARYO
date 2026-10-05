@@ -6,16 +6,16 @@
     var ROOM_CDN = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/environments/RoomEnvironment.js';
 
     var MODELS = [
-        { name: 'BoomBox',        url: 'assets/models/BoomBox.glb',             pos: [-3.2, 0.9, 0],    size: 2.2, remote: 'BoomBox', spin: 0.4 },
-        { name: 'Shoe',           url: 'assets/models/MaterialsVariantsShoe.glb', pos: [-1.8, -1.0, 0.3], size: 2.0, remote: 'MaterialsVariantsShoe', spin: 0.35 },
-        { name: 'WaterBottle',    url: 'assets/models/WaterBottle.glb',          pos: [-3.2, -1.0, -0.5], size: 2.3, remote: 'WaterBottle', spin: 0.5 },
-        { name: 'AntiqueCamera',  url: 'assets/models/AntiqueCamera.glb',        pos: [-1.8, 1.0, -0.3], size: 2.0, remote: 'AntiqueCamera', spin: 0.45 },
-        { name: 'Lamp',           url: 'assets/models/IridescenceLamp.glb',      pos: [-3.4, 0.0, 0.8],  size: 2.2, remote: 'IridescenceLamp', spin: 0.55 },
-        { name: 'BoomBox2',       url: 'assets/models/BoomBox.glb',             pos: [3.2, 0.9, -0.3],  size: 2.0, remote: 'BoomBox', spin: 0.35 },
-        { name: 'Shoe2',          url: 'assets/models/MaterialsVariantsShoe.glb', pos: [1.8, -1.0, 0.4],  size: 2.2, remote: 'MaterialsVariantsShoe', spin: 0.5 },
-        { name: 'WaterBottle2',   url: 'assets/models/WaterBottle.glb',          pos: [3.3, -1.0, -0.4], size: 2.1, remote: 'WaterBottle', spin: 0.4 },
-        { name: 'AntiqueCamera2', url: 'assets/models/AntiqueCamera.glb',        pos: [1.8, 1.0, 0.3],   size: 2.2, remote: 'AntiqueCamera', spin: 0.3 },
-        { name: 'Lamp2',          url: 'assets/models/IridescenceLamp.glb',      pos: [3.4, 0.0, 0.8],   size: 2.0, remote: 'IridescenceLamp', spin: 0.45 }
+        { name: 'DamagedHelmet',        url: 'assets/models/DamagedHelmet.glb',        pos: [-3.6, 0.9, 0],    size: 2.2, remote: 'DamagedHelmet', spin: 0.4 },
+        { name: 'Corset',               url: 'assets/models/Corset.glb',               pos: [-1.9, -0.9, -0.4], size: 2.0, remote: 'Corset', spin: 0.35 },
+        { name: 'GlamVelvetSofa',       url: 'assets/models/GlamVelvetSofa.glb',       pos: [0.0, 1.0, -1.2],   size: 2.4, remote: 'GlamVelvetSofa', spin: 0.3 },
+        { name: 'SheenChair',           url: 'assets/models/SheenChair.glb',           pos: [1.9, -0.9, 0.3],   size: 2.2, remote: 'SheenChair', spin: 0.4 },
+        { name: 'Lantern',              url: 'assets/models/Lantern.glb',              pos: [3.6, 0.9, -0.3],   size: 2.0, remote: 'Lantern', spin: 0.45 },
+        { name: 'LightsPunctualLamp',   url: 'assets/models/LightsPunctualLamp.glb',   pos: [-3.6, -1.0, -0.5], size: 2.2, remote: 'LightsPunctualLamp', spin: 0.5 },
+        { name: 'ReciprocatingSaw',     url: 'assets/models/ReciprocatingSaw.glb',     pos: [-1.9, 1.0, 0.4],   size: 2.0, remote: 'ReciprocatingSaw', spin: 0.55 },
+        { name: 'ToyCar',               url: 'assets/models/ToyCar.glb',               pos: [0.0, -1.1, 0.6],   size: 2.2, remote: 'ToyCar', spin: 0.6 },
+        { name: 'CesiumMilkTruck',      url: 'assets/models/CesiumMilkTruck.glb',      pos: [1.9, 1.0, -0.6],   size: 2.4, remote: 'CesiumMilkTruck', spin: 0.35 },
+        { name: 'IridescentDish',       url: 'assets/models/IridescentDishWithOlives.glb', pos: [3.6, -1.0, 0.5], size: 2.2, remote: 'IridescentDishWithOlives', spin: 0.45 }
     ];
     MODELS.forEach(function (m, i) { m.phase = i * 1.3; });
 
