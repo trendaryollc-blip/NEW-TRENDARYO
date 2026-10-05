@@ -15,8 +15,8 @@ window.TrendaryoConfig = {
     baseURL: '/api',
   },
   stripe: {
-    publishableKey: window.__STRIPE_KEY__ || 'pk_test_51T7Mox3fqZKBWMkDjDd4wT6w7j0Kn7enxmNwYRUCFN3nnGWfMiIv7cK6ys30MFXXcCxpuscqiUiEn3BLF4F4Tv5w00TnWqo4Sd',
-    mode: 'dev-fallback',
+    publishableKey: window.__STRIPE_KEY__ || '',
+    mode: window.__STRIPE_KEY__ ? 'live' : 'pending',
   },
   _ready: false,
 };

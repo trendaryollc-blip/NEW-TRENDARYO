@@ -8,7 +8,10 @@
     { "src": "assets/**", "use": "@vercel/static" },
     { "src": "admin/**", "use": "@vercel/static" },
     { "src": "js/**", "use": "@vercel/static" },
-    { "src": "public/**", "use": "@vercel/static" }
+    { "src": "public/**", "use": "@vercel/static" },
+    { "src": "*.xml", "use": "@vercel/static" },
+    { "src": "*.txt", "use": "@vercel/static" },
+    { "src": "assets/models/*.glb", "use": "@vercel/static" }
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/index.js?__route=/$1" },

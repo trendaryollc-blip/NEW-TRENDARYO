@@ -55,7 +55,7 @@
         .deck-btn--solid { background: linear-gradient(135deg, var(--accent), var(--accent-3)); border-color: transparent; color: #00202a; }
         .deck-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(152px, 1fr)); gap: 0.85rem; margin-top: 1.5rem; }
         .deck-stat { position: relative; padding: 0.95rem 1.05rem; border-radius: var(--r-md); background: var(--card-grad); border: 1px solid var(--glass-border); overflow: hidden; }
-        .deck-stat::after { content: ''; position: absolute; inset: 0 0 auto 0; height: 2px; background: linear-gradient(90deg, var(--accent), rgba(0, 240, 255, 0)); }
+        .deck-stat::after { content: ''; position: absolute; inset: 0 0 auto 0; height: 2px; background: transparent; }
         .deck-stat:nth-child(2n)::after { background: linear-gradient(90deg, var(--accent-2), rgba(255, 0, 170, 0)); }
         .deck-stat:nth-child(3n)::after { background: linear-gradient(90deg, var(--accent-3), rgba(0, 255, 136, 0)); }
         .deck-stat-val { font-family: var(--font-d); font-size: 1.38rem; font-weight: 900; letter-spacing: -0.5px; }
@@ -67,7 +67,7 @@
         .sec-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1.25rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
         .sec-head-txt { max-width: 760px; }
         .sec-kicker { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--font-d); font-size: 0.66rem; font-weight: 700; letter-spacing: 2.4px; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; }
-        .sec-kicker::before { content: ''; width: 22px; height: 1px; background: linear-gradient(90deg, transparent, var(--accent)); }
+        .sec-kicker::before { content: ''; width: 22px; height: 1px; background: transparent; }
         .sec-title { font-family: var(--font-d); font-size: clamp(1.3rem, 2.6vw, 1.95rem); font-weight: 900; line-height: 1.15; background: linear-gradient(135deg, #fff 15%, var(--accent) 60%, var(--accent-2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
         .sec-sub { color: var(--muted); line-height: 1.65; font-size: 0.97rem; margin-top: 0.5rem; }
         .sec-sub a { color: var(--accent); }
@@ -98,7 +98,7 @@
         .note-strip { margin-top: 1.25rem; padding: 1rem 1.25rem; border-radius: var(--r-md); border: 1px dashed rgba(255, 215, 0, 0.4); background: rgba(255, 215, 0, 0.05); color: rgba(255, 255, 255, 0.8); font-size: 0.9rem; line-height: 1.6; }
         .note-strip a { color: var(--accent); }
         /* - The wipe card - */
-        .wipe-card { text-align: center; padding: 2.25rem 1.5rem; border-radius: var(--r-lg); border: 1px solid rgba(255, 68, 68, 0.35); background: linear-gradient(168deg, rgba(255, 68, 68, 0.08), rgba(255, 68, 68, 0.02)); }
+        .wipe-card { text-align: center; padding: 2.25rem 1.5rem; border-radius: var(--r-lg); border: 1px solid rgba(255, 68, 68, 0.35); background: transparent; }
         .wipe-card h3 { font-family: var(--font-d); font-size: 1.1rem; font-weight: 900; letter-spacing: 0.5px; margin-bottom: 0.5rem; }
         .wipe-card p { color: var(--muted); max-width: 560px; margin: 0 auto 1.4rem; line-height: 1.65; font-size: 0.94rem; }
         .wipe-btn { padding: 0.85rem 1.9rem; border: 0; border-radius: var(--r-pill); background: linear-gradient(135deg, var(--danger), #ff8800); color: #fff; font-family: var(--font-d); font-size: 0.72rem; font-weight: 900; letter-spacing: 1.2px; text-transform: uppercase; cursor: pointer; transition: transform 0.25s var(--ease), box-shadow 0.25s ease; }
@@ -119,12 +119,12 @@
 
     <main class="page-offset">
 
-    <!-- 00 · DECK HERO -->
+    <!-- 00 ï¿½ DECK HERO -->
     <section class="deck" aria-labelledby="ckTitle">
         <div class="deck-neb deck-neb-1"></div>
         <div class="deck-neb deck-neb-2"></div>
         <div class="deck-inner">
-            <span class="deck-live"><span class="deck-live-dot"></span>Storage ledger · Complete</span>
+            <span class="deck-live"><span class="deck-live-dot"></span>Storage ledger ï¿½ Complete</span>
             <h1 class="deck-title" id="ckTitle">Every cookie, on the record.</h1>
             <p class="deck-sub">Trendaryo is a static-first store. There is no consent banner to click because there is almost nothing to consent to - no advertising cookies, no cross-site trackers. Everything this site can store on your device is listed below, with its purpose and its expiry. That is the whole list.</p>
             <div class="deck-actions">
@@ -143,7 +143,7 @@
 
     <div class="legal-shell">
 
-    <!-- 00b · THE SHORT VERSION -->
+    <!-- 00b ï¿½ THE SHORT VERSION -->
     <section class="sec" id="quickread">
         <div class="summary-box">
             <h2>The short version</h2>
@@ -155,14 +155,14 @@
                 <li>Questions? <a href="mailto:privacy@trendaryo.com">privacy@trendaryo.com</a> answers within 24 hours.</li>
             </ul>
         </div>
-        <span class="last-updated">Last updated: 1 January 2024 · This page supersedes every earlier version.</span>
+        <span class="last-updated">Last updated: 1 January 2024 ï¿½ This page supersedes every earlier version.</span>
     </section>
 
-    <!-- 01 · MECHANICS -->
+    <!-- 01 ï¿½ MECHANICS -->
     <section class="sec" id="mechanics" aria-labelledby="mecTitle">
         <div class="sec-head">
             <div class="sec-head-txt">
-                <span class="sec-kicker">Section 01 · The two mechanisms</span>
+                <span class="sec-kicker">Section 01 ï¿½ The two mechanisms</span>
                 <h2 class="sec-title" id="mecTitle">Cookies vs localStorage</h2>
                 <p class="sec-sub">Two different storage mechanisms, two very different levels of invasiveness. This site leans almost entirely on the gentle one.</p>
             </div>
@@ -181,11 +181,11 @@
         </div>
     </section>
 
-    <!-- 02 · THE STORAGE LEDGER -->
+    <!-- 02 ï¿½ THE STORAGE LEDGER -->
     <section class="sec" id="ledger" aria-labelledby="ledTitle">
         <div class="sec-head">
             <div class="sec-head-txt">
-                <span class="sec-kicker">Section 02 · What this site writes to your device</span>
+                <span class="sec-kicker">Section 02 ï¿½ What this site writes to your device</span>
                 <h2 class="sec-title" id="ledTitle">The storage ledger</h2>
                 <p class="sec-sub">Eleven entries, as written by this site's code. Keys that belong to one feature family share a row - and no key is omitted. If a future feature adds a key, it appears here first.</p>
             </div>
@@ -212,11 +212,11 @@
         <div class="note-strip">About the demo orders: if you have never placed an order, <code>trendaryo_orders</code> holds two seeded samples so the orders and tracking pages don't look broken to a first-time visitor. They contain no real personal data - the shipping name is literally "Demo Customer".</div>
     </section>
 
-    <!-- 03 · THIRD PARTIES -->
+    <!-- 03 ï¿½ THIRD PARTIES -->
     <section class="sec" id="thirdparties" aria-labelledby="tpTitle">
         <div class="sec-head">
             <div class="sec-head-txt">
-                <span class="sec-kicker">Section 03 · Requests that leave this site</span>
+                <span class="sec-kicker">Section 03 ï¿½ Requests that leave this site</span>
                 <h2 class="sec-title" id="tpTitle">Third-party services</h2>
                 <p class="sec-sub">Four services receive a request from your browser when you use Trendaryo. None of them is an ad network.</p>
             </div>
@@ -229,11 +229,11 @@
         </div>
     </section>
 
-    <!-- 04 · BROWSER CONTROLS -->
+    <!-- 04 ï¿½ BROWSER CONTROLS -->
     <section class="sec" id="browsers" aria-labelledby="brwTitle">
         <div class="sec-head">
             <div class="sec-head-txt">
-                <span class="sec-kicker">Section 04 · The manual route</span>
+                <span class="sec-kicker">Section 04 ï¿½ The manual route</span>
                 <h2 class="sec-title" id="brwTitle">Browser controls</h2>
                 <p class="sec-sub">If you'd rather use your browser's own tools, every mainstream one can clear site data - here's where the switch lives.</p>
             </div>
@@ -246,11 +246,11 @@
         </div>
     </section>
 
-    <!-- 05 · THE WIPE BUTTON -->
+    <!-- 05 ï¿½ THE WIPE BUTTON -->
     <section class="sec" id="wipe" aria-labelledby="wipeTitle">
         <div class="sec-head">
             <div class="sec-head-txt">
-                <span class="sec-kicker">Section 05 · Erase in one click</span>
+                <span class="sec-kicker">Section 05 ï¿½ Erase in one click</span>
                 <h2 class="sec-title" id="wipeTitle">The wipe button</h2>
                 <p class="sec-sub">The honest way to prove Section 02 was complete: press it, refresh, and check DevTools - the keys are gone.</p>
             </div>
@@ -263,22 +263,22 @@
         </div>
     </section>
 
-    <!-- 06 · DO NOT TRACK -->
+    <!-- 06 ï¿½ DO NOT TRACK -->
     <section class="sec" id="dnt" aria-labelledby="dntTitle">
         <div class="sec-head">
             <div class="sec-head-txt">
-                <span class="sec-kicker">Section 06 · A signal with nothing to do</span>
+                <span class="sec-kicker">Section 06 ï¿½ A signal with nothing to do</span>
                 <h2 class="sec-title" id="dntTitle">Do Not Track</h2>
             </div>
         </div>
         <div class="note-strip">Your browser's Do Not Track signal asks every site to stop tracking you. On Trendaryo it changes nothing - there are no trackers to switch off. That's not compliance theatre; it's the design of the store. The same promise the <a href="privacy.html">privacy policy</a> makes in Section 03.</div>
     </section>
 
-    <!-- 07 · FAQ + TRUST + CTA -->
+    <!-- 07 ï¿½ FAQ + TRUST + CTA -->
     <section class="sec" id="faq" aria-labelledby="faqTitle">
         <div class="sec-head">
             <div class="sec-head-txt">
-                <span class="sec-kicker">Section 07 · Asked and answered</span>
+                <span class="sec-kicker">Section 07 ï¿½ Asked and answered</span>
                 <h2 class="sec-title" id="faqTitle">The questions this page gets</h2>
             </div>
         </div>

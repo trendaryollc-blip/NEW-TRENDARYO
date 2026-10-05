@@ -857,7 +857,7 @@
 
     function renderBands() {
         var host = el('bandGrid');
-        if (!host) { return; }
+        if (!host) { renderRange(); return; }
         var maxCount = 0;
         for (var b = 0; b < BANDS.length; b++) { maxCount = Math.max(maxCount, bandCount(BANDS[b])); }
 
@@ -941,46 +941,11 @@
             (n === 1 ? 'product matches' : 'products match') + '</div></div>' +
             '<button type="button" class="f-btn f-btn--ghost" data-reset="all">Reset all</button></div>';
 
-        /* Collection */
-        html += '<div class="f-group"><div class="f-group-title"><span>Collection</span></div>';
-        for (i = 0; i < COLLECTIONS.length; i++) {
-            var col = COLLECTIONS[i];
-            var colN = countIf(function (p) {
-                if (col.id === 'all') { return true; }
-                if (col.id === 'sale') { return discPct(p) > 0; }
-                return p.badge === col.id;
-            });
-            html += choiceRow('col', col.id, esc(col.name), colN, S.col === col.id);
-        }
-        html += '</div>';
-
-        /* Category */
-        html += '<div class="f-group"><div class="f-group-title"><span>Category</span></div>';
-        html += choiceRow('cat', 'all', 'All categories', ALL.length, S.cat === 'all');
-        for (i = 0; i < CATS.length; i++) {
-            html += choiceRow('cat', CATS[i].id, esc(CATS[i].name),
-                countIf(function (p) { return catOf(p) === CATS[i].id; }),
-                S.cat === CATS[i].id);
-        }
-        html += '</div>';
-
-        /* Facet */
-        html += '<div class="f-group"><div class="f-group-title"><span>Facet</span></div>';
-        html += choiceRow('facet', 'all', 'All facets', ALL.length, S.facet === 'all');
-        for (i = 0; i < FACETS.length; i++) {
-            html += choiceRow('facet', FACETS[i].id, esc(FACETS[i].name),
-                countIf(function (p) { return facetOf(p) === FACETS[i].id; }),
-                S.facet === FACETS[i].id);
-        }
-        html += '</div>';
-
-        /* Budget band (mirrors the band cards) */
-        html += '<div class="f-group"><div class="f-group-title"><span>Budget band</span></div>';
-        html += choiceRow('band', 'all', 'Any budget', ALL.length, S.band === 'all');
-        for (i = 0; i < BANDS.length; i++) {
-            html += choiceRow('band', BANDS[i].id, esc(BANDS[i].name), bandCount(BANDS[i]), S.band === BANDS[i].id);
-        }
-        html += '</div>';
+        /* Compact refinement only — categories/collections/facets live in the
+           sticky category pills and quick facet rail, price lives in the panel above,
+           so this box stays small and never repeats the same choices. */
+        html += '<p class="f-note" style="margin-top:0">Use the category pills and quick facets above to shop by type. ' +
+            'Price controls are in the panel above. These filters refine that same list.</p>';
 
         /* Minimum rating */
         html += '<div class="f-group"><div class="f-group-title"><span>Minimum rating</span></div>';
@@ -2408,7 +2373,7 @@
 
         var live = el('deckLiveText');
         if (live) {
-            live.textContent = 'Live catalogue · ' + ALL.length + ' SKUs · ' +
+            live.textContent = 'Research done for you · ' + ALL.length + ' SKUs · ' +
                 SALE_LIST.length + ' on sale · ' + TOTAL_REVIEWS.toLocaleString('en-US') + ' reviews';
         }
     }

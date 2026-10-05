@@ -57,7 +57,7 @@
         
         .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; margin-bottom: 3rem; }
         
-        .blog-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; overflow: hidden; transition: all 0.3s ease; }
+        .blog-card { background: transparent; border: 1px solid var(--glass-border); border-radius: 16px; overflow: hidden; transition: all 0.3s ease; }
         .blog-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,240,255,0.2); border-color: var(--accent); }
         
         .blog-image { position: relative; height: 200px; overflow: hidden; }
@@ -82,8 +82,8 @@
         .blog-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
         .blog-tag { background: rgba(0,240,255,0.1); border: 1px solid var(--accent); color: var(--accent); padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.8rem; font-weight: 500; }
         
-        .newsletter-section { background: var(--glass); border: 1px solid var(--glass-border); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 20px; padding: 3rem; text-align: center; margin-bottom: 3rem; }
-        .newsletter-section h2 { font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent-2)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; }
+        .newsletter-section { background: transparent; border: 1px solid var(--glass-border); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 20px; padding: 3rem; text-align: center; margin-bottom: 3rem; }
+        .newsletter-section h2 { font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 900; background: transparent; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; }
         .newsletter-section p { color: rgba(255,255,255,0.9); font-size: 1.1rem; margin-bottom: 2rem; }
         .newsletter-form { display: flex; gap: 1rem; max-width: 500px; margin: 0 auto; }
         .newsletter-input { flex: 1; padding: 1rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 12px; color: #fff; font-size: 1rem; transition: all 0.3s ease; }
@@ -142,7 +142,7 @@
                             <span class="blog-date">8 min read</span>
                         </div>
                         <h2 class="blog-title">How to Choose Wireless Headphones in 2026</h2>
-                        <p class="blog-excerpt">ANC or open-back? 30-hour battery or lightweight? We break down the five specs that actually change how headphones sound day to day — and the three marketing terms you can safely ignore.</p>
+                        <p class="blog-excerpt">ANC or open-back? 30-hour battery or lightweight? We break down the five specs that actually change how headphones sound day to day ï¿½ and the three marketing terms you can safely ignore.</p>
                         <a href="blog-post.html?id=1" class="read-more">Read article</a>
                     </div>
                 </article>
@@ -174,7 +174,7 @@
                             <span class="blog-date">5 min read</span>
                         </div>
                         <h2 class="blog-title">5 Everyday Carry Upgrades Under $100</h2>
-                        <p class="blog-excerpt">Small, cheap changes that make your daily routine noticeably better — a better wallet, a real power bank, and the one bag upgrade worth every dollar.</p>
+                        <p class="blog-excerpt">Small, cheap changes that make your daily routine noticeably better ï¿½ a better wallet, a real power bank, and the one bag upgrade worth every dollar.</p>
                         <a href="blog-post.html?id=3" class="read-more">Read article</a>
                     </div>
                 </article>
@@ -189,7 +189,7 @@
                             <span class="blog-date">7 min read</span>
                         </div>
                         <h2 class="blog-title">The Real Difference Between Cheap and Premium Sneakers</h2>
-                        <p class="blog-excerpt">It isn't the logo. It's the midsole foam, the knit density and the glue. We explain what you're actually paying for — and when it's worth it.</p>
+                        <p class="blog-excerpt">It isn't the logo. It's the midsole foam, the knit density and the glue. We explain what you're actually paying for ï¿½ and when it's worth it.</p>
                         <a href="blog-post.html?id=4" class="read-more">Read article</a>
                     </div>
                 </article>
@@ -205,7 +205,7 @@
                             <span class="blog-date">9 min read</span>
                         </div>
                         <h2 class="blog-title">Working From Home: The Desk Setup That Actually Helps</h2>
-                        <p class="blog-excerpt">A monitor, a keyboard and lighting — in that order. How to build a desk setup that reduces fatigue instead of just looking good in photos.</p>
+                        <p class="blog-excerpt">A monitor, a keyboard and lighting ï¿½ in that order. How to build a desk setup that reduces fatigue instead of just looking good in photos.</p>
                         <a href="blog-post.html?id=5" class="read-more">Read article</a>
                     </div>
                 </article>
@@ -221,7 +221,7 @@
                             <span class="blog-date">6 min read</span>
                         </div>
                         <h2 class="blog-title">Gift Guide: Tech Gifts They'll Actually Use</h2>
-                        <p class="blog-excerpt">Skip the novelty gadgets. Six tech gifts under $150 that people keep using long after the wrapping paper is gone — plus what to avoid.</p>
+                        <p class="blog-excerpt">Skip the novelty gadgets. Six tech gifts under $150 that people keep using long after the wrapping paper is gone ï¿½ plus what to avoid.</p>
                         <a href="blog-post.html?id=6" class="read-more">Read article</a>
                     </div>
                 </article>
@@ -245,7 +245,7 @@
     <div id="footer-container"></div>
     <script src="components.js"></script>
     <script>
-      /* Category filter — works for click events AND programmatic calls */
+      /* Category filter ï¿½ works for click events AND programmatic calls */
       function filterCategory(category, btn) {
         var buttons = document.querySelectorAll('.category-btn');
         for (var i = 0; i < buttons.length; i++) buttons[i].classList.remove('active');

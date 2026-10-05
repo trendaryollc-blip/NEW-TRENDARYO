@@ -1,14 +1,14 @@
 /**
- * TRENDARYO — HOME RESEARCH ENGINE
+ * TRENDARYO — HOME CONTENT ENGINE
  * ---------------------------------------------------------------------------
  * Every number on the home page is COMPUTED from the live catalogue
  * (products-data.js). Nothing is hard-coded: swap the catalogue for real
  * products and every stat, verdict, rank and bar updates itself.
  *
  * Sections fed by this engine:
- *   · #marketWidget   — "This vs. the market" hero widget (top product)
- *   · [data-pipe]     — research pipeline stat chips
- *   · #vortex grid    — verdict cards, ranked by reviews × rating
+ *   · #marketWidget   — hero bestseller widget (top product)
+ *   · [data-pipe]     — store stat chips
+ *   · #vortex grid    — bestseller cards, ranked by reviews × rating
  *   · .cs-count       — category tiles (count · best rating · entry price)
  *   · [data-stat]     — proof strip stats (count-up reads data-count)
  * ---------------------------------------------------------------------------
@@ -46,12 +46,12 @@
 
     /* ── 2 · Home category model (order matches the six tiles in the DOM) ─ */
     var CATS = [
-        { id: 'audio',     label: 'Audio & Sound',      re: /headphone|earbud|earphone|speaker/ },
-        { id: 'wearables', label: 'Wearables',          re: /watch|fitness band|tracker/ },
-        { id: 'computing', label: 'Computing & Gaming', re: /laptop|tablet|monitor|keyboard|mouse|hub|charger|led strip/ },
-        { id: 'fashion',   label: 'Fashion & Carry',    re: /backpack|wallet|sunglasses|sneakers|shoes/ },
-        { id: 'living',    label: 'Home & Living',      re: /coffee|bottle|yoga/ },
-        { id: 'imaging',   label: 'Cameras & Drones',   re: /camera|drone/ }
+        { id: 'audio',     label: 'Headphones & Audio',   re: /headphone|earbud|earphone|speaker/ },
+        { id: 'wearables', label: 'Watches & Wearables',  re: /watch|fitness band|tracker/ },
+        { id: 'computing', label: 'Laptops & Gaming',     re: /laptop|tablet|monitor|keyboard|mouse|hub|charger|led strip/ },
+        { id: 'fashion',   label: 'Fashion & Shoes',      re: /backpack|wallet|sunglasses|sneakers|shoes/ },
+        { id: 'living',    label: 'Home & Living',        re: /coffee|bottle|yoga/ },
+        { id: 'imaging',   label: 'Cameras & Drones',     re: /camera|drone/ }
     ];
     function catOf(p) {
         var hay = (p.name + ' ' + p.description).toLowerCase();
@@ -66,8 +66,8 @@
 
     /* A tag that is always a true, computed statement about the product */
     function verdictTag(p, rank) {
-        if (rank === 1) { return 'Most wanted this week'; }
-        if (VALUE_KING && p.id === VALUE_KING.id) { return 'Best value on the shelf'; }
+        if (rank === 1) { return 'Bestseller'; }
+        if (VALUE_KING && p.id === VALUE_KING.id) { return 'Great value'; }
         var c = catOf(p);
         if (c && BYCAT[c.id]) {
             var best = BYCAT[c.id].slice().sort(function (a, b) {
@@ -75,7 +75,7 @@
             })[0];
             if (best && best.id === p.id) { return 'Top rated · ' + c.label; }
         }
-        return 'Ranked #' + rank + ' on the shelf';
+        return 'Bestseller #' + rank;
     }
 
     var CART_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/><path d="M12 5v6m-3-3h6"/></svg>';
@@ -84,7 +84,7 @@
         try { fn(); } catch (err) { /* one renderer failing must not kill the rest */ }
     }
 
-    /* ── 3 · Hero: "This vs. the market" widget ─────────────────────────── */
+    /* ── 3 · Hero bestseller widget ───────────────────────────────────── */
     function barRow(label, pct, avgPct, big, small) {
         return '<div class="mw-bar-row">' +
             '<span class="mw-lab">' + label + '</span>' +
@@ -100,16 +100,16 @@
         if (!host) { return; }
         var top = RANKED[0];
         host.innerHTML =
-            '<span class="mw-kicker">Live from the research engine</span>' +
+            '<span class="mw-kicker">Bestseller right now</span>' +
             '<div class="mw-row">' +
                 '<div class="mw-thumb">' + P.media(top) + '</div>' +
                 '<div class="mw-main">' +
                     '<b class="mw-name">' + esc(top.name) + '</b>' +
-                    '<span class="mw-sub">Ranked #1 of ' + ALL.length + ' by reviews × rating — re-checked on every visit</span>' +
+                    '<span class="mw-sub">#1 most loved of ' + ALL.length + ' products — updated every visit</span>' +
                     barRow('Rating', num(top.rating) / 5 * 100, AVG_RATING / 5 * 100, num(top.rating).toFixed(1) + '★', 'avg ' + AVG_RATING.toFixed(1)) +
                     barRow('Demand', 100, null, '#1', 'of ' + ALL.length) +
                 '</div>' +
-                '<a class="mw-go" href="product.html?id=' + encodeURIComponent(P.idOf(top)) + '">See the verdict</a>' +
+                '<a class="mw-go" href="product.html?id=' + encodeURIComponent(P.idOf(top)) + '">View product</a>' +
             '</div>';
     }
 
@@ -125,7 +125,7 @@
         set('drops', String(DROPS.length));
     }
 
-    /* ── 5 · Verdict cards (top 6 by demand, replacing the static grid) ── */
+    /* ── 5 · Bestseller cards (top 6 by demand, replacing the static grid) ── */
     function cardHTML(p, rank) {
         var save = num(p.oldPrice) > num(p.price) ? Math.round(num(p.oldPrice) - num(p.price)) : 0;
         var img = P.media(p).replace('<img ', '<img onload="this.previousElementSibling.classList.add(\'is-done\')" ');
@@ -135,7 +135,7 @@
             '<div class="vx-media">' +
                 '<div class="media-skeleton" aria-hidden="true"></div>' +
                 img +
-                '<span class="vx-badge">Verdict #' + rank + '</span>' +
+                '<span class="vx-badge">Bestseller #' + rank + '</span>' +
             '</div>' +
             '</a>' +
             '<div class="vx-body">' +

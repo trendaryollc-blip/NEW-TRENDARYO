@@ -7,7 +7,7 @@
 (function () {
     'use strict';
 
-    var THREE_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+    var THREE_CDN = 'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js';
     var CANVAS_ID = 'three-canvas';
     var scene, camera, renderer, particles, mx = 0, my = 0, running = false;
     var started = false; // three scene OR 2D fallback — never both, never twice

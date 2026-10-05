@@ -56,7 +56,7 @@
         .deck-btn--solid { background: linear-gradient(135deg, var(--accent), var(--accent-3)); border-color: transparent; color: #00202a; }
         .deck-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(152px, 1fr)); gap: 0.85rem; margin-top: 1.5rem; }
         .deck-stat { position: relative; padding: 0.95rem 1.05rem; border-radius: var(--r-md); background: var(--card-grad); border: 1px solid var(--glass-border); overflow: hidden; }
-        .deck-stat::after { content: ''; position: absolute; inset: 0 0 auto 0; height: 2px; background: linear-gradient(90deg, var(--accent), rgba(0, 240, 255, 0)); }
+        .deck-stat::after { content: ''; position: absolute; inset: 0 0 auto 0; height: 2px; background: transparent; }
         .deck-stat:nth-child(2n)::after { background: linear-gradient(90deg, var(--accent-2), rgba(255, 0, 170, 0)); }
         .deck-stat:nth-child(3n)::after { background: linear-gradient(90deg, var(--accent-3), rgba(0, 255, 136, 0)); }
         .deck-stat-val { font-family: var(--font-d); font-size: 1.38rem; font-weight: 900; letter-spacing: -0.5px; }
@@ -68,7 +68,7 @@
         .sec-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1.25rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
         .sec-head-txt { max-width: 760px; }
         .sec-kicker { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--font-d); font-size: 0.66rem; font-weight: 700; letter-spacing: 2.4px; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; }
-        .sec-kicker::before { content: ''; width: 22px; height: 1px; background: linear-gradient(90deg, transparent, var(--accent)); }
+        .sec-kicker::before { content: ''; width: 22px; height: 1px; background: transparent; }
         .sec-title { font-family: var(--font-d); font-size: clamp(1.3rem, 2.6vw, 1.95rem); font-weight: 900; line-height: 1.15; background: linear-gradient(135deg, #fff 15%, var(--accent) 60%, var(--accent-2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
         .sec-sub { color: var(--muted); line-height: 1.65; font-size: 0.97rem; margin-top: 0.5rem; }
         .sec-sub a { color: var(--accent); }
@@ -130,12 +130,12 @@
 
     <main class="page-offset">
 
-    <!-- 00 · DECK HERO -->
+    <!-- 00 ï¿½ DECK HERO -->
     <section class="deck" aria-labelledby="pvTitle">
         <div class="deck-neb deck-neb-1"></div>
         <div class="deck-neb deck-neb-2"></div>
         <div class="deck-inner">
-            <span class="deck-live"><span class="deck-live-dot"></span>Policy v2 · In force now</span>
+            <span class="deck-live"><span class="deck-live-dot"></span>Policy v2 ï¿½ In force now</span>
             <h1 class="deck-title" id="pvTitle">Your data, on the record.</h1>
             <p class="deck-sub">Trendaryo exists to shrink choice, not to widen surveillance. The same rule that keeps the shelf small keeps this policy honest: if a data point doesn't buy you anything, we don't collect it. What follows is the complete ledger - every category we hold, why it exists and when it leaves.</p>
             <div class="deck-actions">
@@ -154,7 +154,7 @@
 
     <div class="legal-shell">
 
-    <!-- 00b · THE SHORT VERSION -->
+    <!-- 00b ï¿½ THE SHORT VERSION -->
     <section class="sec" id="quickread">
         <div class="summary-box">
             <h2>The short version</h2>
@@ -166,14 +166,14 @@
                 <li>Marketing email is opt-in and switches off in one click - order confirmations always come through.</li>
             </ul>
         </div>
-        <span class="last-updated">Last updated: 1 January 2024 · This page supersedes every earlier version.</span>
+        <span class="last-updated">Last updated: 1 January 2024 ï¿½ This page supersedes every earlier version.</span>
     </section>
 
-    <!-- 01 · THE DATA LEDGER -->
+    <!-- 01 ï¿½ THE DATA LEDGER -->
     <section class="sec" id="ledger" aria-labelledby="ledTitle">
         <div class="sec-head">
             <div class="sec-head-txt">
-                <span class="sec-kicker">Section 01 · What we hold and why</span>
+                <span class="sec-kicker">Section 01 ï¿½ What we hold and why</span>
                 <h2 class="sec-title" id="ledTitle">The data ledger</h2>
                 <p class="sec-sub">Six categories, one table. If a field isn't on this list, we don't collect it - and if one of these stops earning its place, it leaves the list, exactly like a product that loses its standing leaves the shelf.</p>
             </div>
@@ -194,15 +194,15 @@
         </div>
     </section>
 
-    <!-- 02 · LOCAL-FIRST -->
+    <!-- 02 ï¿½ LOCAL-FIRST -->
     <section class="sec" id="local" aria-labelledby="locTitle">
         <div class="sec-head">
             <div class="sec-head-txt">
-                <span class="sec-kicker">Section 02 · What stays on your device</span>
+                <span class="sec-kicker">Section 02 ï¿½ What stays on your device</span>
                 <h2 class="sec-title" id="locTitle">Local-first, by design</h2>
                 <p class="sec-sub">Most of what this site "remembers" about you never leaves your browser. The shop page calls these rails your own history - here is exactly where that history lives and which feature reads it.</p>
             </div>
-            <span class="sec-note">Stored locally · never sent anywhere</span>
+            <span class="sec-note">Stored locally ï¿½ never sent anywhere</span>
         </div>
         <div class="pgrid">
             <div class="pcard">
@@ -232,28 +232,28 @@
         </div>
     </section>
 
-    <!-- 03 · RED LINES -->
+    <!-- 03 ï¿½ RED LINES -->
     <section class="sec" id="never" aria-labelledby="nevTitle">
         <div class="sec-head">
             <div class="sec-head-txt">
-                <span class="sec-kicker">Section 03 · The red lines</span>
+                <span class="sec-kicker">Section 03 ï¿½ The red lines</span>
                 <h2 class="sec-title" id="nevTitle">Four things we will never do</h2>
                 <p class="sec-sub">These aren't aspirations - they're constraints the business model is built around. If a future feature required breaking one of them, the feature would be dropped, not the promise.</p>
             </div>
         </div>
         <div class="pgrid">
             <div class="pcard"><div class="pc-ico">??</div><h3>Sell or rent your data</h3><p>No data brokerage, no "trusted partners", no exceptions. Products are the business; data is not.</p></div>
-            <div class="pcard pcard--pink"><div class="pc-ico">??</div><h3>Take money for placement</h3><p>The shelf has zero paid placements, so there is nothing your data could be sold to influence - the ranking is rating × review volume, and that's all it can ever be.</p></div>
+            <div class="pcard pcard--pink"><div class="pc-ico">??</div><h3>Take money for placement</h3><p>The shelf has zero paid placements, so there is nothing your data could be sold to influence - the ranking is rating ï¿½ review volume, and that's all it can ever be.</p></div>
             <div class="pcard pcard--green"><div class="pc-ico">???</div><h3>Follow you across the web</h3><p>No advertising cookies, no social pixels, no cross-site identifiers. What you browse on other sites is your business.</p></div>
             <div class="pcard pcard--gold"><div class="pc-ico">??</div><h3>Keep secrets from you</h3><p>Every storage key is named and explained on the <a href="cookie-policy.html">Cookie Policy</a> page - including the ones that only hold demo data.</p></div>
         </div>
     </section>
 
-    <!-- 04 · SECURITY ARCHITECTURE -->
+    <!-- 04 ï¿½ SECURITY ARCHITECTURE -->
     <section class="sec" id="security" aria-labelledby="secTitle">
         <div class="sec-head">
             <div class="sec-head-txt">
-                <span class="sec-kicker">Section 04 · Defence in depth</span>
+                <span class="sec-kicker">Section 04 ï¿½ Defence in depth</span>
                 <h2 class="sec-title" id="secTitle">How the ledger is protected</h2>
                 <p class="sec-sub">Four layers, each doing a job the layer above can't. The same "numbers or it didn't happen" energy the shelf applies to products, applied to your data.</p>
             </div>
@@ -261,11 +261,11 @@
         <div id="secSteps" class="mount-pad"></div>
     </section>
 
-    <!-- 05 · RETENTION SCHEDULE -->
+    <!-- 05 ï¿½ RETENTION SCHEDULE -->
     <section class="sec" id="retention" aria-labelledby="retTitle">
         <div class="sec-head">
             <div class="sec-head-txt">
-                <span class="sec-kicker">Section 05 · Nothing lives forever</span>
+                <span class="sec-kicker">Section 05 ï¿½ Nothing lives forever</span>
                 <h2 class="sec-title" id="retTitle">The retention schedule</h2>
                 <p class="sec-sub">Every category from the ledger has an expiry date. The clock starts when the data is created - not when you last logged in.</p>
             </div>
@@ -280,11 +280,11 @@
         </div>
     </section>
 
-    <!-- 06 · YOUR RIGHTS -->
+    <!-- 06 ï¿½ YOUR RIGHTS -->
     <section class="sec" id="rights" aria-labelledby="rigTitle">
         <div class="sec-head">
             <div class="sec-head-txt">
-                <span class="sec-kicker">Section 06 · You hold the pen</span>
+                <span class="sec-kicker">Section 06 ï¿½ You hold the pen</span>
                 <h2 class="sec-title" id="rigTitle">Your rights, and how to use them</h2>
                 <p class="sec-sub">Every right below is exercised the same way: one email to <a href="mailto:privacy@trendaryo.com">privacy@trendaryo.com</a> from your registered address. No forms, no fees, no dark patterns - a human answers within 30 days, usually far sooner.</p>
             </div>
@@ -299,11 +299,11 @@
         </div>
     </section>
 
-    <!-- 07 · THIRD-PARTY PROCESSORS -->
+    <!-- 07 ï¿½ THIRD-PARTY PROCESSORS -->
     <section class="sec" id="processors" aria-labelledby="proTitle">
         <div class="sec-head">
             <div class="sec-head-txt">
-                <span class="sec-kicker">Section 07 · Who else touches your order</span>
+                <span class="sec-kicker">Section 07 ï¿½ Who else touches your order</span>
                 <h2 class="sec-title" id="proTitle">Third-party processors</h2>
                 <p class="sec-sub">Five services help this store run. Each sees only the fields its job requires - and none of them may reuse your data for their own purposes under our agreements.</p>
             </div>
@@ -323,11 +323,11 @@
         <div class="note-strip">No advertising networks. No data brokers. No "strategic partners". If that ever changes, this page changes first - and the previous version stays available on request.</div>
     </section>
 
-    <!-- 08 · FAQ + TRUST + CTA -->
+    <!-- 08 ï¿½ FAQ + TRUST + CTA -->
     <section class="sec" id="faq" aria-labelledby="faqTitle">
         <div class="sec-head">
             <div class="sec-head-txt">
-                <span class="sec-kicker">Section 08 · Asked and answered</span>
+                <span class="sec-kicker">Section 08 ï¿½ Asked and answered</span>
                 <h2 class="sec-title" id="faqTitle">The questions this policy gets</h2>
             </div>
         </div>

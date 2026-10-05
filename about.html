@@ -67,9 +67,9 @@
 
         .page-offset { padding-top: 150px; }
         
-        .welcome-banner { position: fixed; top: 140px; left: 0; right: 0; z-index: 9999; background: linear-gradient(135deg, rgba(0,240,255,0.15), rgba(255,0,170,0.15)); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border); padding: 1rem 1.25rem; text-align: center; animation: slideDown 0.6s ease, bannerPulse 3s ease-in-out infinite; box-shadow: 0 0 30px rgba(0,240,255,0.3); }
+        .welcome-banner { position: fixed; top: 140px; left: 0; right: 0; z-index: 9999; background: transparent; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border); padding: 1rem 1.25rem; text-align: center; animation: slideDown 0.6s ease, bannerPulse 3s ease-in-out infinite; box-shadow: 0 0 30px rgba(0,240,255,0.3); }
         .welcome-banner-content { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
-        .welcome-text { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 700; background: linear-gradient(135deg, var(--accent), var(--accent-2), var(--accent-3)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px; animation: textPulse 2s ease-in-out infinite, textGlow 2s ease-in-out infinite alternate; flex: 1; text-align: center; }
+        .welcome-text { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 700; background: transparent; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px; animation: textPulse 2s ease-in-out infinite, textGlow 2s ease-in-out infinite alternate; flex: 1; text-align: center; }
         .welcome-icon { font-size: 1.5rem; animation: wave 1.5s ease-in-out infinite, iconPulse 2s ease-in-out infinite; }
         .welcome-close { background: none; border: none; color: rgba(255,255,255,0.7); font-size: 1.2rem; cursor: pointer; padding: 0.25rem 0.5rem; transition: color 0.3s; }
         .welcome-close:hover { color: var(--accent-2); }
@@ -94,33 +94,33 @@
         .about-image-3d::before { content: ''; position: absolute; left: -20px; top: -20px; right: 20px; width: 100%; height: 100%; border: 2px solid var(--accent); border-radius: 20px; z-index: -1; }
         
         .stats-row-3d { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-bottom: 6rem; }
-        .stat-card-3d { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; text-align: center; transition: all 0.3s; }
+        .stat-card-3d { background: transparent; border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; text-align: center; transition: all 0.3s; }
         .stat-card-3d:hover { transform: translateY(-5px); border-color: var(--accent); }
-        .stat-value-3d { font-family: 'Orbitron', sans-serif; font-size: 3rem; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent-3)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .stat-value-3d { font-family: 'Orbitron', sans-serif; font-size: 3rem; font-weight: 900; background: transparent; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .stat-label-3d { color: #888; font-size: 1rem; margin-top: 0.5rem; }
         
         .team-section-3d { margin-bottom: 6rem; }
         .section-title-3d { font-family: 'Orbitron', sans-serif; font-size: 2rem; text-align: center; margin-bottom: 3rem; }
         
         .team-grid-3d { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
-        .team-card-3d { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; text-align: center; transition: all 0.3s; }
+        .team-card-3d { background: transparent; border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; text-align: center; transition: all 0.3s; }
         .team-card-3d:hover { transform: translateY(-10px); border-color: var(--accent); }
-        .team-avatar-3d { width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 1.5rem; background: linear-gradient(135deg, var(--accent), var(--accent-2)); display: flex; align-items: center; justify-content: center; font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 900; }
+        .team-avatar-3d { width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 1.5rem; background: transparent; display: flex; align-items: center; justify-content: center; font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 900; }
         .team-name-3d { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; margin-bottom: 0.25rem; }
         .team-role-3d { color: var(--accent); font-size: 0.9rem; }
         
         .values-section-3d { margin-bottom: 4rem; }
         .values-grid-3d { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
-        .value-card-3d { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; text-align: center; transition: all 0.3s; }
+        .value-card-3d { background: transparent; border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; text-align: center; transition: all 0.3s; }
         .value-card-3d:hover { border-color: var(--accent); }
-        .value-icon-3d { width: 70px; height: 70px; margin: 0 auto 1.5rem; background: linear-gradient(135deg, rgba(0,240,255,0.2), rgba(255,0,170,0.2)); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid var(--accent); }
+        .value-icon-3d { width: 70px; height: 70px; margin: 0 auto 1.5rem; background: transparent; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid var(--accent); }
         .value-icon-3d svg { width: 32px; height: 32px; color: var(--accent); }
         .value-title-3d { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; margin-bottom: 1rem; }
         .value-text-3d { color: #aaa; line-height: 1.7; }
         
         .preloader-3d { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 2rem; }
         .preloader-3d.hidden { opacity: 0; pointer-events: none; transition: opacity 0.5s; }
-        .preloader-logo-3d { font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent-2)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .preloader-logo-3d { font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 900; background: transparent; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .preloader-spinner-3d { width: 50px; height: 50px; border: 3px solid var(--glass-border); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
         
         @media(max-width:900px){
@@ -168,11 +168,11 @@
     
     <section class="about-section-3d">
         <!-- Company Information Section -->
-        <div style="background: linear-gradient(135deg, rgba(0,240,255,0.08), rgba(255,0,170,0.08)); border: 2px solid var(--glass-border); border-radius: 24px; padding: 3rem 2.5rem; margin-bottom: 4rem;">
+        <div style="background: transparent; border: 2px solid var(--glass-border); border-radius: 24px; padding: 3rem 2.5rem; margin-bottom: 4rem;">
             <h2 style="font-family: 'Orbitron', sans-serif; font-size: 2rem; margin-bottom: 2rem; color: var(--accent); text-align: center;">Company Information</h2>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;">
                 <div>
-                    <div style="background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem;">
+                    <div style="background: transparent; border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem;">
                         <h3 style="font-family: 'Orbitron', sans-serif; font-size: 1.2rem; color: var(--accent-2); margin-bottom: 1rem;">Legal Entity</h3>
                         <p style="color: rgba(255,255,255,0.9); font-size: 1.1rem; line-height: 1.8; margin: 0;"><strong style="color: #fff;">Company Name:</strong> TRENDARYO LLC</p>
                         <p style="color: rgba(255,255,255,0.9); font-size: 1.1rem; line-height: 1.8; margin: 0.5rem 0 0 0;"><strong style="color: #fff;">Registered:</strong> Sultanate of Oman</p>

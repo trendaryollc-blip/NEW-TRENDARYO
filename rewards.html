@@ -23,7 +23,7 @@
         .grid { display:grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem; }
         @media(max-width: 900px){ .grid { grid-template-columns: 1fr; } }
 
-        .card { background: var(--glass); border: 1px solid var(--glassBorder); border-radius: 16px; padding: 1.5rem; }
+        .card { background: transparent; border: 1px solid var(--glassBorder); border-radius: 16px; padding: 1.5rem; }
         .card h2 { font-family: Orbitron, sans-serif; font-size: 1.1rem; margin:0 0 1rem; }
 
         .statRow { display:grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
@@ -37,7 +37,7 @@
 
         .row { display:flex; gap: 0.75rem; flex-wrap: wrap; }
         .btn { padding: 0.85rem 1.2rem; border-radius: 12px; border: 1px solid transparent; cursor:pointer; font-family: Orbitron, sans-serif; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
-        .btnPrimary { background: linear-gradient(135deg,var(--accent),var(--accent3)); color:#000; }
+        .btnPrimary { background: transparent; color:#000; }
         .btnGhost { background: #0a0a2a; border-color: rgba(255,255,255,0.18); color: rgba(255,255,255,0.9); }
 
         .notice { margin-top: 0.75rem; padding: 0.85rem 1rem; border-radius: 12px; display:none; }
@@ -125,7 +125,7 @@
         <div class="card" style="margin-top: 1.5rem;">
             <h2>Membership Tiers</h2>
             <div id="rw-tiers"></div>
-            <div class="muted" style="margin-top: 0.9rem;">Your tier is calculated from lifetime points and upgrades automatically — higher tiers earn faster and unlock exclusive perks.</div>
+            <div class="muted" style="margin-top: 0.9rem;">Your tier is calculated from lifetime points and upgrades automatically ï¿½ higher tiers earn faster and unlock exclusive perks.</div>
         </div>
 
         <div class="card" style="margin-top: 1.5rem;">
@@ -285,27 +285,27 @@
         var faq = document.getElementById('rw-faq');
         var cta = document.getElementById('rw-cta');
         if (steps && UI.steps) steps.innerHTML = UI.steps([
-            { title: 'Shop', text: 'Every order automatically earns 1 point per $1 spent — no opt-in needed.' },
+            { title: 'Shop', text: 'Every order automatically earns 1 point per $1 spent ï¿½ no opt-in needed.' },
             { title: 'Review & refer', text: 'Write a product review for +50 points, or refer a friend for +100 when they register.' },
-            { title: 'Redeem', text: 'Swap points for store credit — 100 points = $1 off any order, stackable with sales.' }
+            { title: 'Redeem', text: 'Swap points for store credit ï¿½ 100 points = $1 off any order, stackable with sales.' }
         ]);
         if (tiers && UI.tiers) tiers.innerHTML = UI.tiers([
-            { name: 'Bronze', mult: '1× points · from 0 lifetime', perks: ['Earn on every order', 'Birthday bonus +100 pts', 'Member-only deals'] },
-            { name: 'Silver', mult: '1.25× points · 2,000 lifetime', perks: ['Everything in Bronze', 'Early access to drops', 'Express shipping over $75'] },
-            { name: 'Gold', mult: '1.5× points · 5,000 lifetime', perks: ['Everything in Silver', 'Priority support queue', 'Gold-exclusive products'], featured: true },
-            { name: 'Nebula', mult: '2× points · 12,000 lifetime', perks: ['Everything in Gold', 'Free returns shipping', 'Annual gift + secret drops'] }
+            { name: 'Bronze', mult: '1ï¿½ points ï¿½ from 0 lifetime', perks: ['Earn on every order', 'Birthday bonus +100 pts', 'Member-only deals'] },
+            { name: 'Silver', mult: '1.25ï¿½ points ï¿½ 2,000 lifetime', perks: ['Everything in Bronze', 'Early access to drops', 'Express shipping over $75'] },
+            { name: 'Gold', mult: '1.5ï¿½ points ï¿½ 5,000 lifetime', perks: ['Everything in Silver', 'Priority support queue', 'Gold-exclusive products'], featured: true },
+            { name: 'Nebula', mult: '2ï¿½ points ï¿½ 12,000 lifetime', perks: ['Everything in Gold', 'Free returns shipping', 'Annual gift + secret drops'] }
         ]);
         if (earn) earn.innerHTML = '<ul class="rw-earn-list">'
-            + '<li><strong>1 point</strong> per $1 spent — applied automatically</li>'
+            + '<li><strong>1 point</strong> per $1 spent ï¿½ applied automatically</li>'
             + '<li><strong>+50 points</strong> for every product review with a photo</li>'
             + '<li><strong>+100 points</strong> for each friend who registers with your link</li>'
             + '<li><strong>+200 points</strong> on your birthday (once a year)</li>'
             + '<li><strong>+250 points</strong> for your first order over $150</li>'
             + '</ul>';
         if (faq && UI.faq) faq.innerHTML = UI.faq([
-            { q: 'Do my points expire?', a: 'No — points stay in your account as long as it remains active. If no order is made for 24 months, we email you before anything resets.' },
+            { q: 'Do my points expire?', a: 'No ï¿½ points stay in your account as long as it remains active. If no order is made for 24 months, we email you before anything resets.' },
             { q: 'Can I use points with a promo code?', a: 'Yes. Points credit is applied after discount codes, so you can stack WELCOME10 with your redeemed credit.' },
-            { q: 'How do referrals work?', a: 'Share the link in the Referrals card above. When your friend creates an account, you both get +100 points — with no limit.' },
+            { q: 'How do referrals work?', a: 'Share the link in the Referrals card above. When your friend creates an account, you both get +100 points ï¿½ with no limit.' },
             { q: 'When do points appear?', a: 'Order points credit as soon as your order ships. Review and referral points appear instantly.' }
         ], false);
         if (cta && UI.ctaBand) cta.innerHTML = UI.ctaBand({

@@ -57,21 +57,21 @@
         .store-dropdown a:hover { background: rgba(0,240,255,0.12); color: #fff; }
         .store-dropdown small { color: rgba(255,255,255,0.55); font-size: 0.85rem; }
         .store-nav-item:hover .store-dropdown, .store-nav-item.is-open .store-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
-        .store-mobile-toggle { display: none; width: 42px; height: 42px; border-radius: 999px; background: var(--glass); border: 1px solid var(--glass-border); color: rgba(255,255,255,0.9); cursor: pointer; }
+        .store-mobile-toggle { display: none; width: 42px; height: 42px; border-radius: 999px; background: transparent; border: 1px solid var(--glass-border); color: rgba(255,255,255,0.9); cursor: pointer; }
         @media(max-width: 900px) { .store-nav { display: none; } .store-mobile-toggle { display: flex; align-items: center; justify-content: center; } }
         
         #three-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
         .page-header-3d { padding: 2rem 2rem 3rem; text-align: center; }
-        .page-title-3d { font-family: 'Orbitron', sans-serif; font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 900; background: linear-gradient(135deg, #fff, var(--accent)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .page-title-3d { font-family: 'Orbitron', sans-serif; font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 900; background: transparent; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .content-section-3d { padding: 2rem; max-width: 1000px; margin: 0 auto; }
-        .content-card-3d { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px; padding: 2.5rem; margin-bottom: 2rem; backdrop-filter: blur(10px); }
+        .content-card-3d { background: transparent; border: 1px solid var(--glass-border); border-radius: 20px; padding: 2.5rem; margin-bottom: 2rem; backdrop-filter: blur(10px); }
         .content-card-3d h2 { font-family: 'Orbitron', sans-serif; font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--accent); }
         .content-card-3d p, .content-card-3d li { color: rgba(255,255,255,0.95); line-height: 1.9; font-size: 1.1rem; }
         .content-card-3d ul { padding-left: 1.5rem; }
         .content-card-3d li { margin-bottom: 0.75rem; }
         .process-steps-3d { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 2rem; }
         .step-3d { text-align: center; }
-        .step-number-3d { width: 50px; height: 50px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-family: 'Orbitron', sans-serif; font-weight: 700; color: #000; }
+        .step-number-3d { width: 50px; height: 50px; background: transparent; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-family: 'Orbitron', sans-serif; font-weight: 700; color: #000; }
         .step-3d h4 { margin-bottom: 0.5rem; color: rgba(255,255,255,0.95); font-size: 1rem; }
         .step-3d p { font-size: 0.95rem; color: rgba(255,255,255,0.85); }
         .preloader-3d { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 2rem; }
@@ -124,7 +124,7 @@
 
     <!-- Instant Return Portal -->
     <section style="padding:4rem 2rem;max-width:1200px;margin:0 auto;position:relative;z-index:2;">
-        <div style="background:linear-gradient(135deg,rgba(0,240,255,0.15),rgba(255,0,170,0.15));border:2px solid var(--glass-border);border-radius:30px;padding:4rem 3rem;text-align:center;position:relative;overflow:hidden;">
+        <div style="background:transparent;border:2px solid var(--glass-border);border-radius:30px;padding:4rem 3rem;text-align:center;position:relative;overflow:hidden;">
             <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;height:300px;background:radial-gradient(circle,rgba(0,240,255,0.3),transparent);border-radius:50%;animation:pulse-glow 3s ease-in-out infinite;"></div>
             <div style="position:relative;z-index:1;">
                 <div style="font-size:4rem;margin-bottom:1.5rem;animation:bounce-icon 2s ease-in-out infinite;">📦</div>
@@ -132,7 +132,7 @@
                 <p style="color:rgba(255,255,255,0.9);font-size:1.2rem;margin-bottom:2.5rem;max-width:600px;margin-left:auto;margin-right:auto;">No waiting, no hassle. Get your return label in seconds</p>
                 <div style="display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;">
                     <a href="#return-form" style="padding:1.2rem 3rem;background:linear-gradient(135deg,var(--accent),var(--accent-2));border-radius:50px;font-family:'Orbitron',sans-serif;font-weight:700;color:#000;text-decoration:none;transition:transform 0.3s ease,box-shadow 0.3s ease;box-shadow:0 10px 30px rgba(0,240,255,0.3);" onmouseover="this.style.transform='translateY(-3px) scale(1.05)';this.style.boxShadow='0 15px 40px rgba(0,240,255,0.5)';" onmouseout="this.style.transform='';this.style.boxShadow='0 10px 30px rgba(0,240,255,0.3)';">� Start Return</a>
-                    <a href="contact.html" style="padding:1.2rem 3rem;background:var(--glass);border:2px solid var(--glass-border);border-radius:50px;font-family:'Orbitron',sans-serif;font-weight:700;color:#fff;text-decoration:none;transition:all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.1)';this.style.borderColor='var(--accent)';" onmouseout="this.style.background='var(--glass)';this.style.borderColor='var(--glass-border)';">💬 Contact Support</a>
+                    <a href="contact.html" style="padding:1.2rem 3rem;background:transparent;border:2px solid var(--glass-border);border-radius:50px;font-family:'Orbitron',sans-serif;font-weight:700;color:#fff;text-decoration:none;transition:all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.1)';this.style.borderColor='var(--accent)';" onmouseout="this.style.background='var(--glass)';this.style.borderColor='var(--glass-border)';">💬 Contact Support</a>
                 </div>
             </div>
         </div>
@@ -140,7 +140,7 @@
 
     <!-- Return Request Form -->
     <section id="return-form" style="padding:4rem 2rem;max-width:900px;margin:0 auto;position:relative;z-index:2;">
-        <div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:25px;padding:3rem;">
+        <div style="background:transparent;border:1px solid var(--glass-border);border-radius:25px;padding:3rem;">
             <h2 style="font-family:'Orbitron',sans-serif;font-size:2rem;margin-bottom:2rem;text-align:center;color:var(--accent);">Return Request Form</h2>
             
             <form id="return-request-form" style="display:grid;gap:2rem;">
@@ -258,22 +258,22 @@
     <section style="padding:4rem 2rem;max-width:1200px;margin:0 auto;position:relative;z-index:2;">
         <h2 style="font-family:'Orbitron',sans-serif;font-size:2rem;text-align:center;margin-bottom:3rem;color:var(--accent);">Common Return Reasons</h2>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem;">
-            <div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;padding:2.5rem;text-align:center;transition:all 0.3s ease;cursor:pointer;" onmouseover="this.style.transform='translateY(-10px)';this.style.borderColor='rgba(0,240,255,0.5)';this.style.background='rgba(0,240,255,0.08)';" onmouseout="this.style.transform='';this.style.borderColor='var(--glass-border)';this.style.background='var(--glass)';">
+            <div style="background:transparent;border:1px solid var(--glass-border);border-radius:20px;padding:2.5rem;text-align:center;transition:all 0.3s ease;cursor:pointer;" onmouseover="this.style.transform='translateY(-10px)';this.style.borderColor='rgba(0,240,255,0.5)';this.style.background='rgba(0,240,255,0.08)';" onmouseout="this.style.transform='';this.style.borderColor='var(--glass-border)';this.style.background='var(--glass)';">
                 <div style="font-size:3rem;margin-bottom:1rem;">📏</div>
                 <h3 style="font-family:'Orbitron',sans-serif;margin-bottom:1rem;color:#fff;">Wrong Size</h3>
                 <p style="color:rgba(255,255,255,0.85);line-height:1.6;">Free size exchanges available. Check our <a href="size-guide.html" style="color:var(--accent);text-decoration:none;">size guide</a></p>
             </div>
-            <div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;padding:2.5rem;text-align:center;transition:all 0.3s ease;cursor:pointer;" onmouseover="this.style.transform='translateY(-10px)';this.style.borderColor='rgba(255,0,170,0.5)';this.style.background='rgba(255,0,170,0.08)';" onmouseout="this.style.transform='';this.style.borderColor='var(--glass-border)';this.style.background='var(--glass)';">
+            <div style="background:transparent;border:1px solid var(--glass-border);border-radius:20px;padding:2.5rem;text-align:center;transition:all 0.3s ease;cursor:pointer;" onmouseover="this.style.transform='translateY(-10px)';this.style.borderColor='rgba(255,0,170,0.5)';this.style.background='rgba(255,0,170,0.08)';" onmouseout="this.style.transform='';this.style.borderColor='var(--glass-border)';this.style.background='var(--glass)';">
                 <div style="font-size:3rem;margin-bottom:1rem;">🎨</div>
                 <h3 style="font-family:'Orbitron',sans-serif;margin-bottom:1rem;color:#fff;">Different Color</h3>
                 <p style="color:rgba(255,255,255,0.85);line-height:1.6;">Not what you expected? Exchange for any color variant</p>
             </div>
-            <div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;padding:2.5rem;text-align:center;transition:all 0.3s ease;cursor:pointer;" onmouseover="this.style.transform='translateY(-10px)';this.style.borderColor='rgba(0,255,136,0.5)';this.style.background='rgba(0,255,136,0.08)';" onmouseout="this.style.transform='';this.style.borderColor='var(--glass-border)';this.style.background='var(--glass)';">
+            <div style="background:transparent;border:1px solid var(--glass-border);border-radius:20px;padding:2.5rem;text-align:center;transition:all 0.3s ease;cursor:pointer;" onmouseover="this.style.transform='translateY(-10px)';this.style.borderColor='rgba(0,255,136,0.5)';this.style.background='rgba(0,255,136,0.08)';" onmouseout="this.style.transform='';this.style.borderColor='var(--glass-border)';this.style.background='var(--glass)';">
                 <div style="font-size:3rem;margin-bottom:1rem;">⚠️</div>
                 <h3 style="font-family:'Orbitron',sans-serif;margin-bottom:1rem;color:#fff;">Defective Item</h3>
                 <p style="color:rgba(255,255,255,0.85);line-height:1.6;">Priority processing with prepaid return shipping</p>
             </div>
-            <div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;padding:2.5rem;text-align:center;transition:all 0.3s ease;cursor:pointer;" onmouseover="this.style.transform='translateY(-10px)';this.style.borderColor='rgba(0,240,255,0.5)';this.style.background='rgba(0,240,255,0.08)';" onmouseout="this.style.transform='';this.style.borderColor='var(--glass-border)';this.style.background='var(--glass)';">
+            <div style="background:transparent;border:1px solid var(--glass-border);border-radius:20px;padding:2.5rem;text-align:center;transition:all 0.3s ease;cursor:pointer;" onmouseover="this.style.transform='translateY(-10px)';this.style.borderColor='rgba(0,240,255,0.5)';this.style.background='rgba(0,240,255,0.08)';" onmouseout="this.style.transform='';this.style.borderColor='var(--glass-border)';this.style.background='var(--glass)';">
                 <div style="font-size:3rem;margin-bottom:1rem;">💭</div>
                 <h3 style="font-family:'Orbitron',sans-serif;margin-bottom:1rem;color:#fff;">Changed Mind</h3>
                 <p style="color:rgba(255,255,255,0.85);line-height:1.6;">No problem! 30-day hassle-free returns</p>
@@ -304,22 +304,22 @@
         <h2 style="font-family:'Orbitron',sans-serif;font-size:2rem;text-align:center;margin-bottom:1rem;color:var(--accent);">Why Exchange Instead?</h2>
         <p style="text-align:center;color:rgba(255,255,255,0.85);margin-bottom:3rem;font-size:1.1rem;">Get your perfect item faster with instant exchanges</p>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:2rem;">
-            <div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;padding:2rem;text-align:center;">
+            <div style="background:transparent;border:1px solid var(--glass-border);border-radius:20px;padding:2rem;text-align:center;">
                 <div style="width:80px;height:80px;margin:0 auto 1.5rem;background:linear-gradient(135deg,rgba(0,240,255,0.2),rgba(255,0,170,0.2));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;">⚡</div>
                 <h3 style="font-family:'Orbitron',sans-serif;margin-bottom:1rem;color:#fff;font-size:1.2rem;">Faster Processing</h3>
                 <p style="color:rgba(255,255,255,0.85);line-height:1.6;font-size:0.95rem;">Exchanges ship immediately, no waiting for refunds</p>
             </div>
-            <div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;padding:2rem;text-align:center;">
+            <div style="background:transparent;border:1px solid var(--glass-border);border-radius:20px;padding:2rem;text-align:center;">
                 <div style="width:80px;height:80px;margin:0 auto 1.5rem;background:linear-gradient(135deg,rgba(255,0,170,0.2),rgba(0,255,136,0.2));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;">🎁</div>
                 <h3 style="font-family:'Orbitron',sans-serif;margin-bottom:1rem;color:#fff;font-size:1.2rem;">Priority Shipping</h3>
                 <p style="color:rgba(255,255,255,0.85);line-height:1.6;font-size:0.95rem;">Free expedited shipping on all exchanges</p>
             </div>
-            <div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;padding:2rem;text-align:center;">
+            <div style="background:transparent;border:1px solid var(--glass-border);border-radius:20px;padding:2rem;text-align:center;">
                 <div style="width:80px;height:80px;margin:0 auto 1.5rem;background:linear-gradient(135deg,rgba(0,255,136,0.2),rgba(0,240,255,0.2));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;">💰</div>
                 <h3 style="font-family:'Orbitron',sans-serif;margin-bottom:1rem;color:#fff;font-size:1.2rem;">Keep Your Discount</h3>
                 <p style="color:rgba(255,255,255,0.85);line-height:1.6;font-size:0.95rem;">Original sale prices honored on exchanges</p>
             </div>
-            <div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;padding:2rem;text-align:center;">
+            <div style="background:transparent;border:1px solid var(--glass-border);border-radius:20px;padding:2rem;text-align:center;">
                 <div style="width:80px;height:80px;margin:0 auto 1.5rem;background:linear-gradient(135deg,rgba(0,240,255,0.2),rgba(0,255,136,0.2));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;">🔄</div>
                 <h3 style="font-family:'Orbitron',sans-serif;margin-bottom:1rem;color:#fff;font-size:1.2rem;">Unlimited Exchanges</h3>
                 <p style="color:rgba(255,255,255,0.85);line-height:1.6;font-size:0.95rem;">Exchange as many times as needed within 30 days</p>
@@ -591,7 +591,7 @@
                     </div>
                     
                     <div style="text-align:center;margin-top:2rem;">
-                        <button onclick="this.closest('div[style*=position]').remove()" style="padding:1rem 2rem;background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;color:#fff;cursor:pointer;">
+                        <button onclick="this.closest('div[style*=position]').remove()" style="padding:1rem 2rem;background:transparent;border:1px solid var(--glass-border);border-radius:10px;color:#fff;cursor:pointer;">
                             Close
                         </button>
                     </div>

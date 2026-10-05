@@ -57,7 +57,7 @@
         /* -- Stats -- */
         .ship-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.85rem; margin-bottom: 2.5rem; }
         .ship-stat { position: relative; padding: 1.1rem 1.2rem; border-radius: var(--r-md); background: var(--card-grad); border: 1px solid var(--glass-border); overflow: hidden; text-align: center; }
-        .ship-stat::after { content: ''; position: absolute; inset: 0 0 auto 0; height: 2px; background: linear-gradient(90deg, var(--accent), rgba(0,240,255,0)); }
+        .ship-stat::after { content: ''; position: absolute; inset: 0 0 auto 0; height: 2px; background: transparent; }
         .ship-stat:nth-child(2n)::after { background: linear-gradient(90deg, var(--accent-2), rgba(255,0,170,0)); }
         .ship-stat:nth-child(3n)::after { background: linear-gradient(90deg, var(--accent-3), rgba(0,255,136,0)); }
         .ship-stat-val { font-family: var(--font-d); font-size: 1.4rem; font-weight: 900; }
@@ -67,7 +67,7 @@
         .ship-section { margin: 3rem 0; }
         .ship-section-head { margin-bottom: 1.5rem; }
         .ship-kicker { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--font-d); font-size: 0.62rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 0.4rem; }
-        .ship-kicker::before { content: ''; width: 20px; height: 1px; background: linear-gradient(90deg, transparent, var(--accent)); }
+        .ship-kicker::before { content: ''; width: 20px; height: 1px; background: transparent; }
         .ship-title { font-family: var(--font-d); font-size: clamp(1.2rem, 2.5vw, 1.7rem); font-weight: 900; background: linear-gradient(135deg, #fff 15%, var(--accent) 60%, var(--accent-2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
         .ship-sub { color: var(--muted); font-size: 0.97rem; line-height: 1.6; margin-top: 0.4rem; max-width: 60ch; }
 
@@ -144,7 +144,7 @@
 
         /* -- FAQ -- */
         .ship-faq { margin: 3rem 0; }
-        .ship-faq h2 { font-family: var(--font-d); font-size: 1.1rem; font-weight: 900; margin-bottom: 1.2rem; background: linear-gradient(135deg, #fff, var(--accent)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .ship-faq h2 { font-family: var(--font-d); font-size: 1.1rem; font-weight: 900; margin-bottom: 1.2rem; background: transparent; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
 
         /* -- Note -- */
         .ship-note { margin-top: 2rem; padding: 1rem 1.25rem; border-radius: var(--r-md); border: 1px dashed rgba(0,240,255,0.3); background: rgba(0,240,255,0.03); color: rgba(255,255,255,0.8); font-size: 0.9rem; line-height: 1.6; }
@@ -165,7 +165,7 @@
         @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #0a0a0a; }
-        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--accent), var(--accent-2)); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: transparent; border-radius: 4px; }
     </style>
 </head>
 <body>
@@ -189,7 +189,7 @@
             <!-- STATS -->
             <div class="ship-stats">
                 <div class="ship-stat"><div class="ship-stat-val">$0</div><div class="ship-stat-lab">Standard over $50</div></div>
-                <div class="ship-stat"><div class="ship-stat-val">2–3 days</div><div class="ship-stat-lab">Express delivery</div></div>
+                <div class="ship-stat"><div class="ship-stat-val">2ï¿½3 days</div><div class="ship-stat-lab">Express delivery</div></div>
                 <div class="ship-stat"><div class="ship-stat-val">50+</div><div class="ship-stat-lab">Countries served</div></div>
                 <div class="ship-stat"><div class="ship-stat-val">24h</div><div class="ship-stat-lab">Same-day dispatch</div></div>
             </div>
@@ -206,7 +206,7 @@
                         <div class="ship-opt-icon">??</div>
                         <div class="ship-opt-name">Standard</div>
                         <div class="ship-opt-price">FREE</div>
-                        <div class="ship-opt-time">5–7 business days</div>
+                        <div class="ship-opt-time">5ï¿½7 business days</div>
                         <ul class="ship-opt-list">
                             <li>Free on orders over $50</li>
                             <li>Tracking included</li>
@@ -219,7 +219,7 @@
                         <div class="ship-opt-icon">?</div>
                         <div class="ship-opt-name">Express</div>
                         <div class="ship-opt-price">$14.99</div>
-                        <div class="ship-opt-time">2–3 business days</div>
+                        <div class="ship-opt-time">2ï¿½3 business days</div>
                         <ul class="ship-opt-list">
                             <li>Priority processing</li>
                             <li>Real-time tracking updates</li>
@@ -274,8 +274,8 @@
                     </div>
                     <label class="ship-calc-label" style="margin-bottom:0.6rem;display:block;">Shipping Method</label>
                     <div class="ship-calc-methods">
-                        <label class="ship-calc-radio"><input type="radio" name="shipMethod" value="standard" checked><div class="ship-calc-radio-text"><div class="ship-calc-radio-title">Standard Shipping</div><div class="ship-calc-radio-sub">5–7 business days</div></div><div class="ship-calc-radio-price">FREE*</div></label>
-                        <label class="ship-calc-radio"><input type="radio" name="shipMethod" value="express"><div class="ship-calc-radio-text"><div class="ship-calc-radio-title">Express Shipping</div><div class="ship-calc-radio-sub">2–3 business days</div></div><div class="ship-calc-radio-price">$14.99</div></label>
+                        <label class="ship-calc-radio"><input type="radio" name="shipMethod" value="standard" checked><div class="ship-calc-radio-text"><div class="ship-calc-radio-title">Standard Shipping</div><div class="ship-calc-radio-sub">5ï¿½7 business days</div></div><div class="ship-calc-radio-price">FREE*</div></label>
+                        <label class="ship-calc-radio"><input type="radio" name="shipMethod" value="express"><div class="ship-calc-radio-text"><div class="ship-calc-radio-title">Express Shipping</div><div class="ship-calc-radio-sub">2ï¿½3 business days</div></div><div class="ship-calc-radio-price">$14.99</div></label>
                         <label class="ship-calc-radio"><input type="radio" name="shipMethod" value="overnight"><div class="ship-calc-radio-text"><div class="ship-calc-radio-title">Overnight Shipping</div><div class="ship-calc-radio-sub">Next business day</div></div><div class="ship-calc-radio-price">$29.99</div></label>
                     </div>
                     <button type="button" class="ship-calc-btn" id="shipCalcBtn">Calculate Shipping</button>
@@ -296,9 +296,9 @@
                         <tbody>
                             <tr><td>Domestic</td><td>United States</td><td class="free">Free over $50</td><td>$14.99</td><td>$29.99</td></tr>
                             <tr><td>North America</td><td>Canada, Mexico</td><td>$9.99</td><td>$24.99</td><td>$49.99</td></tr>
-                            <tr><td>Europe</td><td>UK, Germany, France, Spain, Italy…</td><td>$14.99</td><td>$34.99</td><td>$59.99</td></tr>
-                            <tr><td>Middle East</td><td>UAE, Saudi Arabia, Oman, Qatar…</td><td>$12.99</td><td>$29.99</td><td>$54.99</td></tr>
-                            <tr><td>Asia-Pacific</td><td>Japan, Australia, Singapore, India…</td><td>$14.99</td><td>$34.99</td><td>$59.99</td></tr>
+                            <tr><td>Europe</td><td>UK, Germany, France, Spain, Italyï¿½</td><td>$14.99</td><td>$34.99</td><td>$59.99</td></tr>
+                            <tr><td>Middle East</td><td>UAE, Saudi Arabia, Oman, Qatarï¿½</td><td>$12.99</td><td>$29.99</td><td>$54.99</td></tr>
+                            <tr><td>Asia-Pacific</td><td>Japan, Australia, Singapore, Indiaï¿½</td><td>$14.99</td><td>$34.99</td><td>$59.99</td></tr>
                             <tr><td>Rest of World</td><td>50+ other countries</td><td>$19.99</td><td>$39.99</td><td>Quote on request</td></tr>
                         </tbody>
                     </table>
@@ -412,10 +412,10 @@
                 else if (country === 'CA' || country === 'MX') cost = 9.99;
                 else if (['UK','DE','FR','ES','IT','AE','SA','OM'].indexOf(country) !== -1) cost = 12.99;
                 else cost = 19.99;
-                days = '5–7 business days';
+                days = '5ï¿½7 business days';
             } else if (method === 'express') {
                 cost = country === 'US' ? 14.99 : (['CA','MX'].indexOf(country) !== -1 ? 24.99 : 34.99);
-                days = '2–3 business days';
+                days = '2ï¿½3 business days';
             } else {
                 cost = country === 'US' ? 29.99 : 49.99;
                 days = 'Next business day';
@@ -456,7 +456,7 @@
             if (faqEl) {
                 faqEl.innerHTML = '<h2>Frequently Asked Questions</h2>' + UI.faq([
                     { q: 'When does my order ship?', a: 'Orders placed before 3 PM (your local time) ship the same business day. Orders after 3 PM ship the next business day. Weekend orders ship Monday.' },
-                    { q: 'How do I get free shipping?', a: 'Standard shipping is free on all domestic orders over $50. The discount is applied automatically at checkout — no code needed.' },
+                    { q: 'How do I get free shipping?', a: 'Standard shipping is free on all domestic orders over $50. The discount is applied automatically at checkout ï¿½ no code needed.' },
                     { q: 'Do you ship internationally?', a: 'Yes. We ship to over 50 countries. International orders may incur customs duties and import taxes, which vary by country and are the buyer\'s responsibility.' },
                     { q: 'Can I change my shipping method after ordering?', a: 'If the order has not shipped yet, contact support within 2 hours and we will upgrade you (you pay the difference). Once shipped, the method cannot be changed.' },
                     { q: 'What if my package is lost or damaged?', a: 'Every shipment is insured. If your package is lost or arrives damaged, contact support with your order number and photos (if damaged). We will reship or refund within 48 hours.' },

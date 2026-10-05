@@ -314,8 +314,19 @@
             cursor: pointer; transition: all 180ms var(--ease); white-space: nowrap;
         }
         .intel-tab:hover { color: #fff; }
-        .intel-tab.is-active { color: var(--accent); border-bottom-color: var(--accent); background: rgba(0, 240, 255, 0.04); }
-        .intel-tab .tab-n { display: inline-block; margin-left: 0.45rem; font-size: 0.58rem; padding: 0.14rem 0.5rem; border-radius: var(--r-pill); background: rgba(0, 240, 255, 0.12); color: var(--accent); }
+        .intel-tab.is-active { color: #fff; background: rgba(255, 255, 255, 0.04); }
+        /* Distinct glow for each intel tab so sections are recognizable instantly */
+        .intel-tab[data-tab="overview"] { color: #38e8ff; text-shadow: 0 0 10px rgba(56,232,255,.75), 0 0 24px rgba(56,232,255,.35); }
+        .intel-tab[data-tab="specs"] { color: #b78cff; text-shadow: 0 0 10px rgba(183,140,255,.75), 0 0 24px rgba(183,140,255,.35); }
+        .intel-tab[data-tab="shipping"] { color: #34d399; text-shadow: 0 0 10px rgba(52,211,153,.75), 0 0 24px rgba(52,211,153,.35); }
+        .intel-tab[data-tab="reviews"] { color: #fbbf24; text-shadow: 0 0 10px rgba(251,191,36,.75), 0 0 24px rgba(251,191,36,.35); }
+        .intel-tab[data-tab="qa"] { color: #fb7185; text-shadow: 0 0 10px rgba(251,113,133,.75), 0 0 24px rgba(251,113,133,.35); }
+        .intel-tab[data-tab="overview"].is-active { border-bottom-color: #38e8ff; }
+        .intel-tab[data-tab="specs"].is-active { border-bottom-color: #b78cff; }
+        .intel-tab[data-tab="shipping"].is-active { border-bottom-color: #34d399; }
+        .intel-tab[data-tab="reviews"].is-active { border-bottom-color: #fbbf24; }
+        .intel-tab[data-tab="qa"].is-active { border-bottom-color: #fb7185; }
+        .intel-tab .tab-n { display: inline-block; margin-left: 0.45rem; font-size: 0.58rem; padding: 0.14rem 0.5rem; border-radius: var(--r-pill); background: rgba(255, 255, 255, 0.08); color: inherit; text-shadow: inherit; }
         .intel-panel { display: none; padding: 2rem; animation: panelIn 320ms var(--ease); }
         .intel-panel.is-active { display: block; }
         @keyframes panelIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
@@ -356,7 +367,7 @@
         .rate-bars { display: grid; gap: 0.45rem; }
         .rate-bar { display: grid; grid-template-columns: 52px 1fr 40px; align-items: center; gap: 0.6rem; font-size: 0.78rem; color: var(--muted); }
         .rate-bar i { display: block; height: 6px; border-radius: var(--r-pill); background: rgba(255, 255, 255, 0.08); overflow: hidden; }
-        .rate-bar i b { display: block; height: 100%; border-radius: var(--r-pill); background: linear-gradient(90deg, var(--accent), var(--accent-3)); }
+        .rate-bar i b { display: block; height: 100%; border-radius: var(--r-pill); background: transparent; }
         .rev-list { display: grid; gap: 1rem; }
         .rev-card { padding: 1.2rem 1.3rem; border-radius: var(--r-md); background: var(--glass-2); border: 1px solid var(--glass-border); }
         .rev-head { display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap; margin-bottom: 0.55rem; }
@@ -374,7 +385,7 @@
         .rev-form h4 { font-family: var(--font-d); font-size: 0.8rem; letter-spacing: 1.6px; text-transform: uppercase; color: var(--accent); }
         .rev-form input, .rev-form textarea {
             width: 100%; padding: 0.8rem 1rem; border-radius: var(--r-sm);
-            background: var(--glass); border: 1px solid var(--glass-border);
+            background: transparent; border: 1px solid var(--glass-border);
             color: #fff; font-family: var(--font-b); font-size: 0.95rem; outline: none;
             transition: border-color 180ms var(--ease);
         }
@@ -393,7 +404,7 @@
         .qa-a::before { content: 'A'; font-family: var(--font-d); color: var(--accent-3); flex-shrink: 0; }
         .qa-meta { margin-top: 0.55rem; padding-left: 1.55rem; font-size: 0.76rem; color: var(--muted-2); }
         .qa-ask { display: flex; gap: 0.7rem; margin-top: 1.4rem; }
-        .qa-ask input { flex: 1; padding: 0.85rem 1.1rem; border-radius: var(--r-sm); background: var(--glass); border: 1px solid var(--glass-border); color: #fff; font-family: var(--font-b); font-size: 0.95rem; outline: none; }
+        .qa-ask input { flex: 1; padding: 0.85rem 1.1rem; border-radius: var(--r-sm); background: transparent; border: 1px solid var(--glass-border); color: #fff; font-family: var(--font-b); font-size: 0.95rem; outline: none; }
         .qa-ask input:focus { border-color: var(--accent); }
 
         /* ════════════════════════════════════════════════════════════════

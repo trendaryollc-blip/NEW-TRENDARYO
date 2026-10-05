@@ -72,14 +72,14 @@
         .breadcrumb-3d a { color: var(--accent); text-decoration: none; }
         .breadcrumb-3d a:hover { text-decoration: underline; }
         .page-subtitle-3d { color: rgba(255,255,255,0.7); max-width: 640px; margin: 1rem auto 0; font-size: 1.15rem; line-height: 1.7; }
-        .page-title-3d { font-family: 'Orbitron', sans-serif; font-size: clamp(2.2rem, 6vw, 3.4rem); font-weight: 900; background: linear-gradient(135deg, #fff, var(--accent)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .page-title-3d { font-family: 'Orbitron', sans-serif; font-size: clamp(2.2rem, 6vw, 3.4rem); font-weight: 900; background: transparent; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
         /* Channel cards */
         .channels-section-3d { padding: 1rem 2rem 2rem; max-width: 1200px; margin: 0 auto; }
         .channels-grid-3d { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
-        .channel-card-3d { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 18px; padding: 2rem; text-align: center; text-decoration: none; color: inherit; display: block; transition: all 0.3s ease; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+        .channel-card-3d { background: transparent; border: 1px solid var(--glass-border); border-radius: 18px; padding: 2rem; text-align: center; text-decoration: none; color: inherit; display: block; transition: all 0.3s ease; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
         .channel-card-3d:hover { transform: translateY(-5px); border-color: rgba(0,240,255,0.5); }
-        .channel-icon-3d { width: 64px; height: 64px; margin: 0 auto 1.25rem; background: linear-gradient(135deg, rgba(0,240,255,0.18), rgba(255,0,170,0.18)); border: 1px solid var(--glass-border); border-radius: 18px; display: flex; align-items: center; justify-content: center; }
+        .channel-icon-3d { width: 64px; height: 64px; margin: 0 auto 1.25rem; background: transparent; border: 1px solid var(--glass-border); border-radius: 18px; display: flex; align-items: center; justify-content: center; }
         .channel-icon-3d svg { width: 28px; height: 28px; color: var(--accent); }
         .channel-title-3d { font-family: 'Orbitron', sans-serif; font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; }
         .channel-desc-3d { color: rgba(255,255,255,0.65); font-size: 0.98rem; line-height: 1.6; margin-bottom: 1rem; }
@@ -89,7 +89,7 @@
         .contact-section-3d { padding: 2rem; max-width: 1200px; margin: 0 auto; }
         .contact-grid-3d { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
 
-        .contact-form-3d { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 24px; padding: 2.5rem; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+        .contact-form-3d { background: transparent; border: 1px solid var(--glass-border); border-radius: 24px; padding: 2.5rem; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
         .contact-form-3d h2 { font-family: 'Orbitron', sans-serif; font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent); }
         .contact-form-3d .form-intro-3d { color: rgba(255,255,255,0.6); margin-bottom: 1.75rem; font-size: 1.02rem; }
         .form-group-3d { margin-bottom: 1.25rem; }
@@ -100,7 +100,7 @@
         .form-textarea-3d { min-height: 150px; resize: vertical; }
         .form-select-3d { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2300f0ff' stroke-width='3'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat: no-repeat; background-position: right 1rem center; }
         .form-select-3d option { background: #12123a; color: #fff; }
-        .btn-submit-3d { width: 100%; padding: 1.1rem; background: linear-gradient(135deg, var(--accent), var(--accent-3)); border: none; border-radius: 12px; font-family: 'Orbitron', sans-serif; font-size: 1rem; font-weight: 700; color: #000; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s; }
+        .btn-submit-3d { width: 100%; padding: 1.1rem; background: transparent; border: none; border-radius: 12px; font-family: 'Orbitron', sans-serif; font-size: 1rem; font-weight: 700; color: #000; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s; }
         .btn-submit-3d:hover { box-shadow: 0 0 40px rgba(0,240,255,0.5); transform: translateY(-2px); }
         .btn-submit-3d:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
         .form-status-3d { display: none; margin-top: 1rem; padding: 0.9rem 1.1rem; border-radius: 12px; font-size: 1.02rem; line-height: 1.5; }
@@ -108,27 +108,27 @@
         .form-status-3d.error { display: block; background: rgba(255,63,63,0.12); border: 1px solid rgba(255,63,63,0.4); color: #ff9c9c; }
         .form-success-3d { display: none; text-align: center; padding: 2rem 0; }
         .form-success-3d.active { display: block; }
-        .form-success-icon-3d { width: 72px; height: 72px; margin: 0 auto 1.25rem; background: linear-gradient(135deg, rgba(0,255,136,0.2), rgba(0,240,255,0.2)); border: 2px solid var(--accent-3); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .form-success-icon-3d { width: 72px; height: 72px; margin: 0 auto 1.25rem; background: transparent; border: 2px solid var(--accent-3); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
         .form-success-icon-3d svg { width: 34px; height: 34px; color: var(--accent-3); }
         .form-success-3d h3 { font-family: 'Orbitron', sans-serif; font-size: 1.3rem; margin-bottom: 0.75rem; color: var(--accent-3); }
         .form-success-3d p { color: rgba(255,255,255,0.7); line-height: 1.7; margin-bottom: 1.5rem; }
-        .btn-secondary-3d { padding: 0.8rem 2rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 999px; color: #fff; font-family: 'Orbitron', sans-serif; font-size: 0.8rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; transition: all 0.3s; }
+        .btn-secondary-3d { padding: 0.8rem 2rem; background: transparent; border: 1px solid var(--glass-border); border-radius: 999px; color: #fff; font-family: 'Orbitron', sans-serif; font-size: 0.8rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; transition: all 0.3s; }
         .btn-secondary-3d:hover { border-color: var(--accent); background: rgba(0,240,255,0.1); }
 
         .contact-info-3d h2 { font-family: 'Orbitron', sans-serif; font-size: 1.5rem; margin-bottom: 1.25rem; color: var(--accent); }
-        .company-card-3d { background: linear-gradient(135deg, rgba(0,240,255,0.1), rgba(255,0,170,0.1)); border: 1px solid rgba(0,240,255,0.4); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .company-card-3d { background: transparent; border: 1px solid rgba(0,240,255,0.4); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; }
         .company-card-3d h3 { font-family: 'Orbitron', sans-serif; font-size: 1.15rem; color: var(--accent); margin-bottom: 0.75rem; }
         .company-card-3d p { color: rgba(255,255,255,0.85); font-size: 1rem; line-height: 1.7; margin: 0; }
         .contact-item-3d { display: flex; gap: 1.25rem; margin-bottom: 1.4rem; align-items: flex-start; }
         .contact-item-3d a { color: var(--accent); text-decoration: none; }
         .contact-item-3d a:hover { text-decoration: underline; }
-        .contact-icon-3d { width: 52px; height: 52px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .contact-icon-3d { width: 52px; height: 52px; background: transparent; border: 1px solid var(--glass-border); border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .contact-icon-3d svg { width: 22px; height: 22px; color: var(--accent); }
         .contact-text-3d h4 { font-size: 1.08rem; margin-bottom: 0.25rem; }
         .contact-text-3d p { color: rgba(255,255,255,0.62); line-height: 1.6; }
 
         .social-links-3d { display: flex; gap: 0.9rem; margin-top: 1.5rem; }
-        .social-link-3d { width: 46px; height: 46px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.8); transition: all 0.3s; }
+        .social-link-3d { width: 46px; height: 46px; background: transparent; border: 1px solid var(--glass-border); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.8); transition: all 0.3s; }
         .social-link-3d:hover { border-color: var(--accent); background: rgba(0,240,255,0.1); transform: translateY(-3px); color: var(--accent); }
 
         /* Expectation strip */
@@ -141,12 +141,12 @@
 
         /* Map */
         .map-section-3d { padding: 3rem 2rem; max-width: 1200px; margin: 0 auto; }
-        .map-wrap-3d { border: 1px solid var(--glass-border); border-radius: 20px; overflow: hidden; background: var(--glass); }
+        .map-wrap-3d { border: 1px solid var(--glass-border); border-radius: 20px; overflow: hidden; background: transparent; }
         .map-wrap-3d iframe { display: block; width: 100%; height: 380px; border: 0; filter: saturate(0.85) contrast(1.05); }
 
         /* FAQ */
         .faq-section-3d { padding: 2rem; max-width: 800px; margin: 0 auto; }
-        .faq-item-3d { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; margin-bottom: 1rem; overflow: hidden; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+        .faq-item-3d { background: transparent; border: 1px solid var(--glass-border); border-radius: 16px; margin-bottom: 1rem; overflow: hidden; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
         .faq-question-3d { padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-family: 'Orbitron', sans-serif; font-weight: 600; font-size: 1.05rem; transition: all 0.3s; }
         .faq-question-3d:hover { color: var(--accent); }
         .faq-answer-3d { padding: 0 1.5rem 1.5rem; color: rgba(255,255,255,0.72); line-height: 1.8; display: none; }
@@ -158,7 +158,7 @@
         .faq-eyebrow:first-child { margin-top: 0; }
 
         /* Chat widget */
-        .chat-launcher { position: fixed; bottom: 24px; right: 24px; z-index: 9500; width: 62px; height: 62px; border-radius: 50%; border: none; background: linear-gradient(135deg, var(--accent), var(--accent-2)); display: flex; align-items: center; justify-content: center; color: #000; cursor: pointer; box-shadow: 0 8px 30px rgba(0,240,255,0.45); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .chat-launcher { position: fixed; bottom: 24px; right: 24px; z-index: 9500; width: 62px; height: 62px; border-radius: 50%; border: none; background: transparent; display: flex; align-items: center; justify-content: center; color: #000; cursor: pointer; box-shadow: 0 8px 30px rgba(0,240,255,0.45); transition: transform 0.3s ease, box-shadow 0.3s ease; }
         .chat-launcher:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 12px 40px rgba(0,240,255,0.6); }
         .chat-launcher svg { width: 28px; height: 28px; }
         .chat-window { position: fixed; bottom: 100px; right: 24px; z-index: 9600; width: 360px; max-width: calc(100vw - 48px); height: 480px; max-height: calc(100vh - 130px); background: rgba(12,12,40,0.96); border: 1px solid var(--glass-border); border-radius: 20px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 24px 70px rgba(0,0,0,0.6); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); opacity: 0; visibility: hidden; transform: translateY(14px); transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease; }

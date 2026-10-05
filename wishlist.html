@@ -61,7 +61,7 @@
         /* ── Stats Row ── */
         .wish-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.85rem; margin-bottom: 2rem; }
         .wish-stat { position: relative; padding: 1.1rem 1.2rem; border-radius: var(--r-md); background: var(--card-grad); border: 1px solid var(--glass-border); overflow: hidden; }
-        .wish-stat::after { content: ''; position: absolute; inset: 0 0 auto 0; height: 2px; background: linear-gradient(90deg, var(--accent), rgba(0,240,255,0)); }
+        .wish-stat::after { content: ''; position: absolute; inset: 0 0 auto 0; height: 2px; background: transparent; }
         .wish-stat:nth-child(2n)::after { background: linear-gradient(90deg, var(--accent-2), rgba(255,0,170,0)); }
         .wish-stat:nth-child(3n)::after { background: linear-gradient(90deg, var(--accent-3), rgba(0,255,136,0)); }
         .wish-stat-val { font-family: var(--font-d); font-size: 1.4rem; font-weight: 900; }
@@ -74,7 +74,7 @@
         .wish-select-info { font-family: var(--font-d); font-size: 0.72rem; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); }
         .wish-filter-btn, .wish-sort-btn { padding: 0.5rem 1rem; border-radius: var(--r-pill); border: 1px solid var(--glass-border-2); background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.85); font-family: var(--font-d); font-size: 0.66rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.22s ease; }
         .wish-filter-btn:hover, .wish-sort-btn:hover { border-color: rgba(0,240,255,0.5); color: var(--accent); }
-        .wish-filter-btn.is-on { background: linear-gradient(135deg, rgba(0,240,255,0.18), rgba(255,0,170,0.14)); border-color: var(--accent); color: #fff; }
+        .wish-filter-btn.is-on { background: transparent; border-color: var(--accent); color: #fff; }
         .wish-action-btn { padding: 0.5rem 1rem; border-radius: var(--r-pill); border: none; font-family: var(--font-d); font-size: 0.66rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.22s ease; }
         .wish-action-btn--add { background: linear-gradient(135deg, var(--accent), var(--accent-3)); color: #00202a; }
         .wish-action-btn--add:hover { box-shadow: 0 0 18px rgba(0,240,255,0.4); }
@@ -119,7 +119,7 @@
         .wish-card-old { font-size: 0.85rem; color: var(--muted-2); text-decoration: line-through; }
         .wish-card-saved { font-size: 0.72rem; color: var(--accent-3); font-weight: 600; }
         .wish-card-actions { display: flex; gap: 0.5rem; }
-        .wish-card-cart { flex: 1; padding: 0.7rem; border: 0; border-radius: var(--r-sm); background: linear-gradient(135deg, var(--accent), var(--accent-3)); color: #00202a; font-family: var(--font-d); font-size: 0.68rem; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; cursor: pointer; transition: all 0.25s ease; }
+        .wish-card-cart { flex: 1; padding: 0.7rem; border: 0; border-radius: var(--r-sm); background: transparent; color: #00202a; font-family: var(--font-d); font-size: 0.68rem; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; cursor: pointer; transition: all 0.25s ease; }
         .wish-card-cart:hover { box-shadow: 0 0 18px rgba(0,240,255,0.4); transform: translateY(-1px); }
         .wish-card-cart.is-added { background: rgba(0,255,136,0.2); color: var(--accent-3); }
         .wish-card-view { padding: 0.7rem 1rem; border: 1px solid var(--glass-border-2); border-radius: var(--r-sm); background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.85); font-family: var(--font-d); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; cursor: pointer; text-decoration: none; transition: all 0.22s ease; }
@@ -128,7 +128,7 @@
         /* ── Empty State ── */
         .wish-empty { text-align: center; padding: 5rem 2rem; }
         .wish-empty-icon { font-size: 4rem; margin-bottom: 1.5rem; opacity: 0.5; }
-        .wish-empty h2 { font-family: var(--font-d); font-size: 1.6rem; font-weight: 900; margin-bottom: 0.7rem; background: linear-gradient(135deg, #fff, var(--accent-2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .wish-empty h2 { font-family: var(--font-d); font-size: 1.6rem; font-weight: 900; margin-bottom: 0.7rem; background: transparent; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
         .wish-empty p { color: var(--muted); font-size: 1rem; max-width: 42ch; margin: 0 auto 2rem; line-height: 1.65; }
         .wish-empty-cta { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.85rem 1.8rem; border-radius: var(--r-pill); background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #00202a; font-family: var(--font-d); font-size: 0.75rem; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; text-decoration: none; transition: all 0.25s ease; }
         .wish-empty-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,240,255,0.3); }
@@ -204,7 +204,7 @@
         @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #0a0a0a; }
-        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--accent), var(--accent-2)); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: transparent; border-radius: 4px; }
     </style>
 </head>
 <body>

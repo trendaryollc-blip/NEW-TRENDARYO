@@ -220,7 +220,7 @@
         }
         .deck-stat::after {
             content: ''; position: absolute; inset: 0 0 auto 0; height: 2px;
-            background: linear-gradient(90deg, var(--accent), rgba(0, 240, 255, 0));
+            background: transparent;
         }
         .deck-stat:nth-child(2n)::after { background: linear-gradient(90deg, var(--accent-2), rgba(255, 0, 170, 0)); }
         .deck-stat:nth-child(3n)::after { background: linear-gradient(90deg, var(--accent-3), rgba(0, 255, 136, 0)); }
@@ -257,7 +257,7 @@
         }
         .cat-card:hover { transform: translateY(-5px); border-color: rgba(0, 240, 255, 0.5); box-shadow: 0 16px 36px rgba(0, 240, 255, 0.14); }
         .cat-card:hover::before { opacity: 1; }
-        .cat-card.is-on { border-color: var(--accent); background: linear-gradient(135deg, rgba(0, 240, 255, 0.16), rgba(255, 0, 170, 0.12)); }
+        .cat-card.is-on { border-color: var(--accent); background: transparent; }
         .cat-top { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.7rem; }
         .cat-ico {
             width: 40px; height: 40px; border-radius: 12px; font-size: 1.25rem;
@@ -313,7 +313,7 @@
         .band-card:hover { transform: translateY(-4px); border-color: rgba(0, 240, 255, 0.5); box-shadow: 0 14px 32px rgba(0, 240, 255, 0.12); }
         .band-card.is-on {
             border-color: var(--accent);
-            background: linear-gradient(135deg, rgba(0, 240, 255, 0.16), rgba(255, 0, 170, 0.1));
+            background: transparent;
             box-shadow: var(--glow-cyan);
         }
         .band-card.is-empty { opacity: 0.45; cursor: not-allowed; }
@@ -394,20 +394,9 @@
         .range-actions { display: flex; align-items: center; gap: 0.55rem; margin-top: 0.95rem; flex-wrap: wrap; }
 /* ==================================================================
         .facet-pill.is-on em { background: rgba(0, 0, 0, 0.3); color: #fff; }
-/* ==================================================================
-           5 · REFINEMENT RAIL (sticky sidebar) + active filter chips
+        /* ==================================================================
+           5 · ACTIVE FILTER CHIPS
            ================================================================== */
-        .shop-layout {
-            display: grid; grid-template-columns: 276px minmax(0, 1fr);
-            gap: 1.6rem; align-items: start;
-        }
-        .shop-side {
-            position: sticky; top: 132px; display: flex; flex-direction: column;
-            gap: 1rem; max-height: calc(100vh - 152px); overflow: auto;
-            padding-right: 0.35rem; scrollbar-width: thin;
-        }
-        .shop-side::-webkit-scrollbar { width: 6px; }
-        .shop-side::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.14); border-radius: var(--r-pill); }
         .f-panel {
             padding: 1.05rem 1.1rem; border-radius: var(--r-md);
             background: var(--card-grad); border: 1px solid var(--glass-border);
@@ -461,7 +450,7 @@
             width: 14px; height: 14px; border-radius: 50%; background: #fff;
             transition: transform 0.25s var(--ease);
         }
-        .f-toggle input:checked ~ .f-switch { background: linear-gradient(135deg, var(--accent), var(--accent-3)); }
+        .f-toggle input:checked ~ .f-switch { background: transparent; }
         .f-toggle input:checked ~ .f-switch::after { transform: translateX(18px); }
         .f-toggle input:focus-visible ~ .f-switch { outline: 2px solid var(--accent); outline-offset: 2px; }
         .f-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem; }
@@ -567,7 +556,7 @@
         }
         .sk-media {
             aspect-ratio: 16 / 10;
-            background: linear-gradient(100deg, rgba(255, 255, 255, 0.04) 30%, rgba(255, 255, 255, 0.12) 50%, rgba(255, 255, 255, 0.04) 70%);
+            background: transparent;
             background-size: 220% 100%; animation: skShimmer 1.25s linear infinite;
         }
         .sk-line {
@@ -578,15 +567,6 @@
         @keyframes skShimmer {
             from { background-position: 120% 0; }
             to { background-position: -120% 0; }
-        }
-        /* Sidebar collapses above the grid on small screens */
-        @media (max-width: 1080px) {
-            .shop-layout { grid-template-columns: 1fr; }
-            .shop-side {
-                position: static; max-height: none; overflow: visible;
-                display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-                gap: 1rem;
-            }
         }
 /* ==================================================================
            7a · PRODUCTCARD v2 — MEDIA STAGE
@@ -649,7 +629,7 @@
         .pc-shine {
             position: absolute; top: 0; left: -60%; z-index: 5; width: 45%; height: 100%;
             pointer-events: none; opacity: 0; transform: skewX(-18deg);
-            background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.18), transparent);
+            background: transparent;
         }
         .pc-card:hover .pc-shine { animation: pcSweep 1.05s ease-out; }
         @keyframes pcSweep {
@@ -891,6 +871,33 @@
             .shop-grid.is-list .pc-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         }
 
+        /* Cleaner DTC product cards — closer to the simple screenshot card */
+        .pc-card { border-radius: 20px; border: 1px solid rgba(255,255,255,.1); background: rgba(8,8,32,.55); }
+        .pc-grid-tex, .pc-spot, .pc-detail, .pc-specbar, .pc-shine, .pc-foot, .pc-highs, .pc-desc, .pc-meter-lab, .pc-stockline { display: none !important; }
+        .pc-media { background: #f6f7fb; border-radius: 18px 18px 0 0; }
+        .pc-img { padding: 7%; filter: none; }
+        .pc-card:hover .pc-img { transform: scale(1.03); }
+        .pc-body { padding: .9rem 1rem 1rem; gap:.35rem; }
+        .pc-eyebrow { display:none; }
+        .pc-name { color:#fff; font-family: var(--font-d); min-height: 0; font-size:.9rem; }
+        .pc-rating { margin-bottom:.1rem; }
+        .pc-price { margin:.2rem 0 .55rem; }
+        .pc-now {
+            background: none; -webkit-background-clip: border-box; background-clip: border-box;
+            -webkit-text-fill-color: #fff; color: #fff; font-size: 1.12rem;
+        }
+        .pc-old { color: rgba(255,255,255,.45); }
+        .pc-add {
+            background: rgba(0,240,255,.08); border: 1px solid rgba(0,240,255,.5); color: var(--accent);
+        }
+        .pc-add:hover { background: rgba(0,240,255,.16); box-shadow: none; }
+        .pc-quick, .pc-more { border-color: rgba(255,255,255,.14); color: rgba(255,255,255,.82); }
+        .pc-tools { opacity: 0; transition: opacity .2s ease; }
+        .pc-card:hover .pc-tools, .pc-card:focus-within .pc-tools { opacity: 1; }
+        @media (hover: none) { .pc-tools { opacity: 1; } }
+        .pc-badge { box-shadow: none; backdrop-filter: none; background: rgba(255,255,255,.88); color: #060614; border: 1px solid rgba(6,6,26,.08); }
+        .pc-badge.hot, .pc-badge.trending, .pc-badge.premium, .pc-badge.new, .pc-badge.salelink { box-shadow: none; }
+
         /* ── Horizontal rails (price drops · momentum · recent · pairs) ── */
         .rail-head {
             display: flex; align-items: flex-end; justify-content: space-between;
@@ -915,7 +922,7 @@
         .rail--wide { grid-auto-columns: 280px; }
         .mom-item { display: flex; flex-direction: column; gap: 0.45rem; }
         .mom-bar { height: 5px; border-radius: var(--r-pill); background: rgba(255, 255, 255, 0.1); overflow: hidden; }
-        .mom-bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--accent-2), var(--accent)); }
+        .mom-bar i { display: block; height: 100%; background: transparent; }
         .mom-meta { display: flex; justify-content: space-between; gap: 0.5rem; font-size: 0.66rem; color: var(--muted-2); }
         .mom-meta b { font-family: var(--font-d); color: #fff; }
 /* ==================================================================
@@ -932,7 +939,7 @@
         .modal-panel {
             position: relative; z-index: 1; max-width: 1020px; margin: 5vh auto;
             max-height: 90vh; overflow: auto; border-radius: 24px;
-            background: linear-gradient(170deg, #0b0b2c, #08081f);
+            background: transparent;
             border: 1px solid var(--glass-border-2); box-shadow: var(--shadow-lift);
             animation: panelIn 0.38s var(--ease);
         }
@@ -1051,7 +1058,7 @@
             letter-spacing: 0.9px; text-transform: uppercase; transition: 0.2s ease;
         }
         .cmp-btn:hover { opacity: 0.88; }
-        .cmp-btn--go { background: linear-gradient(135deg, var(--accent), var(--accent-2)); border-color: transparent; color: #05131c; }
+        .cmp-btn--go { background: transparent; border-color: transparent; color: #05131c; }
         @media (max-width: 640px) { .cmp-info { display: none; } }
         .cmp-wrap { overflow: auto; padding: 1.3rem; }
         .cmp-table { width: 100%; border-collapse: collapse; min-width: 560px; }
@@ -1092,7 +1099,7 @@
         .intel-big { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
         .intel-big b {
             font-family: var(--font-d); font-size: 2.3rem; font-weight: 900; line-height: 1;
-            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            background: transparent;
             -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
         }
         .intel-big span { font-size: 0.82rem; color: var(--muted); }
@@ -1102,7 +1109,7 @@
         .intel-bars { display: grid; gap: 0.5rem; }
         .intel-row { display: grid; grid-template-columns: 54px 1fr 50px; gap: 0.6rem; align-items: center; font-size: 0.74rem; color: var(--muted); }
         .intel-row i { display: block; height: 7px; border-radius: var(--r-pill); background: rgba(255, 255, 255, 0.1); overflow: hidden; }
-        .intel-row i b { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-3)); }
+        .intel-row i b { display: block; height: 100%; background: transparent; }
         .intel-list { display: grid; gap: 0.55rem; }
         .intel-item {
             display: flex; align-items: center; gap: 0.7rem; padding: 0.5rem;
@@ -1188,7 +1195,7 @@
         .tier-name { font-family: var(--font-d); font-size: 0.78rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: #fff; }
         .tier-mult {
             font-family: var(--font-d); font-size: 1.5rem; font-weight: 900; margin: 0.25rem 0 0.5rem;
-            background: linear-gradient(135deg, var(--accent), var(--accent-3));
+            background: transparent;
             -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
         }
         .tier-card ul { list-style: none; display: grid; gap: 0.3rem; }
@@ -1264,6 +1271,144 @@
             .pc-card:hover { transform: none; }
             .deck-neb { display: none; }
         }
+
+        /* ==================================================================
+           10/10 POLISH — modern dropshipping readability + conversion
+           Slim hero, solid titles, always-visible ATC, tightened rhythm.
+           Pure overrides — no JS contracts changed.
+           ================================================================== */
+        .deck { padding: .8rem 0 .35rem; }
+        .hero-unified {
+            max-width: 780px; margin: 0 auto; text-align: center;
+            padding: 1.2rem 0 .55rem;
+        }
+        .hero-unified .deck-live { margin: 0 auto .45rem; padding: .32rem .75rem; font-size:.6rem; }
+        .hero-unified .deck-title { font-size: clamp(1.75rem, 3.4vw, 2.7rem); line-height:1.08; text-align:center; margin-left:auto; margin-right:auto; max-width:100%; }
+        .hero-unified .deck-sub { margin: .35rem auto .75rem; max-width: 60ch; font-size:.95rem; line-height:1.45; text-align:center; }
+        .hero-search {
+            max-width: 640px; margin: 0 auto .6rem; padding: .35rem .45rem .35rem .8rem;
+            border-radius: 999px; background: rgba(10,10,30,.62); border: 1px solid rgba(255,255,255,.14);
+        }
+        .hero-search input { font-size: .95rem; }
+        .hero-search-actions { display:flex; justify-content:center; gap:.6rem; flex-wrap:wrap; margin-bottom: .55rem; }
+        .hero-unified .deck-trust { justify-content:center; gap:.85rem; font-size:.82rem; }
+        .hero-search-panel { display:flex; align-items:center; }
+        .hero-search-card {
+            width:100%; padding: 1.5rem; border-radius: 22px;
+            background: rgba(255,255,255,.045); border: 1px solid rgba(255,255,255,.1);
+            box-shadow: 0 20px 50px rgba(0,0,0,.25);
+        }
+        .hero-search-card h2 { font-family: var(--font-d); font-size: 1.2rem; margin-bottom:.35rem; color:#fff; }
+        .hero-search-card p { color: var(--muted); margin-bottom: 1rem; font-size: .92rem; }
+        .hero-search-card .deck-search { max-width: 100%; margin: 0 0 1rem; background: rgba(6,6,26,.55); }
+        .hero-search-hints { display:flex; flex-wrap:wrap; gap:.45rem; }
+        .hero-search-hints button {
+            padding:.45rem .8rem; border-radius:999px; border:1px solid rgba(255,255,255,.12);
+            background: rgba(255,255,255,.05); color: rgba(255,255,255,.82); cursor:pointer; font-weight:600;
+        }
+        .hero-search-hints button:hover { border-color: rgba(0,240,255,.45); color:#fff; }
+        .deck-title {
+            font-size: clamp(1.9rem, 4.2vw, 3rem);
+            background: none;
+            -webkit-background-clip: border-box; background-clip: border-box;
+            -webkit-text-fill-color: #fff; color: #fff;
+            filter: none; max-width: 16ch;
+        }
+        .deck-sub { font-size: 1rem; max-width: 56ch; }
+        .deck-trust {
+            display: flex; gap: 1.1rem; flex-wrap: wrap;
+            margin-top: 1rem; font-size: 0.82rem; color: var(--muted);
+        }
+        .deck-trust b { color: #fff; font-weight: 700; }
+        .sec { margin: 2.75rem 0; }
+        .sec-title {
+            background: none;
+            -webkit-background-clip: border-box; background-clip: border-box;
+            -webkit-text-fill-color: #fff; color: #fff;
+            font-size: clamp(1.25rem, 2.4vw, 1.7rem);
+        }
+        .sec-sub { font-size: 0.93rem; max-width: 68ch; }
+        /* Info sections sit visually below shopping sections */
+        #intel, #momentum, #guide, #services { scroll-margin-top: 130px; }
+        #intel .intel-card, #guide .guide-card, #services .svc-card { background: rgba(255,255,255,0.028); }
+        /* Conversion: ATC + qty always reachable, no hover-gating */
+        .pc-qty { opacity: 1; transform: none; pointer-events: auto; }
+        .pc-add { min-height: 42px; }
+        .pc-name { font-size: 0.9rem; }
+        .pc-now { font-size: 1.15rem; }
+        /* Sticky category bar reads as one control */
+        .catbar { backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+        /* Rails: consistent card height, less empty scroll */
+        .rail { grid-auto-columns: 264px; }
+        @media (max-width: 640px) {
+            .deck { padding: 1.4rem 0 1rem; }
+            .deck-actions { width: 100%; }
+            .deck-btn { flex: 1 1 auto; text-align: center; justify-content: center; }
+            .shop-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 0.8rem; }
+            .pc-body { padding: 0.6rem 0.65rem 0.7rem; }
+            .pc-name { font-size: 0.82rem; }
+            .pc-desc, .pc-highs, .pc-meter-lab { display: none; }
+        }
+
+        /* SIMPLE FILTER SYSTEM — one obvious place for each decision */
+        .facet-rail { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; margin: 0 0 1.1rem; }
+        .facet-rail .toolbar-label { margin-right: 0.25rem; }
+        .price-panel { border-color: rgba(0,240,255,.18); }
+        .band-grid--mini { grid-template-columns: repeat(auto-fit, minmax(142px, 1fr)); gap: 0.55rem; }
+        .band-card { padding: 0.8rem 0.9rem; border-radius: 14px; }
+        .band-name { font-size: 0.78rem; }
+        .band-count { font-size: 0.72rem; }
+        .range-block--mini { margin-top: 0.75rem; padding: 0.9rem; border-radius: 14px; background: rgba(0,0,0,.12); }
+        .f-group { border-top: 1px solid rgba(255,255,255,.08); padding-top: .85rem; margin-top: .85rem; }
+        .f-group-title { font-size: .66rem; margin-bottom: .55rem; }
+        .f-choice { display:flex; align-items:center; gap:.55rem; padding:.55rem .6rem; border-radius:12px; }
+        .f-choice:hover { background: rgba(255,255,255,.06); }
+        .f-choice span { flex:1 1 auto; }
+        .f-choice em { font-family: var(--font-d); color: var(--accent); }
+        .f-toggle { display:flex; align-items:center; justify-content:space-between; gap:.6rem; padding:.6rem .65rem; margin-bottom:.45rem; border-radius:12px; background: rgba(255,255,255,.045); border:1px solid rgba(255,255,255,.07); }
+        .f-toggle:hover { border-color: rgba(0,240,255,.35); }
+        .f-live { display:flex; align-items:center; justify-content:space-between; gap:.75rem; padding:.85rem .95rem; margin-bottom:.9rem; border-radius:14px; background: rgba(0,240,255,.08); border:1px solid rgba(0,240,255,.22); }
+        .f-live-num { font-size:1.35rem; color:#fff; }
+        .f-actions { gap:.45rem; }
+        .f-note { line-height:1.55; color: var(--muted-2); }
+
+
+        /* Price filter lives in a slim adjustable strip under the category bar */
+        .price-strip { max-width: 1440px; margin: 0 auto .75rem; padding: 0 1.5rem; }
+        .price-panel {
+            display: flex; align-items: stretch; gap: 1rem; flex-wrap: wrap;
+            padding: 1rem 1.1rem; border-radius: 18px;
+            background: rgba(255,255,255,.035); border: 1px solid rgba(0,240,255,.16);
+        }
+        .price-panel-head { flex: 0 0 150px; display: flex; flex-direction: column; justify-content: center; gap: .2rem; }
+        .price-panel--solo { padding: .65rem 1rem; justify-content:center; }
+        .price-panel--solo .range-dual { width:100%; height: 18px; }
+        .range-num-row { display:flex; align-items:center; justify-content:center; gap:.5rem; margin-top:.45rem; flex-wrap:wrap; }
+        .range-num { display:flex; align-items:center; gap:.35rem; color: var(--muted); font-size:.75rem; }
+        .range-num input {
+            width: 92px; padding:.35rem .5rem; border-radius: 9px; text-align:center;
+            background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); color:#fff;
+            font-family: var(--font-d); font-size:.78rem;
+        }
+        .range-num input:focus { outline:none; border-color: var(--accent); }
+        .range-num-sep { color: var(--muted-2); font-size:.8rem; }
+        .price-range-label { font-family: var(--font-d); color: var(--accent); font-size:.82rem; }
+        .band-grid--mini { flex: 1 1 430px; display: flex; gap: .5rem; overflow-x: auto; padding-bottom: .2rem; }
+        .band-card { flex: 0 0 150px; padding: .75rem .85rem; }
+        .range-block--mini { flex: 1 1 440px; margin-top: 0; padding: .85rem 1rem; }
+        @media (max-width: 900px) {
+            .price-strip { padding: 0 1.1rem; }
+            .price-panel { flex-direction: column; }
+            .price-panel-head { flex: 0 0 auto; flex-direction: row; align-items:center; justify-content:space-between; }
+            .band-grid--mini { flex: 0 0 auto; }
+        }
+
+        /* Centre the browse-everything heading block instead of stretching it left-to-right */
+        #grid .sec-head { justify-content: center; text-align: center; }
+        #grid .sec-head-txt { margin: 0 auto; max-width: 760px; }
+        #grid .sec-kicker { justify-content: center; }
+        #grid .sec-title { text-align: center; }
+        #grid .sec-sub { margin-left: auto; margin-right: auto; max-width: 62ch; text-align: center; }
     </style>
 </head>
 <body>
@@ -1283,57 +1428,32 @@
         <section class="deck" aria-labelledby="deckTitle">
             <span class="deck-neb deck-neb-1" aria-hidden="true"></span>
             <span class="deck-neb deck-neb-2" aria-hidden="true"></span>
-            <div class="shop-shell deck-inner deck-hero">
-                <div class="deck-copy">
-                    <span class="deck-live">
-                        <span class="deck-live-dot" aria-hidden="true"></span>
-                        <span id="deckLiveText">Live catalogue</span>
-                    </span>
-
-                    <h1 class="deck-title" id="deckTitle">Shop everything.</h1>
-                    <p class="deck-sub">
-                        Every product, its price, rating and discount — filter it down and add to cart
-                        without losing your place.
-                    </p>
-
-                    <form class="deck-search" id="deckSearchForm" role="search" novalidate>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-                            <circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>
-                        </svg>
-                        <input type="search" id="deckSearch" placeholder="Search a product, SKU, facet or category…" autocomplete="off" aria-label="Search the catalogue">
-                        <button type="button" class="deck-search-clear" id="deckSearchClear" aria-label="Clear search">×</button>
-                        <button type="submit" class="deck-search-btn">Search</button>
-                    </form>
-
-                    <div class="deck-actions">
-                        <button type="button" class="deck-btn deck-btn--solid" data-scroll="grid">Browse products</button>
-                        <a class="deck-btn" href="#pricePanel">Price: <span id="heroPriceRange">Any price</span></a>
-                    </div>
-
-                    <div class="facet-rail" id="deckJumps" aria-label="Preset jumps"></div>
+            <div class="shop-shell deck-inner hero-unified">
+                <span class="deck-live">
+                    <span class="deck-live-dot" aria-hidden="true"></span>
+                    <span id="deckLiveText">Research done for you</span>
+                </span>
+                <h1 class="deck-title" id="deckTitle">We do the research for you.</h1>
+                <p class="deck-sub">
+                    Every listing is checked for quality, price, reviews and value across platforms — so you save time and buy the best option with confidence.
+                </p>
+                <form class="deck-search hero-search" id="deckSearchForm" role="search" novalidate>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                        <circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>
+                    </svg>
+                    <input type="search" id="deckSearch" placeholder="Search headphones, watches, sneakers..." autocomplete="off" aria-label="Search the catalogue">
+                    <button type="button" class="deck-search-clear" id="deckSearchClear" aria-label="Clear search">×</button>
+                    <button type="submit" class="deck-search-btn">Search</button>
+                </form>
+                <div class="hero-search-actions">
+                    <button type="button" class="deck-btn deck-btn--solid" data-scroll="grid">Browse products</button>
+                    <a class="deck-btn" href="#drops">Today's deals</a>
                 </div>
-                <div class="deck-visual" aria-hidden="false">
-                    <article class="hero-card" id="dealHeroCard">
-                        <div class="hero-card-media">
-                            <img id="dealHeroImg" src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=max&w=800" alt="Deal of the day">
-                            <span class="hero-card-badge" id="dealHeroBadge">DEAL OF THE DAY</span>
-                        </div>
-                        <div class="hero-card-body">
-                            <div class="hero-card-row">
-                                <div>
-                                    <strong id="dealHeroName">Wireless Headphones</strong>
-                                    <span id="dealHeroMeta">4.8 ★ · 234 reviews</span>
-                                </div>
-                                <div class="hero-card-price"><span id="dealHeroPrice">$149</span> <s id="dealHeroOld">$199</s></div>
-                            </div>
-                            <div class="hero-card-actions">
-                                <a href="product.html?id=1" class="hero-cta hero-cta--primary hero-card-btn" id="dealHeroLink">View deal</a>
-                                <a href="#drops" class="hero-card-link">More deals</a>
-                            </div>
-                        </div>
-                    </article>
-                    <div class="hero-float hero-float--a">✓ Free 30-day returns</div>
-                    <div class="hero-float hero-float--b">✓ Price checked today</div>
+                <div class="deck-trust" aria-label="Store promises">
+                    <span><b>Free shipping</b> over $50</span>
+                    <span><b>30-day</b> free returns</span>
+                    <span><b>4.8★</b> verified reviews</span>
+                    <span><b>Quality-checked</b> listings</span>
                 </div>
             </div>
         </section>
@@ -1344,75 +1464,48 @@
                 <button type="button" class="catbar-btn" data-cat="electronics">Electronics</button>
                 <button type="button" class="catbar-btn" data-cat="fashion">Fashion</button>
                 <button type="button" class="catbar-btn" data-cat="home">Home</button>
+                <button type="button" class="catbar-btn" data-facet="audio">Audio</button>
+                <button type="button" class="catbar-btn" data-facet="wearables">Wearables</button>
+                <button type="button" class="catbar-btn" data-facet="computing">Computing</button>
+                <button type="button" class="catbar-btn" data-facet="imaging">Cameras</button>
+                <button type="button" class="catbar-btn" data-facet="power">Power</button>
+                <button type="button" class="catbar-btn" data-facet="carry">Carry</button>
+                <button type="button" class="catbar-btn" data-facet="footwear">Footwear</button>
+                <button type="button" class="catbar-btn" data-facet="living">Living</button>
                 <button type="button" class="catbar-btn catbar-btn--sale" data-jump="sale">On Sale</button>
             </div>
         </div>
 
-<!-- ══════ ON SALE NOW (shelf 1 — catalogue-wide highlights) ══════ -->
-        <section class="sec shop-shell" id="drops" aria-labelledby="dropTitle">
-            <div class="rail-head">
-                <div class="sec-head-txt">
-                    <span class="sec-kicker sec-kicker--sale">On sale now</span>
-                    <h2 class="sec-title" id="dropTitle">Today's biggest price drops</h2>
-                    <p class="sec-sub">
-                        Real discounts, ranked by how much you save. Grab them before prices move.
-                    </p>
+        <!-- Compact adjustable price line, directly under the category bar -->
+        <div class="price-strip shop-shell" id="priceStrip" aria-label="Price filter">
+            <div class="f-panel price-panel price-panel--solo" id="pricePanel">
+                <div class="range-dual" aria-label="Price range">
+                    <span class="range-fill" id="rangeFill" aria-hidden="true"></span>
+                    <input type="range" id="rangeLo" aria-label="Minimum price">
+                    <input type="range" id="rangeHi" aria-label="Maximum price">
                 </div>
-                <div class="rail-nav">
-                    <button type="button" class="rail-btn" data-rail="dropsRail" data-dir="-1" aria-label="Scroll price drops left">‹</button>
-                    <button type="button" class="rail-btn" data-rail="dropsRail" data-dir="1" aria-label="Scroll price drops right">›</button>
+                <div class="range-num-row" aria-label="Enter price range">
+                    <label class="range-num">
+                        <span>From</span>
+                        <input type="number" id="rangeLoNum" step="1" inputmode="numeric" aria-label="Minimum price">
+                    </label>
+                    <span class="range-num-sep">to</span>
+                    <label class="range-num">
+                        <span>Up to</span>
+                        <input type="number" id="rangeHiNum" step="1" inputmode="numeric" aria-label="Maximum price">
+                    </label>
                 </div>
             </div>
-            <div class="rail" id="dropsRail"></div>
-        </section>
+        </div>
 
         <!-- ══════ BROWSE EVERYTHING (shelf 2 — the full grid + sticky filters) ══════ -->
-        <section class="sec shop-shell" id="grid" aria-labelledby="gridTitle">
-            <div class="sec-head">
-                <div class="sec-head-txt">
-                    <span class="sec-kicker">Browse everything</span>
-                    <h2 class="sec-title" id="gridTitle">Find your next favourite</h2>
-                    <p class="sec-sub">
-                        Use the filters to narrow it down — every card shows its rating, reviews and real discount.
-                    </p>
-                </div>
-            </div>
-
+        <section class="sec shop-shell" id="grid" aria-label="Product grid">
             <div class="chip-rail" id="chipsRoot" aria-live="polite"></div>
 
-            <div class="shop-layout">
-                <aside class="shop-side" aria-label="Filters">
-                    <div class="f-panel price-panel" id="pricePanel">
-                        <div class="f-group-title"><span>Price</span></div>
-                        <div class="band-grid band-grid--mini" id="bandGrid"></div>
-                        <div class="range-block range-block--mini">
-                            <div class="range-head">
-                                <span class="range-title">Custom range</span>
-                                <div class="range-nums">
-                                    <label class="sr-only" for="rangeLoNum">Minimum price</label>
-                                    <input type="number" id="rangeLoNum" step="1" inputmode="numeric">
-                                    <span>–</span>
-                                    <label class="sr-only" for="rangeHiNum">Maximum price</label>
-                                    <input type="number" id="rangeHiNum" step="1" inputmode="numeric">
-                                </div>
-                            </div>
-                            <div class="range-dual">
-                                <span class="range-fill" id="rangeFill" aria-hidden="true"></span>
-                                <input type="range" id="rangeLo" aria-label="Minimum price">
-                                <input type="range" id="rangeHi" aria-label="Maximum price">
-                            </div>
-                            <div class="range-ticks" id="rangeTicks"></div>
-                            <div class="range-actions">
-                                <button type="button" class="f-btn" data-range-apply="1">Apply</button>
-                                <button type="button" class="f-btn f-btn--ghost" data-range-reset="1">Reset</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="filtersRoot"></div>
-                </aside>
+            <div class="facet-rail" id="facetRail" aria-label="Quick facets"></div>
 
-                <div>
-                    <div class="toolbar">
+            <div>
+                <div class="toolbar">
                         <div class="toolbar-main">
                             <p class="toolbar-count" id="resultCount" aria-live="polite">Loading catalogue…</p>
                         </div>
@@ -1439,9 +1532,38 @@
                         <button type="button" class="chip-clear" id="loadAll">Show all</button>
                     </div>
                 </div>
-            </div>
         </section>
 
+<!-- ══════ ON SALE NOW (shelf 1 — catalogue-wide highlights) ══════ -->
+        <section class="sec shop-shell" id="drops" aria-labelledby="dropTitle">
+            <div class="rail-head">
+                <div class="sec-head-txt">
+                    <span class="sec-kicker sec-kicker--sale">On sale now</span>
+                    <h2 class="sec-title" id="dropTitle">Today's biggest price drops</h2>
+                    <p class="sec-sub">
+                        Real discounts, ranked by how much you save. Grab them before prices move.
+                    </p>
+                </div>
+                <div class="rail-nav">
+                    <button type="button" class="rail-btn" data-rail="dropsRail" data-dir="-1" aria-label="Scroll price drops left">‹</button>
+                    <button type="button" class="rail-btn" data-rail="dropsRail" data-dir="1" aria-label="Scroll price drops right">›</button>
+                </div>
+            </div>
+            <div class="rail" id="dropsRail"></div>
+        </section><!-- ═════ 13 · SERVICE ARCHITECTURE ═══════ -->
+        <section class="sec shop-shell" id="services" aria-labelledby="svcTitle">
+            <div class="sec-head">
+                <div class="sec-head-txt">
+                    <span class="sec-kicker">Shipping & returns</span>
+                    <h2 class="sec-title" id="svcTitle">Service architecture</h2>
+                    <p class="sec-sub">
+                        Six promises with numbers attached — each one links straight to the page that
+                        explains it in full, so nothing on this shop page is a dead end.
+                    </p>
+                </div>
+            </div>
+            <div class="svc-grid" id="svcGrid"></div>
+        </section>
         <!-- ═════ 8 · QUICK VIEW MODAL (rendered by JS) ═══════ -->
         <div class="modal" id="quickView" role="dialog" aria-modal="true" aria-labelledby="qvTitleHost" hidden>
             <div class="modal-back" data-close="quickView"></div>
@@ -1481,75 +1603,18 @@
                 </div>
             </div>
         </div>
-<!-- ═════ 10 · CATALOGUE INTELLIGENCE ═══════ -->
-        <section class="sec shop-shell" id="intel" aria-labelledby="intelTitle">
-            <div class="sec-head">
-                <div class="sec-head-txt">
-                    <span class="sec-kicker">Section 10 · Read the whole shelf at once</span>
-                    <h2 class="sec-title" id="intelTitle">Catalogue intelligence</h2>
-                    <p class="sec-sub">
-                        Aggregates and leaderboards computed from this store's own ratings, review counts and
-                        prices — the catalogue reporting on itself, updated on every visit.
-                    </p>
-                </div>
-            </div>
-            <div class="intel-grid" id="intelRoot"></div>
-        </section>
 
-        <!-- ═════ 11 · MOMENTUM RAIL (ranked, bar = real score) ═══════ -->
-        <section class="sec shop-shell" id="momentum" aria-labelledby="momTitle">
-            <div class="rail-head">
-                <div class="sec-head-txt">
-                    <span class="sec-kicker">Section 11 · Ranked by demand</span>
-                    <h2 class="sec-title" id="momTitle">What the catalogue is moving today</h2>
-                    <p class="sec-sub">
-                        Ranked #1 to #8 by a momentum score built from real review volume × rating.
-                        The bar length <em>is</em> that score — it is data, not decoration.
-                    </p>
-                </div>
-                <div class="rail-nav">
-                    <button type="button" class="rail-btn" data-rail="momentumRail" data-dir="-1" aria-label="Scroll momentum rail left">‹</button>
-                    <button type="button" class="rail-btn" data-rail="momentumRail" data-dir="1" aria-label="Scroll momentum rail right">›</button>
-                </div>
-            </div>
-            <div class="rail" id="momentumRail"></div>
-        </section>
 
-        <!-- ═════ 12 · DECISION SUPPORT (real specs + FAQ) ═══════ -->
-        <section class="sec shop-shell" id="guide" aria-labelledby="guideTitle">
-            <div class="sec-head">
-                <div class="sec-head-txt">
-                    <span class="sec-kicker">Section 12 · Decide with evidence</span>
-                    <h2 class="sec-title" id="guideTitle">How to choose, using real specifications</h2>
-                    <p class="sec-sub">
-                        Every figure below is pulled from the spec table of the best-rated product in that
-                        facet — the same rows you will find on its product page.
-                    </p>
-                </div>
-            </div>
-            <div class="guide-grid" id="guideRoot"></div>
-            <div class="faq-wrap" id="faqRoot"></div>
-        </section>
+        
 
-        <!-- ═════ 13 · SERVICE ARCHITECTURE ═══════ -->
-        <section class="sec shop-shell" id="services" aria-labelledby="svcTitle">
-            <div class="sec-head">
-                <div class="sec-head-txt">
-                    <span class="sec-kicker">Section 13 · What happens after you click buy</span>
-                    <h2 class="sec-title" id="svcTitle">Service architecture</h2>
-                    <p class="sec-sub">
-                        Six promises with numbers attached — each one links straight to the page that
-                        explains it in full, so nothing on this shop page is a dead end.
-                    </p>
-                </div>
-            </div>
-            <div class="svc-grid" id="svcGrid"></div>
-        </section>
+        
+
+        
 <!-- ════ 14a · RECENTLY VIEWED (personal, localStorage) ═════ -->
         <section class="sec shop-shell" id="recent" aria-labelledby="recentTitle" hidden>
             <div class="rail-head">
                 <div class="sec-head-txt">
-                    <span class="sec-kicker">Section 14 · Your own history</span>
+                    <span class="sec-kicker">Recently viewed</span>
                     <h2 class="sec-title" id="recentTitle">Continue where you left off</h2>
                     <p class="sec-sub">
                         Built from the products you opened in this browser — stored locally, never sent anywhere.
@@ -1567,7 +1632,7 @@
         <section class="sec shop-shell" id="pairs" aria-labelledby="pairsTitle" hidden>
             <div class="rail-head">
                 <div class="sec-head-txt">
-                    <span class="sec-kicker">Section 14 · Cross-sell from real cart data</span>
+                    <span class="sec-kicker">Pairs well with</span>
                     <h2 class="sec-title" id="pairsTitle">Pairs well with what's already in your cart</h2>
                     <p class="sec-sub" id="pairsSub">
                         Highest-rated products from the same category as your cart items.
@@ -1581,11 +1646,55 @@
             <div class="rail rail--wide" id="pairsRail"></div>
         </section>
 
-        <!-- ═════ 16 · REWARDS + NEWSLETTER BAND ═══════ -->
+<!-- ═════ 10 · CATALOGUE INTELLIGENCE ═══════ -->
+        <section class="sec shop-shell" id="intel" aria-labelledby="intelTitle">
+            <div class="sec-head">
+                <div class="sec-head-txt">
+                    <span class="sec-kicker">Store insights</span>
+                    <h2 class="sec-title" id="intelTitle">Catalogue intelligence</h2>
+                    <p class="sec-sub">
+                        Aggregates and leaderboards computed from this store's own ratings, review counts and
+                        prices — the catalogue reporting on itself, updated on every visit.
+                    </p>
+                </div>
+            </div>
+            <div class="intel-grid" id="intelRoot"></div>
+        </section><!-- ═════ 11 · MOMENTUM RAIL (ranked, bar = real score) ═══════ -->
+        <section class="sec shop-shell" id="momentum" aria-labelledby="momTitle">
+            <div class="rail-head">
+                <div class="sec-head-txt">
+                    <span class="sec-kicker">Trending now</span>
+                    <h2 class="sec-title" id="momTitle">What the catalogue is moving today</h2>
+                    <p class="sec-sub">
+                        Ranked #1 to #8 by a momentum score built from real review volume × rating.
+                        The bar length <em>is</em> that score — it is data, not decoration.
+                    </p>
+                </div>
+                <div class="rail-nav">
+                    <button type="button" class="rail-btn" data-rail="momentumRail" data-dir="-1" aria-label="Scroll momentum rail left">‹</button>
+                    <button type="button" class="rail-btn" data-rail="momentumRail" data-dir="1" aria-label="Scroll momentum rail right">›</button>
+                </div>
+            </div>
+            <div class="rail" id="momentumRail"></div>
+        </section><!-- ═════ 12 · DECISION SUPPORT (real specs + FAQ) ═══════ -->
+        <section class="sec shop-shell" id="guide" aria-labelledby="guideTitle">
+            <div class="sec-head">
+                <div class="sec-head-txt">
+                    <span class="sec-kicker">Buying guides</span>
+                    <h2 class="sec-title" id="guideTitle">How to choose, using real specifications</h2>
+                    <p class="sec-sub">
+                        Every figure below is pulled from the spec table of the best-rated product in that
+                        facet — the same rows you will find on its product page.
+                    </p>
+                </div>
+            </div>
+            <div class="guide-grid" id="guideRoot"></div>
+            <div class="faq-wrap" id="faqRoot"></div>
+        </section>        <!-- ═════ 16 · REWARDS + NEWSLETTER BAND ═══════ -->
         <section class="sec shop-shell" id="rewards" aria-labelledby="rwTitle">
             <div class="sec-head">
                 <div class="sec-head-txt">
-                    <span class="sec-kicker">Section 16 · Members get more</span>
+                    <span class="sec-kicker">Membership</span>
                     <h2 class="sec-title" id="rwTitle">What an account changes</h2>
                     <p class="sec-sub">
                         No invented tiers below — just what shopping as a guest already gets you today, and what
@@ -1653,16 +1762,19 @@
 
     /* Hero price chip — shows the live sidebar range, links to it */
     function syncHeroPrice() {
-        var s = document.getElementById('heroPriceRange');
-        if (!s) return;
-        try {
-            var shop = window.TrendaryoShop;
-            var st = shop && shop.state ? shop.state : null;
-            if (!st) return;
-            var P = window.TrendaryoProducts;
-            var fmt = function (n) { return (P && P.price) ? P.price(n) : '$' + n; };
-            s.textContent = fmt(st.lo) + ' – ' + fmt(st.hi);
-        } catch (e) {}
+            var s = document.getElementById('heroPriceRange');
+            var s2 = document.getElementById('priceRangeLabel');
+            if (!s && !s2) return;
+            try {
+                var shop = window.TrendaryoShop;
+                var st = shop && shop.state ? shop.state : null;
+                if (!st) return;
+                var P = window.TrendaryoProducts;
+                var fmt = function (n) { return (P && P.price) ? P.price(n) : '$' + n; };
+                var txt = fmt(st.lo) + ' – ' + fmt(st.hi);
+                if (s) s.textContent = txt;
+                if (s2) s2.textContent = txt;
+            } catch (e) {}
     }
     window.addEventListener('hashchange', function () { setTimeout(syncHeroPrice, 120); });
     (function () {
@@ -1686,8 +1798,9 @@
             bar.querySelectorAll('.catbar-btn').forEach(function (b) {
                 var on = false;
                 if (b.hasAttribute('data-jump')) { on = (st.sale === 1); }
-                else if (b.getAttribute('data-cat') === 'all') { on = (st.cat === 'all' && !st.sale); }
-                else { on = (b.getAttribute('data-cat') === st.cat && !st.sale); }
+                else if (b.hasAttribute('data-facet')) { on = (b.getAttribute('data-facet') === st.facet && !st.sale); }
+                else if (b.getAttribute('data-cat') === 'all') { on = (st.cat === 'all' && st.facet === 'all' && !st.sale); }
+                else { on = (b.getAttribute('data-cat') === st.cat && st.facet === 'all' && !st.sale); }
                 b.classList.toggle('is-on', on);
             });
         }
