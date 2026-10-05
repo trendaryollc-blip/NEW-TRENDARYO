@@ -247,6 +247,22 @@
         var storeSettings = { currency: 'usd', taxRate: 0.08, shippingFlat: 9.99, freeShippingThreshold: 50 };
         var appliedCoupon = null;
 
+        function ensureCheckoutSession() {
+            if (typeof initFirebase !== 'function') return;
+            Promise.resolve(initFirebase()).then(function (fb) {
+                var auth = fb && fb.auth;
+                if (!auth || typeof auth.onAuthStateChanged !== 'function') return;
+                auth.onAuthStateChanged(function (user) {
+                    if (user) return;
+                    try {
+                        var p = auth.signInAnonymously();
+                        if (p && p.catch) p.catch(function (e) { console.warn('Guest session unavailable:', e && e.message); });
+                    } catch (e) { console.warn('Guest session unavailable:', e && e.message); }
+                });
+            }).catch(function () {});
+        }
+        ensureCheckoutSession();
+
         document.addEventListener('DOMContentLoaded', function() {
             loadCart();
             initStripe();

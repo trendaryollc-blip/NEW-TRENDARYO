@@ -140,6 +140,25 @@
     <script>
         var auth, db;
         
+        function getSafeRedirect() {
+            try {
+                var v = new URLSearchParams(window.location.search).get('redirect');
+                if (!v) return null;
+                if (v.indexOf('://') !== -1 || v.indexOf('//') === 0) return null;
+                if (!/^[a-zA-Z0-9/._~-]+(\?[^#]*)?(#.*)?$/.test(v)) return null;
+                return v;
+            } catch (e) { return null; }
+        }
+        (function propagateRedirectToLinks() {
+            var r = null;
+            try { r = new URLSearchParams(window.location.search).get('redirect'); } catch (e) {}
+            if (!r) return;
+            document.querySelectorAll('a[href^="login.html"]').forEach(function (a) {
+                var base = a.getAttribute('href');
+                a.href = base + (base.indexOf('?') > -1 ? '&' : '?') + 'redirect=' + encodeURIComponent(r);
+            });
+        })();
+        
         window.addEventListener('load', async function() {
             try {
                 if (typeof initFirebase === 'function') {
@@ -212,7 +231,7 @@
                     }
                     
                     setTimeout(function() {
-                        window.location.href = 'shop.html';
+                        window.location.href = getSafeRedirect() || 'shop.html';
                     }, 1500);
                 }
             } catch (err) {

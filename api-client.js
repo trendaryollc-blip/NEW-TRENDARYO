@@ -53,7 +53,10 @@ class APIClient {
           localStorage.removeItem('user');
           localStorage.removeItem('auth_token');
           setTimeout(() => {
-            window.location.href = '/login.html';
+            var onAuthPage = /\/(login|register|admin-login|forgot-password|reset-password|email-verify)\.html$/.test(window.location.pathname);
+            if (onAuthPage) { window.location.href = '/login.html'; return; }
+            var back = window.location.pathname + window.location.search;
+            window.location.href = '/login.html?redirect=' + encodeURIComponent(back);
           }, 1500);
         }
 
