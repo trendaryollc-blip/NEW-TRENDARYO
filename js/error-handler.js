@@ -403,7 +403,7 @@ class ErrorHandler {
     }
 
     // Also log to console in development
-    if (process?.env?.NODE_ENV === 'development') {
+    if (typeof process !== 'undefined' && process.env && process.env.NODE_ENV === 'development') {
       console.error('Error logged:', errorInfo);
     }
   }

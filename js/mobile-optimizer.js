@@ -59,11 +59,12 @@ class MobileOptimizer {
    * Add device classes
    */
   addDeviceClasses() {
-    document.body.classList.add(
+    const classes = [
       this.isMobile ? 'is-mobile' : 'is-desktop',
       this.isTablet ? 'is-tablet' : '',
-      `orientation-${this.orientation}`
-    );
+      `orientation-${this.orientation}`,
+    ].filter(Boolean);
+    document.body.classList.add(...classes);
   }
 
   /**

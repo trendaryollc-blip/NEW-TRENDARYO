@@ -276,3 +276,4 @@ class APIClient {
 }
 
 const API = new APIClient();
+window.API = API;

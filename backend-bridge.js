@@ -23,7 +23,7 @@
   var RELOAD_GUARD = 'trendaryo_catalog_reloaded';
 
   function api() { return window.API; }
-  function haveApi() { return !!(window.API && typeof window.API.request === 'function'); }
+  function haveApi() { return typeof APIClient !== 'undefined' || !!(window.API && typeof window.API.request === 'function'); }
 
   function lsGet(key, fallback) {
     try { var v = JSON.parse(localStorage.getItem(key)); return v == null ? fallback : v; }
