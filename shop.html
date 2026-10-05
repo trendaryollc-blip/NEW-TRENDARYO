@@ -1342,9 +1342,6 @@
         .rail { grid-auto-columns: 264px; }
         @media (max-width: 640px) {
             .deck { padding: 1.4rem 0 1rem; }
-        #shop-3d { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; opacity: 0; transition: opacity .8s ease; touch-action: none; cursor: grab; }
-        .deck-inner { pointer-events: none; }
-        .deck-inner form, .deck-inner a, .deck-inner button, .deck-inner input, .deck-inner .deck-search-btn { pointer-events: auto; }
             .deck-actions { width: 100%; }
             .deck-btn { flex: 1 1 auto; text-align: center; justify-content: center; }
             .shop-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 0.8rem; }
@@ -1352,6 +1349,9 @@
             .pc-name { font-size: 0.82rem; }
             .pc-desc, .pc-highs, .pc-meter-lab { display: none; }
         }
+        #shop-3d { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; opacity: 0; transition: opacity .8s ease; touch-action: none; cursor: grab; }
+        .deck-inner { pointer-events: none; }
+        .deck-inner form, .deck-inner a, .deck-inner button, .deck-inner input, .deck-inner .deck-search-btn { pointer-events: auto; }
 
         /* SIMPLE FILTER SYSTEM — one obvious place for each decision */
         .facet-rail { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; margin: 0 0 1.1rem; }
