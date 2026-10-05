@@ -1342,6 +1342,9 @@
         .rail { grid-auto-columns: 264px; }
         @media (max-width: 640px) {
             .deck { padding: 1.4rem 0 1rem; }
+        #shop-3d { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; opacity: 0; transition: opacity .8s ease; touch-action: none; cursor: grab; }
+        .deck-inner { pointer-events: none; }
+        .deck-inner form, .deck-inner a, .deck-inner button, .deck-inner input, .deck-inner .deck-search-btn { pointer-events: auto; }
             .deck-actions { width: 100%; }
             .deck-btn { flex: 1 1 auto; text-align: center; justify-content: center; }
             .shop-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 0.8rem; }
@@ -1428,6 +1431,7 @@
         <section class="deck" aria-labelledby="deckTitle">
             <span class="deck-neb deck-neb-1" aria-hidden="true"></span>
             <span class="deck-neb deck-neb-2" aria-hidden="true"></span>
+            <canvas id="shop-3d" aria-hidden="true"></canvas>
             <div class="shop-shell deck-inner hero-unified">
                 <span class="deck-live">
                     <span class="deck-live-dot" aria-hidden="true"></span>
@@ -1457,6 +1461,7 @@
                 </div>
             </div>
         </section>
+        <script src="shop-3d.js"></script>
         <!-- ══════ CATEGORY BAR — sticky below header · category first, price second ══════ -->
         <div class="catbar" role="navigation" aria-label="Shop by category">
             <div class="catbar-inner">
