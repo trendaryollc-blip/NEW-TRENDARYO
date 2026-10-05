@@ -8,9 +8,16 @@ let auth;
 function initFirebase() {
   if (db) return { db, auth };
 
-  const projectId = process.env.FIREBASE_PROJECT_ID;
-  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
-  const privateKey = process.env.FIREBASE_PRIVATE_KEY;
+  let projectId = process.env.FIREBASE_PROJECT_ID;
+  let clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
+  let privateKey = process.env.FIREBASE_PRIVATE_KEY;
+
+  if ((!projectId || !clientEmail || !privateKey) && process.env.FIREBASE_SERVICE_ACCOUNT_KEY) {
+    const sa = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
+    projectId = projectId || sa.project_id;
+    clientEmail = clientEmail || sa.client_email;
+    privateKey = privateKey || sa.private_key;
+  }
 
   if (!projectId || !clientEmail || !privateKey) {
     throw new Error('Missing Firebase credentials in environment variables');
