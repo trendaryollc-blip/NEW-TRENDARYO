@@ -6,11 +6,11 @@
     var ROOM_CDN = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/environments/RoomEnvironment.js';
 
     var MODELS = [
-        { name: 'BoomBox',             url: 'assets/models/BoomBox.glb',             pos: [-1.8, 1.0, 0],  size: 1.6, remote: 'BoomBox', spin: 0.4, phase: 0 },
-        { name: 'Shoe',                url: 'assets/models/MaterialsVariantsShoe.glb', pos: [1.8, 1.3, -0.4], size: 1.5, remote: 'MaterialsVariantsShoe', spin: 0.35, phase: 1.6 },
-        { name: 'WaterBottle',         url: 'assets/models/WaterBottle.glb',         pos: [2.0, -1.3, 0.4], size: 1.7, remote: 'WaterBottle', spin: 0.55, phase: 3.1 },
-        { name: 'AntiqueCamera',       url: 'assets/models/AntiqueCamera.glb',       pos: [-1.7, -1.4, 0.3], size: 1.5, remote: 'AntiqueCamera', spin: 0.45, phase: 4.4 },
-        { name: 'IridescenceLamp',     url: 'assets/models/IridescenceLamp.glb',     pos: [0.2, -0.2, -1.8], size: 1.6, remote: 'IridescenceLamp', spin: 0.5, phase: 5.5 }
+        { name: 'BoomBox',             url: 'assets/models/BoomBox.glb',             pos: [-1.8, 1.0, 0],  size: 2.6, remote: 'BoomBox', spin: 0.4, phase: 0 },
+        { name: 'Shoe',                url: 'assets/models/MaterialsVariantsShoe.glb', pos: [1.8, 1.3, -0.4], size: 2.4, remote: 'MaterialsVariantsShoe', spin: 0.35, phase: 1.6 },
+        { name: 'WaterBottle',         url: 'assets/models/WaterBottle.glb',         pos: [2.0, -1.3, 0.4], size: 2.7, remote: 'WaterBottle', spin: 0.55, phase: 3.1 },
+        { name: 'AntiqueCamera',       url: 'assets/models/AntiqueCamera.glb',       pos: [-1.7, -1.4, 0.3], size: 2.4, remote: 'AntiqueCamera', spin: 0.45, phase: 4.4 },
+        { name: 'IridescenceLamp',     url: 'assets/models/IridescenceLamp.glb',     pos: [0.2, -0.2, -1.8], size: 2.6, remote: 'IridescenceLamp', spin: 0.5, phase: 5.5 }
     ];
 
     function init() {
@@ -207,6 +207,6 @@
         });
     }
 
-    if (window.THREE) { boot(); return; }
-    load(THREE_CDN, boot);
+    if (window.THREE) { window.addEventListener('load', boot); return; }
+    load(THREE_CDN, function () { window.addEventListener('load', boot); });
 })();
