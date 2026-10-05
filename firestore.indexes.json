@@ -135,16 +135,6 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "paymentIntentId",
-          "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "payments",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
           "fieldPath": "userId",
           "order": "ASCENDING"
         },
@@ -164,16 +154,6 @@
         },
         {
           "fieldPath": "createdAt",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "adminLogs",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "at",
           "order": "DESCENDING"
         }
       ]
