@@ -9,6 +9,8 @@
   "scripts": {
     "dev": "vercel dev",
     "build": "echo 'Static site - no build needed'",
+    "test": "node --test",
+    "test:coverage": "node --test --experimental-test-coverage",
     "start": "vercel dev",
     "deploy": "vercel --prod",
     "seed": "node scripts/seed-firestore.js",

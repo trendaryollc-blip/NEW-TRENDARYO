@@ -2,6 +2,10 @@
 node_modules
 .git
 .vscode
+.env*
+*.env
+service-account.json
+*serviceAccountKey*.json
 *.md
 !README.md
 .gitignore

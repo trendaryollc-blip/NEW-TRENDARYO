@@ -122,7 +122,9 @@ module.exports = async function handler(req, res) {
         if (intent.metadata && intent.metadata.userId && intent.metadata.userId !== user.uid) {
           return res.status(403).json({ error: { message: 'Payment does not belong to this account' } });
         }
-        if (toCents(intent.amount_received || intent.amount) !== toCents(pricing.total)) {
+        const receivedAmount = Number(intent.amount_received ?? intent.amount ?? 0);
+        const expectedAmount = toCents(pricing.total);
+        if (receivedAmount !== expectedAmount) {
           return res.status(400).json({
             error: { message: 'Payment amount does not match the order total', code: 'amount_mismatch' },
           });
