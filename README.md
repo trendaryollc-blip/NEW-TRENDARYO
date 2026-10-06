@@ -29,17 +29,6 @@ A fully functional, enterprise-grade e-commerce platform with 3D UI effects, Fir
 - **Firestore rules**: all commerce writes are blocked to the client SDK (Admin SDK only). Users cannot self-elevate to admin or modify their role/status/email. See `firestore.rules`.
 - **Admin API**: every admin endpoint enforces a server-side role check (`requireAdmin`) against Firestore, not client-stored flags.
 
-## Tests
-
-Run the project-owned tests with Node.js 22 or newer (no extra test dependencies):
-
-```bash
-npm test
-npm run test:coverage
-```
-
-The suite covers API gateway dispatch, pricing and security utilities, mocked handler flows for authentication, cart/wishlist, catalog/reviews, orders/payments, and admin operations, plus syntax/smoke checks for checked-in HTML and JavaScript. Coverage output is an observed measurement, not a claim that every user flow or external integration is tested. Firebase, Stripe, Cloudinary, browser interactions, and deployment behavior still need environment-backed integration/E2E checks before production.
-
 ## Setup
 
 ### 1. Clone & Install

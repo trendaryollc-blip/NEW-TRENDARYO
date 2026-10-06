@@ -34,9 +34,6 @@ build/
 .next/
 out/
 
-# Testing
-coverage/
-
 # Temporary files
 tmp/
 temp/
