@@ -562,7 +562,7 @@
 
         async function loadOrders() {
             console.log('Loading orders...');
-            const result = await window.OrderManager.getOrders(50, 1);
+            const result = await window.OrderManager.getOrders(50);
 
             if (result.success) {
                 // Backend returns { data: [], pagination: {} }

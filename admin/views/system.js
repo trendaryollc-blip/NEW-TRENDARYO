@@ -525,6 +525,10 @@
                 '<div class="panel"><div class="panel__head"><div><div class="panel__title">Commerce</div></div></div><div class="panel__body">' +
                     '<div class="field-row"><div class="field"><label class="field__label">Low stock threshold</label><input class="input input--mono" id="stLow" type="number" min="0" value="' + s.lowStock + '"><div class="field__hint">Watchlists and badges key off this number.</div></div>' +
                     '<div class="field"><label class="field__label">Display currency</label><select class="select" id="stCur"><option value="USD"' + (s.currency === 'USD' ? ' selected' : '') + '>USD</option><option value="EUR"' + (s.currency === 'EUR' ? ' selected' : '') + '>EUR</option><option value="GBP"' + (s.currency === 'GBP' ? ' selected' : '') + '>GBP</option></select><div class="field__hint">Display only - prices stay as listed.</div></div></div>' +
+                    '<div class="field-row mt-3"><div class="field"><label class="field__label">Tax by country (JSON)</label><textarea class="input input--mono" id="stTaxCountry" rows="2" placeholder="{&quot;CA&quot;:0.13,&quot;GB&quot;:0.2}">' + U.esc(JSON.stringify(s.taxRatesByCountry || {})) + '</textarea><div class="field__hint">Rates are decimals. US may use the legacy default.</div></div>' +
+                    '<div class="field"><label class="field__label">Tax by region (JSON)</label><textarea class="input input--mono" id="stTaxRegion" rows="2" placeholder="{&quot;US-CA&quot;:0.0725,&quot;CA-ON&quot;:0.13}">' + U.esc(JSON.stringify(s.taxRatesByRegion || {})) + '</textarea><div class="field__hint">Region keys use COUNTRY-REGION; they override country rates.</div></div></div>' +
+                    '<div class="field-row"><div class="field"><label class="field__label">Shipping by country (JSON)</label><textarea class="input input--mono" id="stShipCountry" rows="2" placeholder="{&quot;US&quot;:9.99,&quot;CA&quot;:14.99,&quot;GB&quot;:19.99}">' + U.esc(JSON.stringify(s.shippingByCountry || {})) + '</textarea><div class="field__hint">Countries omitted here use the default flat shipping fee.</div></div>' +
+                    '<div class="field"><label class="field__label">COD countries (JSON)</label><textarea class="input input--mono" id="stCodCountries" rows="2" placeholder="[&quot;US&quot;,&quot;CA&quot;]">' + U.esc(JSON.stringify(s.codCountries == null ? null : s.codCountries)) + '</textarea><div class="field__hint">null allows all countries; [] disables COD everywhere.</div></div></div>' +
                     '<div class="row mt-4"><button class="btn btn--primary btn--sm" id="stCoSave" type="button">' + A().icon('save', 13) + 'Save commerce</button></div></div></div>' +
             '</div>' +
 
@@ -562,7 +566,32 @@
                 App.toast('Store identity saved', 'ok', 'Settings');
             });
             root.querySelector('#stCoSave').addEventListener('click', function () {
-                S.saveSettings({ lowStock: parseInt(root.querySelector('#stLow').value, 10) || 0, currency: root.querySelector('#stCur').value });
+                var commerceSettings;
+                try {
+                    commerceSettings = {
+                        lowStock: parseInt(root.querySelector('#stLow').value, 10) || 0,
+                        currency: root.querySelector('#stCur').value,
+                        taxRatesByCountry: JSON.parse(root.querySelector('#stTaxCountry').value || '{}'),
+                        taxRatesByRegion: JSON.parse(root.querySelector('#stTaxRegion').value || '{}'),
+                        shippingByCountry: JSON.parse(root.querySelector('#stShipCountry').value || '{}'),
+                        codCountries: JSON.parse(root.querySelector('#stCodCountries').value || '[]')
+                    };
+                    if (commerceSettings.codCountries !== null && !Array.isArray(commerceSettings.codCountries)) throw new Error('COD countries must be null or a JSON array.');
+                    ['taxRatesByCountry', 'taxRatesByRegion', 'shippingByCountry'].forEach(function (key) {
+                        if (!commerceSettings[key] || typeof commerceSettings[key] !== 'object' || Array.isArray(commerceSettings[key])) {
+                            throw new Error(key + ' must be a JSON object.');
+                        }
+                    });
+                    if (Object.values(commerceSettings.taxRatesByCountry).some(function (v) { return !Number.isFinite(Number(v)) || Number(v) < 0 || Number(v) > 1; }) ||
+                        Object.values(commerceSettings.taxRatesByRegion).some(function (v) { return !Number.isFinite(Number(v)) || Number(v) < 0 || Number(v) > 1; }) ||
+                        Object.values(commerceSettings.shippingByCountry).some(function (v) { return !Number.isFinite(Number(v)) || Number(v) < 0; })) {
+                        throw new Error('Tax rates must be 0–1 and shipping rates must be zero or greater.');
+                    }
+                } catch (error) {
+                    App.toast(error.message || 'Enter valid commerce settings JSON.', 'error', 'Settings');
+                    return;
+                }
+                S.saveSettings(commerceSettings);
                 App.toast('Commerce settings saved', 'ok', 'Settings');
                 app().badges();
             });

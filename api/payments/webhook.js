@@ -88,6 +88,25 @@ module.exports = async function handler(req, res) {
         break;
       }
 
+      case 'charge.refunded': {
+        const charge = event.data.object;
+        const paymentIntentId = typeof charge.payment_intent === 'string'
+          ? charge.payment_intent
+          : charge.payment_intent && charge.payment_intent.id;
+        if (paymentIntentId) {
+          const payments = await db.collection('payments')
+            .where('paymentIntentId', '==', paymentIntentId)
+            .get();
+          for (const doc of payments.docs) {
+            await doc.ref.update({
+              status: 'refunded',
+              updatedAt: new Date().toISOString(),
+            });
+          }
+        }
+        break;
+      }
+
       default:
         break;
     }

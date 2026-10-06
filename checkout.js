@@ -16,6 +16,7 @@
     var quotePending = false;
     var appliedCoupon = null;
     var completedPayment = null;
+    var pendingCardAttempt = false;
     var isSubmitting = false;
     var checkoutInitialized = false;
 
@@ -64,11 +65,19 @@
         if (checkoutInitialized) return;
         checkoutInitialized = true;
         loadCart();
+        var hasPendingPayment = restorePendingCheckout();
         initStripe();
         togglePayment();
 
         var country = document.getElementById('country');
-        if (country) country.addEventListener('change', updatePostalLabel);
+        if (country) country.addEventListener('change', function() {
+            updatePostalLabel();
+            refreshQuote(appliedCoupon && appliedCoupon.code).catch(function() {});
+        });
+        var region = document.getElementById('state');
+        if (region) region.addEventListener('change', function() {
+            refreshQuote(appliedCoupon && appliedCoupon.code).catch(function() {});
+        });
 
         var couponInput = document.getElementById('coupon-code');
         if (couponInput) couponInput.addEventListener('keydown', function(event) {
@@ -79,7 +88,7 @@
         });
 
         attachFormHandler();
-        if (cart.length) refreshQuote().catch(function() {});
+        if (cart.length && !hasPendingPayment) refreshQuote().catch(function() {});
     }
 
     if (document.readyState === 'loading') {
@@ -231,6 +240,7 @@
     }
 
     function validatePayment() {
+        if (completedPayment || pendingCardAttempt) return true;
         var method = document.getElementById('payment-method').value;
         if (method === 'card' && stripeState !== 'ready') {
             setCheckoutFeedback('Card payments are unavailable. Select another payment method or try again later.', 'error');
@@ -396,10 +406,119 @@
         return JSON.stringify({ items: items, couponCode: couponCode || null });
     }
 
+    function quoteRequestKey(items, couponCode) {
+        return JSON.stringify({
+            items: items,
+            couponCode: couponCode || null,
+            country: document.getElementById('country') && document.getElementById('country').value || 'US',
+            region: document.getElementById('state') && document.getElementById('state').value.trim().toUpperCase() || ''
+        });
+    }
+
+    function checkoutAttemptFingerprint(items, couponCode) {
+        return quoteKey(items, couponCode) + '|' + JSON.stringify(currentQuote && currentQuote.breakdown || {});
+    }
+
+    function getShippingFormValues() {
+        var values = {};
+        ['firstName', 'lastName', 'email', 'phone', 'address', 'city', 'state', 'zip', 'country'].forEach(function(id) {
+            var field = document.getElementById(id);
+            values[id] = field ? field.value : '';
+        });
+        return values;
+    }
+
+    function getCheckoutRequestId(fingerprint, items, couponCode) {
+        var key = 'trendaryo_checkout_attempt';
+        try {
+            var saved = JSON.parse(localStorage.getItem(key) || 'null');
+            if (saved && saved.fingerprint === fingerprint && saved.id) {
+                persistCheckoutAttempt({ items: items, couponCode: couponCode || null, shippingAddress: getShippingAddress(), formValues: getShippingFormValues(), quote: currentQuote });
+                return saved.id;
+            }
+            var id;
+            if (window.crypto && typeof window.crypto.randomUUID === 'function') {
+                id = window.crypto.randomUUID();
+            } else if (window.crypto && typeof window.crypto.getRandomValues === 'function') {
+                var randomBytes = new Uint8Array(16);
+                window.crypto.getRandomValues(randomBytes);
+                id = 'checkout_' + Array.from(randomBytes).map(function(byte) { return byte.toString(16).padStart(2, '0'); }).join('');
+            } else {
+                throw new Error('A secure random generator is unavailable.');
+            }
+            localStorage.setItem(key, JSON.stringify({ fingerprint: fingerprint, id: id, items: items, couponCode: couponCode || null, shippingAddress: getShippingAddress(), formValues: getShippingFormValues(), quote: currentQuote }));
+            return id;
+        } catch (error) {
+            throw new Error('Secure checkout retry protection is unavailable. Enable browser storage and try again.');
+        }
+    }
+
+    function clearCheckoutAttempt() {
+        try { localStorage.removeItem('trendaryo_checkout_attempt'); } catch (error) { /* storage may be blocked */ }
+    }
+
+    function persistCheckoutAttempt(patch) {
+        try {
+            var saved = JSON.parse(localStorage.getItem('trendaryo_checkout_attempt') || 'null') || {};
+            localStorage.setItem('trendaryo_checkout_attempt', JSON.stringify(Object.assign(saved, patch)));
+        } catch (error) { /* retry still uses the in-memory payment state */ }
+    }
+
+    function restorePendingCheckout() {
+        var saved;
+        try { saved = JSON.parse(localStorage.getItem('trendaryo_checkout_attempt') || 'null'); } catch (error) { return false; }
+        if (!saved || !saved.intentRequested || !saved.id || !saved.shippingAddress || !saved.quote) return false;
+        var address = saved.shippingAddress;
+        var values = saved.formValues || {
+            firstName: address.fullName ? address.fullName.split(' ')[0] : '',
+            lastName: address.fullName ? address.fullName.split(' ').slice(1).join(' ') : '',
+            email: address.email,
+            phone: address.phone,
+            address: address.street,
+            city: address.city,
+            state: address.state,
+            zip: address.zipCode,
+            country: address.country
+        };
+        Object.keys(values).forEach(function(id) {
+            var field = document.getElementById(id);
+            if (field && values[id] != null) field.value = values[id];
+        });
+        var couponInput = document.getElementById('coupon-code');
+        if (couponInput) couponInput.value = saved.couponCode || '';
+        appliedCoupon = saved.couponCode && saved.quote.coupon ? saved.quote.coupon : null;
+        currentQuote = saved.quote;
+        currentQuoteKey = quoteRequestKey(saved.items || getOrderItems(), appliedCoupon && appliedCoupon.code);
+        if (Array.isArray(saved.quote.lineItems)) {
+            cart = saved.quote.lineItems.map(function(line) {
+                return { id: String(line.productId), quantity: Number(line.quantity), name: String(line.name || 'Product'), price: Number(line.price), image: String(line.image || 'assets/placeholder.jpg') };
+            });
+        }
+        if (saved.paid && saved.paymentIntentId) {
+            completedPayment = { id: saved.paymentIntentId, fingerprint: saved.fingerprint, checkoutRequestId: saved.id };
+        }
+        pendingCardAttempt = true;
+        renderCart();
+        updateOrderSummary();
+        updatePaymentAvailability();
+        updateCouponControls();
+        lockShippingFields(true);
+        setCheckoutFeedback('Restored your pending payment. Continue checkout to safely finish the same order.', 'success');
+        return true;
+    }
+
+    function lockShippingFields(locked) {
+        ['firstName', 'lastName', 'email', 'phone', 'address', 'city', 'state', 'zip', 'country']
+            .forEach(function(id) {
+                var field = document.getElementById(id);
+                if (field) field.disabled = Boolean(locked);
+            });
+    }
+
     async function refreshQuote(couponCode) {
         var items = getOrderItems();
         if (!items.length) throw new Error('Your cart is empty.');
-        var key = quoteKey(items, couponCode);
+        var key = quoteRequestKey(items, couponCode);
         var sequence = ++quoteSequence;
         quotePending = true;
         updateSubmitButton();
@@ -411,7 +530,7 @@
                 throw new Error('Checkout pricing is unavailable. Please try again later.');
             }
 
-            var response = await API.getCheckoutQuote(items, couponCode || null);
+            var response = await API.getCheckoutQuote(items, couponCode || null, getShippingAddress());
             if (sequence !== quoteSequence) return null;
             if (!response || !response.data || !response.data.breakdown || !Array.isArray(response.data.lineItems)) {
                 throw new Error('The store could not calculate your order total.');
@@ -536,9 +655,12 @@
         var removeButton = document.getElementById('coupon-remove');
         var applyButton = document.getElementById('coupon-apply');
         var input = document.getElementById('coupon-code');
-        if (removeButton) removeButton.disabled = Boolean(completedPayment);
-        if (applyButton) applyButton.disabled = Boolean(completedPayment);
-        if (input) input.disabled = Boolean(completedPayment);
+        var savedAttempt = null;
+        try { savedAttempt = JSON.parse(localStorage.getItem('trendaryo_checkout_attempt') || 'null'); } catch (error) {}
+        var locked = Boolean(completedPayment || isSubmitting || (savedAttempt && savedAttempt.intentRequested));
+        if (removeButton) removeButton.disabled = locked;
+        if (applyButton) applyButton.disabled = locked;
+        if (input) input.disabled = locked;
         if (removeButton) removeButton.hidden = !appliedCoupon;
     }
 
@@ -578,12 +700,15 @@
         if (cardOption) cardOption.disabled = stripeState === 'unavailable';
         if (codOption && codEnabled !== undefined) codOption.disabled = codEnabled === false;
 
-        if (completedPayment) {
+        if (completedPayment || pendingCardAttempt) {
             select.value = 'card';
             select.disabled = true;
-        } else if (select.selectedOptions[0] && select.selectedOptions[0].disabled) {
-            if (cardOption && !cardOption.disabled) select.value = 'card';
-            else if (codOption && !codOption.disabled) select.value = 'cod';
+        } else {
+            select.disabled = Boolean(cardOption && cardOption.disabled && codOption && codOption.disabled);
+            if (select.selectedOptions[0] && select.selectedOptions[0].disabled) {
+                if (cardOption && !cardOption.disabled) select.value = 'card';
+                else if (codOption && !codOption.disabled) select.value = 'cod';
+            }
         }
         var help = document.getElementById('payment-method-help');
         if (help && cardOption && cardOption.disabled && codOption && codOption.disabled) {
@@ -599,7 +724,7 @@
     function togglePayment() {
         var select = document.getElementById('payment-method');
         if (!select) return;
-        if (completedPayment) {
+        if (completedPayment || pendingCardAttempt) {
             select.value = 'card';
             select.disabled = true;
         }
@@ -647,7 +772,7 @@
         if (continueButton) continueButton.disabled = cart.length === 0;
         if (reviewButton) reviewButton.disabled = cart.length === 0;
         if (!button) return;
-        var desiredKey = quoteKey(getOrderItems(), appliedCoupon && appliedCoupon.code);
+        var desiredKey = quoteRequestKey(getOrderItems(), appliedCoupon && appliedCoupon.code);
         var quoteIsCurrent = currentQuote && currentQuoteKey === desiredKey;
         button.disabled = isSubmitting || quotePending || !cart.length || !quoteIsCurrent;
         if (!cart.length) button.textContent = 'Cart is Empty';
@@ -677,6 +802,7 @@
         isSubmitting = submitting;
         var button = document.getElementById('place-order-btn');
         if (button) button.classList.toggle('loading', submitting);
+        updateCouponControls();
         updateSubmitButton();
     }
 
@@ -729,12 +855,12 @@
 
             var methodSelect = document.getElementById('payment-method');
             var paymentMethod = methodSelect.value;
-            if (methodSelect.selectedOptions[0].disabled) {
+            if (methodSelect.selectedOptions[0].disabled && !completedPayment && !pendingCardAttempt) {
                 setCheckoutFeedback('The selected payment method is unavailable. Choose another method.', 'error');
                 return;
             }
-            if (paymentMethod === 'card' && (stripeState !== 'ready' || !cardElement || !cardComplete)) {
-                setCheckoutFeedback('Enter valid card details before placing your order.', 'error');
+            if (paymentMethod === 'card' && !completedPayment && !pendingCardAttempt && (stripeState !== 'ready' || !cardElement)) {
+                setCheckoutFeedback('Card payments are unavailable. Please try again later.', 'error');
                 showStep(2);
                 return;
             }
@@ -742,17 +868,21 @@
             setSubmitting(true);
             var items = getOrderItems();
             var couponCode = appliedCoupon ? appliedCoupon.code : null;
-            var fingerprint = quoteKey(items, couponCode);
-            var paidIntent = completedPayment && completedPayment.fingerprint === fingerprint
-                ? completedPayment
-                : null;
+            var fingerprint = checkoutAttemptFingerprint(items, couponCode);
+            var checkoutRequestId;
+            var paidIntent;
 
             try {
-                if (!paidIntent) {
+                checkoutRequestId = getCheckoutRequestId(fingerprint, items, couponCode);
+                paidIntent = completedPayment && completedPayment.fingerprint === fingerprint
+                    ? completedPayment
+                    : null;
+                if (!paidIntent && paymentMethod === 'cod') {
                     var previousQuote = currentQuote;
                     var freshQuote = await refreshQuote(couponCode);
                     if (!freshQuote) throw new Error('Your order total could not be confirmed.');
                     if (quoteChanged(previousQuote, freshQuote)) {
+                        clearCheckoutAttempt();
                         setCheckoutFeedback('Your prices or availability changed. Review the updated order summary, then place your order again.', 'error');
                         setSubmitting(false);
                         return;
@@ -761,57 +891,94 @@
 
                 var paymentIntentId = paidIntent ? paidIntent.id : null;
                 if (paymentMethod === 'card' && !paidIntent) {
-                    if (stripeState !== 'ready' || !stripe || !cardElement) {
+                    if (!pendingCardAttempt && (stripeState !== 'ready' || !stripe || !cardElement)) {
                         throw new Error('Card payments are unavailable. Select another payment method.');
                     }
-                    var intentResponse = await API.createPaymentIntent(items, couponCode);
+                    var shippingAddress = getShippingAddress();
+                    persistCheckoutAttempt({ intentRequested: true, items: items, couponCode: couponCode, shippingAddress: shippingAddress, formValues: getShippingFormValues(), quote: currentQuote });
+                    pendingCardAttempt = true;
+                    lockShippingFields(true);
+                    updatePaymentAvailability();
+                    updateCouponControls();
+                    var intentResponse = await API.createPaymentIntent(items, couponCode, checkoutRequestId, shippingAddress);
                     var intent = intentResponse && intentResponse.data;
-                    if (!intent || !intent.clientSecret || !intent.paymentIntentId || !intent.breakdown) {
+                    if (!intent || !intent.clientSecret || !intent.paymentIntentId || !intent.breakdown || !Array.isArray(intent.lineItems)) {
                         throw new Error('The payment service returned an incomplete response.');
                     }
+                    persistCheckoutAttempt({ paymentIntentId: intent.paymentIntentId });
                     if (quoteChanged(currentQuote, {
                         breakdown: intent.breakdown,
-                        lineItems: currentQuote.lineItems
+                        lineItems: intent.lineItems
                     })) {
+                        currentQuote.lineItems = intent.lineItems;
                         currentQuote.breakdown = intent.breakdown;
+                        cart = intent.lineItems.map(function(line) {
+                            return { id: String(line.productId), quantity: Number(line.quantity), name: String(line.name || 'Product'), price: Number(line.price), image: String(line.image || 'assets/placeholder.jpg') };
+                        });
+                        renderCart();
                         updateOrderSummary();
+                        clearCheckoutAttempt();
+                        pendingCardAttempt = false;
+                        lockShippingFields(false);
+                        updatePaymentAvailability();
+                        updateCouponControls();
                         setCheckoutFeedback('Your total changed while checkout was open. Review the updated total and place your order again.', 'error');
                         setSubmitting(false);
                         return;
                     }
 
-                    var address = getShippingAddress();
-                    var result = await stripe.confirmCardPayment(intent.clientSecret, {
-                        payment_method: {
-                            card: cardElement,
-                            billing_details: {
-                                name: address.fullName,
-                                email: address.email,
-                                phone: address.phone,
-                                address: {
-                                    line1: address.street,
-                                    city: address.city,
-                                    state: address.state,
-                                    postal_code: address.zipCode,
-                                    country: address.country
+                    if (intent.status === 'succeeded') {
+                        paymentIntentId = intent.paymentIntentId;
+                        paidIntent = { id: paymentIntentId, fingerprint: fingerprint, checkoutRequestId: checkoutRequestId };
+                        completedPayment = paidIntent;
+                        persistCheckoutAttempt({ paid: true, paymentIntentId: paymentIntentId });
+                        lockShippingFields(true);
+                    } else {
+                        if (stripeState !== 'ready' || !stripe || !cardElement) {
+                            throw new Error('Card payments are unavailable. Retry this checkout when card payments are available.');
+                        }
+                        if (!cardComplete) {
+                            setCheckoutFeedback('Enter valid card details to finish this payment.', 'error');
+                            setSubmitting(false);
+                            showStep(2);
+                            return;
+                        }
+                        var address = getShippingAddress();
+                        var result = await stripe.confirmCardPayment(intent.clientSecret, {
+                            payment_method: {
+                                card: cardElement,
+                                billing_details: {
+                                    name: address.fullName,
+                                    email: address.email,
+                                    phone: address.phone,
+                                    address: {
+                                        line1: address.street,
+                                        city: address.city,
+                                        state: address.state,
+                                        postal_code: address.zipCode,
+                                        country: address.country
+                                    }
                                 }
                             }
+                        });
+                        if (result.error) {
+                            var cardErrors = document.getElementById('stripe-card-errors');
+                            if (cardErrors) {
+                                cardErrors.textContent = result.error.message || 'Card payment failed.';
+                                cardErrors.style.display = 'block';
+                            }
+                            setSubmitting(false);
+                            return;
                         }
-                    });
-                    if (result.error) {
-                        var cardErrors = document.getElementById('stripe-card-errors');
-                        if (cardErrors) {
-                            cardErrors.textContent = result.error.message || 'Card payment failed.';
-                            cardErrors.style.display = 'block';
+                        if (!result.paymentIntent || result.paymentIntent.status !== 'succeeded') {
+                            throw new Error('Payment was not completed. Please try again.');
                         }
-                        setSubmitting(false);
-                        return;
+                        paymentIntentId = result.paymentIntent.id;
+                        paidIntent = { id: paymentIntentId, fingerprint: fingerprint, checkoutRequestId: checkoutRequestId };
+                        completedPayment = paidIntent;
+                        persistCheckoutAttempt({ paid: true, paymentIntentId: paymentIntentId });
+                        lockShippingFields(true);
                     }
-                    if (!result.paymentIntent || result.paymentIntent.status !== 'succeeded') {
-                        throw new Error('Payment was not completed. Please try again.');
-                    }
-                    paymentIntentId = result.paymentIntent.id;
-                    completedPayment = { id: paymentIntentId, fingerprint: fingerprint };
                     updatePaymentAvailability();
                     updateCouponControls();
                 }
@@ -822,6 +989,7 @@
                     paymentMethod: paymentMethod,
                     couponCode: couponCode,
                     paymentIntentId: paymentIntentId,
+                    checkoutRequestId: checkoutRequestId,
                     notes: ''
                 });
                 if (!orderResult || !orderResult.data || !orderResult.data.id) {
@@ -830,6 +998,7 @@
                 try {
                     localStorage.setItem('trendaryo_last_order', JSON.stringify(orderResult.data));
                 } catch (e) { /* storage full or blocked */ }
+                clearCheckoutAttempt();
                 window.trendaryoToast && window.trendaryoToast('Order placed successfully!');
                 if (typeof CartManager !== 'undefined') {
                     CartManager.clear();
@@ -847,6 +1016,34 @@
                 console.error('[Checkout] Order submission failed:', error);
                 setCheckoutFeedback(error.message || 'Your order could not be completed. Please try again.', 'error');
                 setSubmitting(false);
+                var errorData = error && error.response && error.response.data && error.response.data.error;
+                if (errorData && errorData.refunded) {
+                    completedPayment = null;
+                    pendingCardAttempt = false;
+                    lockShippingFields(false);
+                    clearCheckoutAttempt();
+                    updatePaymentAvailability();
+                    updateCouponControls();
+                    return;
+                }
+                if (errorData && errorData.code === 'payment_intent_canceled') {
+                    completedPayment = null;
+                    pendingCardAttempt = false;
+                    clearCheckoutAttempt();
+                    lockShippingFields(false);
+                    updatePaymentAvailability();
+                    updateCouponControls();
+                    refreshQuote(couponCode).catch(function() {});
+                    return;
+                }
+                if (pendingCardAttempt && error.response && error.response.status >= 400 && error.response.status < 500 &&
+                    (!errorData || errorData.code !== 'checkout_request_mismatch')) {
+                    pendingCardAttempt = false;
+                    clearCheckoutAttempt();
+                    lockShippingFields(false);
+                    updatePaymentAvailability();
+                    updateCouponControls();
+                }
                 if (completedPayment) {
                     setCheckoutFeedback('Payment succeeded but the order could not be confirmed. Keep this page open and retry; do not submit another payment.', 'error');
                 }

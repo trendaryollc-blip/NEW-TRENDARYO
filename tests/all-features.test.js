@@ -512,13 +512,24 @@ test('orders and payments flows cover pricing, verification, admin listing, and 
         return orderQuery;
       }
       if (name === 'payments') {
+        const paymentFilters = [];
         const paymentQuery = {
-          where: () => paymentQuery,
+          where: (field, op, value) => { paymentFilters.push({ field, op, value }); return paymentQuery; },
           orderBy: () => paymentQuery,
           limit: () => paymentQuery,
-          get: async () => ({ docs: Object.values(payments).map((doc) => ({ id: doc.id, ref: { update: async () => {} }, data: () => doc })) }),
+          get: async () => {
+            let docs = Object.values(payments);
+            for (const filter of paymentFilters) {
+              docs = docs.filter((doc) => String(doc[filter.field]) === String(filter.value));
+            }
+            return {
+              empty: docs.length === 0,
+              docs: docs.map((doc) => ({ id: doc.id, ref: { update: async () => {} }, data: () => doc })),
+            };
+          },
           doc: (id) => ({
             get: async () => ({ exists: !!payments[id], data: () => ({ ...payments[id], id }) }),
+            set: async (next) => { payments[id] = { ...payments[id], ...next, id }; },
             update: async (next) => { payments[id] = { ...payments[id], ...next }; },
           }),
           add: async (payload) => {
@@ -576,7 +587,8 @@ test('orders and payments flows cover pricing, verification, admin listing, and 
     method: 'POST',
     body: {
       items: [{ productId: 'p1', quantity: 1 }],
-      shippingAddress: { fullName: 'User Example', email: 'user@example.com', street: '1 Main', city: 'X', country: 'US' },
+      checkoutRequestId: 'test_request_0123456789abcdef',
+      shippingAddress: { fullName: 'User Example', email: 'user@example.com', phone: '5551234567', street: '1 Main', city: 'X', country: 'US' },
       paymentMethod: 'card',
       paymentIntentId: 'pi_123',
     },
@@ -588,7 +600,15 @@ test('orders and payments flows cover pricing, verification, admin listing, and 
   assert.equal(orderGet.statusCode, 200);
 
   const intentRes = responseFactory();
-  await createIntent({ method: 'POST', body: { items: [{ productId: 'p1', quantity: 1 }] }, headers: { authorization: 'Bearer valid-token' } }, intentRes);
+  await createIntent({
+    method: 'POST',
+    body: {
+      items: [{ productId: 'p1', quantity: 1 }],
+      checkoutRequestId: 'test_request_0123456789abcdef',
+      shippingAddress: { fullName: 'User Example', email: 'user@example.com', phone: '5551234567', street: '1 Main', city: 'X', country: 'US' },
+    },
+    headers: { authorization: 'Bearer valid-token' },
+  }, intentRes);
   assert.equal(intentRes.statusCode, 200);
 
   const refundRes = responseFactory();
@@ -618,6 +638,7 @@ test('checkout quote returns server-priced items and rejects invalid methods', a
     lineItems: [{ productId: 'p1', name: 'Widget', price: 100, quantity: 1, lineTotal: 100 }],
     coupon: { code: 'SAVE10', type: 'percent', value: 10 },
     settings: { codEnabled: false },
+    codEnabled: false,
   });
   installBaseStubs({
     authUser: { uid: 'user-1' },

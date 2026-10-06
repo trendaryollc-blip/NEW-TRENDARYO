@@ -416,7 +416,7 @@
                 var wrap = document.getElementById('recent-orders');
                 try {
                     if (!window.OrderManager) throw new Error('OrderManager unavailable');
-                    var result = await window.OrderManager.getOrders(50, 1);
+                    var result = await window.OrderManager.getOrders(50);
                     var orders = extractOrders(result).map(function (o) {
                         if (o && typeof o.items === 'string') {
                             try { o.items = JSON.parse(o.items); } catch (e) { o.items = []; }

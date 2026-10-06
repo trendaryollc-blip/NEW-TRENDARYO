@@ -48,6 +48,41 @@ async function getSettings(db) {
   };
 }
 
+function destinationPricing(settings, shippingAddress) {
+  const country = String((shippingAddress && shippingAddress.country) || 'US').trim().toUpperCase();
+  const region = String((shippingAddress && shippingAddress.state) || '').trim().toUpperCase();
+  const regionalRates = settings.taxRatesByRegion && typeof settings.taxRatesByRegion === 'object'
+    ? settings.taxRatesByRegion : {};
+  const countryRates = settings.taxRatesByCountry && typeof settings.taxRatesByCountry === 'object'
+    ? settings.taxRatesByCountry : {};
+  const regionKey = region ? `${country}-${region}` : '';
+  let taxRate;
+  if (regionKey && regionalRates[regionKey] != null) taxRate = Number(regionalRates[regionKey]);
+  else if (countryRates[country] != null) taxRate = Number(countryRates[country]);
+  else if (country === 'US') taxRate = settings.taxRate;
+  else {
+    throw new PricingError(`Tax settings are not configured for ${country}${region ? `-${region}` : ''}. Please contact support.`, 400, 'tax_configuration_missing');
+  }
+  if (!Number.isFinite(taxRate) || taxRate < 0 || taxRate > 1) {
+    throw new PricingError(`Tax settings are invalid for ${country}${region ? `-${region}` : ''}. Please contact support.`, 503, 'tax_configuration_invalid');
+  }
+
+  const countryShipping = settings.shippingByCountry && typeof settings.shippingByCountry === 'object'
+    ? settings.shippingByCountry : {};
+  const shipping = countryShipping[country] == null ? settings.shippingFlat : Number(countryShipping[country]);
+  if (!Number.isFinite(shipping) || shipping < 0) {
+    throw new PricingError(`Shipping settings are invalid for ${country}. Please contact support.`, 503, 'shipping_configuration_invalid');
+  }
+  const codCountries = Array.isArray(settings.codCountries) ? settings.codCountries.map((x) => String(x).toUpperCase()) : null;
+  return {
+    country,
+    region,
+    taxRate,
+    shippingFlat: round2(shipping),
+    codEnabled: settings.codEnabled !== false && (!codCountries || codCountries.includes(country)),
+  };
+}
+
 function normalizeItems(rawItems) {
   if (!Array.isArray(rawItems) || rawItems.length === 0) {
     throw new PricingError('Your cart is empty');
@@ -119,8 +154,9 @@ async function resolveCoupon(db, code, subtotal) {
  * @param {string} [couponCode]
  * @returns {Promise<object>} pricing breakdown
  */
-async function priceOrder(db, rawItems, couponCode) {
+async function priceOrder(db, rawItems, couponCode, shippingAddress) {
   const settings = await getSettings(db);
+  const destination = destinationPricing(settings, shippingAddress);
   const normalized = normalizeItems(rawItems);
 
   const refs = normalized.map((i) => db.collection('products').doc(i.productId));
@@ -185,8 +221,8 @@ async function priceOrder(db, rawItems, couponCode) {
   const { discount, coupon } = await resolveCoupon(db, couponCode, subtotal);
 
   const taxable = round2(subtotal - discount);
-  const shipping = taxable >= settings.freeShippingThreshold ? 0 : round2(settings.shippingFlat);
-  const tax = round2(taxable * settings.taxRate);
+  const shipping = taxable >= settings.freeShippingThreshold ? 0 : destination.shippingFlat;
+  const tax = round2(taxable * destination.taxRate);
   const total = round2(taxable + shipping + tax);
 
   return {
@@ -199,12 +235,14 @@ async function priceOrder(db, rawItems, couponCode) {
     currency: settings.currency,
     coupon,
     settings,
+    codEnabled: destination.codEnabled,
   };
 }
 
 module.exports = {
   priceOrder,
   getSettings,
+  destinationPricing,
   PricingError,
   round2,
   toCents,

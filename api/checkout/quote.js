@@ -16,12 +16,12 @@ module.exports = async function handler(req, res) {
     const user = await requireAuth(req, res);
     if (!user) return;
 
-    const { items, couponCode = null } = req.body || {};
+    const { items, couponCode = null, shippingAddress = null } = req.body || {};
     const { db } = initFirebase();
 
     let pricing;
     try {
-      pricing = await priceOrder(db, items, couponCode);
+      pricing = await priceOrder(db, items, couponCode, shippingAddress);
     } catch (error) {
       if (error instanceof PricingError) {
         return res.status(error.statusCode).json({
@@ -43,7 +43,7 @@ module.exports = async function handler(req, res) {
           total: pricing.total,
           currency: pricing.currency,
         },
-        codEnabled: pricing.settings.codEnabled !== false,
+        codEnabled: pricing.codEnabled,
       },
     });
   } catch (error) {

@@ -150,15 +150,17 @@ class APIClient {
     return this.request('/orders', { method: 'POST', body: orderData });
   }
 
-  async getCheckoutQuote(items, couponCode) {
+  async getCheckoutQuote(items, couponCode, shippingAddress) {
     return this.request('/checkout/quote', {
       method: 'POST',
-      body: { items, couponCode: couponCode || null },
+      body: { items, couponCode: couponCode || null, shippingAddress: shippingAddress || null },
     });
   }
 
-  async getOrders(page = 1, limit = 20) {
-    return this.request(`/orders?page=${page}&limit=${limit}`);
+  async getOrders(limit = 20, cursor = null) {
+    const query = new URLSearchParams({ limit: String(limit) });
+    if (cursor) query.set('cursor', cursor);
+    return this.request(`/orders?${query.toString()}`);
   }
 
   async getOrderById(id) {
@@ -175,10 +177,10 @@ class APIClient {
    * @param {Array<{productId:string, quantity:number}>} items
    * @param {string} [couponCode]
    */
-  async createPaymentIntent(items, couponCode) {
+  async createPaymentIntent(items, couponCode, checkoutRequestId, shippingAddress) {
     return this.request('/payments/create-intent', {
       method: 'POST',
-      body: { items, couponCode: couponCode || null },
+      body: { items, couponCode: couponCode || null, checkoutRequestId, shippingAddress: shippingAddress || null },
     });
   }
 

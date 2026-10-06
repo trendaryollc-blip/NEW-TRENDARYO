@@ -155,7 +155,10 @@ body{font-family:'Rajdhani',sans-serif;background:transparent;color:#fff;min-hei
     }
 
     if (!order) {
-        try { order = JSON.parse(localStorage.getItem('trendaryo_last_order') || 'null'); } catch (e) {}
+        try {
+            var cachedOrder = JSON.parse(localStorage.getItem('trendaryo_last_order') || 'null');
+            if (cachedOrder && String(cachedOrder.id) === String(orderId)) order = cachedOrder;
+        } catch (e) {}
     }
 
     if (!order) {
@@ -163,6 +166,18 @@ body{font-family:'Rajdhani',sans-serif;background:transparent;color:#fff;min-hei
         document.querySelector('.os-hero h1').textContent = 'No Order Found';
         document.getElementById('os-number').textContent = orderId ? orderId.substring(0, 16) : 'UNKNOWN';
         return;
+    }
+
+    var currency = String(order.currency || 'USD').toUpperCase();
+    function formatOrderMoney(value) {
+        var amount = Number(value) || 0;
+        try { return new Intl.NumberFormat(undefined, { style: 'currency', currency: currency }).format(amount); }
+        catch (e) { return currency + ' ' + amount.toFixed(2); }
+    }
+    function escapeOrderText(value) {
+        return String(value == null ? '' : value).replace(/[&<>"']/g, function(char) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char];
+        });
     }
 
     document.getElementById('os-number').textContent = order.orderNumber || order.id || 'TRD-0000-0000';
@@ -187,21 +202,25 @@ body{font-family:'Rajdhani',sans-serif;background:transparent;color:#fff;min-hei
             var qty = it.quantity || it.qty || 1;
             var img = it.image || (p && p.image) || '';
             return '<div class="os-row"><span class="os-item-name">' +
-                (img ? '<img class="os-thumb" src="' + img + '" alt="">' : '') +
-                name + ' <em style="color:rgba(255,255,255,0.5);font-style:normal;">x ' + qty + '</em></span>' +
-                '<b>$' + (price * qty).toFixed(2) + '</b></div>';
+                (img ? '<img class="os-thumb" src="' + escapeOrderText(img) + '" alt="">' : '') +
+                escapeOrderText(name) + ' <em style="color:rgba(255,255,255,0.5);font-style:normal;">x ' + escapeOrderText(qty) + '</em></span>' +
+                '<b>' + escapeOrderText(formatOrderMoney(price * qty)) + '</b></div>';
         }).join('');
     } else {
         itemsEl.innerHTML = '<p style="color:rgba(255,255,255,0.6);">Order details are available in your confirmation email.</p>';
     }
 
     var subtotal = Number(order.subtotal != null ? order.subtotal : 0);
+    var discount = Number(order.discount != null ? order.discount : 0);
     var shipping = Number(order.shipping != null ? order.shipping : 0);
+    var tax = Number(order.tax != null ? order.tax : 0);
     var total = Number(order.total != null ? order.total : subtotal + shipping);
     document.getElementById('os-totals').innerHTML =
-        '<div class="os-row"><span>Subtotal</span><b>$' + subtotal.toFixed(2) + '</b></div>' +
-        '<div class="os-row"><span>Shipping</span><b>' + (shipping > 0 ? '$' + shipping.toFixed(2) : 'FREE') + '</b></div>' +
-        '<div class="os-row total"><span>Total Paid</span><b>$' + total.toFixed(2) + '</b></div>';
+        '<div class="os-row"><span>Subtotal</span><b>' + escapeOrderText(formatOrderMoney(subtotal)) + '</b></div>' +
+        (discount > 0 ? '<div class="os-row"><span>Discount</span><b>-' + escapeOrderText(formatOrderMoney(discount)) + '</b></div>' : '') +
+        '<div class="os-row"><span>Shipping</span><b>' + (shipping > 0 ? escapeOrderText(formatOrderMoney(shipping)) : 'FREE') + '</b></div>' +
+        '<div class="os-row"><span>Tax</span><b>' + escapeOrderText(formatOrderMoney(tax)) + '</b></div>' +
+        '<div class="os-row total"><span>' + (order.paymentMethod === 'cod' && order.paymentStatus !== 'paid' ? 'Order Total' : 'Total Paid') + '</span><b>' + escapeOrderText(formatOrderMoney(total)) + '</b></div>';
 
     var wrap = document.getElementById('os-related');
     var band = document.getElementById('os-related-band');

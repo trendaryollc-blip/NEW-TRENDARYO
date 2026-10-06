@@ -57,9 +57,11 @@ class OrderManager {
     }
   }
 
-  async getOrders(limit = 20, page = 1) {
+  async getOrders(limit = 20, cursor = null) {
     try {
-      const data = await this.makeRequest(`/orders?limit=${limit}&page=${page}`);
+      const params = new URLSearchParams({ limit: String(limit) });
+      if (cursor) params.set('cursor', cursor);
+      const data = await this.makeRequest(`/orders?${params.toString()}`);
       return { success: true, data: data };
     } catch (error) {
       console.error('[OrderManager] getOrders error:', error);

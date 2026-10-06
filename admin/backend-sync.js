@@ -231,6 +231,10 @@
                 if (settings.lowStock != null) patch.lowStock = settings.lowStock;
                 if (settings.currency != null) patch.currency = settings.currency.toUpperCase();
                 if (settings.announcement != null) patch.announcement = settings.announcement;
+                if (settings.taxRatesByCountry != null) patch.taxRatesByCountry = settings.taxRatesByCountry;
+                if (settings.taxRatesByRegion != null) patch.taxRatesByRegion = settings.taxRatesByRegion;
+                if (settings.shippingByCountry != null) patch.shippingByCountry = settings.shippingByCountry;
+                if (settings.codCountries != null) patch.codCountries = settings.codCountries;
                 S.saveSettings(patch);
                 // don't log a synthetic settings update
                 var log = lsGet('trendaryo_admin_log', []);
@@ -337,6 +341,10 @@
                 if (patch.lowStock !== undefined) out.lowStock = patch.lowStock;
                 if (patch.currency !== undefined) out.currency = String(patch.currency).toLowerCase();
                 if (patch.announcement !== undefined) out.announcement = patch.announcement;
+                if (patch.taxRatesByCountry !== undefined) out.taxRatesByCountry = patch.taxRatesByCountry;
+                if (patch.taxRatesByRegion !== undefined) out.taxRatesByRegion = patch.taxRatesByRegion;
+                if (patch.shippingByCountry !== undefined) out.shippingByCountry = patch.shippingByCountry;
+                if (patch.codCountries !== undefined) out.codCountries = patch.codCountries;
                 if (Object.keys(out).length) api().request('/settings', { method: 'PUT', body: out }).catch(notify);
             }
             return res;
