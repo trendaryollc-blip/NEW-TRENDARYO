@@ -17,7 +17,7 @@ function setContentSecurityPolicy(res) {
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com",
     "img-src 'self' data: blob: https: http:",
-    "connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://api.stripe.com wss://*.firebaseio.com",
+    "connect-src 'self' https://*.googleapis.com https://www.gstatic.com https://*.firebaseio.com https://api.stripe.com wss://*.firebaseio.com",
     "frame-src 'self' https://js.stripe.com https://hooks.stripe.com",
     "object-src 'none'",
     "base-uri 'self'",
