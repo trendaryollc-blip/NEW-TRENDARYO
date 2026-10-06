@@ -25,6 +25,13 @@
         if (!feedback) return;
         feedback.textContent = message || '';
         feedback.className = 'checkout-feedback' + (type ? ' ' + type : '');
+        // The feedback element sits at the TOP of the checkout card while the
+        // Place Order button is at the bottom — scroll it into view so the user
+        // actually sees why their click did (or did not) go through.
+        if (message && typeof feedback.scrollIntoView === 'function') {
+            try { feedback.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+            catch (e) { feedback.scrollIntoView(); }
+        }
     }
 
     function ensureCheckoutSession() {
@@ -1056,6 +1063,11 @@
                                 cardErrors.textContent = result.error.message || 'Card payment failed.';
                                 cardErrors.style.display = 'block';
                             }
+                            // The card element lives in the payment step, which is
+                            // hidden while the review step is active — mirror the
+                            // decline message to the shared feedback area so the
+                            // click is never silently swallowed on the review screen.
+                            setCheckoutFeedback(result.error.message || 'Card payment failed. Check your card details and try again.', 'error');
                             // The bank may have actually charged the card even though
                             // the SDK surfaced an error (e.g. a dropped connection
                             // after capture). Verify the real intent status before
