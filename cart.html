@@ -177,7 +177,7 @@
 
             <!-- STATS -->
             <div class="cart-stats">
-                <div class="cart-stat"><div class="cart-stat-val" id="quantum-item-count">0</div><div class="cart-stat-lab">Items</div></div>
+                <div class="cart-stat"><div class="cart-stat-val" id="quantum-item-count">0</div><div class="cart-stat-lab">Products</div></div>
                 <div class="cart-stat"><div class="cart-stat-val" id="quantum-subtotal">$0.00</div><div class="cart-stat-lab">Subtotal</div></div>
                 <div class="cart-stat"><div class="cart-stat-val" id="quantum-shipping">FREE</div><div class="cart-stat-lab">Shipping</div></div>
                 <div class="cart-stat"><div class="cart-stat-val" id="quantum-total">$0.00</div><div class="cart-stat-lab">Total</div></div>
@@ -376,7 +376,7 @@
         /* ── Summary ── */
         function updateSummary() {
             var total = CartManager.getTotal();
-            var itemCount = CartManager.getCount();
+            var itemCount = CartManager.getProductCount();
             var shipping = total >= 50 ? 0 : 9.99;
             var tax = total * 0.08;
             var finalTotal = total + shipping + tax;

@@ -406,11 +406,9 @@
         if (!badge) return;
         try {
             const cart = JSON.parse(localStorage.getItem('trendaryo_cart') || '[]');
-            const count = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-            if (count > 0) {
-                badge.textContent = count > 99 ? '99+' : count;
-                badge.style.display = 'flex';
-            }
+            const count = Array.isArray(cart) ? cart.length : 0;
+            badge.textContent = count > 99 ? '99+' : String(count);
+            badge.style.display = count > 0 ? 'flex' : 'none';
         } catch (e) { /* ignore */ }
     }
 

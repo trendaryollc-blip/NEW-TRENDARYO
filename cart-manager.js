@@ -79,6 +79,10 @@ const CartManager = {
     getCount() {
         return this.getCart().reduce((sum, item) => sum + item.quantity, 0);
     },
+
+    getProductCount() {
+        return this.getCart().length;
+    },
     
     getTotal() {
         const cart = this.getCart();
@@ -95,6 +99,7 @@ const CartManager = {
             detail: { 
                 cart: this.getCart(),
                 count: this.getCount(),
+                productCount: this.getProductCount(),
                 total: this.getTotal()
             } 
         }));
@@ -108,10 +113,12 @@ const CartManager = {
 
 // Auto-update cart count badge on all pages
 function updateCartCountBadge() {
-    const badge = document.getElementById('cart-count');
-    if (badge) {
-        badge.textContent = CartManager.getCount();
-    }
+    const count = CartManager.getProductCount();
+    [document.getElementById('cart-count'), document.getElementById('cart-badge')].forEach(badge => {
+        if (!badge) return;
+        badge.textContent = count > 99 ? '99+' : String(count);
+        badge.style.display = count > 0 ? 'flex' : 'none';
+    });
 }
 
 // Listen for cart updates
