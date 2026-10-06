@@ -792,6 +792,10 @@
                 if (!orderResult || !orderResult.data || !orderResult.data.id) {
                     throw new Error('The order service did not confirm your order. Keep this page open and contact support before retrying payment.');
                 }
+                try {
+                    localStorage.setItem('trendaryo_last_order', JSON.stringify(orderResult.data));
+                } catch (e) { /* storage full or blocked */ }
+                window.trendaryoToast && window.trendaryoToast('Order placed successfully!');
                 if (typeof CartManager !== 'undefined') {
                     CartManager.clear();
                 } else {
