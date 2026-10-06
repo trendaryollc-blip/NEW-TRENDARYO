@@ -401,16 +401,36 @@
     }
 
     /* ── Cart badge from localStorage ── */
+    function readCartCount() {
+        try {
+            const cart = JSON.parse(localStorage.getItem('trendaryo_cart') || '[]');
+            return Array.isArray(cart) ? cart.length : 0;
+        } catch (e) {
+            return 0;
+        }
+    }
+
     function initCartBadge() {
         const badge = document.getElementById('cart-badge');
         if (!badge) return;
-        try {
-            const cart = JSON.parse(localStorage.getItem('trendaryo_cart') || '[]');
-            const count = Array.isArray(cart) ? cart.length : 0;
+        const count = readCartCount();
+        badge.textContent = count > 99 ? '99+' : String(count);
+        badge.style.display = count > 0 ? 'flex' : 'none';
+    }
+
+    /* Keep the header badge live on every page, even where cart-manager.js
+       is not loaded (pages may also dispatch cartUpdated manually). */
+    function refreshCartBadges() {
+        const count = readCartCount();
+        [document.getElementById('cart-badge'), document.getElementById('cart-count')].forEach(badge => {
+            if (!badge) return;
             badge.textContent = count > 99 ? '99+' : String(count);
             badge.style.display = count > 0 ? 'flex' : 'none';
-        } catch (e) { /* ignore */ }
+        });
     }
+
+    window.addEventListener('cartUpdated', refreshCartBadges);
+    window.addEventListener('storage', refreshCartBadges);
 
     /* ── Account Menu with Login/Logout ── */
     function initAccountMenu() {

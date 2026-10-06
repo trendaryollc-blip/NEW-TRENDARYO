@@ -264,8 +264,12 @@
         var FREE_SHIP_THRESHOLD = 50;
 
         function getCartItems() {
-            var cart = CartManager.getCart();
-            var products = JSON.parse(localStorage.getItem('trendaryo_cart_products') || '{}');
+            var cart = [];
+            try { cart = CartManager.getCart(); } catch (e) {
+                try { cart = (typeof CartManager !== 'undefined' && CartManager.normalizeCart) ? CartManager.normalizeCart(JSON.parse(localStorage.getItem('trendaryo_cart') || '[]')) : JSON.parse(localStorage.getItem('trendaryo_cart') || '[]'); } catch (e2) { cart = []; }
+            }
+            var products = {};
+            try { products = JSON.parse(localStorage.getItem('trendaryo_cart_products') || '{}'); } catch (e) { products = {}; }
             return cart.map(function (item) {
                 var product = products[item.id] || {};
                 return {
@@ -375,8 +379,14 @@
 
         /* ── Summary ── */
         function updateSummary() {
-            var total = CartManager.getTotal();
-            var itemCount = CartManager.getProductCount();
+            var total = 0;
+            try { total = CartManager.getTotal(); } catch (e) { total = 0; }
+            var itemCount = 0;
+            try {
+                itemCount = (typeof CartManager.getProductCount === 'function')
+                    ? CartManager.getProductCount()
+                    : CartManager.getCount();
+            } catch (e) { itemCount = 0; }
             var shipping = total >= 50 ? 0 : 9.99;
             var tax = total * 0.08;
             var finalTotal = total + shipping + tax;
