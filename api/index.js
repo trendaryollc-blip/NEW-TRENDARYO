@@ -31,6 +31,7 @@ const ROUTES = {
   '/wishlist': require('./wishlist/index'),
   '/newsletter': require('./newsletter/index'),
   '/contact': require('./contact/index'),
+  '/contact/:id': require('./contact/[id]'),
   '/settings': require('./settings'),
   '/upload': require('./upload'),
   '/config/public': require('./config/public'),
