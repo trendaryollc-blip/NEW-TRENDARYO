@@ -12,11 +12,20 @@ function initFirebase() {
   let clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
   let privateKey = process.env.FIREBASE_PRIVATE_KEY;
 
-  if ((!projectId || !clientEmail || !privateKey) && process.env.FIREBASE_SERVICE_ACCOUNT_KEY) {
-    const sa = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
-    projectId = projectId || sa.project_id;
-    clientEmail = clientEmail || sa.client_email;
-    privateKey = privateKey || sa.private_key;
+  // FIREBASE_SERVICE_ACCOUNT_KEY (single-line JSON) is the most
+  // copy/paste-safe format, so prefer it when it present and valid. The
+  // split FIREBASE_PROJECT_ID/FIREBASE_CLIENT_EMAIL/FIREBASE_PRIVATE_KEY
+  // vars are only used as a fallback because their multi-line private key
+  // value is easy to mangle in env dashboards.
+  if (process.env.FIREBASE_SERVICE_ACCOUNT_KEY) {
+    try {
+      const sa = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
+      if (sa.project_id && sa.client_email && sa.private_key) {
+        projectId = sa.project_id;
+        clientEmail = sa.client_email;
+        privateKey = sa.private_key;
+      }
+    } catch (e) { /* fall through to split vars */ }
   }
 
   if (!projectId || !clientEmail || !privateKey) {
