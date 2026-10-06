@@ -306,6 +306,41 @@
         renderCart();
         updateOrderSummary();
         updateSubmitButton();
+        pruneUnavailableItems();
+        return cart;
+    }
+
+    /* Drop cart lines whose product id does not exist in the current catalogue
+       (e.g. saved before the Firestore reseed, or numeric demo ids) so the
+       checkout quote and order pricing cannot fail with a 'product missing'
+       error. Surfaces a single, clear notice for what was removed. */
+    function pruneUnavailableItems() {
+        if (!cart.length || !window.TrendaryoProducts || !window.TrendaryoProducts.all) return;
+        var knownIds = {};
+        window.TrendaryoProducts.all().forEach(function(p) {
+            knownIds[String(p.id)] = true;
+        });
+        var valid = cart.filter(function(item) { return knownIds[String(item.id)]; });
+        var removed = cart.filter(function(item) { return !knownIds[String(item.id)]; });
+        if (!removed.length) return;
+        cart = valid;
+        removed.forEach(function(item) {
+            if (typeof CartManager !== 'undefined') {
+                try { CartManager.removeItem(item.id); } catch (e) { /* ignore */ }
+            }
+        });
+        try {
+            var productsMeta = JSON.parse(localStorage.getItem('trendaryo_cart_products') || '{}');
+            removed.forEach(function(item) { delete productsMeta[item.id]; });
+            localStorage.setItem('trendaryo_cart_products', JSON.stringify(productsMeta));
+        } catch (e) { /* ignore */ }
+        renderCart();
+        updateOrderSummary();
+        updateSubmitButton();
+        setCheckoutFeedback(
+            removed.length + ' item(s) in your cart are no longer available and were removed. Please review your order.',
+            'error'
+        );
         if (!cart.length) setCheckoutFeedback('Your cart is empty. Add items before checkout.', 'error');
     }
 
