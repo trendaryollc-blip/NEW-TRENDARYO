@@ -139,6 +139,9 @@ Or connect your GitHub repo to Vercel for automatic deployments.
 - `PUT /api/cart` - Update cart
 - `DELETE /api/cart` - Clear cart
 
+### Checkout
+- `POST /api/checkout/quote` - Calculate authoritative item, discount, tax, shipping, and payment-method availability before order submission
+
 ### Orders
 - `GET /api/orders` - List user orders
 - `POST /api/orders` - Create order
@@ -197,6 +200,7 @@ Or connect your GitHub repo to Vercel for automatic deployments.
 │   ├── auth/              # Auth routes
 │   ├── products/          # Product routes
 │   ├── cart/              # Cart routes
+│   ├── checkout/          # Server-priced checkout quotes
 │   ├── orders/            # Order routes
 │   ├── payments/          # Stripe payment routes
 │   ├── reviews/           # Review routes
@@ -219,6 +223,7 @@ Or connect your GitHub repo to Vercel for automatic deployments.
 ├── *.html                 # Frontend pages
 ├── *.js                   # Frontend scripts
 │   ├── api-client.js      # API client (Firebase token auth)
+│   ├── checkout.js        # Checkout steps, quotes, coupons, and payment flow
 │   ├── backend-bridge.js  # Storefront <-> backend sync
 │   ├── products-data.js   # Catalog (backend-cache first)
 │   └── config.js          # Async /api/config/public fetch

@@ -150,6 +150,13 @@ class APIClient {
     return this.request('/orders', { method: 'POST', body: orderData });
   }
 
+  async getCheckoutQuote(items, couponCode) {
+    return this.request('/checkout/quote', {
+      method: 'POST',
+      body: { items, couponCode: couponCode || null },
+    });
+  }
+
   async getOrders(page = 1, limit = 20) {
     return this.request(`/orders?page=${page}&limit=${limit}`);
   }

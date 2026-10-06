@@ -11,6 +11,7 @@ const ROUTES = {
   '/products': require('./products/index'),
   '/products/:id': require('./products/[id]'),
   '/cart': require('./cart/index'),
+  '/checkout/quote': require('./checkout/quote'),
   '/orders': require('./orders/index'),
   '/orders/:id': require('./orders/[id]'),
   '/payments/create-intent': require('./payments/create-intent'),

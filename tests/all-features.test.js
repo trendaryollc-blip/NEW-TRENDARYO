@@ -93,7 +93,7 @@ function installBaseStubs({
     tax: 8,
     total: 108,
     currency: 'usd',
-    lineItems: [{ productId: 'p1', quantity: 1, name: 'Widget' }],
+    lineItems: [{ productId: 'p1', quantity: 1, name: 'Widget', price: 100 }],
     coupon: null,
   }));
 
@@ -122,6 +122,7 @@ function installBaseStubs({
         status: 'succeeded',
         amount: 10800,
         amount_received: 10800,
+        currency: 'usd',
         metadata: { userId: 'user-1' },
       }),
     },
@@ -497,7 +498,8 @@ test('orders and payments flows cover pricing, verification, admin listing, and 
             empty: false,
             docs: Object.values(orders).map((doc) => ({ id: doc.id, data: () => doc })),
           }),
-          doc: (id) => ({
+          doc: (id = 'o2') => ({
+            id,
             get: async () => ({ exists: !!orders[id], data: () => ({ ...orders[id], id }) }),
             update: async (next) => { orders[id] = { ...orders[id], ...next }; },
           }),
@@ -550,6 +552,12 @@ test('orders and payments flows cover pricing, verification, admin listing, and 
       return {};
     },
     batch: () => ({ set: () => {}, commit: async () => {} }),
+    runTransaction: async (callback) => callback({
+      get: async (query) => query.get(),
+      getAll: async (...refs) => Promise.all(refs.map((ref) => ref.get())),
+      set: () => {},
+      update: () => {},
+    }),
   };
   installBaseStubs({ authUser: user, adminUser: admin, db });
 
@@ -597,6 +605,39 @@ test('orders and payments flows cover pricing, verification, admin listing, and 
     process.env.STRIPE_WEBHOOK_SECRET = previousWebhookSecret;
   }
   assert.equal(webhookRes.statusCode, 200);
+});
+
+test('checkout quote returns server-priced items and rejects invalid methods', async () => {
+  const priceOrder = async () => ({
+    subtotal: 100,
+    discount: 10,
+    shipping: 0,
+    tax: 7.2,
+    total: 97.2,
+    currency: 'usd',
+    lineItems: [{ productId: 'p1', name: 'Widget', price: 100, quantity: 1, lineTotal: 100 }],
+    coupon: { code: 'SAVE10', type: 'percent', value: 10 },
+    settings: { codEnabled: false },
+  });
+  installBaseStubs({
+    authUser: { uid: 'user-1' },
+    db: {},
+    pricing: { priceOrder },
+  });
+
+  const quote = loadHandler('checkout/quote.js');
+  const response = responseFactory();
+  await quote({
+    method: 'POST',
+    body: { items: [{ productId: 'p1', quantity: 1 }], couponCode: 'SAVE10' },
+    headers: {},
+  }, response);
+
+  assert.equal(response.statusCode, 200);
+  assert.equal(response.body.data.breakdown.total, 97.2);
+  assert.equal(response.body.data.lineItems[0].price, 100);
+  assert.equal(response.body.data.coupon.code, 'SAVE10');
+  assert.equal(response.body.data.codEnabled, false);
 });
 
 test('admin dashboards cover stats/users/orders/products and route-level guards', async () => {
