@@ -9,12 +9,66 @@ class APIClient {
     this.baseURL = baseURL || (window.TrendaryoConfig ? window.TrendaryoConfig.api.baseURL : '/api');
   }
 
-  async getIdToken() {
+  /**
+   * Firebase restores the session asynchronously, so `currentUser` is null for
+   * the first few milliseconds after page load. Waiting for the first auth
+   * callback means requests carry a token instead of being rejected with 401.
+   */
+  waitForAuth(timeout = 6000) {
+    if (this._authReady) return this._authReady;
+    if (typeof firebase === 'undefined' || !firebase.auth) {
+      return Promise.resolve();
+    }
+
+    let auth;
+    try {
+      auth = firebase.auth();
+    } catch (e) {
+      // App not initialised yet - retry on the next request instead of
+      // caching a "no session" answer that would never be refreshed.
+      return Promise.resolve();
+    }
+    if (auth.currentUser) {
+      this._authReady = Promise.resolve();
+      return this._authReady;
+    }
+
+    this._authReady = new Promise((resolve) => {
+      let settled = false;
+      let unsubscribe = null;
+      let timer = null;
+      const done = () => {
+        if (settled) return;
+        settled = true;
+        if (timer) clearTimeout(timer);
+        if (typeof unsubscribe === 'function') {
+          try { unsubscribe(); } catch (e) { /* ignore */ }
+        }
+        resolve();
+      };
+      try {
+        unsubscribe = auth.onAuthStateChanged(done, done);
+      } catch (e) {
+        done();
+        return;
+      }
+      timer = setTimeout(done, timeout);
+    });
+    return this._authReady;
+  }
+
+  async getIdToken(forceRefresh = false) {
+    await this.waitForAuth();
     if (typeof firebase !== 'undefined' && firebase.auth) {
-      const user = firebase.auth().currentUser;
+      let user = null;
+      try {
+        user = firebase.auth().currentUser;
+      } catch (e) {
+        return null;
+      }
       if (user) {
         try {
-          return await user.getIdToken();
+          return await user.getIdToken(forceRefresh);
         } catch (e) {
           return null;
         }
@@ -30,7 +84,7 @@ class APIClient {
       ...options.headers,
     };
 
-    const token = await this.getIdToken();
+    const token = await this.getIdToken(options._retry === true);
     if (token) {
       headers['Authorization'] = `Bearer ${token}`;
     }
@@ -49,15 +103,33 @@ class APIClient {
 
       if (!response.ok) {
         if (response.status === 401) {
-          localStorage.removeItem('user_id');
-          localStorage.removeItem('user');
-          localStorage.removeItem('auth_token');
-          setTimeout(() => {
-            var onAuthPage = /\/(login|register|admin-login|forgot-password|reset-password|email-verify)\.html$/.test(window.location.pathname);
-            if (onAuthPage) { window.location.href = '/login.html'; return; }
-            var back = window.location.pathname + window.location.search;
-            window.location.href = '/login.html?redirect=' + encodeURIComponent(back);
-          }, 1500);
+          // A missing or stale token must not log the shopper out: retry once
+          // with a freshly minted token before treating this as a dead session.
+          if (!options._retry) {
+            const freshToken = await this.getIdToken(true);
+            if (freshToken && freshToken !== token) {
+              return this.request(endpoint, { ...options, _retry: true });
+            }
+          }
+
+          let stillSignedIn = false;
+          try {
+            stillSignedIn = !!(typeof firebase !== 'undefined' && firebase.auth &&
+              firebase.auth().currentUser);
+          } catch (e) {
+            stillSignedIn = false;
+          }
+          if (!stillSignedIn) {
+            localStorage.removeItem('user_id');
+            localStorage.removeItem('user');
+            localStorage.removeItem('auth_token');
+            setTimeout(() => {
+              var onAuthPage = /\/(login|register|admin-login|forgot-password|reset-password|email-verify)\.html$/.test(window.location.pathname);
+              if (onAuthPage) { window.location.href = '/login.html'; return; }
+              var back = window.location.pathname + window.location.search;
+              window.location.href = '/login.html?redirect=' + encodeURIComponent(back);
+            }, 1500);
+          }
         }
 
         let errorData;

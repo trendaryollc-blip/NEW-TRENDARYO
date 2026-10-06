@@ -17,6 +17,32 @@ const firebaseConfig = {
 
 let app, db, auth;
 let firebaseInitialized = false;
+let sessionCacheSynced = false;
+
+/* Keep the localStorage session cache in step with Firebase. The API client
+   used to clear user/user_id on a 401, which left the account menu and every
+   page that reads localStorage claiming the shopper was logged out even though
+   the session was still alive. Restoring the cache here makes that state
+   self-healing. Anonymous sessions stay out of it: guests keep the guest menu. */
+function syncSessionCache(user) {
+  try {
+    if (!user || user.isAnonymous) return;
+    var uid = user.uid;
+    var email = user.email || '';
+    if (!uid || !email) return;
+    if (localStorage.getItem('user_id') === uid && localStorage.getItem('user')) return;
+
+    var cached = {};
+    try { cached = JSON.parse(localStorage.getItem('user') || '{}') || {}; } catch (e) { cached = {}; }
+    cached.id = uid;
+    cached.email = email;
+    if (!cached.name) cached.name = user.displayName || email;
+
+    localStorage.setItem('user_id', uid);
+    localStorage.setItem('user', JSON.stringify(cached));
+    if (typeof window.updateAccountMenu === 'function') window.updateAccountMenu();
+  } catch (e) { /* storage blocked */ }
+}
 
 async function initFirebase() {
   if (firebaseInitialized) {
@@ -45,6 +71,15 @@ async function initFirebase() {
     if (typeof firebase.auth === 'function') auth = firebase.auth();
   } catch (error) {
     console.warn('Firebase Auth unavailable:', error && error.message);
+  }
+
+  if (auth && !sessionCacheSynced) {
+    sessionCacheSynced = true;
+    try {
+      auth.onAuthStateChanged(syncSessionCache);
+    } catch (error) {
+      console.warn('Session cache sync unavailable:', error && error.message);
+    }
   }
 
   firebaseInitialized = true;

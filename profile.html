@@ -117,23 +117,78 @@
     <script src="api-client.js"></script>
     <script src="js/profile-integration.js"></script>
     <script>
-        function loadProfile() {
-            var user = JSON.parse(localStorage.getItem('user') || '{}');
-            if (!user.email) { window.location.href = 'login.html'; return; }
+        var profileUser = {};
+
+        function readLocalUser() {
+            try { return JSON.parse(localStorage.getItem('user') || '{}') || {}; } catch (e) { return {}; }
+        }
+
+        // Firebase restores the session asynchronously, so localStorage may be
+        // empty for a moment even though the shopper is signed in. Wait for the
+        // first auth callback before deciding this is a stranger.
+        function waitForFirebaseUser(timeout) {
+            return new Promise(function (resolve) {
+                if (typeof firebase === 'undefined' || !firebase.auth) { resolve(null); return; }
+                var auth;
+                try { auth = firebase.auth(); } catch (e) { resolve(null); return; }
+                if (auth.currentUser) { resolve(auth.currentUser); return; }
+
+                var settled = false;
+                var unsub = null;
+                var timer = null;
+                var done = function (user) {
+                    if (settled) return;
+                    settled = true;
+                    if (timer) clearTimeout(timer);
+                    if (typeof unsub === 'function') { try { unsub(); } catch (e) {} }
+                    resolve(user || auth.currentUser || null);
+                };
+                try { unsub = auth.onAuthStateChanged(done, done); } catch (e) { done(null); return; }
+                timer = setTimeout(function () { done(null); }, timeout || 4000);
+            });
+        }
+
+        function fillForm(user) {
             document.getElementById('firstName').value = user.firstName || (user.name ? user.name.split(' ')[0] : '');
             document.getElementById('lastName').value = user.lastName || (user.name ? user.name.split(' ').slice(1).join(' ') : '');
             document.getElementById('email').value = user.email || '';
             document.getElementById('phone').value = user.phone || '';
         }
+
+        async function loadProfile() {
+            var user = readLocalUser();
+            if (!user.email) {
+                var fbUser = await waitForFirebaseUser(4000);
+                if (!fbUser || !fbUser.email) {
+                    window.location.replace('login.html');
+                    return;
+                }
+                user = {
+                    id: fbUser.uid,
+                    email: fbUser.email,
+                    name: fbUser.displayName || '',
+                    firstName: (fbUser.displayName || '').split(' ')[0] || '',
+                    lastName: (fbUser.displayName || '').split(' ').slice(1).join(' '),
+                };
+                try {
+                    localStorage.setItem('user_id', fbUser.uid);
+                    localStorage.setItem('user', JSON.stringify(user));
+                } catch (e) { /* storage blocked */ }
+            }
+            profileUser = user;
+            fillForm(user);
+        }
+
         document.getElementById('profile-form').addEventListener('submit', function (e) {
             e.preventDefault();
-            var user = JSON.parse(localStorage.getItem('user') || '{}');
+            var user = Object.assign({}, profileUser, readLocalUser());
             user.firstName = document.getElementById('firstName').value;
             user.lastName = document.getElementById('lastName').value;
             user.email = document.getElementById('email').value;
             user.phone = document.getElementById('phone').value;
             user.name = user.firstName + ' ' + user.lastName;
-            localStorage.setItem('user', JSON.stringify(user));
+            profileUser = user;
+            try { localStorage.setItem('user', JSON.stringify(user)); } catch (err) { /* storage blocked */ }
             var s = document.getElementById('profile-success');
             s.textContent = 'Profile updated successfully!'; s.classList.add('show');
             setTimeout(function () { s.classList.remove('show'); }, 3000);

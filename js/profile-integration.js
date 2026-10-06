@@ -22,11 +22,22 @@ class ProfileIntegration {
       }
     } catch (error) {
       console.error('Failed to load profile:', error);
-      const localUser = JSON.parse(localStorage.getItem('user') || '{}');
-      if (!localUser.email) {
-        window.location.href = 'login.html';
-        return;
+      // Never sign the shopper out from here: profile.html owns the auth gate
+      // and waits for the Firebase session, so a failed request (or a request
+      // that raced the session restore) must not bounce a signed-in user.
+      let localUser = {};
+      try { localUser = JSON.parse(localStorage.getItem('user') || '{}') || {}; } catch (e) { localUser = {}; }
+
+      if (!localUser.email && typeof firebase !== 'undefined' && firebase.auth) {
+        try {
+          const fbUser = firebase.auth().currentUser;
+          if (fbUser && fbUser.email) {
+            localUser = { id: fbUser.uid, email: fbUser.email, name: fbUser.displayName || '' };
+          }
+        } catch (e) { /* ignore */ }
       }
+      if (!localUser.email) return;
+
       this.user = localUser;
       this.populateForm();
     }
