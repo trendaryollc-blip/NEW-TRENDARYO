@@ -56,7 +56,22 @@
         });
     }
 
-    checkoutSessionReady = ensureCheckoutSession().catch(function(error) {
+    function rememberGuestUid(user) {
+        if (!user) return;
+        try {
+            if (user.isAnonymous) {
+                var existingUid = localStorage.getItem('trendaryo_anon_uid');
+                if (existingUid !== user.uid) localStorage.setItem('trendaryo_anon_uid', user.uid);
+            } else {
+                localStorage.removeItem('trendaryo_anon_uid');
+            }
+        } catch (e) { /* storage may be blocked */ }
+    }
+
+    checkoutSessionReady = ensureCheckoutSession().then(function(user) {
+        rememberGuestUid(user);
+        return user;
+    }).catch(function(error) {
         checkoutSessionError = error;
         console.error('[Checkout] Secure session failed:', error);
     });
@@ -106,6 +121,11 @@
                 var key = window.TrendaryoConfig && window.TrendaryoConfig.stripe &&
                     window.TrendaryoConfig.stripe.publishableKey;
                 if (!key || typeof Stripe === 'undefined') {
+                    if (!key) {
+                        console.warn('[Checkout] Stripe publishable key is empty. Set STRIPE_PUBLISHABLE_KEY in the API environment (local: .env via `vercel dev`; live: Vercel dashboard env vars) and redeploy.');
+                    } else {
+                        console.warn('[Checkout] Stripe.js (https://js.stripe.com/v3/) did not load — check network/ad-blocker/CSP.');
+                    }
                     stripeUnavailable('Card payments are not configured. Choose another available payment method.');
                     return;
                 }
@@ -150,9 +170,29 @@
             }
         };
 
+        function scheduleRetry(attempts) {
+            if (stripeInitStarted) return;
+            if (attempts >= 25) {
+                stripeUnavailable('Card payments could not be loaded. Choose another available payment method.');
+                return;
+            }
+            var delay = Math.min(1000 * Math.pow(1.5, attempts), 10000);
+            setTimeout(function() {
+                if (stripeInitStarted) return;
+                // The config promise never silently fails: config.js always sets
+                // _ready (true even without a key) once the fetch settles, so we
+                // poll until it does instead of falling over after a fixed 3s.
+                if (window.TrendaryoConfig && window.TrendaryoConfig._ready) {
+                    start();
+                    return;
+                }
+                scheduleRetry(attempts + 1);
+            }, delay);
+        }
+
         if (window.TrendaryoConfig && !window.TrendaryoConfig._ready) {
             window.addEventListener('trendaryo:config', start, { once: true });
-            setTimeout(start, 3000);
+            scheduleRetry(0);
             return;
         }
         start();
@@ -326,6 +366,11 @@
        error. Surfaces a single, clear notice for what was removed. */
     function pruneUnavailableItems() {
         if (!cart.length || !window.TrendaryoProducts || !window.TrendaryoProducts.all) return;
+        // Only prune against the authoritative backend catalogue. During the
+        // window where products-data.js still serves the built-in demo list
+        // (before backend-bridge.js has hydrated the server copy), pruning here
+        // would delete real, server-side cart entries for no reason.
+        if (!window.__CATALOG_IS_BACKEND__) return;
         var knownIds = {};
         window.TrendaryoProducts.all().forEach(function(p) {
             knownIds[String(p.id)] = true;
@@ -457,6 +502,16 @@
         try { localStorage.removeItem('trendaryo_checkout_attempt'); } catch (error) { /* storage may be blocked */ }
     }
 
+    /* Best-effort void of a Stripe PaymentIntent whose checkout was abandoned
+       (price change / card failure). Silently ignored when the API or auth is
+       unavailable; the server also never charges an unconfirmed intent. */
+    function cancelStaleIntent(paymentIntentId) {
+        if (!paymentIntentId || typeof API === 'undefined' || typeof API.cancelPaymentIntent !== 'function') return;
+        API.cancelPaymentIntent(paymentIntentId).catch(function(error) {
+            console.warn('[Checkout] Could not cancel stale payment intent:', error && error.message);
+        });
+    }
+
     function persistCheckoutAttempt(patch) {
         try {
             var saved = JSON.parse(localStorage.getItem('trendaryo_checkout_attempt') || 'null') || {};
@@ -488,12 +543,16 @@
         if (couponInput) couponInput.value = saved.couponCode || '';
         appliedCoupon = saved.couponCode && saved.quote.coupon ? saved.quote.coupon : null;
         currentQuote = saved.quote;
-        currentQuoteKey = quoteRequestKey(saved.items || getOrderItems(), appliedCoupon && appliedCoupon.code);
         if (Array.isArray(saved.quote.lineItems)) {
             cart = saved.quote.lineItems.map(function(line) {
                 return { id: String(line.productId), quantity: Number(line.quantity), name: String(line.name || 'Product'), price: Number(line.price), image: String(line.image || 'assets/placeholder.jpg') };
             });
         }
+        // Derive the freshness key from the restored authoritative quote lines
+        // AFTER the cart is restored, so the restored order is not treated as
+        // stale/dead on arrival (the old key was computed from the pre-restore
+        // cart, which could permanently lock the Place Order button).
+        currentQuoteKey = quoteRequestKey(getOrderItems(), appliedCoupon && appliedCoupon.code);
         if (saved.paid && saved.paymentIntentId) {
             completedPayment = { id: saved.paymentIntentId, fingerprint: saved.fingerprint, checkoutRequestId: saved.id };
         }
@@ -503,6 +562,7 @@
         updatePaymentAvailability();
         updateCouponControls();
         lockShippingFields(true);
+        updateSubmitButton();
         setCheckoutFeedback('Restored your pending payment. Continue checkout to safely finish the same order.', 'success');
         return true;
     }
@@ -772,9 +832,11 @@
         if (continueButton) continueButton.disabled = cart.length === 0;
         if (reviewButton) reviewButton.disabled = cart.length === 0;
         if (!button) return;
-        var desiredKey = quoteRequestKey(getOrderItems(), appliedCoupon && appliedCoupon.code);
-        var quoteIsCurrent = currentQuote && currentQuoteKey === desiredKey;
-        button.disabled = isSubmitting || quotePending || !cart.length || !quoteIsCurrent;
+        // A stale quote must NOT disable the button. It stays enabled so the
+        // submit handler can re-verify the quote right before charging; if the
+        // total actually changed it surfaces an inline message instead of
+        // starting (or re-using) a payment for the wrong amount.
+        button.disabled = isSubmitting || quotePending || !cart.length;
         if (!cart.length) button.textContent = 'Cart is Empty';
         else if (isSubmitting) button.textContent = 'Processing Order…';
         else button.textContent = 'Place Order';
@@ -839,7 +901,7 @@
         if (!form) return;
         form.addEventListener('submit', async function(event) {
             event.preventDefault();
-            if (isSubmitting) return;
+            if (isSubmitting || quotePending) return;
             if (!validateShipping()) {
                 showStep(1);
                 return;
@@ -865,9 +927,45 @@
                 return;
             }
 
-            setSubmitting(true);
             var items = getOrderItems();
             var couponCode = appliedCoupon ? appliedCoupon.code : null;
+
+            // (A) Guarantee an authoritative, current quote BEFORE any charge
+            // attempt (card or COD). The persistent checkout attempt is only
+            // written AFTER this step, so a restored or stale quote can never
+            // be charged against outdated totals, and COD checks the freshness
+            // of its own quote through exactly the same gate.
+            if (!completedPayment && !pendingCardAttempt) {
+                var desiredQuoteKey = quoteRequestKey(items, couponCode);
+                if (!currentQuote || currentQuoteKey !== desiredQuoteKey) {
+                    var beforeQuote = currentQuote;
+                    var freshQuote;
+                    try {
+                        freshQuote = await refreshQuote(couponCode);
+                    } catch (quoteError) {
+                        setCheckoutFeedback(quoteError.message || 'Your order total could not be confirmed. Try again.', 'error');
+                        return;
+                    }
+                    if (!freshQuote) {
+                        setCheckoutFeedback('Your order total could not be confirmed. Try again.', 'error');
+                        return;
+                    }
+                    if (beforeQuote && quoteChanged(beforeQuote, freshQuote)) {
+                        setCheckoutFeedback('Your prices or availability changed. Review the updated order summary, then place your order again.', 'error');
+                        return;
+                    }
+                    if (!beforeQuote) {
+                        setCheckoutFeedback('Your order total is confirmed. Review the summary, then press Place Order again to complete your order.', 'success');
+                        return;
+                    }
+                }
+            }
+
+            // Re-derive the order lines from the authoritative quote in case
+            // prices, names or quantities were corrected during the refresh.
+            items = getOrderItems();
+
+            setSubmitting(true);
             var fingerprint = checkoutAttemptFingerprint(items, couponCode);
             var checkoutRequestId;
             var paidIntent;
@@ -877,17 +975,6 @@
                 paidIntent = completedPayment && completedPayment.fingerprint === fingerprint
                     ? completedPayment
                     : null;
-                if (!paidIntent && paymentMethod === 'cod') {
-                    var previousQuote = currentQuote;
-                    var freshQuote = await refreshQuote(couponCode);
-                    if (!freshQuote) throw new Error('Your order total could not be confirmed.');
-                    if (quoteChanged(previousQuote, freshQuote)) {
-                        clearCheckoutAttempt();
-                        setCheckoutFeedback('Your prices or availability changed. Review the updated order summary, then place your order again.', 'error');
-                        setSubmitting(false);
-                        return;
-                    }
-                }
 
                 var paymentIntentId = paidIntent ? paidIntent.id : null;
                 if (paymentMethod === 'card' && !paidIntent) {
@@ -910,6 +997,8 @@
                         breakdown: intent.breakdown,
                         lineItems: intent.lineItems
                     })) {
+                        // Void the just-created intent; the prices it charged are stale.
+                        cancelStaleIntent(intent.paymentIntentId);
                         currentQuote.lineItems = intent.lineItems;
                         currentQuote.breakdown = intent.breakdown;
                         cart = intent.lineItems.map(function(line) {
@@ -967,15 +1056,50 @@
                                 cardErrors.textContent = result.error.message || 'Card payment failed.';
                                 cardErrors.style.display = 'block';
                             }
-                            setSubmitting(false);
-                            return;
+                            // The bank may have actually charged the card even though
+                            // the SDK surfaced an error (e.g. a dropped connection
+                            // after capture). Verify the real intent status before
+                            // treating this as a decline and freeing the form.
+                            try {
+                                var verified = await stripe.retrievePaymentIntent(intent.clientSecret);
+                                var verifiedIntent = verified && verified.paymentIntent;
+                                if (verifiedIntent && verifiedIntent.status === 'succeeded') {
+                                    paymentIntentId = verifiedIntent.id;
+                                    paidIntent = { id: paymentIntentId, fingerprint: fingerprint, checkoutRequestId: checkoutRequestId };
+                                    completedPayment = paidIntent;
+                                    persistCheckoutAttempt({ paid: true, paymentIntentId: paymentIntentId });
+                                    lockShippingFields(true);
+                                    updatePaymentAvailability();
+                                    updateCouponControls();
+                                }
+                            } catch (verifyError) {
+                                console.error('[Checkout] Could not verify card status after decline:', verifyError);
+                            }
+                            if (!completedPayment) {
+                                // Genuine decline: void the orphaned intent, reset the
+                                // attempt and unlock the form so the shopper can retry
+                                // (including switching to cash on delivery).
+                                cancelStaleIntent(intent.paymentIntentId);
+                                pendingCardAttempt = false;
+                                clearCheckoutAttempt();
+                                lockShippingFields(false);
+                                updatePaymentAvailability();
+                                updateCouponControls();
+                                setSubmitting(false);
+                                return;
+                            }
                         }
-                        if (!result.paymentIntent || result.paymentIntent.status !== 'succeeded') {
+                        // If recovery already confirmed payment, result may still
+                        // carry the original error; only bail out when we know
+                        // for certain the payment did not go through.
+                        if (!paidIntent && (!result.paymentIntent || result.paymentIntent.status !== 'succeeded')) {
                             throw new Error('Payment was not completed. Please try again.');
                         }
-                        paymentIntentId = result.paymentIntent.id;
-                        paidIntent = { id: paymentIntentId, fingerprint: fingerprint, checkoutRequestId: checkoutRequestId };
-                        completedPayment = paidIntent;
+                        if (!paidIntent) {
+                            paymentIntentId = result.paymentIntent.id;
+                            paidIntent = { id: paymentIntentId, fingerprint: fingerprint, checkoutRequestId: checkoutRequestId };
+                            completedPayment = paidIntent;
+                        }
                         persistCheckoutAttempt({ paid: true, paymentIntentId: paymentIntentId });
                         lockShippingFields(true);
                     }

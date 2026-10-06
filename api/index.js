@@ -16,11 +16,13 @@ const ROUTES = {
   '/orders/:id': require('./orders/[id]'),
   '/payments/create-intent': require('./payments/create-intent'),
   '/payments/webhook': require('./payments/webhook'),
+  '/payments/cancel-intent': require('./payments/cancel-intent'),
   '/payments/refund': require('./payments/refund'),
   '/coupons/validate': require('./coupons/validate'),
   '/reviews': require('./reviews/index'),
   '/reviews/:id': require('./reviews/[id]'),
   '/users/profile': require('./users/profile'),
+  '/users/claim-guest': require('./users/claim-guest'),
   '/admin/stats': require('./admin/stats'),
   '/admin/users': require('./admin/users'),
   '/admin/users/:id': require('./admin/users/[id]'),
@@ -33,6 +35,8 @@ const ROUTES = {
   '/upload': require('./upload'),
   '/config/public': require('./config/public'),
 };
+
+const MAX_BODY_BYTES = 10 * 1024 * 1024;
 
 function ensureResHelpers(res) {
   if (typeof res.status !== 'function') {
@@ -52,6 +56,62 @@ function ensureResHelpers(res) {
   }
 }
 
+// Vercel's default body parser mangles the raw request body, which breaks
+// Stripe's webhook signature verification (it needs the exact bytes).
+// We disable it for every route (bodyParser: false), read the raw body from
+// the stream ourselves, and hand it through as req.rawBody. JSON routes are
+// re-parsed here so downstream handlers keep working untouched; the webhook
+// route receives the raw Buffer.
+function readRawBody(req) {
+  return new Promise(function (resolve, reject) {
+    if (req.body !== undefined && req.body !== null) {
+      if (Buffer.isBuffer(req.body)) return resolve(req.body);
+      if (typeof req.body === 'string') return resolve(Buffer.from(req.body));
+      if (typeof req.body === 'object') {
+        return resolve(Buffer.from(JSON.stringify(req.body)));
+      }
+    }
+    if (typeof req.read !== 'function') return resolve(Buffer.alloc(0));
+    const chunks = [];
+    let size = 0;
+    req.on('data', function (chunk) {
+      size += chunk.length;
+      if (size > MAX_BODY_BYTES) {
+        req.destroy();
+        reject(new Error('Request body too large'));
+        return;
+      }
+      chunks.push(chunk);
+    });
+    req.on('end', function () {
+      resolve(Buffer.concat(chunks));
+    });
+    req.on('error', reject);
+  });
+}
+
+function parseBodyForRoute(req, rawBody, routePath) {
+  if (routePath === '/payments/webhook') {
+    req.body = rawBody;
+    return { ok: true };
+  }
+  const contentType = String(req.headers['content-type'] || '').toLowerCase();
+  if (!contentType.includes('application/json')) {
+    req.body = undefined;
+    return { ok: true };
+  }
+  if (!rawBody.length) {
+    req.body = {};
+    return { ok: true };
+  }
+  try {
+    req.body = JSON.parse(rawBody.toString('utf8'));
+    return { ok: true };
+  } catch (e) {
+    return { ok: false };
+  }
+}
+
 module.exports = async function handler(req, res) {
   ensureResHelpers(res);
 
@@ -63,6 +123,21 @@ module.exports = async function handler(req, res) {
 
     if (method === 'OPTIONS') {
       handleCors(req, res);
+      return;
+    }
+
+    let rawBody;
+    try {
+      rawBody = await readRawBody(req);
+    } catch (error) {
+      res.status(413).json({ error: { message: 'Request body too large' } });
+      return;
+    }
+    req.rawBody = rawBody;
+
+    const parsed = parseBodyForRoute(req, rawBody, routePath);
+    if (!parsed.ok) {
+      res.status(400).json({ error: { message: 'Invalid JSON body' } });
       return;
     }
 
@@ -98,8 +173,7 @@ module.exports = async function handler(req, res) {
 
 module.exports.config = {
   api: {
-    bodyParser: {
-      sizeLimit: '10mb',
-    },
+    bodyParser: false,
+    externalResolver: true,
   },
 };

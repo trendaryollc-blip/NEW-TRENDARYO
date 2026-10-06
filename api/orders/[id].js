@@ -2,6 +2,7 @@ const { initFirebase } = require('../_lib/firebase');
 const { handleCors } = require('../_lib/cors');
 const { requireAuth, requireAdmin } = require('../_lib/auth');
 const { applyRateLimit } = require('../_lib/security');
+const { sendShippingUpdate } = require('../_lib/mail');
 
 module.exports = async function handler(req, res) {
   if (handleCors(req, res)) return;
@@ -72,7 +73,19 @@ module.exports = async function handler(req, res) {
       await db.collection('orders').doc(id).update(updateData);
 
       const updatedDoc = await db.collection('orders').doc(id).get();
-      return res.status(200).json({ data: { id: updatedDoc.id, ...updatedDoc.data() } });
+      const updatedOrder = { id: updatedDoc.id, ...updatedDoc.data() };
+
+      // Notify the customer when an order moves to shipped. Best-effort:
+      // a missing email provider or delivery failure never fails the update.
+      if (status === 'shipped' && order.status !== 'shipped') {
+        try {
+          await sendShippingUpdate(updatedOrder);
+        } catch (mailError) {
+          console.error('[orders:id] Shipping email failed:', mailError.message);
+        }
+      }
+
+      return res.status(200).json({ data: updatedOrder });
     }
 
     return res.status(405).json({ error: { message: 'Method not allowed' } });

@@ -36,7 +36,23 @@ function checkRateLimit(identifier, maxRequests = 100) {
   }
 
   const timestamps = RATE_LIMIT_STORE.get(identifier).filter(t => t > windowStart);
+  // Bound the stored array so a heavily throttled key can't grow unbounded.
+  if (timestamps.length > maxRequests) {
+    timestamps.splice(0, timestamps.length - maxRequests);
+  }
   RATE_LIMIT_STORE.set(identifier, timestamps);
+
+  // Opportunistic eviction: drop stale keys when the store gets large.
+  if (RATE_LIMIT_STORE.size > 10000) {
+    for (const [key, list] of RATE_LIMIT_STORE) {
+      const live = (list || []).filter(t => t > windowStart);
+      if (!live.length) {
+        RATE_LIMIT_STORE.delete(key);
+      } else {
+        RATE_LIMIT_STORE.set(key, live);
+      }
+    }
+  }
 
   if (timestamps.length >= maxRequests) {
     return false;
@@ -62,7 +78,13 @@ function getRateLimitHeaders(identifier, maxRequests = 100) {
 function applyRateLimit(req, res, maxRequests = 100) {
   setSecurityHeaders(res);
 
-  const identifier = req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown';
+  // Take the left-most X-Forwarded-For entry (the original client) instead of
+  // the raw header value, which Vercel sets to a comma-separated proxy chain.
+  // Falling back to the socket address keeps the key real when no proxy is set.
+  const forwarded = String(req.headers['x-forwarded-for'] || '')
+    .split(',')[0]
+    .trim() || req.socket?.remoteAddress;
+  const identifier = forwarded && forwarded !== 'unknown' ? forwarded : 'unknown';
   const rateLimitKey = `${identifier}:${req.url || '/'}`;
 
   if (!checkRateLimit(rateLimitKey, maxRequests)) {

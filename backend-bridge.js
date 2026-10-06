@@ -120,7 +120,14 @@
         // The catalogue changed on the server (or this is the first visit, when
         // products-data.js had no cache yet). Reload once so the synchronous
         // renderers pick up the cached copy without per-page rewrites.
-        if (!sessionStorage.getItem(RELOAD_GUARD)) {
+        //
+        // The checkout page is exempt: reloading mid-checkout would erase the
+        // shopper's form and any in-progress payment. The catalogue cache is
+        // written above regardless, so the next visit / checkout retry reads
+        // the correct data. The reload guard is NOT consumed on checkout, so
+        // other pages still perform their one-time reload.
+        var isCheckoutPage = /checkout\.html$/.test(String(window.location.pathname).split('/').pop() || '');
+        if (!isCheckoutPage && !sessionStorage.getItem(RELOAD_GUARD)) {
           sessionStorage.setItem(RELOAD_GUARD, '1');
           window.location.reload();
         }

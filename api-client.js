@@ -184,6 +184,29 @@ class APIClient {
     });
   }
 
+  /**
+   * Void a PaymentIntent that no longer has a matching checkout (price change,
+   * card failure, or abandoned order). Server-verified to be the caller's own.
+   */
+  async cancelPaymentIntent(paymentIntentId) {
+    return this.request('/payments/cancel-intent', {
+      method: 'POST',
+      body: { paymentIntentId },
+    });
+  }
+
+  /**
+   * Migrate a guest's orders / payments / cart / wishlist (recorded against the
+   * anonymous UID this browser used during guest checkout) onto the signed-in
+   * account. Requires a non-anonymous session.
+   */
+  async claimGuest(guestUid) {
+    return this.request('/users/claim-guest', {
+      method: 'POST',
+      body: { guestUid },
+    });
+  }
+
   async validateCoupon(code, items) {
     return this.request('/coupons/validate', {
       method: 'POST',

@@ -5,6 +5,7 @@ const { FieldValue, FieldPath } = require('firebase-admin/firestore');
 const { applyRateLimit } = require('../_lib/security');
 const { priceOrder, PricingError, toCents } = require('../_lib/pricing');
 const { getStripe } = require('../_lib/stripe');
+const { sendOrderConfirmation } = require('../_lib/mail');
 const { createHash, randomUUID } = require('crypto');
 
 function addressFingerprint(address) {
@@ -405,6 +406,16 @@ module.exports = async function handler(req, res) {
           });
         }
         throw error;
+      }
+
+      // Best-effort confirmation email. Never fails the order if email is
+      // not configured (mail.js skips and logs when no provider is set).
+      if (transactionResult.created) {
+        try {
+          await sendOrderConfirmation(transactionResult.data);
+        } catch (mailError) {
+          console.error('[orders] Confirmation email failed:', mailError.message);
+        }
       }
 
       return res.status(transactionResult.created ? 201 : 200).json({

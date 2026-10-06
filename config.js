@@ -38,9 +38,12 @@ window.TrendaryoConfig = {
 
   fetch('/api/config/public')
     .then(function (r) {
-      if (!r.ok) throw new Error('config');
+      if (!r.ok) throw new Error('HTTP ' + r.status);
       return r.json();
     })
     .then(function (body) { apply(body && body.data); })
-    .catch(function () { window.TrendaryoConfig._ready = true; });
+    .catch(function (error) {
+      console.warn('[config] /api/config/public failed. Stripe key will be unavailable:', error && error.message);
+      window.TrendaryoConfig._ready = true;
+    });
 })();
