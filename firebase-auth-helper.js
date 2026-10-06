@@ -98,7 +98,7 @@ const FirebaseAuth = {
 
     // Migrate any guest data recorded under this browser into the account that
     // is now signed in (only when the UID actually changed).
-    await claimGuestData(user.uid);
+    await FirebaseAuth.claimGuestData(user.uid);
 
     const db = firebase.firestore();
     const userDoc = await db.collection('users').doc(user.uid).get();
@@ -177,7 +177,7 @@ const FirebaseAuth = {
     }
 
     // Merge any guest data this browser collected while it was anonymous.
-    await claimGuestData(user.uid);
+    await FirebaseAuth.claimGuestData(user.uid);
 
     const userInfo = {
       id: user.uid,
