@@ -837,6 +837,11 @@
                     localStorage.removeItem('trendaryo_cart');
                     localStorage.removeItem('trendaryo_cart_products');
                 }
+                try {
+                    if (window.API && typeof window.API.clearCart === 'function') {
+                        window.API.clearCart().catch(function () {});
+                    }
+                } catch (e) { /* ignore */ }
                 window.location.href = 'order-success.html?id=' + encodeURIComponent(orderResult.data.id);
             } catch (error) {
                 console.error('[Checkout] Order submission failed:', error);

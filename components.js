@@ -557,6 +557,23 @@
             console.error('Firebase logout error:', e);
         }
 
+        // Clear local cart on logout so the next session does not inherit
+        // items added while signed in, and clear the server-side cart copy
+        // while we still have the session to call the authenticated API.
+        try {
+            if (typeof CartManager !== 'undefined' && CartManager.clear) {
+                CartManager.clear();
+            } else {
+                localStorage.removeItem('trendaryo_cart');
+                localStorage.removeItem('trendaryo_cart_products');
+            }
+        } catch (e) { /* ignore */ }
+        try {
+            if (window.API && typeof window.API.clearCart === 'function') {
+                await window.API.clearCart().catch(function () {});
+            }
+        } catch (e) { /* ignore */ }
+
         // Clear all auth data
         localStorage.removeItem('user_id');
         localStorage.removeItem('user');
