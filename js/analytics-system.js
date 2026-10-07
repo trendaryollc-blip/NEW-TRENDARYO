@@ -286,16 +286,6 @@ class AnalyticsSystem {
     if (window.fbq) {
       window.fbq('track', event.name, event.data);
     }
-
-    // Custom analytics endpoint
-    if (window.API) {
-      // Don't await, fire and forget
-      fetch('/api/analytics/event', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(event)
-      }).catch(err => console.warn('Failed to send analytics:', err));
-    }
   }
 
   /**
@@ -303,24 +293,6 @@ class AnalyticsSystem {
    */
   sendAnalytics() {
     if (this.events.length === 0) return;
-
-    const analyticsData = {
-      sessionId: this.sessionId,
-      userId: this.userId,
-      events: this.events,
-      pageViews: this.pageViews,
-      conversions: this.conversions,
-      timestamp: new Date().toISOString()
-    };
-
-    // Send to backend
-    if (window.API) {
-      fetch('/api/analytics/batch', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(analyticsData)
-      }).catch(err => console.warn('Failed to send analytics batch:', err));
-    }
 
     // Clear sent events
     this.events = [];

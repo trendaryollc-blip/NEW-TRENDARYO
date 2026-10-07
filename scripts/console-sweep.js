@@ -2,8 +2,8 @@ const { chromium } = require('playwright-core');
 const fs = require('fs');
 const path = require('path');
 
-const BASE = 'http://localhost:3000';
-const OUT = path.join(__dirname, '..', 'console-sweep');
+const BASE = process.env.SWEEP_BASE || 'http://localhost:3000';
+const OUT = path.join(__dirname, '..', process.env.SWEEP_OUT || 'console-sweep');
 const IGNORE = [/favicon/i, /\/favicon\.ico/i, /assets\/favicon/i];
 
 async function main() {
@@ -76,7 +76,7 @@ async function main() {
     } catch (e) {
       errors.push({ text: 'NAVIGATION FAILED: ' + e.message, source: url });
     }
-    await page.waitForTimeout(10000);
+    await page.waitForTimeout(Number(process.env.SWEEP_WAIT) || 10000);
 
     const uniq = [];
     const seenKeys = new Set();

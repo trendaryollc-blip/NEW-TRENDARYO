@@ -53,7 +53,7 @@ service-account.json
 .firebase
 
 # Console sweep output (generated screenshots/report)
-console-sweep/
+console-sweep*/
 
 .vercel
 .env*
