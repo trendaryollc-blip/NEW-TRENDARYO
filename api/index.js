@@ -33,6 +33,7 @@ const ROUTES = {
   '/contact': require('./contact/index'),
   '/contact/:id': require('./contact/[id]'),
   '/settings': require('./settings'),
+  '/ai': require('./ai'),
   '/upload': require('./upload'),
   '/config/public': require('./config/public'),
 };
@@ -176,5 +177,7 @@ module.exports.config = {
   api: {
     bodyParser: false,
     externalResolver: true,
+    // AI relay generations can run past the 10s default on the Hobby plan.
+    maxDuration: 60,
   },
 };

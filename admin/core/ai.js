@@ -38,6 +38,8 @@
         return {
             mode: live ? 'live' : 'offline',
             provider: live ? p : 'offline',
+            configured: p,
+            hasKey: !!s.aiKey,
             providerLabel: live ? PROVIDERS[p].label : PROVIDERS.offline.label,
             model: s.aiModel || (live ? (PROVIDERS[p].models[0]) : 'trendaryo-studio-v1'),
             key: s.aiKey || ''
@@ -49,6 +51,16 @@
     AI.test = function () {
         var t0 = Date.now();
         if (!AI.isLive()) {
+            var pre = AI.status();
+            if (pre.configured !== 'offline' && !pre.hasKey) {
+                var pc = PROVIDERS[pre.configured];
+                return Promise.resolve({
+                    ok: false, mode: 'offline',
+                    label: pc.label,
+                    error: pc.label + ' is selected but no API key is saved. Paste the key in Settings > AI configuration, then save.',
+                    ms: Date.now() - t0
+                });
+            }
             return Promise.resolve({ ok: true, mode: 'offline', label: PROVIDERS.offline.label, ms: Date.now() - t0 });
         }
         var stat = AI.status();
@@ -58,9 +70,22 @@
         var sys = 'You are a connection test. Reply with exactly: TRENDARYO OK';
         var usr = 'Ping';
         return callProvider(p, key, model, sys, usr, 30).then(function (text) {
-            return { ok: true, mode: 'live', label: p.label + ' - ' + model, sample: String(text || '').slice(0, 80), ms: Date.now() - t0 };
+            var via = AI.lastTransport === 'relay' ? ' - via site relay' : '';
+            return {
+                ok: true, mode: 'live',
+                label: p.label + ' - ' + model + via,
+                transport: AI.lastTransport,
+                sample: String(text || '').slice(0, 80),
+                ms: Date.now() - t0
+            };
         }, function (err) {
-            return { ok: false, mode: 'live', label: p.label, error: String(err && err.message || err), ms: Date.now() - t0 };
+            return {
+                ok: false, mode: 'live',
+                label: p.label,
+                transport: AI.lastTransport,
+                error: friendly(p, err),
+                ms: Date.now() - t0
+            };
         });
     };
 
@@ -186,87 +211,207 @@
 
     AI.TASKS = TASKS;
 
-    /* ---------- transport ---------- */
+    /* ---------- transport ----------
+     * Two paths to the provider:
+     *  1. direct  - the browser calls the provider (preferred, key stays local)
+     *  2. relay   - the browser calls POST /api/ai on this site, which forwards
+     *    the request server-side. Used automatically when the direct call is
+     *    blocked by the network, an extension or a browser policy - those only
+     *    ever surface as an opaque "Failed to fetch".
+     */
+
+    AI.lastTransport = 'direct';
 
     function httpError(status, body) {
         var snippet = String(body || '').slice(0, 220).replace(/\s+/g, ' ');
-        return new Error('HTTP ' + status + ' - ' + snippet);
+        var e = new Error('HTTP ' + status + ' - ' + snippet);
+        e.status = status;
+        return e;
     }
 
-    function callProvider(p, key, model, sys, usr, seconds) {
-        var ctl = typeof AbortController !== 'undefined' ? new AbortController() : null;
-        var timer = ctl ? setTimeout(function () { ctl.abort(); }, (seconds || 45) * 1000) : null;
-        var opts = { method: 'POST', headers: {}, body: '', signal: ctl ? ctl.signal : undefined };
+    function hostOf(p) {
+        return String(p.endpoint || '').replace(/^https?:\/\//, '').split('/')[0] || 'the provider';
+    }
+
+    function isNetworkError(err) {
+        if (!err) return false;
+        if (err.name === 'AbortError') return false;
+        if (err.name === 'TypeError') return true;
+        return /failed to fetch|networkerror|network request failed|load failed/i.test(String(err.message || ''));
+    }
+
+    function buildRequest(p, key, model, sys, usr) {
         var url = p.endpoint;
+        var headers = {};
+        var body;
         if (p.kind === 'gemini') {
-            opts.headers['Content-Type'] = 'application/json';
+            headers['Content-Type'] = 'application/json';
             url = p.endpoint + encodeURIComponent(model || 'gemini-2.0-flash') + ':generateContent?key=' + encodeURIComponent(key);
-            opts.body = JSON.stringify({
+            body = {
                 contents: [{ role: 'user', parts: [{ text: sys + '\n\n' + usr }] }],
                 generationConfig: { temperature: 0.7, maxOutputTokens: 1200 }
-            });
+            };
         } else if (p.kind === 'anthropic') {
-            opts.headers['Content-Type'] = 'application/json';
-            opts.headers['x-api-key'] = key;
-            opts.headers['anthropic-version'] = '2023-06-01';
-            opts.headers['anthropic-dangerous-direct-browser-access'] = 'true';
-            opts.body = JSON.stringify({
-                model: model,
-                max_tokens: 1200,
-                system: sys,
-                messages: [{ role: 'user', content: usr }]
-            });
+            headers['Content-Type'] = 'application/json';
+            headers['x-api-key'] = key;
+            headers['anthropic-version'] = '2023-06-01';
+            headers['anthropic-dangerous-direct-browser-access'] = 'true';
+            body = { model: model, max_tokens: 1200, system: sys, messages: [{ role: 'user', content: usr }] };
         } else {
-            opts.headers['Content-Type'] = 'application/json';
-            opts.headers['Authorization'] = 'Bearer ' + key;
-            if (p.label === 'OpenRouter') {
-                opts.headers['X-Title'] = 'Trendaryo Admin';
-            }
-            opts.body = JSON.stringify({
+            headers['Content-Type'] = 'application/json';
+            headers['Authorization'] = 'Bearer ' + key;
+            if (p.label === 'OpenRouter') headers['X-Title'] = 'Trendaryo Admin';
+            body = {
                 model: model,
                 temperature: 0.7,
                 max_tokens: 1200,
                 messages: [{ role: 'system', content: sys }, { role: 'user', content: usr }]
-            });
+            };
         }
-        return fetch(url, opts).then(function (res) {
-            return res.text().then(function (raw) {
-                if (!res.ok) throw httpError(res.status, raw);
-                var data = {};
-                try { data = JSON.parse(raw); } catch (e) { throw new Error('Provider returned non-JSON data.'); }
-                if (p.kind === 'gemini') {
-                    var parts = data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts;
-                    var txt = '';
-                    for (var i = 0; i < (parts || []).length; i++) txt += (parts[i].text || '');
-                    if (!txt) throw new Error('Gemini returned an empty response.');
-                    return txt;
-                }
-                if (p.kind === 'anthropic') {
-                    var blocks = data.content || [];
-                    var out = '';
-                    for (var j = 0; j < blocks.length; j++) if (blocks[j].type === 'text') out += blocks[j].text;
-                    if (!out) throw new Error('Anthropic returned an empty response.');
-                    return out;
-                }
-                var msg = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
-                if (!msg) throw new Error('Provider returned an empty response.');
-                return msg;
-            });
-        });
-
-        function promiseFinally() { /* placeholder to keep structure clear */ return null; }
+        return { url: url, headers: headers, body: JSON.stringify(body) };
     }
 
-    /* Wrap fetch so the timer always clears (older browsers without .finally). */
-    var rawCall = callProvider;
-    callProvider = function (p, key, model, sys, usr, seconds) {
-        return rawCall(p, key, model, sys, usr, seconds).then(function (text) {
+    function parseBody(p, raw) {
+        var data = {};
+        try { data = JSON.parse(raw); } catch (e) { throw new Error('Provider returned non-JSON data.'); }
+        if (p.kind === 'gemini') {
+            var parts = data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts;
+            var txt = '';
+            for (var i = 0; i < (parts || []).length; i++) txt += (parts[i].text || '');
+            if (!txt) throw new Error('Gemini returned an empty response.');
+            return txt;
+        }
+        if (p.kind === 'anthropic') {
+            var blocks = data.content || [];
+            var out = '';
+            for (var j = 0; j < blocks.length; j++) if (blocks[j].type === 'text') out += blocks[j].text;
+            if (!out) throw new Error('Anthropic returned an empty response.');
+            return out;
+        }
+        var msg = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
+        if (!msg) throw new Error('Provider returned an empty response.');
+        return msg;
+    }
+
+    function directCall(p, key, model, sys, usr, seconds) {
+        var req = buildRequest(p, key, model, sys, usr);
+        var ctl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+        var timer = ctl ? setTimeout(function () { ctl.abort(); }, (seconds || 45) * 1000) : null;
+        return fetch(req.url, {
+            method: 'POST',
+            headers: req.headers,
+            body: req.body,
+            signal: ctl ? ctl.signal : undefined
+        }).then(function (res) {
+            return res.text().then(function (raw) {
+                if (!res.ok) throw httpError(res.status, raw);
+                return parseBody(p, raw);
+            });
+        }).then(function (text) {
+            if (timer) clearTimeout(timer);
             return text;
         }, function (err) {
-            if (err && err.name === 'AbortError') throw new Error('Provider timed out after ' + (seconds || 45) + 's.');
+            if (timer) clearTimeout(timer);
             throw err;
         });
-    };
+    }
+
+    function relayCall(p, key, model, sys, usr, seconds) {
+        var API = window.API;
+        if (!API || typeof API.request !== 'function') {
+            return Promise.reject(new Error('Same-origin AI relay is unavailable on this page.'));
+        }
+        function providerId() {
+            for (var id in PROVIDERS) if (PROVIDERS[id] === p) return id;
+            return 'offline';
+        }
+        return API.request('/ai', {
+            method: 'POST',
+            body: {
+                provider: providerId(),
+                model: model,
+                system: sys,
+                user: usr,
+                key: key,
+                seconds: seconds || 45
+            }
+        }).then(function (body) {
+            var text = body && body.data && body.data.text;
+            if (!text) throw new Error('The relay returned an empty response.');
+            return text;
+        });
+    }
+
+    function friendly(p, err) {
+        var status = err && err.status;
+        var raw = String((err && err.message) || err || 'unknown error');
+        var msg = raw.trim();
+        if (status === 401 && /^unauthorized$/i.test(msg)) {
+            return 'The admin session expired - reload the admin page, sign in again, then retest.';
+        }
+        if (status === 403) {
+            return 'This admin account is not allowed to relay AI calls: ' + msg;
+        }
+        if (status === 429 && /^too many requests$/i.test(msg)) {
+            return 'The site API rate limit kicked in - wait a minute and retry.';
+        }
+        if (status === 401 || status === 403) {
+            var badKey = /missing authentication|invalid api key|incorrect api key|invalid_x_api_key|authentication_error|user not found/i.test(raw);
+            var fmt = '';
+            if (p.label === 'OpenRouter') fmt = ' Expected format: sk-or-v1-... - copy it again from openrouter.ai/keys.';
+            else if (p.label === 'OpenAI') fmt = ' Expected format: sk-...';
+            else if (p.label === 'Anthropic') fmt = ' Expected format: sk-ant-...';
+            return p.label + ' rejected the API key (HTTP ' + status + ')' +
+                (badKey ? ' - the key itself is not accepted' : '') +
+                '. Open Settings > AI configuration and paste a fresh key.' + fmt;
+        }
+        if (status === 404) {
+            var hint = p.label === 'OpenRouter'
+                ? ' OpenRouter needs the vendor/model form, e.g. openai/gpt-4o-mini.'
+                : '';
+            return p.label + ' does not recognise that model (HTTP 404): ' + raw + hint;
+        }
+        if (status === 429) {
+            return p.label + ' rate-limited the key (HTTP 429). Wait a minute, then retry.';
+        }
+        if (status === 400) {
+            return p.label + ' rejected the request (HTTP 400): ' + raw;
+        }
+        if (status >= 500) {
+            return p.label + ' had a server problem (HTTP ' + status + '). Try again shortly.';
+        }
+        if (isNetworkError(err)) {
+            return 'The browser could not reach ' + hostOf(p) + ' (' + raw + ') - a network, extension or policy blocked the call.';
+        }
+        return raw;
+    }
+
+    function callProvider(p, key, model, sys, usr, seconds) {
+        seconds = seconds || 45;
+        return directCall(p, key, model, sys, usr, seconds).then(function (text) {
+            AI.lastTransport = 'direct';
+            return text;
+        }, function (err) {
+            if (err && err.name === 'AbortError') {
+                AI.lastTransport = 'direct';
+                var t = new Error(p.label + ' timed out after ' + seconds + 's.');
+                t.status = 0;
+                throw t;
+            }
+            if (!isNetworkError(err)) throw err;
+            return relayCall(p, key, model, sys, usr, seconds).then(function (text) {
+                AI.lastTransport = 'relay';
+                return text;
+            }, function (err2) {
+                AI.lastTransport = 'relay';
+                var head = 'Direct call to ' + hostOf(p) + ' was blocked in this browser (' +
+                    String((err && err.message) || err || 'request failed') + ').';
+                var e = new Error(head + ' The same-origin relay then said: ' + friendly(p, err2));
+                e.status = err2 && err2.status;
+                throw e;
+            });
+        });
+    }
 
     /* ---------- JSON extraction (models like to add prose around JSON) ---------- */
 
@@ -281,6 +426,17 @@
 
     /* ---------- the run pipeline ---------- */
 
+    var lastWarn = 0;
+    function warnOnce(message) {
+        var App = window.TrendaryoAdminApp;
+        if (!App || typeof App.toast !== 'function') return;
+        var now = Date.now();
+        if (now - lastWarn < 8000) return;
+        lastWarn = now;
+        App.toast('Live AI call failed - Offline Studio draft used instead. ' + message, 'warn', 'AI');
+    }
+
+
     AI.run = function (taskKey, input, opts) {
         opts = opts || {};
         var t = TASKS[taskKey];
@@ -291,8 +447,9 @@
         var sys = voice(tone) + ' ' + t.system;
         var usr = t.build(input || {});
 
-        function finish(text, provider, model) {
+        function finish(text, provider, model, error) {
             var out = { task: taskKey, text: String(text || ''), provider: provider, model: model, ms: Date.now() - t0 };
+            if (error) out.fallbackError = error;
             if (t.json) {
                 var parsed = extractJSON(out.text);
                 if (parsed) out.data = parsed; else out.parseError = true;
@@ -305,6 +462,7 @@
                         provider: provider,
                         model: model,
                         ms: out.ms,
+                        error: error || null,
                         prompt: String(usr).slice(0, 400),
                         output: out.text.slice(0, 4000),
                         applied: opts.applyNote || null,
@@ -328,8 +486,9 @@
             return finish(text, stat.provider, stat.model);
         }, function (err) {
             if (opts.fallback === false) throw err;
-            var out = finish(offline(taskKey, input || {}), 'offline', 'trendaryo-studio-v1');
-            out.fallbackError = String((err && err.message) || err);
+            var message = friendly(p, err);
+            var out = finish(offline(taskKey, input || {}), 'offline', 'trendaryo-studio-v1', message);
+            warnOnce(message);
             return out;
         });
     };

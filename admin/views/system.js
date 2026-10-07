@@ -267,6 +267,15 @@
         return 'Copy to clipboard';
     }
 
+    function keyFormatWarning(prov, key) {
+        if (prov === 'offline' || !key) return '';
+        if (prov === 'openrouter' && !/^sk-or-/.test(key)) return 'it does not start with sk-or-v1-';
+        if (prov === 'openai' && !/^sk-/.test(key)) return 'it does not start with sk-';
+        if (prov === 'anthropic' && !/^sk-ant-/.test(key)) return 'it does not start with sk-ant-';
+        if (prov === 'gemini' && !/^AIza/.test(key)) return 'it does not start with AIza';
+        return '';
+    }
+
     function runTask(ctx, taskKey) {
         var S = ctx.S, App = ctx.App, engine = ctx.AI;
         var t = engine.TASKS[taskKey];
@@ -390,24 +399,31 @@
                 '<button class="btn btn--sm" id="asTest" type="button">' + A().icon('wifi', 13) + 'Test connection</button>' +
                 '<a class="btn btn--sm" href="#/settings">' + A().icon('settings', 13) + 'Configure AI</a>') +
 
+            /* 1. engine status - one full-width band, never squeezed */
             '<div class="ai-panel" style="margin-bottom:16px;"><div class="ai-panel__head">' + A().icon('sparkles', 13) + '<span class="ai-panel__title">Engine status</span><span class="badge ' + (stat.mode === 'live' ? 'badge--ai' : 'badge--neutral') + '" style="margin-left:auto;">' + (stat.mode === 'live' ? 'LIVE - ' + U.esc(stat.providerLabel) + ' (' + U.esc(stat.model) + ')' : 'OFFLINE STUDIO - built-in') + '</span></div>' +
-                '<div class="ai-panel__body"><div class="t-body">' + (stat.mode === 'live' ? 'Generations call ' + U.esc(stat.providerLabel) + ' directly from this browser. The key never leaves this device, and every draft lands in history before it is applied.' : 'The built-in Offline Studio drafts copy from catalogue data - no key, no network, fully honest about what it is. Connect a live provider in Settings for open-ended generation.') + '</div>' +
-                '<div class="ai-meta" id="asTestOut"></div></div></div>' +
+                '<div class="ai-panel__body"><div class="t-body">' + (stat.mode === 'live' ? 'Generations call ' + U.esc(stat.providerLabel) + ' from this browser. If the network or an extension blocks that call, the same request is relayed through this site automatically - the key still goes only to ' + U.esc(stat.providerLabel) + '.' : 'The built-in Offline Studio drafts copy from catalogue data - no key, no network, fully honest about what it is. Connect a live provider in Settings for open-ended generation.') + '</div>' +
+                '<div class="ai-strip"><div class="ai-meta" id="asTestOut"></div><div class="fs-xs t-mute">Every draft lands in history before it is applied.</div></div></div></div>' +
 
-            '<div class="grid grid--split" style="margin-bottom:16px;">' +
-                '<div class="panel"><div class="panel__head"><div><div class="panel__title">Automation center</div><div class="panel__subtitle">SEO coverage across the shelf</div></div></div>' +
-                    '<div class="panel__body">' +
+            /* 2. automation centre - full width, stats and actions side by side */
+            '<div class="panel" style="margin-bottom:16px;"><div class="panel__head"><div><div class="panel__title">Automation center</div><div class="panel__subtitle">SEO coverage across the shelf - ' + audit.total + ' products</div></div></div>' +
+                '<div class="panel__body"><div class="auto-grid">' +
+                    '<div class="auto-grid__col">' +
                         '<div class="row row--between fs-sm"><span>' + audit.full + ' full</span><span class="t-mute">' + audit.partial + ' partial</span><span class="text-danger">' + audit.missing + ' missing</span></div>' +
                         '<div class="meter mt-2"><div class="meter__fill meter__fill--ai" style="width:' + pct + '%"></div></div>' +
                         '<div class="fs-xs t-mute mt-1">' + pct + '% of ' + audit.total + ' products carry a complete package.</div>' +
-                        '<div class="ai-actions mt-4"><button class="ai-chip" id="asAutofill" type="button">' + A().icon('sparkles', 12) + 'Autofill every gap</button>' +
+                    '</div>' +
+                    '<div class="auto-grid__col">' +
+                        '<div class="ai-actions"><button class="ai-chip" id="asAutofill" type="button">' + A().icon('sparkles', 12) + 'Autofill every gap</button>' +
                         '<button class="ai-chip" id="asDescAll" type="button">' + A().icon('wand', 12) + 'Rewrite all descriptions</button></div>' +
-                        '<div class="ai-note mt-3">' + A().icon('sparkles', 14) + '<div>Both run sequentially with live progress. Every draft is stored in history - applied items are marked, nothing is silent.</div></div>' +
-                    '</div></div>' +
-                '<div class="panel"><div class="panel__head"><div><div class="panel__title">Task library</div><div class="panel__subtitle">Pick a task, give it context, review the draft</div></div></div>' +
-                    '<div class="panel__body panel__body--flush"><div class="grid grid--3" style="padding:16px;">' + TASK_CARDS + '</div></div></div>' +
-            '</div>' +
+                        '<div class="ai-note" style="margin-top:12px;">' + A().icon('sparkles', 14) + '<div>Both run sequentially with live progress. Every draft is stored in history - applied items are marked, nothing is silent.</div></div>' +
+                    '</div>' +
+                '</div></div></div>' +
 
+            /* 3. task library - full width, cards sized by content not by column width */
+            '<div class="panel" style="margin-bottom:16px;"><div class="panel__head"><div><div class="panel__title">Task library</div><div class="panel__subtitle">Pick a task, give it context, review the draft</div></div><div class="panel__actions"><span class="fs-xs t-mute">' + TASK_META.length + ' tasks</span></div></div>' +
+                '<div class="panel__body"><div class="task-grid">' + TASK_CARDS + '</div></div></div>' +
+
+            /* 4. generation history */
             '<div class="panel"><div class="panel__head"><div><div class="panel__title">Generation history</div><div class="panel__subtitle">The last ' + hist.length + ' drafts - applied ones are marked</div></div><div class="panel__actions"><button class="btn btn--sm" id="asClear" type="button">Clear history</button></div></div>' +
                 '<div class="table-wrap" id="asHist"></div></div>';
 
@@ -421,6 +437,8 @@
                 out.textContent = 'Testing...';
                 ctx.AI.test().then(function (r) {
                     out.textContent = r.ok ? ('OK - ' + r.label + (r.ms ? ' (' + r.ms + 'ms)' : '')) : ('FAILED - ' + (r.error || 'unknown'));
+                    out.classList.toggle('text-ok', !!r.ok);
+                    out.classList.toggle('text-danger', !r.ok);
                     App.toast(r.ok ? 'AI connection OK - ' + r.label : 'Connection failed: ' + (r.error || 'unknown'), r.ok ? 'ok' : 'danger', 'AI Studio');
                 });
             });
@@ -461,7 +479,8 @@
                 var h = '<table class="table table--compact"><thead><tr><th>When</th><th>Task</th><th>Provider</th><th>Applied</th><th></th></tr></thead><tbody>';
                 for (var i = 0; i < list2.length; i++) {
                     var e2 = list2[i];
-                    h += '<tr><td class="fs-sm t-mute">' + App.ago(e2.at) + '</td><td class="fs-sm">' + U.esc(e2.label || e2.task) + '</td><td class="fs-sm">' + U.esc(e2.provider || '-') + '</td>' +
+                    var errNote = e2.error ? '<div class="fs-xs text-danger" title="' + U.esc(e2.error) + '">' + U.esc(String(e2.error).slice(0, 90)) + '</div>' : '';
+                    h += '<tr><td class="fs-sm t-mute">' + App.ago(e2.at) + '</td><td class="fs-sm">' + U.esc(e2.label || e2.task) + '</td><td class="fs-sm">' + U.esc(e2.provider || '-') + errNote + '</td>' +
                         '<td>' + (e2.applied ? '<span class="badge badge--ok">' + U.esc(e2.applied) + '</span>' : '<span class="badge badge--neutral">draft</span>') + '</td>' +
                         '<td><div class="cell-actions"><button class="icon-btn" data-view="' + U.esc(e2.id) + '" type="button" title="View draft">' + A().icon('eye', 14) + '</button></div></td></tr>';
                 }
@@ -494,8 +513,9 @@
     var TASK_CARDS = '';
     for (var _tci = 0; _tci < TASK_META.length; _tci++) {
         var _t = TASK_META[_tci];
-        TASK_CARDS += '<div class="panel" style="padding:14px;"><div class="row" style="margin-bottom:6px;"><span class="stat__icon stat__icon--ai">' + A().icon(_t.icon, 14) + '</span><b class="fs-sm">' + U.esc(_t.label) + '</b></div>' +
-            '<p class="fs-xs t-mute" style="line-height:1.5;margin-bottom:10px;">' + U.esc(_t.hint) + '</p>' +
+        TASK_CARDS += '<div class="panel task-card">' +
+            '<div class="task-card__top"><span class="stat__icon stat__icon--ai">' + A().icon(_t.icon, 14) + '</span><b>' + U.esc(_t.label) + '</b></div>' +
+            '<p class="task-card__hint">' + U.esc(_t.hint) + '</p>' +
             '<button class="ai-chip" type="button" data-task="' + _t.key + '">' + A().icon('sparkles', 12) + 'Run</button></div>';
     }
 
@@ -537,8 +557,8 @@
                 '<div class="field"><label class="field__label">API key</label><div class="input-ai"><input class="input input--mono" id="stKey" type="password" value="' + U.esc(s.aiKey) + '" placeholder="sk-..."><button class="ai-btn" type="button" id="stKeyEye">' + A().icon('eye', 13) + '</button></div></div></div>' +
                 '<div class="field-row"><div class="field"><label class="field__label">Model</label><input class="input input--mono" id="stModel" value="' + U.esc(s.aiModel) + '" placeholder="' + U.esc(modelHint[s.aiProvider] || '') + '"><div class="field__hint" id="stModelHint">' + U.esc(modelHint[s.aiProvider] || '') + '</div></div>' +
                 '<div class="field"><label class="field__label">Writing tone</label><select class="select" id="stTone"><option value="confident"' + (s.aiTone === 'confident' ? ' selected' : '') + '>Confident (default)</option><option value="luxury"' + (s.aiTone === 'luxury' ? ' selected' : '') + '>Luxury</option><option value="technical"' + (s.aiTone === 'technical' ? ' selected' : '') + '>Technical</option><option value="friendly"' + (s.aiTone === 'friendly' ? ' selected' : '') + '>Friendly</option></select></div></div>' +
-                '<div class="row mt-4"><button class="btn btn--primary btn--sm" id="stAiSave" type="button">' + A().icon('save', 13) + 'Save AI settings</button>' +
-                '<button class="btn btn--ai btn--sm" id="stAiTest" type="button">' + A().icon('wifi', 13) + 'Test connection</button><span class="fs-xs t-dim" id="stTestOut"></span></div></div></div>' +
+                '<div class="row row--wrap mt-4"><button class="btn btn--primary btn--sm" id="stAiSave" type="button">' + A().icon('save', 13) + 'Save AI settings</button>' +
+                '<button class="btn btn--ai btn--sm" id="stAiTest" type="button">' + A().icon('wifi', 13) + 'Test connection</button><span class="fs-xs t-dim" id="stTestOut" style="flex:1 1 220px;min-width:0;line-height:1.5;"></span></div></div></div>' +
 
             '<div class="grid grid--split" style="margin-bottom:16px;">' +
                 '<div class="panel"><div class="panel__head"><div><div class="panel__title">Security</div><div class="panel__subtitle">Local admin gate - stored in this browser</div></div></div><div class="panel__body">' +
@@ -603,13 +623,28 @@
                 inp.type = show ? 'text' : 'password';
                 keyEye.innerHTML = A().icon(show ? 'eyeOff' : 'eye', 13);
             });
+            function defaultModel(prov) {
+                if (!prov || !provs[prov]) return '';
+                var list = provs[prov].models || [];
+                return list[0] || '';
+            }
             root.querySelector('#stProv').addEventListener('change', function () {
                 root.querySelector('#stModelHint').textContent = modelHint[this.value] || '';
                 root.querySelector('#stModel').placeholder = modelHint[this.value] || '';
+                var mi = root.querySelector('#stModel');
+                if (!mi.value.trim() && this.value !== 'offline') mi.value = defaultModel(this.value);
             });
+            (function prefillModel() {
+                var prov = root.querySelector('#stProv').value;
+                var mi = root.querySelector('#stModel');
+                if (!mi.value.trim() && prov !== 'offline') mi.value = defaultModel(prov);
+            })();
             root.querySelector('#stAiSave').addEventListener('click', function () {
-                S.saveSettings({ aiProvider: root.querySelector('#stProv').value, aiKey: root.querySelector('#stKey').value.trim(), aiModel: root.querySelector('#stModel').value.trim(), aiTone: root.querySelector('#stTone').value });
-                App.toast('AI settings saved', 'ok', 'Settings');
+                var prov = root.querySelector('#stProv').value;
+                var key = root.querySelector('#stKey').value.trim();
+                S.saveSettings({ aiProvider: prov, aiKey: key, aiModel: root.querySelector('#stModel').value.trim(), aiTone: root.querySelector('#stTone').value });
+                var warn = keyFormatWarning(prov, key);
+                App.toast(warn ? 'AI settings saved, but double-check the key: ' + warn : 'AI settings saved', warn ? 'warn' : 'ok', 'Settings');
                 App.route();
             });
             root.querySelector('#stAiTest').addEventListener('click', function () {
@@ -617,7 +652,9 @@
                 out.textContent = 'Testing...';
                 engine.test().then(function (r) {
                     out.textContent = r.ok ? ('OK - ' + r.label + (r.ms ? ' (' + r.ms + 'ms)' : '')) : ('FAILED - ' + (r.error || 'unknown'));
-                    App.toast(r.ok ? 'AI connection OK' : 'AI connection failed', r.ok ? 'ok' : 'danger', 'Settings');
+                    out.classList.toggle('text-ok', !!r.ok);
+                    out.classList.toggle('text-danger', !r.ok);
+                    App.toast(r.ok ? 'AI connection OK' : 'AI connection failed: ' + (r.error || 'unknown'), r.ok ? 'ok' : 'danger', 'Settings');
                 });
             });
 
