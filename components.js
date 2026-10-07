@@ -17,7 +17,7 @@
     const headerHTML = `
     <header class="store-header" id="store-header">
         <div class="announcement-bar">
-            <span id="announce-msg">Free shipping over $50 · 30-day returns · WELCOME10 for 10% off</span>
+            <span id="announce-msg">Flat-rate shipping from $4.99 · 30-day returns · WELCOME10 for 10% off</span>
             <span id="announce-countdown" class="announce-countdown" style="display:none;"></span>
         </div>
         <div class="store-header-inner">
@@ -123,11 +123,11 @@
                 <span class="footer-logo-text">TRENDARYO</span>
                 <span class="footer-company-name">TRENDARYO LLC</span>
                 <div class="footer-address">
-                    Al Maabela, Wilayat Al Seeb<br>
-                    Muscat Governorate, OMAN
+                    30 N Gould St Ste N<br>
+                    Sheridan, WY 82801, USA
                 </div>
                 <div class="footer-contact">
-                    <strong>Email:</strong> <a href="mailto:admin@trendaryo.com">admin@trendaryo.com</a><br>
+                    <strong>Email:</strong> <a href="mailto:support@trendaryo.com">support@trendaryo.com</a><br>
                     <strong>Phone:</strong> <a href="tel:+13075334512">+1 (307) 533-4512</a>
                 </div>
                 <p>Your premium destination for electronics, fashion, and accessories. Experience the future of shopping with our cutting-edge 3D platform.</p>
@@ -654,7 +654,7 @@
             if (countdown) countdown.style.display = 'none';
             return;
         }        const messages = [
-            'FREE SHIPPING ON ORDERS OVER $50',
+            'FLAT-RATE SHIPPING FROM $4.99',
             'USE CODE WELCOME10 FOR 10% OFF YOUR FIRST ORDER',
             'NEW ARRIVALS — FRESH DROPS EVERY WEEK',
         ];

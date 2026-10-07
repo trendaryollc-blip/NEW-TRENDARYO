@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Cart - Trendaryo | Review Items & Checkout</title>
-    <meta name="description" content="Review your Trendaryo cart items, apply promo codes, and proceed to secure checkout. Free shipping on orders over $50.">
+    <meta name="description" content="Review your Trendaryo cart items, apply promo codes, and proceed to secure checkout. Standard shipping from $4.99, tracked and insured.">
     <meta name="robots" content="noindex, follow">
     <link rel="canonical" href="https://trendaryo.com/cart.html">
     <meta property="og:type" content="website">
@@ -87,7 +87,7 @@
         .cart-summary-row .value { font-weight: 700; }
         .cart-summary-total { display: flex; justify-content: space-between; align-items: center; font-family: var(--font-d); font-size: 1.2rem; font-weight: 900; color: var(--accent); padding-top: 1rem; border-top: 2px solid var(--glass-border); margin-top: 0.5rem; }
 
-        /* ── Free Shipping Progress ── */
+        /* cart styles */
         .cart-ship-bar { width: 100%; height: 6px; border-radius: 3px; background: rgba(255,255,255,0.08); overflow: hidden; margin-bottom: 0.5rem; }
         .cart-ship-fill { height: 100%; border-radius: 3px; background: transparent; transition: width 0.5s ease; }
         .cart-ship-fill.is-free { background: var(--accent-3); box-shadow: 0 0 10px rgba(0,255,136,0.5); }
@@ -179,7 +179,7 @@
             <div class="cart-stats">
                 <div class="cart-stat"><div class="cart-stat-val" id="quantum-item-count">0</div><div class="cart-stat-lab">Products</div></div>
                 <div class="cart-stat"><div class="cart-stat-val" id="quantum-subtotal">$0.00</div><div class="cart-stat-lab">Subtotal</div></div>
-                <div class="cart-stat"><div class="cart-stat-val" id="quantum-shipping">FREE</div><div class="cart-stat-lab">Shipping</div></div>
+                <div class="cart-stat"><div class="cart-stat-val" id="quantum-shipping">$4.99</div><div class="cart-stat-lab">Shipping</div></div>
                 <div class="cart-stat"><div class="cart-stat-val" id="quantum-total">$0.00</div><div class="cart-stat-lab">Total</div></div>
             </div>
 
@@ -200,9 +200,8 @@
                     <div class="cart-summary-title">Cart Summary</div>
 
                     <div class="cart-summary-section">
-                        <span class="cart-summary-label">Free Shipping Progress</span>
-                        <div class="cart-ship-bar"><div class="cart-ship-fill" id="shipProgressFill" style="width:0%"></div></div>
-                        <div class="cart-ship-text" id="shipProgressText">Add $50.00 to unlock FREE shipping</div>
+                        <span class="cart-summary-label">Shipping</span>
+                        <div class="cart-ship-text">Standard shipping from $4.99 (US). Exact total is calculated at checkout.</div>
                     </div>
 
                     <div class="cart-summary-section">
@@ -217,7 +216,7 @@
                     <div class="cart-summary-section">
                         <span class="cart-summary-label">Order Breakdown</span>
                         <div class="cart-summary-row"><span class="label">Subtotal</span><span class="value" id="quantum-subtotal-2">$0.00</span></div>
-                        <div class="cart-summary-row"><span class="label">Shipping</span><span class="value" id="quantum-shipping-2">FREE</span></div>
+                        <div class="cart-summary-row"><span class="label">Shipping</span><span class="value" id="quantum-shipping-2">$4.99</span></div>
                         <div class="cart-summary-row"><span class="label">Tax (8%)</span><span class="value" id="quantum-tax">$0.00</span></div>
                         <div class="cart-summary-total"><span>Total</span><span id="quantum-total-2">$0.00</span></div>
                     </div>
@@ -261,8 +260,7 @@
     (function () {
         'use strict';
         var UI = window.TrendaryoUI;
-        var FREE_SHIP_THRESHOLD = 50;
-
+    
         function getCartItems() {
             var cart = [];
             try { cart = CartManager.getCart(); } catch (e) {
@@ -347,20 +345,6 @@
             }
         }
 
-        /* ── Free-shipping progress ── */
-        function updateShippingProgress() {
-            var total = CartManager.getTotal();
-            var fill = document.getElementById('shipProgressFill');
-            var text = document.getElementById('shipProgressText');
-            if (!fill || !text) return;
-            var pct = Math.min(100, (total / FREE_SHIP_THRESHOLD) * 100);
-            fill.style.width = pct.toFixed(0) + '%';
-            fill.classList.toggle('is-free', pct >= 100);
-            if (total <= 0) text.textContent = 'Add $' + FREE_SHIP_THRESHOLD.toFixed(2) + ' to unlock FREE shipping';
-            else if (pct >= 100) text.textContent = "You've unlocked FREE shipping!";
-            else text.textContent = 'Add $' + (FREE_SHIP_THRESHOLD - total).toFixed(2) + ' more to unlock FREE shipping';
-        }
-
         /* ── Promo ── */
         function initPromo() {
             var input = document.getElementById('promoInput');
@@ -387,20 +371,19 @@
                     ? CartManager.getProductCount()
                     : CartManager.getCount();
             } catch (e) { itemCount = 0; }
-            var shipping = total >= 50 ? 0 : 9.99;
+            var shipping = total > 0 ? 4.99 : 0;
             var tax = total * 0.08;
             var finalTotal = total + shipping + tax;
 
             var ids = ['quantum-item-count','quantum-subtotal','quantum-shipping','quantum-total'];
-            var vals = [itemCount, '$' + total.toFixed(2), shipping === 0 ? 'FREE' : '$' + shipping.toFixed(2), '$' + finalTotal.toFixed(2)];
+            var vals = [itemCount, '$' + total.toFixed(2), '$' + shipping.toFixed(2), '$' + finalTotal.toFixed(2)];
             for (var j = 0; j < ids.length; j++) { var el = document.getElementById(ids[j]); if (el) el.textContent = vals[j]; }
 
             var ids2 = ['quantum-subtotal-2','quantum-shipping-2','quantum-tax','quantum-total-2'];
-            var vals2 = ['$' + total.toFixed(2), shipping === 0 ? 'FREE' : '$' + shipping.toFixed(2), '$' + tax.toFixed(2), '$' + finalTotal.toFixed(2)];
+            var vals2 = ['$' + total.toFixed(2), '$' + shipping.toFixed(2), '$' + tax.toFixed(2), '$' + finalTotal.toFixed(2)];
             for (var k = 0; k < ids2.length; k++) { var el2 = document.getElementById(ids2[k]); if (el2) el2.textContent = vals2[k]; }
 
             renderCartItems();
-            updateShippingProgress();
         }
 
         /* ── Cross-sell ── */

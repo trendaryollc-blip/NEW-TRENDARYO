@@ -764,7 +764,7 @@
             {
                 val: '24 h',
                 lab: 'Dispatch promise',
-                sub: 'ordered before 3 PM · free shipping over $50 · 30-day returns'
+                sub: 'ordered before 3 PM · tracked shipping · 30-day returns'
             }
         ];
     }
@@ -1383,7 +1383,7 @@
         var items = P.shippingInfo(ref).slice();
         items.push({
             q: 'Do you ship worldwide, and what does it cost?',
-            a: 'Yes. Orders over $50 ship free inside the standard window; anything below that is quoted at checkout. Express upgrades are offered there too, with a tracked carrier on every parcel.'
+            a: 'Orders ship with a tracked carrier: $4.99 flat on US standard delivery, with express upgrades and exact totals shown at checkout. Every parcel includes tracking, insurance and a delivery estimate.'
         });
         items.push({
             q: 'Who do I talk to if something goes wrong?',
@@ -1404,7 +1404,7 @@
             {
                 href: 'shipping.html',
                 icon: ic('<path d="M5 18H3c-.6 0-1-.4-1-1V7c0-.6.4-1 1-1h10c.6 0 1 .4 1 1v11"/><path d="M14 9h4l4 4v4c0 .6-.4 1-1 1h-2"/><circle cx="7" cy="18" r="2"/><path d="M15 18H9"/><circle cx="17" cy="18" r="2"/>'),
-                title: 'Shipping', num: 'Free over $50',
+                title: 'Shipping', num: 'From $4.99',
                 text: 'Standard 3–5 working days, or 5–7 on orders above $400. Ordered before 3 PM? It ships the same day.'
             },
             {

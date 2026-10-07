@@ -21,7 +21,8 @@
     "stripe": "^17.0.0"
   },
   "devDependencies": {
-    "dotenv": "^16.6.1"
+    "dotenv": "^16.6.1",
+    "playwright-core": "^1.63.0"
   },
   "overrides": {
     "jose": "^4.15.9"

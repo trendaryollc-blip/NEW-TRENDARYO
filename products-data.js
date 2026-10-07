@@ -226,8 +226,8 @@ var RAW2 = [
             var days = p && p.price >= 400 ? '5–7' : '3–5';
             return [
                 { q: 'When will my order be dispatched?', a: 'Orders placed before 3:00 PM are packed and dispatched the same working day. Anything after that goes out the next working day — you will get a tracking link by email the moment the carrier scans it.' },
-                { q: 'How long does delivery take?', a: 'Standard delivery on this item is ' + days + ' working days. Express options are shown at checkout, and orders over $50 ship free within the standard window.' },
-                { q: 'Can I return this item?', a: 'Yes. You have 30 days from delivery to return it in its original condition and packaging. We refund to your original payment method within 3–5 working days of the item reaching our warehouse.' },
+                { q: 'How long does delivery take?', a: 'Standard delivery on this item is ' + days + ' working days. Express options are shown at checkout, tracked shipping is a flat $4.99 on US orders.' },
+                { q: 'Can I return this item?', a: 'Yes. You have 30 days from delivery to return it in its original condition and packaging. We refund to your original payment method within 5-7 working days of the item reaching our warehouse.' },
                 { q: 'Is the warranty included?', a: 'Every Trendaryo item includes the manufacturer warranty listed in the Specifications above. Keep your order confirmation email — it doubles as your warranty proof.' }
             ];
         }

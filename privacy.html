@@ -162,11 +162,11 @@
                 <li>We collect only what an order or an account needs to work - nothing speculative.</li>
                 <li>We <strong>never sell or rent</strong> your data, and the shelf has no paid placements to sell either.</li>
                 <li>Your cart, wishlist and recently-viewed live in <strong>your browser</strong> - the server first sees your cart when you press Pay.</li>
-                <li>Access, correction, export and deletion: one email to <a href="mailto:privacy@trendaryo.com">privacy@trendaryo.com</a>, answered within 30 days.</li>
+                <li>Access, correction, export and deletion: one email to <a href="mailto:support@trendaryo.com">support@trendaryo.com</a>, answered within 24 hours.</li>
                 <li>Marketing email is opt-in and switches off in one click - order confirmations always come through.</li>
             </ul>
         </div>
-        <span class="last-updated">Last updated: 1 January 2024 � This page supersedes every earlier version.</span>
+        <span class="last-updated">Last updated: 7 October 2026 � This page supersedes every earlier version.</span>
     </section>
 
     <!-- 01 � THE DATA LEDGER -->
@@ -286,7 +286,7 @@
             <div class="sec-head-txt">
                 <span class="sec-kicker">Section 06 � You hold the pen</span>
                 <h2 class="sec-title" id="rigTitle">Your rights, and how to use them</h2>
-                <p class="sec-sub">Every right below is exercised the same way: one email to <a href="mailto:privacy@trendaryo.com">privacy@trendaryo.com</a> from your registered address. No forms, no fees, no dark patterns - a human answers within 30 days, usually far sooner.</p>
+                <p class="sec-sub">Every right below is exercised the same way: one email to <a href="mailto:support@trendaryo.com">support@trendaryo.com</a> from your registered address. No forms, no fees, no dark patterns - a human answers within 24 hours, usually far sooner.</p>
             </div>
         </div>
         <div class="rgrid">
@@ -300,6 +300,20 @@
     </section>
 
     <!-- 07 � THIRD-PARTY PROCESSORS -->
+    <section class="sec" id="frameworks" aria-labelledby="fwTitle">
+        <div class="sec-head">
+            <div class="sec-head-txt">
+                <span class="sec-kicker">Section 06b - The legal floor</span>
+                <h2 class="sec-title" id="fwTitle">GDPR, CCPA and international transfers</h2>
+            </div>
+        </div>
+        <div class="rgrid">
+            <div class="rcard"><span class="rcard-num">GDPR</span><div><h3>EU/UK rights</h3><p>If you are in the EEA or UK, you hold the same access, correction, export, deletion and objection rights above, exercised the same way - one email.</p><span class="how">Lawful bases: contract performance, legitimate interests, consent.</span></div></div>
+            <div class="rcard"><span class="rcard-num">CCPA</span><div><h3>California</h3><p>We do not sell personal information or share it for cross-context behavioural advertising. You may request disclosure, deletion or correction at any time.</p><span class="how">No discrimination for exercising these rights.</span></div></div>
+            <div class="rcard"><span class="rcard-num">INTL</span><div><h3>International transfers</h3><p>Some processors (hosting, email, payments) may store data outside your country, including the United States, under contractual safeguards.</p><span class="how">The same protections travel with your data.</span></div></div>
+        </div>
+    </section>
+
     <section class="sec" id="processors" aria-labelledby="proTitle">
         <div class="sec-head">
             <div class="sec-head-txt">
@@ -356,7 +370,7 @@
         if (faq && UI.faq) faq.innerHTML = UI.faq([
             { q: 'Do you sell my personal data?', a: 'No - and the word carries no fine print. Revenue comes from products on the shelf; there is no data side-business, no "anonymised partner feeds", no exceptions. If that ever changes, this page changes first.' },
             { q: 'Where does my cart actually live?', a: 'In your browser, under the storage key <code>trendaryo_cart</code>. The shop page, the cart dock and checkout read it locally - the server first sees your cart at the moment you press Pay.' },
-            { q: 'How do I delete everything?', a: 'One email to privacy@trendaryo.com from your registered address covers the server side - account, orders and history are erased within 30 days. Browser-side data (cart, wishlist, recently viewed) clears instantly via your browser settings or the wipe button on the <a href="cookie-policy.html" style="color:var(--accent);">Cookie Policy</a> page.' },
+            { q: 'How do I delete everything?', a: 'One email to support@trendaryo.com from your registered address covers the server side - account, orders and history are erased within 30 days. Browser-side data (cart, wishlist, recently viewed) clears instantly via your browser settings or the wipe button on the <a href="cookie-policy.html" style="color:var(--accent);">Cookie Policy</a> page.' },
             { q: 'Do you track me on other websites?', a: 'No. There are no advertising cookies, no social pixels and no cross-site identifiers on Trendaryo. What you browse elsewhere never reaches us - and never will.' },
             { q: 'Who sees my card number?', a: 'Nobody here. Card details go directly to the payment processor over an encrypted channel; we store only the brand, the last four digits and the transaction status - enough for receipts and refunds, nothing more.' },
             { q: 'What about the demo orders on the orders page?', a: 'Those are seeded samples stored only in your own browser so first-time pages don\'t look broken. They contain no real personal data and vanish the moment you clear site data.' }
@@ -366,7 +380,7 @@
         var cta = document.getElementById('ctaRoot');
         if (cta && UI.ctaBand) cta.innerHTML = UI.ctaBand({
             title: 'Questions about your data?',
-            text: 'A person reads privacy@trendaryo.com. Request a copy, a correction or a deletion - you will get a reply within 24 hours, not a ticket number.',
+            text: 'A person reads support@trendaryo.com. Request a copy, a correction or a deletion - you will get a reply within 24 hours, not a ticket number.',
             cta: 'Contact the Privacy Desk',
             href: 'contact.html'
         });

@@ -8,8 +8,8 @@
     <meta name="theme-color" content="#0a0a2a">
     <link rel="icon" type="image/svg+xml" href="assets/favicon-crown-star.svg">
     <title>Product Details - Trendaryo | Real Specs, Reviews & Best Prices</title>
-    <meta name="description" content="Full product details with real specifications, verified reviews, multiple product views, live stock, price-drop tracking and free shipping over $50. Shop the Trendaryo catalogue with confidence.">
-    <meta name="keywords" content="product details, specifications, reviews, buy online, premium electronics, trendaryo store, best price, free shipping">
+    <meta name="description" content="Full product details with real specifications, verified reviews, multiple product views, live stock, price-drop tracking and tracked shipping. Shop the Trendaryo catalogue with confidence.">
+    <meta name="keywords" content="product details, specifications, reviews, buy online, premium electronics, trendaryo store, best price, tracked shipping">
     <link rel="canonical" href="https://trendaryo.com/product.html">
 
     <!-- Open Graph / Facebook (per-product values written by page script) -->
@@ -745,7 +745,7 @@
         $('buyReviewsLink').textContent = (p.reviews || 0) + ' reviews';
         $('priceNow').textContent = P.price(p.price);
         $('buyDesc').textContent = p.description;
-        $('priceFinance').innerHTML = 'or <b>' + P.price(Math.round(p.price / 4)) + ' × 4</b> interest-free instalments at checkout · Free shipping on orders over $50';
+        $('priceFinance').innerHTML = 'or <b>' + P.price(Math.round(p.price / 4)) + ' × 4</b> interest-free instalments at checkout · Flat-rate shipping from $4.99';
         if (p.oldPrice) {
             $('priceOld').hidden = false;
             $('priceOld').textContent = P.price(p.oldPrice);
@@ -782,7 +782,7 @@
         var days = p.price >= 400 ? '5–7' : '3–5';
         var eta = new Date(Date.now() + (p.price >= 400 ? 6 : 4) * 86400000);
         var etaStr = eta.toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' });
-        $('deliveryText').innerHTML = 'Free delivery by <b>' + etaStr + '</b> (' + days + ' working days) · Express available at checkout';
+        $('deliveryText').innerHTML = 'Delivery by <b>' + etaStr + '</b> (' + days + ' working days) · Express available at checkout';
 
         /* ═══ 2 · GALLERY — multiple views of the same product ═══ */
         var baseImg = p.image || P.tile(p);
@@ -1027,7 +1027,7 @@
                 'Dispatched from our own warehouse within 24 hours',
                 warranty + ' manufacturer warranty included as standard',
                 '30-day no-questions return window',
-                'Free shipping on this order' + (p.price < 50 ? ' when bundled over $50' : '')
+                'Tracked shipping from $4.99'
             ].map(function (t) { return '<li>' + t + '</li>'; }).join('');
         })();
 
@@ -1241,7 +1241,7 @@
                 if (el) el.setAttribute('content', val);
             }
             setMeta('meta[name="description"]',
-                p.name + ' — ' + p.description + ' Rated ' + p.rating.toFixed(1) + '/5 by ' + (p.reviews || 0) + ' verified buyers' + (discount ? ' · ' + discount + '% off today' : '') + '. Free shipping over $50, 30-day returns.');
+                p.name + ' — ' + p.description + ' Rated ' + p.rating.toFixed(1) + '/5 by ' + (p.reviews || 0) + ' verified buyers' + (discount ? ' · ' + discount + '% off today' : '') + '. Flat-rate shipping, 30-day returns.');
             setMeta('meta[property="og:title"]', p.name + ' — Trendaryo');
             setMeta('meta[property="og:description"]', p.description);
             setMeta('meta[property="og:url"]', url);

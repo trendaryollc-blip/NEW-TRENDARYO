@@ -11,8 +11,8 @@ const { initFirebase } = require('./firebase');
 const DEFAULT_SETTINGS = {
   currency: 'usd',
   taxRate: 0.08,
-  shippingFlat: 9.99,
-  freeShippingThreshold: 50,
+  shippingFlat: 4.99,
+  freeShippingThreshold: 1000000000,
 };
 
 const MAX_QTY_PER_ITEM = 99;
@@ -221,7 +221,7 @@ async function priceOrder(db, rawItems, couponCode, shippingAddress) {
   const { discount, coupon } = await resolveCoupon(db, couponCode, subtotal);
 
   const taxable = round2(subtotal - discount);
-  const shipping = taxable >= settings.freeShippingThreshold ? 0 : destination.shippingFlat;
+  const shipping = destination.shippingFlat;
   const tax = round2(taxable * destination.taxRate);
   const total = round2(taxable + shipping + tax);
 
