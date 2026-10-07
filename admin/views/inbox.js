@@ -167,8 +167,34 @@
         var subject = 'Re: your Trendaryo message (' + (TOPIC[m.topic] || m.topic || 'support') + ')';
         var bodyText = 'Hi ' + unesc(m.name || '') + ',\n\nThanks for contacting Trendaryo. Regarding your message:\n\n> ' +
             unesc(m.message).replace(/\n/g, '\n> ') + '\n\nBest regards,\nTrendaryo Support';
-        var mailto = 'mailto:' + encodeURIComponent(m.email || '') +
+        var to = m.email || '';
+        // Keep "@" literal: several mail handlers pass a percent-encoded address
+        // through untouched and end up with a broken recipient.
+        var mailto = 'mailto:' + encodeURIComponent(to).replace(/%40/g, '@') +
             '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(bodyText);
+
+        /* A bare mailto: does nothing on machines whose default mail handler is
+           the browser itself (common on Windows when no desktop client is set
+           up), so reply in the admin's own web mail compose screen when we know
+           their provider. The draft is copied either way. */
+        var adminEmail = '';
+        try { adminEmail = localStorage.getItem('adminEmail') || ''; } catch (e) { adminEmail = ''; }
+        if (!adminEmail) {
+            try { adminEmail = window.TrendaryoAdminStore.settings().adminEmail || ''; } catch (e) { adminEmail = ''; }
+        }
+        var adminHost = String(adminEmail).toLowerCase().split('@')[1] || '';
+        var isGmail = /(^|\.)(gmail|googlemail)\.com$/.test(adminHost);
+        var isOutlook = /(^|\.)(outlook|hotmail|live|msn)\./.test(adminHost);
+
+        var replyHref = mailto;
+        if (to && isGmail) {
+            replyHref = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(to) +
+                '&su=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(bodyText);
+        } else if (to && isOutlook) {
+            replyHref = 'https://outlook.office.com/mail/deeplink/compose?to=' + encodeURIComponent(to) +
+                '&subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(bodyText);
+        }
+        var opensWebMail = replyHref !== mailto;
 
         var replyBlock = '';
         if (isChat && m.reply) {
@@ -198,8 +224,26 @@
                 '<button class="btn btn--sm" data-toggle type="button">' +
                     (statusOf(m) === 'new' ? A().icon('check', 13) + 'Mark handled' : A().icon('undo', 13) + 'Reopen') +
                 '</button>' +
-                (m.email ? '<a class="btn btn--primary" href="' + App.esc(mailto) + '">' + A().icon('send', 13) + 'Reply by email</a>' : ''),
+                (m.email ? '<a class="btn btn--primary" data-reply href="' + App.esc(replyHref) + '"' +
+                    (opensWebMail ? ' target="_blank" rel="noopener"' : '') + '>' +
+                    A().icon('send', 13) + 'Reply by email</a>' : ''),
             onMount: function (drawerRoot) {
+                var replyBtn = drawerRoot.querySelector('[data-reply]');
+                if (replyBtn) replyBtn.addEventListener('click', function () {
+                    var draft = bodyText;
+                    var okMsg = opensWebMail ?
+                        'Opening your mail composer - reply draft also copied to the clipboard' :
+                        'Reply draft copied to the clipboard - paste it into your mail app';
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(draft).then(function () {
+                            App.toast(okMsg, 'ok', 'Inbox');
+                        }, function () {
+                            App.toast(opensWebMail ? 'Opening your mail composer' : 'Reply to: ' + to, 'info', 'Inbox');
+                        });
+                    } else {
+                        App.toast(opensWebMail ? 'Opening your mail composer' : 'Reply to: ' + to, 'info', 'Inbox');
+                    }
+                });
                 var copyBtn = drawerRoot.querySelector('[data-copy]');
                 if (copyBtn) copyBtn.addEventListener('click', function () {
                     var email = m.email || '';
