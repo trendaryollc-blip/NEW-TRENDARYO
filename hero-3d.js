@@ -5,6 +5,19 @@
     var GLTF_CDN = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js';
     var ROOM_CDN = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/environments/RoomEnvironment.js';
 
+    // Shared loader (same helper bg.js uses) so a page loads each library once.
+    window.__loadScriptOnce = window.__loadScriptOnce || function (src, cb) {
+        var states = window.__scriptState || (window.__scriptState = {});
+        if (states[src] === 'done') { cb(); return; }
+        if (states[src]) { states[src].push(cb); return; }
+        states[src] = [cb];
+        var s = document.createElement('script');
+        s.src = src;
+        s.onload = function () { var q = states[src]; states[src] = 'done'; q.forEach(function (f) { f(); }); };
+        s.onerror = function () { var q = states[src]; delete states[src]; q.forEach(function (f) { f(); }); };
+        document.head.appendChild(s);
+    };
+
     var MODELS = [
         { name: 'BoomBox',             url: 'assets/models/BoomBox.glb',             pos: [-1.8, 1.0, 0],  size: 2.6, remote: 'BoomBox', spin: 0.4, phase: 0 },
         { name: 'Shoe',                url: 'assets/models/MaterialsVariantsShoe.glb', pos: [1.8, 1.3, -0.4], size: 2.4, remote: 'MaterialsVariantsShoe', spin: 0.35, phase: 1.6 },
@@ -191,22 +204,14 @@
         animate();
     }
 
-    function load(src, cb) {
-        var s = document.createElement('script');
-        s.src = src;
-        s.onload = cb;
-        s.onerror = function () { /* offline */ };
-        document.head.appendChild(s);
-    }
-
     function boot() {
         if (!window.THREE) return;
         if (window.THREE.GLTFLoader && THREE.RoomEnvironment) { init(); return; }
-        load(GLTF_CDN, function () {
-            load(ROOM_CDN, init);
+        window.__loadScriptOnce(GLTF_CDN, function () {
+            window.__loadScriptOnce(ROOM_CDN, init);
         });
     }
 
     if (window.THREE) { window.addEventListener('load', boot); return; }
-    load(THREE_CDN, function () { window.addEventListener('load', boot); });
+    window.__loadScriptOnce(THREE_CDN, function () { window.addEventListener('load', boot); });
 })();

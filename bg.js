@@ -9,6 +9,19 @@
     'use strict';
 
     var THREE_CDN = 'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js';
+    // Shared loader: a page evaluates each library exactly once, even when
+    // several features (bg + hero-3d) request it in the same tick.
+    window.__loadScriptOnce = window.__loadScriptOnce || function (src, cb) {
+        var states = window.__scriptState || (window.__scriptState = {});
+        if (states[src] === 'done') { cb(); return; }
+        if (states[src]) { states[src].push(cb); return; }
+        states[src] = [cb];
+        var s = document.createElement('script');
+        s.src = src;
+        s.onload = function () { var q = states[src]; states[src] = 'done'; q.forEach(function (f) { f(); }); };
+        s.onerror = function () { var q = states[src]; delete states[src]; q.forEach(function (f) { f(); }); };
+        document.head.appendChild(s);
+    };
     var CANVAS_ID = 'three-canvas';
     var scene, camera, renderer, particles, mx = 0, my = 0, running = false;
     var started = false; // three scene OR 2D fallback — never both, never twice
@@ -266,15 +279,11 @@
         if (typeof THREE !== 'undefined') {
             init();
         } else {
-            document.querySelectorAll('script[src*="three"]').forEach(function(s){ s.remove(); });
-            var s = document.createElement('script');
-            s.src = THREE_CDN;
-            s.onload = init;
-            s.onerror = function () {
+            window.__loadScriptOnce(THREE_CDN, function () {
+                if (typeof THREE !== 'undefined') { init(); return; }
                 console.warn('bg.js: Three.js CDN failed — using 2D fallback background.');
                 startFallback2D();
-            };
-            document.head.appendChild(s);
+            });
             // Watchdog: a hanging CDN request (offline/adblock) must not leave a dead sky.
             setTimeout(function () {
                 if (!started && typeof THREE === 'undefined') {
