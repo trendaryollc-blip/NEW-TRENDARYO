@@ -4,7 +4,7 @@ const path = require('path');
 
 const BASE = 'http://localhost:3000';
 const OUT = path.join(__dirname, '..', 'console-sweep');
-const IGNORE = [/favicon/i, /\/favicon\.ico/i];
+const IGNORE = [/favicon/i, /\/favicon\.ico/i, /assets\/favicon/i];
 
 async function main() {
   fs.mkdirSync(OUT, { recursive: true });
@@ -48,8 +48,8 @@ async function main() {
     page.on('console', (msg) => {
       if (msg.type() !== 'error') return;
       const text = msg.text();
-      if (IGNORE.some((re) => re.test(text))) return;
       const loc = msg.location() || {};
+      if (IGNORE.some((re) => re.test(text)) || IGNORE.some((re) => re.test(loc.url || ''))) return;
       errors.push({ text, source: (loc.url || '') + (loc.lineNumber != null ? ':' + loc.lineNumber : '') });
     });
     page.on('pageerror', (err) => {
@@ -76,7 +76,18 @@ async function main() {
     } catch (e) {
       errors.push({ text: 'NAVIGATION FAILED: ' + e.message, source: url });
     }
-    await page.waitForTimeout(6000);
+    await page.waitForTimeout(10000);
+
+    const uniq = [];
+    const seenKeys = new Set();
+    for (const e of errors) {
+      const key = e.text.replace(/blob:\S+/g, 'blob:*').slice(0, 200);
+      if (seenKeys.has(key)) continue;
+      seenKeys.add(key);
+      uniq.push(e);
+    }
+    errors.length = 0;
+    errors.push(...uniq);
 
     const shot = path.join(OUT, name + '.png');
     let overlayOk = true;
@@ -99,15 +110,33 @@ async function main() {
           box.appendChild(line);
         });
         document.body.appendChild(box);
-      }, errors.concat(failed.map((f) => ({ text: 'REQUEST ISSUE: ' + f, source: '' }))));
+      }, errors);
     } catch (e) {
       overlayOk = false;
     }
     await page.waitForTimeout(300);
     await page.screenshot({ path: shot });
-    if (errors.length || failed.length) {
-      const full = path.join(OUT, name + '-full.png');
-      await page.screenshot({ path: full, fullPage: false });
+    if (errors.length) {
+      await page.evaluate(() => {
+        const box = document.getElementById('__console-sweep');
+        if (!box) return;
+        box.style.top = '0';
+        box.style.maxHeight = '100vh';
+        box.style.height = '100vh';
+        box.style.padding = '20px 24px';
+        box.style.borderTop = 'none';
+      });
+      await page.waitForTimeout(200);
+      await page.screenshot({ path: path.join(OUT, name + '-console.png') });
+      await page.evaluate(() => {
+        const box = document.getElementById('__console-sweep');
+        if (!box) return;
+        box.style.top = '';
+        box.style.maxHeight = '60vh';
+        box.style.height = '';
+        box.style.padding = '10px 14px';
+        box.style.borderTop = '3px solid #f28b82';
+      });
     }
 
     report.push({ name, url, errors, failed, screenshot: shot, overlayOk });
