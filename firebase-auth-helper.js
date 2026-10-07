@@ -41,7 +41,11 @@ const FirebaseAuth = {
   },
 
   /* Migrate data recorded under this browser's anonymous guest UID onto the
-     currently signed-in (non-anonymous) account, then forget the marker. */
+     currently signed-in (non-anonymous) account, then forget the marker.
+     Uses a direct fetch rather than window.API — the register page does not
+     load api-client.js, and the claim must work there. The marker is only
+     cleared once the server accepts (or permanently rejects) the claim, so a
+     failed merge retries automatically on the next sign-in. */
   async claimGuestData(uid) {
     try {
       const guestUid = localStorage.getItem('trendaryo_anon_uid');
@@ -49,10 +53,18 @@ const FirebaseAuth = {
         if (guestUid && guestUid === uid) localStorage.removeItem('trendaryo_anon_uid');
         return;
       }
-      if (typeof window.API !== 'undefined' && typeof window.API.claimGuest === 'function') {
-        await window.API.claimGuest(guestUid);
+      const token = await FirebaseAuth.getIdToken();
+      if (!token) return;
+      const res = await fetch('/api/users/claim-guest', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+        body: JSON.stringify({ guestUid }),
+      });
+      if (res.ok || res.status === 400) {
+        localStorage.removeItem('trendaryo_anon_uid');
+      } else {
+        console.warn('Guest claim pending (HTTP ' + res.status + ') - will retry on next sign-in');
       }
-      localStorage.removeItem('trendaryo_anon_uid');
     } catch (error) {
       console.warn('Could not merge guest data after sign-in:', error && error.message);
     }
