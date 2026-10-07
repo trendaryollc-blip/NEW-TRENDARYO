@@ -79,17 +79,22 @@ const FirebaseAuth = {
 
     let authResult;
     if (anonBefore) {
+      // Remember where the guest data lives before any sign-out.
+      if (!localStorage.getItem('trendaryo_anon_uid')) {
+        localStorage.setItem('trendaryo_anon_uid', anonBefore.uid);
+      }
       try {
         authResult = await anonBefore.linkWithCredential(
           firebase.auth.EmailAuthProvider.credential(email, password)
         );
       } catch (linkError) {
-        if (linkError && (linkError.code === 'auth/credential-already-in-use' || linkError.code === 'auth/email-already-in-use')) {
-          await authRef.signOut();
-          authResult = await authRef.signInWithEmailAndPassword(email, password);
-        } else {
-          throw linkError;
-        }
+        // Either the email already belongs to an account, or Google refused
+        // the link entirely (auth/operation-not-allowed — the anonymous
+        // upgrade path is blocked under email-enumeration protections).
+        // Both resolve the same way: leave the guest session, sign in
+        // normally — the claimGuestData call below migrates guest data.
+        await authRef.signOut();
+        authResult = await authRef.signInWithEmailAndPassword(email, password);
       }
     } else {
       authResult = await authRef.signInWithEmailAndPassword(email, password);
@@ -136,6 +141,11 @@ const FirebaseAuth = {
       // Already signed into a real account on this browser — nothing to create.
       createdAccount = false;
     } else if (currentUser && currentUser.isAnonymous) {
+      // Remember the guest UID before any sign-out so the merge below still
+      // knows where the guest orders live.
+      if (!localStorage.getItem('trendaryo_anon_uid')) {
+        localStorage.setItem('trendaryo_anon_uid', currentUser.uid);
+      }
       try {
         userCredential = await currentUser.linkWithCredential(
           firebase.auth.EmailAuthProvider.credential(email, password)
@@ -148,7 +158,23 @@ const FirebaseAuth = {
           userCredential = await authRef.signInWithEmailAndPassword(email, password);
           createdAccount = false;
         } else {
-          throw linkError;
+          // Google blocked the guest→email link (auth/operation-not-allowed —
+          // email-enumeration protections forbid the client SDK upgrade path).
+          // Fall back to a normal sign-up in a fresh session; the account gets
+          // a new UID and claimGuestData below migrates the guest orders onto
+          // it server-side, so nothing is lost either way.
+          await authRef.signOut();
+          try {
+            userCredential = await authRef.createUserWithEmailAndPassword(email, password);
+            createdAccount = true;
+          } catch (createError) {
+            if (createError && createError.code === 'auth/email-already-in-use') {
+              userCredential = await authRef.signInWithEmailAndPassword(email, password);
+              createdAccount = false;
+            } else {
+              throw createError;
+            }
+          }
         }
       }
     } else {
