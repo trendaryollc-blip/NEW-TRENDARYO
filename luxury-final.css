@@ -108,11 +108,15 @@ html { scroll-behavior: auto !important; }
 html.smooth-anchors { scroll-behavior: smooth !important; }
 body { overscroll-behavior-y: none; }
 
-/* Promote fixed layers to their own compositor layer — no repaint on scroll */
-.store-header, .dock, #three-canvas, #__theme-bg {
+/* Promote fixed layers to their own compositor layer — no repaint on scroll.
+   NOTE: .dock must NOT get a transform here — it hides itself with
+   translateY(170%) until the cart has items (see .dock.is-on). */
+.store-header, #three-canvas, #__theme-bg {
   transform: translateZ(0);
   backface-visibility: hidden;
 }
+.store-header, .dock { backface-visibility: hidden; }
+.dock { will-change: transform; }
 /* Header blur is the #1 scroll cost: keep it, but isolate repaints */
 .store-header { contain: layout style; will-change: transform; }
 .dock { contain: layout style paint; }

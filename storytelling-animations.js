@@ -251,10 +251,12 @@
         const hero = document.getElementById('hero');
         if (!hero) return;
         let breathing = null;
+        const bobTarget = document.querySelector('#hero .hero-neon');
+        if (!bobTarget) return;
         new IntersectionObserver((entries) => {
             const visible = entries[0].isIntersecting;
             if (visible && !breathing) {
-                breathing = gsap.to('#hero .hero-visual', {
+                breathing = gsap.to(bobTarget, {
                     y: -6,
                     duration: 3.2,
                     yoyo: true,
