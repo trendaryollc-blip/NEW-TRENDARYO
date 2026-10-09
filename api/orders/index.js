@@ -416,6 +416,17 @@ module.exports = async function handler(req, res) {
         } catch (mailError) {
           console.error('[orders] Confirmation email failed:', mailError.message);
         }
+        // Best-effort auto-forward to CJ Dropshipping when enabled.
+        try {
+          const { getSettings } = require('../_lib/cj');
+          const cjSettings = await getSettings(db);
+          if (cjSettings && cjSettings.autoFulfill) {
+            const { fulfillOrder } = require('../admin/supplier-fulfill');
+            await fulfillOrder(db, transactionResult.data.id);
+          }
+        } catch (ffError) {
+          console.error('[orders] CJ auto-fulfill failed:', ffError.message);
+        }
       }
 
       return res.status(transactionResult.created ? 201 : 200).json({

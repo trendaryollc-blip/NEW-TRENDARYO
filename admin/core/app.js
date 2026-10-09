@@ -267,7 +267,9 @@
         { id: 'reviews', group: 'Catalog' },
         { id: 'orders', group: 'Sales' },
         { id: 'customers', group: 'Sales' },
+        { id: 'suppliers', group: 'Sales' },
         { id: 'inbox', group: 'Support' },
+        { id: 'automations', group: 'Growth' },
         { id: 'marketing', group: 'Growth' },
         { id: 'ai-studio', group: 'Intelligence' },
         { id: 'settings', group: 'System' }
@@ -287,6 +289,7 @@
         try { b.orders = S.orderKpis().open; } catch (e) { b.orders = 0; }
         try { b.reviews = S.reviewKpis().low.length; } catch (e) { b.reviews = 0; }
         try { b['ai-studio'] = S.aiHistory().length; } catch (e) { b['ai-studio'] = 0; }
+        try { b.automations = views().automations.openAlerts || 0; } catch (e) { b.automations = 0; }
         try { b.inbox = views().inbox.unread || 0; } catch (e) { b.inbox = 0; }
         var items = document.querySelectorAll('.nav-item[data-nav]');
         for (var i = 0; i < items.length; i++) {
@@ -299,6 +302,7 @@
             el.classList.remove('is-alert', 'is-warn');
             if (id === 'reviews' && val > 0) el.classList.add('is-alert');
             if (id === 'inbox' && val > 0) el.classList.add('is-alert');
+            if (id === 'automations' && val > 0) el.classList.add('is-warn');
             if ((id === 'products' || id === 'orders') && val > 0) el.classList.add('is-warn');
         }
     };

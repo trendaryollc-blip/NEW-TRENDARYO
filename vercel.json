@@ -71,6 +71,10 @@
     { "src": "/admin/(.*)", "dest": "/admin.html" },
     { "src": "/(.*)", "dest": "/$1" }
   ],
+  "crons": [
+    { "path": "/api/cron/supplier-sync", "schedule": "0 */6 * * *" },
+    { "path": "/api/cron/automations", "schedule": "0 * * * *" }
+  ],
   "headers": [
     {
       "source": "/api/(.*)",
