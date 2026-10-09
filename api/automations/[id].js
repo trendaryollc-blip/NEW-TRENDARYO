@@ -51,10 +51,28 @@ module.exports = async function handler(req, res) {
     /* PATCH - toggle and/or retune the rule. */
     if (req.method === 'PATCH' || req.method === 'PUT') {
       const body = req.body || {};
+      const before = (await db.collection('automations').doc(key).get());
+      const beforeData = before.exists ? before.data() : {};
       const update = await updateRule(db, key, {
         enabled: body.enabled,
         config: body.config,
       });
+      try {
+        const { log } = require('../_lib/audit');
+        await log(db, {
+          actorUid: adminUser.uid,
+          actorEmail: adminUser.email || null,
+          action: body.enabled !== undefined ? 'automation.toggled' : 'automation.configured',
+          targetType: 'automation',
+          targetId: key,
+          before: { enabled: !!beforeData.enabled, config: beforeData.config || null },
+          after: { enabled: body.enabled !== undefined ? !!body.enabled : !!beforeData.enabled, config: body.config || undefined },
+          ip: req.headers['x-forwarded-for'] || null,
+          userAgent: req.headers['user-agent'] || null,
+        });
+      } catch (auditError) {
+        console.error('[automations] audit failed:', auditError.message);
+      }
       return res.status(200).json({ data: update });
     }
 

@@ -4,6 +4,7 @@ const { handleCors } = require('../_lib/cors');
 const { requireAuth } = require('../_lib/auth');
 const { applyRateLimit, sanitizeError } = require('../_lib/security');
 const { priceOrder, PricingError, toCents } = require('../_lib/pricing');
+const { assertStoreOpen } = require('../_lib/store-gate');
 const { createHash } = require('crypto');
 
 function addressFingerprint(address) {
@@ -33,6 +34,14 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ error: { message: 'Complete shipping details are required before payment' } });
     }
     const { db } = initFirebase();
+
+    /* Never authorise a charge the store will refuse to accept. */
+    try {
+      await assertStoreOpen(db, { country: shippingAddress && shippingAddress.country });
+    } catch (gateError) {
+      return res.status(gateError.statusCode || 403).json({ error: { message: gateError.code || 'checkout_disabled' } });
+    }
+
     const shippingAddressHash = addressFingerprint(shippingAddress);
     const checkoutFingerprint = createHash('sha256').update(JSON.stringify({
       items: Array.isArray(items) ? items.map((item) => ({ productId: String(item && item.productId || ''), quantity: Number(item && item.quantity) })).sort((a, b) => a.productId.localeCompare(b.productId)) : items,

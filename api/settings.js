@@ -4,7 +4,29 @@ const { requireAdmin } = require('./_lib/auth');
 const { applyRateLimit } = require('./_lib/security');
 const { getSettings, round2 } = require('./_lib/pricing');
 
-const WRITABLE = ['logoUrl','storeName','tagline','currency','lowStock','supportEmail','checkoutEnabled','maintenanceMode','maintenanceMessage','blockedCountries','riskEnabled','riskReviewThreshold','riskMaxOrderValue'];
+const WRITABLE = [
+  'storeName',
+  'currency',
+  'taxRate',
+  'shippingFlat',
+  'freeShippingThreshold',
+  'announcement',
+  'lowStock',
+  'codEnabled',
+  'taxRatesByCountry',
+  'taxRatesByRegion',
+  'shippingByCountry',
+  'codCountries',
+  'supportEmail',
+  'supportPhone',
+  'checkoutEnabled',
+  'maintenanceMode',
+  'maintenanceMessage',
+  'blockedCountries',
+  'riskEnabled',
+  'riskReviewThreshold',
+  'riskMaxOrderValue',
+];
 
 module.exports = async function handler(req, res) {
   if (handleCors(req, res)) return;

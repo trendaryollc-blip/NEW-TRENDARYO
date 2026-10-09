@@ -3,6 +3,7 @@ const { handleCors } = require('../_lib/cors');
 const { requireAuth } = require('../_lib/auth');
 const { applyRateLimit } = require('../_lib/security');
 const { priceOrder, PricingError } = require('../_lib/pricing');
+const { assertStoreOpen } = require('../_lib/store-gate');
 
 module.exports = async function handler(req, res) {
   if (handleCors(req, res)) return;
@@ -18,6 +19,12 @@ module.exports = async function handler(req, res) {
 
     const { items, couponCode = null, shippingAddress = null } = req.body || {};
     const { db } = initFirebase();
+
+    try {
+      await assertStoreOpen(db, { country: shippingAddress && shippingAddress.country });
+    } catch (gateError) {
+      return res.status(gateError.statusCode || 403).json({ error: { message: gateError.code || 'checkout_disabled' } });
+    }
 
     let pricing;
     try {

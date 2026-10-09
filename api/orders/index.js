@@ -6,6 +6,8 @@ const { applyRateLimit } = require('../_lib/security');
 const { priceOrder, PricingError, toCents } = require('../_lib/pricing');
 const { getStripe } = require('../_lib/stripe');
 const { sendOrderConfirmation } = require('../_lib/mail');
+const { allowedFrom } = require('../_lib/order-state');
+const { assertStoreOpen } = require('../_lib/store-gate');
 const { createHash, randomUUID } = require('crypto');
 
 function addressFingerprint(address) {
@@ -116,6 +118,13 @@ module.exports = async function handler(req, res) {
       const addressError = validateShippingAddress(shippingAddress);
       if (addressError) {
         return res.status(400).json({ error: { message: addressError } });
+      }
+
+      /* Store kill switch: block new orders without a deploy. */
+      try {
+        await assertStoreOpen(db, { country: shippingAddress && shippingAddress.country });
+      } catch (gateError) {
+        return res.status(gateError.statusCode || 403).json({ error: { message: gateError.code || 'checkout_disabled' } });
       }
 
       const normalizedPaymentMethod = String(paymentMethod).toLowerCase();
