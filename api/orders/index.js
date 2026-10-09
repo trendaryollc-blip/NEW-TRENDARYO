@@ -96,7 +96,7 @@ module.exports = async function handler(req, res) {
       const snapshot = await query.limit(l + 1).get();
       const hasMore = snapshot.docs.length > l;
       const pageDocs = snapshot.docs.slice(0, l);
-      const orders = pageDocs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      const orders = pageDocs.map((doc) => ({ id: doc.id, ...doc.data(), allowedTransitions: allowedFrom(doc.data().status || 'pending') }));
       const last = pageDocs[pageDocs.length - 1];
       const nextCursor = hasMore && last
         ? Buffer.from(JSON.stringify({ createdAt: last.data().createdAt, id: last.id })).toString('base64url')

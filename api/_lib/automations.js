@@ -21,7 +21,7 @@
  */
 'use strict';
 
-const { FieldValue } = require('firebase-admin/firestore');
+const { assertTransition } = require('./order-state');
 const { fulfillOrder } = require('../admin/supplier-fulfill');
 const { getSettings } = require('./pricing');
 const { send } = require('./mail');

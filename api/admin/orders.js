@@ -1,6 +1,7 @@
 const { initFirebase } = require('../_lib/firebase');
 const { handleCors } = require('../_lib/cors');
 const { requireAdmin } = require('../_lib/auth');
+const { allowedFrom } = require('../_lib/order-state');
 const { applyRateLimit } = require('../_lib/security');
 
 module.exports = async function handler(req, res) {

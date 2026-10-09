@@ -3,6 +3,7 @@ const { handleCors } = require('../_lib/cors');
 const { requireAuth, requireAdmin } = require('../_lib/auth');
 const { applyRateLimit } = require('../_lib/security');
 const { sendShippingUpdate } = require('../_lib/mail');
+const { assertTransition, allowedFrom } = require('../_lib/order-state');
 
 module.exports = async function handler(req, res) {
   if (handleCors(req, res)) return;
@@ -44,27 +45,36 @@ module.exports = async function handler(req, res) {
       }
 
       const order = doc.data();
-      const userDoc = await db.collection('users').doc(user.uid).get();
       const isAdmin = userDoc.exists && userDoc.data().role === 'admin';
+      const isOwner = order.userId === user.uid;
 
-      if (!isAdmin && order.userId !== user.uid) {
+      if (!isAdmin && !isOwner) {
         return res.status(403).json({ error: { message: 'Access denied' } });
       }
 
       const updateData = { updatedAt: new Date().toISOString() };
 
       if (status) {
+        let actorRole = 'admin';
+        if (!isAdmin) {
+          actorRole = 'customer';
+        }
+        try {
+          assertTransition(order.status || 'pending', status, actorRole);
+        } catch (e) {
+          const code = e.code || 'invalid_transition';
+          const sc = e.statusCode || 409;
+          return res.status(sc).json({ error: { message: code } });
+        }
         updateData.status = status;
-        if (!Array.isArray(updateData.statusHistory)) updateData.statusHistory = [];
-        updateData.statusHistory = [...(order.statusHistory || []), {
+        const hist = Array.isArray(order.statusHistory) ? order.statusHistory : [];
+        updateData.statusHistory = [...hist, {
           status,
           timestamp: new Date().toISOString(),
           note: note || '',
+          actor: actorRole,
+          actorUid: user.uid,
         }];
-
-        if (status === 'shipped') {
-          updateData.paymentStatus = 'paid';
-        }
       }
 
       if (trackingNumber) updateData.trackingNumber = trackingNumber;
