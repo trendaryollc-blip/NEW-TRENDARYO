@@ -19,6 +19,43 @@
         return (i >= 0 && i < S.STATUS_FLOW.length - 1) ? S.STATUS_FLOW[i + 1] : null;
     }
 
+    /* The server owns the state machine (F1). When the hydrator handed us the
+       allowed list we honour it; offline/demo orders fall back to the flow. */
+    function allowedNext(S, o) {
+        var nx = nextStage(S, o.status);
+        if (!Array.isArray(o.allowedTransitions)) return nx;
+        return nx && o.allowedTransitions.indexOf(nx) >= 0 ? nx : null;
+    }
+
+    function canMove(o, target) {
+        if (!Array.isArray(o.allowedTransitions)) return true;
+        return o.allowedTransitions.indexOf(target) >= 0;
+    }
+
+    function moveOrder(S, App, o, target) {
+        if (!o || !target || o.status === target) return false;
+        if (!canMove(o, target)) {
+            App.toast(o.id + ' cannot move to ' + target + ' from ' + o.status, 'danger', 'Orders');
+            return false;
+        }
+        S.setOrderStatus(o.id, target);
+        return true;
+    }
+
+    function flagBadges(o) {
+        var h = '';
+        if (o.riskLevel === 'review' || o.riskLevel === 'disputed') {
+            h += '<span class="badge badge--danger" title="Risk hold - fulfilment blocked">risk</span> ';
+        }
+        if (o.slaBreached) {
+            h += '<span class="badge badge--warn" title="Supplier SLA breached">SLA</span> ';
+        }
+        if (o.needsAttention) {
+            h += '<span class="badge badge--accent" title="' + U.esc(o.attentionReason || 'Needs attention') + '">!</span>';
+        }
+        return h;
+    }
+
     /* ================================================================
        ORDERS
        ================================================================ */
@@ -45,6 +82,8 @@
                 '<div class="search">' + A().icon('search', 14) + '<input id="orQ" type="text" placeholder="Search order id or customer..."></div>' +
                 '<div class="chip-row" id="orStatus">' +
                     '<button class="chip is-active" data-st="">All</button>' +
+                    '<button class="chip" data-st="pending">Pending</button>' +
+                    '<button class="chip" data-st="confirmed">Confirmed</button>' +
                     '<button class="chip" data-st="processing">Processing</button>' +
                     '<button class="chip" data-st="packed">Packed</button>' +
                     '<button class="chip" data-st="shipped">Shipped</button>' +
@@ -97,13 +136,14 @@
             root.querySelector('#orBulkAdvance').addEventListener('click', function () {
                 var ids = bulkSel(root);
                 if (!ids.length) return;
-                var n = 0, skipped = 0, i;
+                var n = 0, skipped = 0, blocked = 0, i;
                 for (i = 0; i < ids.length; i++) {
                     var o = S.order(ids[i]);
-                    var nx = o ? nextStage(S, o.status) : null;
-                    if (nx) { S.setOrderStatus(ids[i], nx); n++; } else skipped++;
+                    var nx = o ? allowedNext(S, o) : null;
+                    if (!nx) { skipped++; continue; }
+                    if (moveOrder(S, App, o, nx)) n++; else blocked++;
                 }
-                App.toast(n + ' order(s) advanced' + (skipped ? ' - ' + skipped + ' already terminal' : ''), 'ok', 'Orders');
+                App.toast(n + ' order(s) advanced' + (skipped ? ' - ' + skipped + ' at their final stage' : '') + (blocked ? ' - ' + blocked + ' refused by the state machine' : ''), blocked ? 'warn' : 'ok', 'Orders');
                 draw(root, ctx);
                 app().badges();
             });
@@ -112,8 +152,12 @@
                 if (!ids.length) return;
                 App.confirm({ title: 'Cancel ' + ids.length + ' order(s)?', message: '<p class="t-body">Cancelled orders leave the revenue totals immediately. Refunds are handled per your payment processor.</p>', okText: 'Cancel orders', danger: true }).then(function (ok) {
                     if (!ok) return;
-                    for (var i = 0; i < ids.length; i++) S.setOrderStatus(ids[i], 'cancelled');
-                    App.toast(ids.length + ' order(s) cancelled', 'ok', 'Orders');
+                    var n = 0, blocked = 0, i;
+                    for (i = 0; i < ids.length; i++) {
+                        var o = S.order(ids[i]);
+                        if (o && moveOrder(S, App, o, 'cancelled')) n++; else blocked++;
+                    }
+                    App.toast(n + ' order(s) cancelled' + (blocked ? ' - ' + blocked + ' refused by the state machine' : ''), blocked ? 'warn' : 'ok', 'Orders');
                     draw(root, ctx);
                     app().badges();
                 });
@@ -160,7 +204,7 @@
         var list = filteredOrders(S);
 
         if (stO.mode === 'board') {
-            var stages = ['processing', 'packed', 'shipped', 'delivered', 'cancelled', 'refunded'];
+            var stages = ['pending', 'confirmed', 'processing', 'packed', 'shipped', 'delivered', 'cancelled', 'refunded'];
             var bh = '<div class="kanban" style="padding:16px;">';
             for (var si = 0; si < stages.length; si++) {
                 var stage = stages[si];
@@ -199,10 +243,11 @@
                         var stage = col.getAttribute('data-stage');
                         var o = S.order(oid);
                         if (!o || o.status === stage) return;
-                        S.setOrderStatus(oid, stage);
-                        App.toast(o.id + ' moved to ' + stage, 'ok', 'Orders');
-                        app().badges();
-                        draw(root, ctx);
+                        if (moveOrder(S, App, o, stage)) {
+                            App.toast(o.id + ' moved to ' + stage, 'ok', 'Orders');
+                            app().badges();
+                            draw(root, ctx);
+                        }
                     });
                 })(cols[ki]);
             }
@@ -218,13 +263,13 @@
             '<th>Order</th><th>Customer</th><th class="num">Items</th><th class="num">Total</th><th>Status</th><th>Placed</th><th></th></tr></thead><tbody>';
         for (var i = 0; i < list.length; i++) {
             var o = list[i];
-            var nx = nextStage(S, o.status);
+            var nx = allowedNext(S, o);
             h += '<tr><td><label class="check"><input type="checkbox" data-osel="' + U.esc(o.id) + '"></label></td>' +
                 '<td class="mono-id">' + U.esc(o.id) + '</td>' +
                 '<td><div class="table__primary">' + U.esc((o.shipping && o.shipping.name) || 'Guest') + '</div><div class="table__secondary">' + U.esc(((o.shipping && o.shipping.city) || '') + ((o.shipping && o.shipping.country) ? ', ' + o.shipping.country : '')) + '</div></td>' +
                 '<td class="num">' + (o.items || []).length + '</td>' +
                 '<td class="num fw-600">' + U.money(o.total) + '</td>' +
-                '<td>' + U.statusBadge(o.status) + '</td>' +
+                '<td>' + U.statusBadge(o.status) + ' ' + flagBadges(o) + '</td>' +
                 '<td class="fs-sm t-mute">' + App.ago(o.date) + '</td>' +
                 '<td><div class="cell-actions">' +
                     (nx ? '<button class="btn btn--sm" data-adv="' + U.esc(o.id) + '" type="button" title="Advance to ' + nx + '">' + A().icon('zap', 12) + nx + '</button>' : '') +
@@ -249,11 +294,12 @@
             if ((t = e.target.closest('[data-adv]'))) {
                 var aid = t.getAttribute('data-adv');
                 var ao = S.order(aid);
-                var an = nextStage(S, ao.status);
-                S.setOrderStatus(aid, an);
-                App.toast(ao.id + ' advanced to ' + an, 'ok', 'Orders');
-                app().badges();
-                draw(root, ctx);
+                var an = allowedNext(S, ao);
+                if (moveOrder(S, App, ao, an)) {
+                    App.toast(ao.id + ' advanced to ' + an, 'ok', 'Orders');
+                    app().badges();
+                    draw(root, ctx);
+                }
             }
         });
         updateBulk(root, ctx);
@@ -294,13 +340,30 @@
             histHtml += '<div class="row row--between fs-sm" style="padding:5px 0;"><span>' + U.esc(hist[k2].status) + '</span><span class="t-mute fs-xs">' + App.dateTime(hist[k2].at) + '</span></div>';
         }
         if (!histHtml) histHtml = '<div class="fs-sm t-mute">No status history recorded.</div>';
-        var nx = nextStage(S, o.status);
+        var nx = allowedNext(S, o);
         var sh = o.shipping || {};
+
+        /* Hold / SLA / attention notice (F5/F6/F9) */
+        var notice = '';
+        if (o.riskLevel === 'review' || o.riskLevel === 'disputed') {
+            notice += '<div class="panel" style="border-left:3px solid var(--danger,#e5484d);margin-bottom:12px;"><div class="panel__body panel__body--tight">' +
+                '<div class="fs-sm fw-600">Risk hold - ' + U.esc(o.riskLevel) + '</div>' +
+                '<div class="fs-xs t-mute">Auto-fulfilment is blocked and refunds are paused until this is released.</div></div></div>';
+        }
+        if (o.slaBreached) {
+            notice += '<div class="panel" style="border-left:3px solid var(--warn,#f5a623);margin-bottom:12px;"><div class="panel__body panel__body--tight">' +
+                '<div class="fs-sm fw-600">Supplier SLA breached</div>' +
+                '<div class="fs-xs t-mute">' + U.esc(o.attentionReason || 'Not shipped within the lead time.') + '</div></div></div>';
+        } else if (o.needsAttention && !o.riskLevel) {
+            notice += '<div class="panel" style="border-left:3px solid var(--accent,#6366f1);margin-bottom:12px;"><div class="panel__body panel__body--tight">' +
+                '<div class="fs-sm fw-600">Needs attention</div>' +
+                '<div class="fs-xs t-mute">' + U.esc(o.attentionReason || '') + '</div></div></div>';
+        }
 
         App.drawer.open({
             title: o.id,
             sub: 'Placed ' + App.dateTime(o.date) + (o.eta ? ' - ETA ' + App.date(o.eta) : ''),
-            body: '<div class="pipeline" style="margin-bottom:16px;">' + pipe + '</div>' +
+            body: notice + '<div class="pipeline" style="margin-bottom:16px;">' + pipe + '</div>' +
                 '<div class="grid grid--2" style="margin-bottom:16px;">' +
                     '<div><div class="t-label" style="margin-bottom:6px;">Ship to</div><div class="fs-sm">' + U.esc(sh.name || '-') + '<br>' + U.esc(sh.address || '') + '<br>' + U.esc((sh.city || '') + (sh.country ? ', ' + sh.country : '')) + '</div></div>' +
                     '<div><div class="t-label" style="margin-bottom:6px;">Totals</div><div class="fs-sm">Items: <b>' + items.length + '</b><br>Units: <b>' + (o.items || []).reduce(function (s, x) { return s + (x.qty || 1); }, 0) + '</b><br>Total: <b class="text-accent">' + U.money(o.total) + '</b></div></div>' +
@@ -308,13 +371,14 @@
                 '<div class="t-label" style="margin-bottom:6px;">Items</div>' + itemsHtml +
                 '<div class="t-label" style="margin:16px 0 6px;">Status history</div><div class="panel" style="background:var(--surface-2);"><div class="panel__body panel__body--tight">' + histHtml + '</div></div>',
             foot: '<span class="spacer"></span>' +
-                (o.status !== 'cancelled' && o.status !== 'refunded' && o.status !== 'delivered' ? '<button class="btn btn--danger btn--sm" data-oc type="button">Cancel</button>' : '') +
-                (o.status !== 'cancelled' && o.status !== 'refunded' ? '<button class="btn btn--sm" data-orf type="button">Mark refunded</button>' : '') +
+                ((o.riskLevel === 'review' || o.riskLevel === 'disputed') ? '<button class="btn btn--sm" data-orr type="button" title="Clear the risk hold">' + A2.icon('shieldCheck', 13) + 'Release risk hold</button>' : '') +
+                (canMove(o, 'cancelled') && o.status !== 'delivered' ? '<button class="btn btn--danger btn--sm" data-oc type="button">Cancel</button>' : '') +
+                (canMove(o, 'refunded') ? '<button class="btn btn--sm" data-orf type="button">Mark refunded</button>' : '') +
                 (nx ? '<button class="btn btn--primary" data-onx type="button">' + A2.icon('zap', 13) + 'Advance to ' + nx + '</button>' : '<span class="badge badge--ok">Journey complete</span>'),
             onMount: function (root) {
                 var nxBtn = root.querySelector('[data-onx]');
                 if (nxBtn) nxBtn.addEventListener('click', function () {
-                    S.setOrderStatus(o.id, nx);
+                    if (!moveOrder(S, App, o, nx)) return;
                     App.toast(o.id + ' advanced to ' + nx, 'ok', 'Orders');
                     App.drawer.close();
                     app().badges();
@@ -324,7 +388,7 @@
                 if (cBtn) cBtn.addEventListener('click', function () {
                     App.confirm({ title: 'Cancel this order?', message: '<p class="t-body"><b>' + U.esc(o.id) + '</b> leaves the revenue totals immediately.</p>', okText: 'Cancel order', danger: true }).then(function (ok) {
                         if (!ok) return;
-                        S.setOrderStatus(o.id, 'cancelled');
+                        if (!moveOrder(S, App, o, 'cancelled')) return;
                         App.toast(o.id + ' cancelled', 'ok', 'Orders');
                         App.drawer.close();
                         app().badges();
@@ -335,11 +399,28 @@
                 if (rBtn) rBtn.addEventListener('click', function () {
                     App.confirm({ title: 'Mark as refunded?', message: '<p class="t-body">Records the refund on the ledger. Process the actual money in your payment dashboard.</p>', okText: 'Mark refunded' }).then(function (ok) {
                         if (!ok) return;
-                        S.setOrderStatus(o.id, 'refunded');
+                        if (!moveOrder(S, App, o, 'refunded')) return;
                         App.toast(o.id + ' marked refunded', 'ok', 'Orders');
                         App.drawer.close();
                         if (app().current === 'orders') App.route();
                     });
+                });
+                /* F6: server-side risk release. */
+                var relBtn = root.querySelector('[data-orr]');
+                if (relBtn) relBtn.addEventListener('click', function () {
+                    if (!window.API) return;
+                    relBtn.classList.add('is-busy');
+                    window.API.request('/orders/' + encodeURIComponent(o.id), { method: 'PUT', body: { riskRelease: true } })
+                        .then(function () {
+                            App.toast('Risk hold released - order can fulfil again', 'ok', 'Orders');
+                            if (window.TrendaryoAdminSync && window.TrendaryoAdminSync.reloadOrders) window.TrendaryoAdminSync.reloadOrders();
+                            App.drawer.close();
+                            if (app().current === 'orders') App.route();
+                        })
+                        .catch(function (err) {
+                            relBtn.classList.remove('is-busy');
+                            App.toast('Release failed: ' + ((err && err.message) || 'unknown error'), 'danger', 'Orders');
+                        });
                 });
             }
         });

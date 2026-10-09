@@ -228,10 +228,24 @@
         .stock-line.in::before { background: var(--accent-3); box-shadow: 0 0 10px var(--accent-3); }
         .stock-line.low { color: var(--accent-4); }
         .stock-line.low::before { background: var(--accent-4); box-shadow: 0 0 10px var(--accent-4); animation: stockPulse 1.6s ease-in-out infinite; }
+        .stock-line.out { color: #ff6b6b; }
+        .stock-line.out::before { background: #ff6b6b; }
         @keyframes stockPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
         .delivery-line { display: flex; align-items: center; gap: 0.5rem; font-size: 0.88rem; color: var(--muted); }
         .delivery-line b { color: #fff; font-weight: 700; }
         .delivery-line svg { color: var(--accent); flex-shrink: 0; }
+
+        /* Restock waitlist (notify me) */
+        .wl { display: none; margin-top: 0.4rem; padding: 0.9rem 1rem; border: 1px solid var(--glass-border); border-radius: 14px; background: var(--glass); }
+        .wl-title { font-weight: 700; font-size: 0.88rem; }
+        .wl-sub { font-size: 0.76rem; color: var(--muted); margin-top: 0.2rem; }
+        .wl-row { display: flex; gap: 0.5rem; margin-top: 0.65rem; }
+        .wl-row input { flex: 1; min-width: 0; padding: 0.6rem 0.8rem; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(0, 0, 0, 0.25); color: #fff; font-size: 0.82rem; }
+        .wl-row input:focus { outline: none; border-color: var(--accent); }
+        .wl-btn { padding: 0.6rem 1rem; border: 0; border-radius: 10px; background: var(--accent); color: #04121a; font-weight: 800; font-size: 0.72rem; letter-spacing: 0.04em; cursor: pointer; text-transform: uppercase; }
+        .wl-btn:disabled { opacity: 0.6; cursor: wait; }
+        .wl-msg { font-size: 0.76rem; margin-top: 0.55rem; min-height: 1em; color: var(--muted); }
+        .btn-cta:disabled { opacity: 0.45; cursor: not-allowed; }
 
         /* Quantity + actions */
         .buy-row { display: flex; gap: 0.85rem; flex-wrap: wrap; align-items: stretch; }
@@ -526,6 +540,16 @@
                         </span>
                     </div>
 
+                    <div class="wl" id="waitlistBox">
+                        <div class="wl-title" id="waitlistTitle">Out of stock - get the restock email</div>
+                        <div class="wl-sub" id="waitlistCount">We will email you the moment it is back on the shelf.</div>
+                        <div class="wl-row" id="waitlistRow">
+                            <input type="email" id="waitlistEmail" placeholder="you@email.com" autocomplete="email" maxlength="254" aria-label="Email for restock alert">
+                            <button type="button" class="wl-btn" id="waitlistBtn">Notify me</button>
+                        </div>
+                        <div class="wl-msg" id="waitlistMsg"></div>
+                    </div>
+
                     <div class="buy-row">
                         <div class="qty" role="group" aria-label="Quantity">
                             <button type="button" id="qtyMinus" aria-label="Decrease quantity">−</button>
@@ -768,9 +792,12 @@
         if (here) here.textContent = p.name;
 
         /* stock */
-        var units = p.stock || (pidNum % 5 === 0 ? 6 : 24);
+        var units = (p.stock == null || isNaN(Number(p.stock))) ? (pidNum % 5 === 0 ? 6 : 24) : Number(p.stock);
         var stockEl = $('stockLine');
-        if (units <= 8) {
+        if (units <= 0) {
+            stockEl.className = 'stock-line out';
+            stockEl.textContent = 'Out of stock - join the list for the restock email';
+        } else if (units <= 8) {
             stockEl.className = 'stock-line low';
             stockEl.textContent = 'Low stock — only ' + units + ' left in the warehouse';
         } else {
@@ -783,6 +810,80 @@
         var eta = new Date(Date.now() + (p.price >= 400 ? 6 : 4) * 86400000);
         var etaStr = eta.toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' });
         $('deliveryText').innerHTML = 'Delivery by <b>' + etaStr + '</b> (' + days + ' working days) · Express available at checkout';
+
+        /* ═══ stock gate + restock waitlist (F8) ═══ */
+        (function stockGate() {
+            var out = units <= 0;
+            if (out) {
+                $('addCartBtn').disabled = true;
+                $('miniAddBtn').disabled = true;
+                $('buyNowBtn').disabled = true;
+                $('addCartLabel').textContent = 'Out of Stock';
+            }
+            var box = $('waitlistBox');
+            if (!box || !out) return;
+            box.style.display = 'block';
+
+            var msg = $('waitlistMsg');
+            var joinedKey = 'trendaryo_waitlist_' + String(p.id);
+            function markJoined(text) {
+                var row = $('waitlistRow');
+                if (row) row.style.display = 'none';
+                msg.textContent = text || "You're on the list - we'll email you the moment it's back.";
+                msg.style.color = 'var(--accent-3, #7ee787)';
+                $('waitlistTitle').textContent = "You're on the restock list";
+                try { localStorage.setItem(joinedKey, '1'); } catch (e) { /* storage blocked */ }
+            }
+            try { if (localStorage.getItem(joinedKey)) markJoined(); } catch (e) { /* storage blocked */ }
+
+            function refreshCount() {
+                if (typeof fetch !== 'function') return;
+                fetch('/api/waitlist?productId=' + encodeURIComponent(String(p.id)))
+                    .then(function (r) { return r.ok ? r.json() : null; })
+                    .then(function (b) {
+                        var n = b && b.data ? Number(b.data.waiting) : 0;
+                        if (n > 0) $('waitlistCount').textContent = n + (n === 1 ? ' person is' : ' people are') + ' already waiting for this item.';
+                    })
+                    .catch(function () { /* social proof only */ });
+            }
+            refreshCount();
+
+            $('waitlistBtn').onclick = function () {
+                var email = $('waitlistEmail').value.trim();
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+                    msg.textContent = 'Enter a valid email so we can reach you.';
+                    msg.style.color = '#ff6b6b';
+                    $('waitlistEmail').focus();
+                    return;
+                }
+                var btn = $('waitlistBtn');
+                btn.disabled = true;
+                btn.textContent = 'Joining…';
+                fetch('/api/waitlist', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ productId: String(p.id), email: email })
+                }).then(function (r) {
+                    return r.json().then(function (b) { return { ok: r.ok, b: b }; });
+                }).then(function (res) {
+                    btn.disabled = false;
+                    btn.textContent = 'Notify me';
+                    if (!res.ok) {
+                        msg.textContent = (res.b && res.b.error && res.b.error.message) || 'Could not join the list - please try again.';
+                        msg.style.color = '#ff6b6b';
+                        return;
+                    }
+                    markJoined();
+                    toast('Added to the restock list for ' + p.name);
+                    refreshCount();
+                }).catch(function () {
+                    btn.disabled = false;
+                    btn.textContent = 'Notify me';
+                    msg.textContent = 'Network error - please try again.';
+                    msg.style.color = '#ff6b6b';
+                });
+            };
+        })();
 
         /* ═══ 2 · GALLERY — multiple views of the same product ═══ */
         var baseImg = p.image || P.tile(p);
@@ -904,7 +1005,7 @@
         function refreshTotal() {
             var q = Math.max(1, parseInt($('qtyInput').value, 10) || 1);
             var total = p.price * curBundle.mult * q;
-            $('addCartLabel').textContent = 'Add to Cart — ' + P.price(Math.round(total));
+            $('addCartLabel').textContent = units <= 0 ? 'Out of Stock' : 'Add to Cart — ' + P.price(Math.round(total));
         }
         refreshTotal();
 

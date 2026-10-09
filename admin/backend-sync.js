@@ -97,6 +97,10 @@
             specs: specs,
             features: p.features || [],
             seo: p.seo || null,
+            hidden: p.status === 'draft',
+            costPrice: p.costPrice != null ? Number(p.costPrice) : null,
+            reorderPoint: p.reorderPoint != null ? Number(p.reorderPoint) : null,
+            leadTimeDays: p.leadTimeDays != null ? Number(p.leadTimeDays) : null,
             _backend: true
         };
     }
@@ -153,7 +157,15 @@
             items: items,
             history: history,
             userId: o.userId,
-            coupon: o.coupon || null
+            coupon: o.coupon || null,
+            /* F1/F6/F9: server state machine + hold + SLA flags. */
+            allowedTransitions: Array.isArray(o.allowedTransitions) ? o.allowedTransitions : null,
+            riskLevel: o.riskLevel || null,
+            needsAttention: !!o.needsAttention,
+            attentionReason: o.attentionReason || null,
+            slaBreached: !!o.slaBreached,
+            fulfillment: o.fulfillment || null,
+            supplierSubmittedAt: o.supplierSubmittedAt || null
         };
     }
 
@@ -235,6 +247,16 @@
                 if (settings.taxRatesByRegion != null) patch.taxRatesByRegion = settings.taxRatesByRegion;
                 if (settings.shippingByCountry != null) patch.shippingByCountry = settings.shippingByCountry;
                 if (settings.codCountries != null) patch.codCountries = settings.codCountries;
+                /* Production control keys (F5/F6/F9). */
+                if (settings.checkoutEnabled != null) patch.checkoutEnabled = !!settings.checkoutEnabled;
+                if (settings.maintenanceMode != null) patch.maintenanceMode = !!settings.maintenanceMode;
+                if (settings.maintenanceMessage != null) patch.maintenanceMessage = settings.maintenanceMessage;
+                if (settings.blockedCountries != null) patch.blockedCountries = settings.blockedCountries;
+                if (settings.supportEmail != null) patch.supportEmail = settings.supportEmail;
+                if (settings.riskEnabled != null) patch.riskEnabled = !!settings.riskEnabled;
+                if (settings.riskReviewThreshold != null) patch.riskReviewThreshold = settings.riskReviewThreshold;
+                if (settings.riskMaxOrderValue != null) patch.riskMaxOrderValue = settings.riskMaxOrderValue;
+                if (settings.supplierLeadDays != null) patch.supplierLeadDays = settings.supplierLeadDays;
                 S.saveSettings(patch);
                 // don't log a synthetic settings update
                 var log = lsGet('trendaryo_admin_log', []);
@@ -258,14 +280,20 @@
         }
 
         function productPayload(patch) {
+            var OPS = { costPrice: 1, reorderPoint: 1, leadTimeDays: 1 };
             var out = {}, k;
             for (k in patch) {
-                if (patch[k] === null || patch[k] === undefined) continue;
+                if (patch[k] === undefined) continue;
+                /* null clears an ops field; every other null stays local-only. */
+                if (patch[k] === null && !OPS[k]) continue;
                 switch (k) {
                     case 'price': out.price = Number(patch.price) || 0; break;
                     case 'oldPrice': out.originalPrice = Number(patch.oldPrice) || null; break;
                     case 'hidden': out.status = patch.hidden ? 'draft' : 'active'; break;
                     case 'seo': out.seo = patch.seo; break;
+                    case 'costPrice':
+                    case 'reorderPoint':
+                    case 'leadTimeDays': out[k] = patch[k]; break;
                     default: out[k] = patch[k];
                 }
             }
@@ -296,7 +324,10 @@
                     badge: p.badge || null,
                     sku: p.sku || '',
                     features: p.features || [],
-                    status: p.hidden ? 'draft' : 'active'
+                    status: p.hidden ? 'draft' : 'active',
+                    costPrice: p.costPrice != null ? Number(p.costPrice) : undefined,
+                    reorderPoint: p.reorderPoint != null ? Number(p.reorderPoint) : undefined,
+                    leadTimeDays: p.leadTimeDays != null ? Number(p.leadTimeDays) : undefined
                 };
                 api().createProduct(payload).catch(notify);
             }
@@ -325,10 +356,32 @@
                 .catch(notify);
         };
 
+        /* The server owns the state machine: if it refuses the move we pull
+           the real orders back so the board never lies about a status. */
+        function reloadOrders() {
+            if (!api()) return;
+            getJSON('/admin/orders?limit=500').then(function (r) {
+                lsSet('trendaryo_orders', (r.data || []).map(mapOrderToAdmin));
+                if (App && App.route && /orders/.test(String(location.hash || ''))) App.route();
+            }).catch(notify);
+        }
+        /* Views need this after server-side actions (risk release, refunds). */
+        window.TrendaryoAdminSync = window.TrendaryoAdminSync || {};
+        window.TrendaryoAdminSync.reloadOrders = reloadOrders;
+
         var origSetOrderStatus = S.setOrderStatus;
         S.setOrderStatus = function (id, status, note) {
             var res = origSetOrderStatus.call(S, id, status);
-            if (api()) api().updateOrderStatus(String(id), { status: status, note: note || '' }).catch(notify);
+            if (api()) {
+                api().updateOrderStatus(String(id), { status: status, note: note || '' })
+                    .then(reloadOrders)
+                    .catch(function (err) {
+                        notify(err);
+                        reloadOrders();
+                        var msg = (err && err.message) || 'rejected';
+                        if (App && App.toast) App.toast('Server refused "' + status + '": ' + msg, 'danger', 'Orders');
+                    });
+            }
             return res;
         };
 
@@ -345,6 +398,16 @@
                 if (patch.taxRatesByRegion !== undefined) out.taxRatesByRegion = patch.taxRatesByRegion;
                 if (patch.shippingByCountry !== undefined) out.shippingByCountry = patch.shippingByCountry;
                 if (patch.codCountries !== undefined) out.codCountries = patch.codCountries;
+                /* Production control keys (F5/F6/F9). */
+                if (patch.checkoutEnabled !== undefined) out.checkoutEnabled = !!patch.checkoutEnabled;
+                if (patch.maintenanceMode !== undefined) out.maintenanceMode = !!patch.maintenanceMode;
+                if (patch.maintenanceMessage !== undefined) out.maintenanceMessage = String(patch.maintenanceMessage || '');
+                if (patch.blockedCountries !== undefined) out.blockedCountries = patch.blockedCountries;
+                if (patch.supportEmail !== undefined) out.supportEmail = String(patch.supportEmail || '');
+                if (patch.riskEnabled !== undefined) out.riskEnabled = !!patch.riskEnabled;
+                if (patch.riskReviewThreshold !== undefined) out.riskReviewThreshold = patch.riskReviewThreshold;
+                if (patch.riskMaxOrderValue !== undefined) out.riskMaxOrderValue = patch.riskMaxOrderValue;
+                if (patch.supplierLeadDays !== undefined) out.supplierLeadDays = patch.supplierLeadDays;
                 if (Object.keys(out).length) api().request('/settings', { method: 'PUT', body: out }).catch(notify);
             }
             return res;

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * TRENDARYO ADMIN - Catalog views (Products + Reviews)
  * Product edits write the override layer, which products-data.js merges
  * into the live catalogue - so changes here are on the storefront
@@ -106,6 +106,7 @@
             for (var ck in cats) catOpts += '<option value="' + U.esc(ck) + '">' + U.esc(ck) + '</option>';
 
             root.innerHTML = U.head('Products', String(all.length) + ' products on the shelf - overrides and additions included',
+                '<button class="btn btn--sm" id="prReorder" type="button">' + A().icon('truck', 13) + 'Reorder report</button>' +
                 '<button class="btn btn--ai btn--sm" id="prBulkSeo" type="button">' + A().icon('sparkles', 13) + 'AI SEO audit</button>' +
                 '<button class="btn btn--sm" id="prExport" type="button">' + A().icon('download', 13) + 'Export</button>' +
                 '<button class="btn btn--primary btn--sm" id="prAdd" type="button">' + A().icon('plus', 13) + 'Add product</button>') +
@@ -126,6 +127,7 @@
             drawRows(root, ctx);
             root.querySelector('#prAdd').addEventListener('click', function () { openEditor(ctx, null); });
             root.querySelector('#prExport').addEventListener('click', function () { exportCsv(ctx); });
+            root.querySelector('#prReorder').addEventListener('click', function () { openReorderReport(ctx); });
             root.querySelector('#prBulkSeo').addEventListener('click', function () {
                 var missing = [];
                 var list = S.products();
@@ -206,7 +208,7 @@
                 '<td><div class="table__user">' + (P() ? P().media(p, 'table__thumb') : '') + '<div style="min-width:0;"><div class="table__primary t-truncate" style="max-width:260px;">' + U.esc(p.name) + '</div>' +
                     '<div class="table__secondary">#' + p.id + (p._overridden ? ' - edited' : '') + (p._added ? ' - added by admin' : '') + (p.badge ? ' - ' + U.esc(p.badge) : '') + '</div></div></div></td>' +
                 '<td class="fs-sm">' + U.esc(cat) + '</td>' +
-                '<td class="num"><span class="fw-600">' + U.money(p.price) + '</span>' + (p.oldPrice ? '<div class="fs-xs t-mute" style="text-decoration:line-through;">' + U.money(p.oldPrice) + '</div>' : '') + '</td>' +
+                '<td class="num"><span class="fw-600">' + U.money(p.price) + '</span>' + (p.oldPrice ? '<div class="fs-xs t-mute" style="text-decoration:line-through;">' + U.money(p.oldPrice) + '</div>' : '') + ((p.costPrice != null && p.price > 0) ? '<div class="fs-xs ' + (((p.price - p.costPrice) / p.price) < 0.2 ? 'text-danger' : 'text-ok') + '">' + Math.round(((p.price - p.costPrice) / p.price) * 100) + '% margin</div>' : '') + '</td>' +
                 '<td>' + (P() ? P().stars(p.rating) : '') + ' <span class="fs-xs t-dim">' + p.rating + '</span></td>' +
                 '<td>' + seoBadge(S.seoState(p)) + '</td>' +
                 '<td class="num"><span class="badge ' + (p._stock === 0 ? 'badge--danger' : (p._stock <= S.settings().lowStock ? 'badge--warn' : 'badge--neutral')) + '">' + p._stock + '</span></td>' +
@@ -390,6 +392,10 @@
             '<div class="field-row"><div class="field"><label class="field__label">Badge</label><select class="select" id="edBadge"><option value="">no badge</option><option value="hot"' + (p && p.badge === 'hot' ? ' selected' : '') + '>hot</option><option value="trending"' + (p && p.badge === 'trending' ? ' selected' : '') + '>trending</option><option value="new"' + (p && p.badge === 'new' ? ' selected' : '') + '>new</option><option value="premium"' + (p && p.badge === 'premium' ? ' selected' : '') + '>premium</option></select></div>' +
             '<div class="field"><label class="field__label">Emoji</label><input class="input" id="edEmoji" maxlength="4" value="' + U.esc(p ? (p.emoji || '') : '') + '" placeholder="e.g. &#127911;"><div class="field__hint">Used as the artwork when no photo is set.</div></div></div>' +
             '<div class="field"><label class="field__label">Image URL</label><input class="input input--mono" id="edImage" value="' + U.esc(p ? (p.image || '') : '') + '" placeholder="https://..."></div>' +
+            '<hr class="divider"><div class="row row--between" style="margin-bottom:8px;"><span class="t-label">Operations</span><span class="fs-xs t-mute">Cost powers margin; reorder point drives low-stock alerts and the reorder report.</span></div>' +
+            '<div class="field-row field-row--3"><div class="field"><label class="field__label">Cost price ($)</label><input class="input input--mono" id="edCost" type="number" min="0" step="0.01" value="' + (p && p.costPrice != null ? p.costPrice : '') + '"><div class="field__hint" id="edMargin">Margin unknown without cost.</div></div>' +
+            '<div class="field"><label class="field__label">Reorder point</label><input class="input input--mono" id="edReorder" type="number" min="0" value="' + (p && p.reorderPoint != null ? p.reorderPoint : '') + '"><div class="field__hint">0/empty = store low-stock setting.</div></div>' +
+            '<div class="field"><label class="field__label">Lead time (days)</label><input class="input input--mono" id="edLead" type="number" min="0" value="' + (p && p.leadTimeDays != null ? p.leadTimeDays : '') + '"><div class="field__hint">Supplier SLA clock for this item.</div></div></div>' +
             '<label class="switch" style="margin-bottom:16px;"><input type="checkbox" id="edHidden"' + (p && p.hidden ? ' checked' : '') + '><span class="switch__track"></span><span class="switch__text">Hidden from the public shelf</span></label>' +
             '<hr class="divider"><div class="row row--between" style="margin-bottom:8px;"><span class="t-label">SEO package</span><button class="ai-chip" type="button" data-gen="seoPackage">' + A().icon('sparkles', 12) + 'Generate package</button></div>' +
             '<div class="field"><label class="field__label">Meta title</label><input class="input input--mono" id="edMt" maxlength="70" value="' + U.esc(seo.metaTitle || '') + '"><div class="field__hint">Max 60 characters in search results.</div></div>' +
@@ -408,6 +414,10 @@
             onMount: function (root) {
                 var q = function (sel) { return root.querySelector(sel); };
                 function collect() {
+                    function numOrNull(sel) {
+                        var v = q(sel).value;
+                        return v === '' ? null : (parseFloat(v) >= 0 ? parseFloat(v) : null);
+                    }
                     return {
                         id: p ? p.id : null,
                         name: q('#edName').value.trim(),
@@ -421,21 +431,28 @@
                         hidden: q('#edHidden').checked,
                         rating: p ? p.rating : 4.5,
                         reviews: p ? p.reviews : 0,
+                        costPrice: numOrNull('#edCost'),
+                        reorderPoint: numOrNull('#edReorder'),
+                        leadTimeDays: numOrNull('#edLead'),
                         seo: { metaTitle: q('#edMt').value.trim(), metaDescription: q('#edMd').value.trim(), keywords: q('#edKw').value.split(',').map(function (s) { return s.trim(); }).filter(Boolean) }
                     };
                 }
                 function preview() {
                     var c = collect();
                     var P2 = P();
+                    var margin = (c.costPrice != null && c.price > 0) ? Math.round(((c.price - c.costPrice) / c.price) * 1000) / 10 : null;
+                    var marginHint = q('#edMargin');
+                    if (marginHint) marginHint.textContent = margin != null ? 'Margin ' + margin + '% at this price.' : 'Margin unknown without cost.';
                     var art = c.image ? '<img class="table__thumb" style="width:120px;height:120px;border-radius:6px;object-fit:cover;" src="' + U.esc(c.image) + '" alt="">' : (P2 ? P2.tile({ id: c.id || 1, emoji: c.emoji || '\uD83D\uDCE6' }).replace('<svg', '<svg style="width:120px;height:120px;border-radius:6px;"') : '');
                     q('#edPrev').innerHTML = '<div style="text-align:center;">' + art + '</div>' +
                         '<div class="fw-700 mt-3" style="text-align:center;">' + U.esc(c.name || 'Untitled product') + '</div>' +
                         '<div style="text-align:center;margin-top:4px;">' + (P2 ? P2.stars(c.rating) : '') + ' <span class="fs-xs t-dim">' + c.rating + '</span></div>' +
                         '<div style="text-align:center;margin-top:6px;"><span class="fw-700" style="font-size:18px;">' + U.money(c.price) + '</span>' + (c.oldPrice ? ' <span class="fs-xs t-mute" style="text-decoration:line-through;">' + U.money(c.oldPrice) + '</span>' : '') + '</div>' +
+                        (margin != null ? '<div class="fs-xs ' + (margin < 20 ? 'text-danger' : 'text-ok') + '" style="text-align:center;margin-top:2px;">margin ' + margin + '%</div>' : '') +
                         (c.badge ? '<div style="text-align:center;margin-top:8px;"><span class="badge badge--accent">' + U.esc(c.badge) + '</span></div>' : '') +
                         (c.hidden ? '<div style="text-align:center;margin-top:8px;"><span class="badge badge--neutral">Hidden</span></div>' : '');
                 }
-                var fields = ['#edName', '#edDesc', '#edPrice', '#edOld', '#edEmoji', '#edBadge', '#edImage', '#edHidden'];
+                var fields = ['#edName', '#edDesc', '#edPrice', '#edOld', '#edEmoji', '#edBadge', '#edImage', '#edHidden', '#edCost', '#edReorder', '#edLead'];
                 for (var fi = 0; fi < fields.length; fi++) {
                     (function (sel) {
                         var el2 = q(sel);
@@ -493,6 +510,60 @@
         });
         return d;
     }
+
+    /* ---------- F7: reorder report drawer ---------- */
+    function openReorderReport(ctx) {
+        var App = ctx.App;
+        var d = App.drawer.open({
+            title: 'Reorder report',
+            sub: 'Active products at or below their effective reorder point',
+            wide: true,
+            body: '<div class="empty"><span class="spinner"></span><p style="margin-top:12px;">Checking stock against reorder points...</p></div>',
+            foot: '<span class="spacer"></span><button class="btn" type="button" data-dc>Close</button>',
+            onMount: function (root) {
+                root.querySelector('[data-dc]').addEventListener('click', function () { App.drawer.close(); });
+            }
+        });
+        if (!window.API) return d;
+        window.API.request('/admin/reorder').then(function (res) {
+            var rows = (res && res.data) || [];
+            var meta = (res && res.meta) || {};
+            var bodyEl = d.root.querySelector('.modal__body');
+            if (!bodyEl) return;
+            if (!rows.length) {
+                bodyEl.innerHTML = '<div class="empty"><div class="empty__icon">' + A().icon('check', 20) + '</div>' +
+                    '<p class="fw-600">Nothing to reorder</p>' +
+                    '<p class="fs-sm t-mute">Every active product is above its reorder point (store default ' + (meta.storeDefaultThreshold != null ? meta.storeDefaultThreshold : 8) + ').</p></div>';
+                return;
+            }
+            var h = '<div class="row row--wrap" style="gap:8px;margin-bottom:12px;">' +
+                '<span class="badge badge--danger">' + rows.length + ' below reorder point</span>' +
+                '<span class="badge badge--neutral">' + (meta.outOfStock || 0) + ' out of stock</span>' +
+                '<span class="fs-xs t-mute" style="align-self:center;">checked ' + (meta.checkedAt ? App.ago(meta.checkedAt) : 'just now') + '</span></div>' +
+                '<div class="table-wrap"><table class="table table--compact"><thead><tr>' +
+                '<th>Product</th><th class="num">Stock</th><th class="num">Reorder at</th><th class="num">Lead</th><th class="num">Margin</th><th>Supplier</th>' +
+                '</tr></thead><tbody>';
+            for (var i = 0; i < rows.length; i++) {
+                var r = rows[i];
+                h += '<tr>' +
+                    '<td><div class="table__primary">' + U.esc(r.name) + '</div><div class="table__secondary">#' + U.esc(r.id) + (r.sku ? ' - ' + U.esc(r.sku) : '') + '</div></td>' +
+                    '<td class="num"><span class="badge ' + (r.outOfStock ? 'badge--danger' : 'badge--warn') + '">' + r.stock + '</span></td>' +
+                    '<td class="num">' + r.effectiveThreshold + (r.reorderPoint != null ? '' : ' <span class="fs-xs t-mute">(default)</span>') + '</td>' +
+                    '<td class="num">' + (r.leadTimeDays != null ? r.leadTimeDays + 'd' : '-') + '</td>' +
+                    '<td class="num' + (r.marginPct != null && r.marginPct < 20 ? ' text-danger' : '') + '">' + (r.marginPct != null ? r.marginPct + '%' : '-') + '</td>' +
+                    '<td class="fs-sm">' + (r.supplierId ? U.esc(String(r.supplierId)) : '-') + '</td>' +
+                    '</tr>';
+            }
+            h += '</tbody></table></div>' +
+                '<div class="fs-xs t-mute" style="margin-top:10px;">Reorder point and lead time are editable in the product editor (Operations section).</div>';
+            bodyEl.innerHTML = h;
+        }).catch(function (err) {
+            var bodyEl = d.root.querySelector('.modal__body');
+            if (bodyEl) bodyEl.innerHTML = '<div class="empty"><div class="empty__icon">' + A().icon('alert', 20) + '</div><p class="fw-600">Could not load the report</p><p class="fs-sm t-mute">' + U.esc((err && err.message) || 'Unknown error') + '</p></div>';
+        });
+        return d;
+    }
+
 
     /* ================================================================
        REVIEWS

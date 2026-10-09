@@ -19,6 +19,7 @@
     var pendingCardAttempt = false;
     var isSubmitting = false;
     var checkoutInitialized = false;
+    var storeClosed = null;
 
     function setCheckoutFeedback(message, type) {
         var feedback = document.getElementById('checkout-feedback');
@@ -110,7 +111,33 @@
         });
 
         attachFormHandler();
+        applyStoreGate();
         if (cart.length && !hasPendingPayment) refreshQuote().catch(function() {});
+    }
+
+    /* F5 kill switch: ask the server whether ordering is open. Fails open on
+       the client - the API is still the authority if this fetch never lands. */
+    function showStoreClosedBanner(message) {
+        storeClosed = message;
+        var banner = document.getElementById('store-closed-banner');
+        if (banner) {
+            banner.textContent = message;
+            banner.style.display = 'block';
+        }
+        updateSubmitButton();
+    }
+
+    function applyStoreGate() {
+        if (!window.API || typeof window.API.request !== 'function') return;
+        window.API.request('/config/public').then(function (res) {
+            var d = (res && res.data) || null;
+            if (!d) return;
+            if (d.maintenanceMode === true) {
+                showStoreClosedBanner(d.maintenanceMessage || 'We are performing maintenance right now - please check back in a few minutes.');
+            } else if (d.checkoutEnabled === false) {
+                showStoreClosedBanner('Ordering is paused right now. You can keep browsing - checkout reopens shortly.');
+            }
+        }).catch(function () { /* fail open: the API enforces the gate server-side */ });
     }
 
     if (document.readyState === 'loading') {
@@ -282,6 +309,7 @@
     }
 
     function handleContinueToPayment() {
+        if (storeClosed) { setCheckoutFeedback(storeClosed, 'error'); return; }
         if (currentStep === 1 && !validateShipping()) return;
         moveToNextStep();
     }
@@ -829,6 +857,7 @@
     }
 
     function nextStep() {
+        if (storeClosed) { setCheckoutFeedback(storeClosed, 'error'); return; }
         if (currentStep === 2 && validatePayment()) moveToNextStep();
     }
 
@@ -836,15 +865,16 @@
         var button = document.getElementById('place-order-btn');
         var continueButton = document.getElementById('continue-to-payment-btn');
         var reviewButton = document.getElementById('review-order-btn');
-        if (continueButton) continueButton.disabled = cart.length === 0;
-        if (reviewButton) reviewButton.disabled = cart.length === 0;
+        if (continueButton) continueButton.disabled = cart.length === 0 || !!storeClosed;
+        if (reviewButton) reviewButton.disabled = cart.length === 0 || !!storeClosed;
         if (!button) return;
         // A stale quote must NOT disable the button. It stays enabled so the
         // submit handler can re-verify the quote right before charging; if the
         // total actually changed it surfaces an inline message instead of
         // starting (or re-using) a payment for the wrong amount.
-        button.disabled = isSubmitting || quotePending || !cart.length;
-        if (!cart.length) button.textContent = 'Cart is Empty';
+        button.disabled = isSubmitting || quotePending || !cart.length || !!storeClosed;
+        if (storeClosed) button.textContent = 'Checkout Closed';
+        else if (!cart.length) button.textContent = 'Cart is Empty';
         else if (isSubmitting) button.textContent = 'Processing Order…';
         else button.textContent = 'Place Order';
     }
@@ -908,6 +938,7 @@
         if (!form) return;
         form.addEventListener('submit', async function(event) {
             event.preventDefault();
+            if (storeClosed) { setCheckoutFeedback(storeClosed, 'error'); return; }
             if (isSubmitting || quotePending) return;
             if (!validateShipping()) {
                 showStep(1);

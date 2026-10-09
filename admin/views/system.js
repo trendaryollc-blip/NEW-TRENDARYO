@@ -552,6 +552,23 @@
                     '<div class="row mt-4"><button class="btn btn--primary btn--sm" id="stCoSave" type="button">' + A().icon('save', 13) + 'Save commerce</button></div></div></div>' +
             '</div>' +
 
+            '<div class="grid grid--split" style="margin-bottom:16px;">' +
+                '<div class="panel"><div class="panel__head"><div><div class="panel__title">Store control</div><div class="panel__subtitle">Kill switch, maintenance window and country blocks</div></div></div><div class="panel__body">' +
+                    '<label class="switch" style="margin-bottom:10px;"><input type="checkbox" id="stCheckout"' + (s.checkoutEnabled !== false ? ' checked' : '') + '><span class="switch__track"></span><span class="switch__text">Checkout enabled - off refuses new orders (403)</span></label>' +
+                    '<label class="switch" style="margin-bottom:10px;"><input type="checkbox" id="stMaint"' + (s.maintenanceMode === true ? ' checked' : '') + '><span class="switch__track"></span><span class="switch__text">Maintenance mode - checkout answers 503</span></label>' +
+                    '<div class="field"><label class="field__label">Maintenance message</label><input class="input" id="stMaintMsg" value="' + U.esc(s.maintenanceMessage || '') + '" placeholder="Back soon - we are restocking"></div>' +
+                    '<div class="field"><label class="field__label">Blocked countries</label><input class="input input--mono" id="stBlocked" value="' + U.esc((s.blockedCountries || []).join(', ')) + '" placeholder="US, CA, GB"><div class="field__hint">Comma separated ISO codes. Empty allows every country.</div></div>' +
+                    '<div class="field"><label class="field__label">Ops digest email</label><input class="input" id="stSupportEmail" type="email" value="' + U.esc(s.supportEmail || '') + '" placeholder="ops@yourdomain.com"><div class="field__hint">Daily ops digest destination - empty skips email.</div></div>' +
+                    '<div class="row mt-4"><button class="btn btn--primary btn--sm" id="stGateSave" type="button">' + A().icon('save', 13) + 'Save store control</button></div></div></div>' +
+
+                '<div class="panel"><div class="panel__head"><div><div class="panel__title">Risk & supplier SLA</div><div class="panel__subtitle">Fraud review holds and the default lead-time clock</div></div></div><div class="panel__body">' +
+                    '<label class="switch" style="margin-bottom:10px;"><input type="checkbox" id="stRisk"' + (s.riskEnabled === true ? ' checked' : '') + '><span class="switch__track"></span><span class="switch__text">Risk scoring on - off ships completely inert</span></label>' +
+                    '<div class="field-row"><div class="field"><label class="field__label">Review threshold</label><input class="input input--mono" id="stRiskThr" type="number" min="1" max="100" value="' + (s.riskReviewThreshold != null ? s.riskReviewThreshold : 50) + '"><div class="field__hint">Score 1-100 - at or above puts the order on hold.</div></div>' +
+                    '<div class="field"><label class="field__label">Max order value ($)</label><input class="input input--mono" id="stRiskMax" type="number" min="1" value="' + (s.riskMaxOrderValue != null ? s.riskMaxOrderValue : 1000) + '"><div class="field__hint">Orders above this add +20 to the score.</div></div></div>' +
+                    '<div class="field mt-3"><label class="field__label">Default supplier lead (days)</label><input class="input input--mono" id="stLead" type="number" min="0" max="120" value="' + (s.supplierLeadDays != null ? s.supplierLeadDays : 7) + '"><div class="field__hint">Used when neither the product nor the SLA rule sets a lead time.</div></div>' +
+                    '<div class="row mt-4"><button class="btn btn--primary btn--sm" id="stRiskSave" type="button">' + A().icon('save', 13) + 'Save risk & SLA</button></div></div></div>' +
+            '</div>' +
+
             '<div class="panel" style="margin-bottom:16px;"><div class="panel__head"><div><div class="panel__title">AI configuration</div><div class="panel__subtitle">Bring your own key - it stays in this browser and is never sent anywhere except the provider</div></div></div><div class="panel__body">' +
                 '<div class="field-row"><div class="field"><label class="field__label">Provider</label><select class="select" id="stProv">' + popts + '</select><div class="field__hint">Offline Studio works with no key at all.</div></div>' +
                 '<div class="field"><label class="field__label">API key</label><div class="input-ai"><input class="input input--mono" id="stKey" type="password" value="' + U.esc(s.aiKey) + '" placeholder="sk-..."><button class="ai-btn" type="button" id="stKeyEye">' + A().icon('eye', 13) + '</button></div></div></div>' +
@@ -578,8 +595,115 @@
                     '</div></div></div>' +
             '</div>' +
 
+            '<div class="grid grid--split" style="margin-bottom:16px;">' +
+                '<div class="panel"><div class="panel__head"><div><div class="panel__title">Operations health</div><div class="panel__subtitle">Cron and webhook probes, straight from the server</div></div><div class="panel__actions"><button class="btn btn--sm" id="stHealthReload" type="button">' + A().icon('refresh', 13) + 'Refresh</button></div></div>' +
+                '<div class="panel__body" id="stHealth"><div class="t-dim" style="padding:12px;">Loading health...</div></div></div>' +
+
+                '<div class="panel"><div class="panel__head"><div><div class="panel__title">Server audit log</div><div class="panel__subtitle">Order, refund and automation actions written by the API</div></div><div class="panel__actions"><button class="btn btn--sm" id="stAuditReload" type="button">' + A().icon('refresh', 13) + 'Refresh</button></div></div>' +
+                '<div class="panel__body" id="stAudit"><div class="t-dim" style="padding:12px;">Loading audit trail...</div></div></div>' +
+            '</div>' +
+
             '<div class="panel"><div class="panel__head"><div><div class="panel__title">Activity log</div><div class="panel__subtitle">Every admin action, newest first</div></div><div class="panel__actions"><button class="btn btn--sm" id="stLogExport" type="button">Export</button><button class="btn btn--sm" id="stLogClear" type="button">Clear</button></div></div>' +
                 '<div class="table-wrap" id="stLog"></div></div>';
+
+            /* ---------- F5/F6/F9: store control + risk + SLA saves ---------- */
+            root.querySelector('#stGateSave').addEventListener('click', function () {
+                var blocked = root.querySelector('#stBlocked').value.split(',').map(function (c) { return c.trim().toUpperCase(); }).filter(Boolean);
+                S.saveSettings({
+                    checkoutEnabled: root.querySelector('#stCheckout').checked,
+                    maintenanceMode: root.querySelector('#stMaint').checked,
+                    maintenanceMessage: root.querySelector('#stMaintMsg').value.trim(),
+                    blockedCountries: blocked,
+                    supportEmail: root.querySelector('#stSupportEmail').value.trim()
+                });
+                App.toast('Store control saved', 'ok', 'Settings');
+            });
+            root.querySelector('#stRiskSave').addEventListener('click', function () {
+                var thr = parseInt(root.querySelector('#stRiskThr').value, 10);
+                var maxV = parseFloat(root.querySelector('#stRiskMax').value);
+                var lead = parseInt(root.querySelector('#stLead').value, 10);
+                if (!Number.isFinite(thr) || thr < 1 || thr > 100) { App.toast('Review threshold must be 1-100', 'warn', 'Settings'); return; }
+                if (!Number.isFinite(maxV) || maxV < 1) { App.toast('Max order value must be at least 1', 'warn', 'Settings'); return; }
+                if (!Number.isFinite(lead) || lead < 0 || lead > 120) { App.toast('Lead time must be 0-120 days', 'warn', 'Settings'); return; }
+                S.saveSettings({
+                    riskEnabled: root.querySelector('#stRisk').checked,
+                    riskReviewThreshold: thr,
+                    riskMaxOrderValue: maxV,
+                    supplierLeadDays: lead
+                });
+                App.toast('Risk & SLA settings saved', 'ok', 'Settings');
+            });
+
+            /* ---------- F10: ops health card ---------- */
+            function drawHealth(d) {
+                var el = root.querySelector('#stHealth');
+                if (!el) return;
+                if (!d) { el.innerHTML = '<div class="t-dim" style="padding:12px;">No health data yet - probes report after the next cron run.</div>'; return; }
+                var c = d.counts || {};
+                var ov = d.overall || 'ok';
+                var h = '<div class="row row--wrap" style="gap:8px;margin-bottom:10px;">' +
+                    '<span class="badge ' + (ov === 'ok' ? 'badge--ok' : (ov === 'degraded' ? 'badge--warn' : 'badge--danger')) + '">overall ' + U.esc(ov) + '</span>' +
+                    '<span class="badge ' + (c.openAlerts ? 'badge--warn' : 'badge--neutral') + '">' + (c.openAlerts || 0) + ' open alerts</span>' +
+                    '<span class="badge ' + (c.failedWebhooks ? 'badge--danger' : 'badge--neutral') + '">' + (c.failedWebhooks || 0) + ' failed webhooks</span>' +
+                    '<span class="badge ' + (c.attentionOrders ? 'badge--warn' : 'badge--neutral') + '">' + (c.attentionOrders || 0) + ' orders need attention</span>' +
+                    '<span class="fs-xs t-mute" style="align-self:center;">checked ' + (d.checkedAt ? App.ago(d.checkedAt) : 'just now') + '</span></div>';
+                var probes = d.probes || [];
+                if (!probes.length) { h += '<div class="fs-sm t-mute">No probes have reported yet.</div>'; }
+                else {
+                    h += '<div class="table-wrap"><table class="table table--compact"><thead><tr><th>Probe</th><th>State</th><th>Last run</th><th>Detail</th></tr></thead><tbody>';
+                    for (var i = 0; i < probes.length; i++) {
+                        var p = probes[i];
+                        var stv = p.state || 'ok';
+                        h += '<tr><td class="fs-sm fw-600">' + U.esc(p.key) + '</td>' +
+                            '<td><span class="badge ' + (stv === 'ok' ? 'badge--ok' : (stv === 'stale' ? 'badge--warn' : 'badge--danger')) + '">' + U.esc(stv) + '</span></td>' +
+                            '<td class="fs-sm t-mute nowrap">' + (p.lastRunAt ? App.ago(p.lastRunAt) : 'never') + '</td>' +
+                            '<td class="fs-sm t-dim">' + U.esc(p.detail || p.lastStatus || '') + '</td></tr>';
+                    }
+                    h += '</tbody></table></div>';
+                }
+                el.innerHTML = h;
+            }
+            function loadHealth() {
+                var el = root.querySelector('#stHealth');
+                if (el) el.innerHTML = '<div class="t-dim" style="padding:12px;">Loading health...</div>';
+                window.API.request('/admin/health').then(function (res) {
+                    drawHealth((res && res.data) || null);
+                }, function (err) {
+                    if (el) el.innerHTML = '<div style="padding:12px;color:var(--danger,#f66);">' + U.esc((err && err.message) || 'Could not load health') + '</div>';
+                });
+            }
+
+            /* ---------- F4: server audit trail ---------- */
+            function drawAudit(items) {
+                var el = root.querySelector('#stAudit');
+                if (!el) return;
+                if (!items || !items.length) { el.innerHTML = '<div class="t-dim" style="padding:12px;">No server audit entries yet - order changes and refunds write here.</div>'; return; }
+                var h = '<div class="table-wrap"><table class="table table--compact"><thead><tr><th>When</th><th>Actor</th><th>Action</th><th>Target</th></tr></thead><tbody>';
+                for (var i = 0; i < items.length; i++) {
+                    var a = items[i];
+                    h += '<tr><td class="fs-sm t-mute nowrap">' + (a.createdAt ? App.ago(a.createdAt) : '-') + '</td>' +
+                        '<td class="fs-sm">' + U.esc(a.actorEmail || a.actorUid || 'system') + '</td>' +
+                        '<td class="fs-sm fw-600">' + U.esc(a.action) + '</td>' +
+                        '<td class="fs-sm t-dim">' + U.esc((a.targetType || '') + (a.targetId ? ':' + a.targetId : '')) + '</td></tr>';
+                }
+                h += '</tbody></table></div>' +
+                    '<div class="fs-xs t-mute" style="margin-top:8px;">Write-only from the API - entries cannot be edited from the admin.</div>';
+                el.innerHTML = h;
+            }
+            function loadAudit() {
+                var el = root.querySelector('#stAudit');
+                if (el) el.innerHTML = '<div class="t-dim" style="padding:12px;">Loading audit trail...</div>';
+                window.API.request('/admin/audit?limit=30').then(function (res) {
+                    drawAudit((res && res.data) || []);
+                }, function (err) {
+                    if (el) el.innerHTML = '<div style="padding:12px;color:var(--danger,#f66);">' + U.esc((err && err.message) || 'Could not load audit log') + '</div>';
+                });
+            }
+            root.querySelector('#stHealthReload').addEventListener('click', loadHealth);
+            root.querySelector('#stAuditReload').addEventListener('click', loadAudit);
+            loadHealth();
+            loadAudit();
+
 
             root.querySelector('#stIdSave').addEventListener('click', function () {
                 S.saveSettings({ storeName: root.querySelector('#stName').value.trim() || 'Trendaryo' });

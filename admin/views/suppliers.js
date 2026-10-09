@@ -96,6 +96,73 @@
         });
     }
 
+    /* ---------- F9: supplier SLA report ---------- */
+    var sla = { loading: false, data: null, err: '' };
+
+    function loadSla(root) {
+        sla.loading = true; sla.err = ''; drawSla(root);
+        window.API.request('/admin/supplier-sla').then(function (res) {
+            sla.loading = false;
+            sla.data = (res && res.data) || null;
+            drawSla(root);
+        }, function (err) {
+            sla.loading = false;
+            sla.err = (err && err.message) || 'Could not load the SLA report';
+            drawSla(root);
+        });
+    }
+
+    function pct(v) { return v == null ? '-' : v + '%'; }
+    function day(v) { return v == null ? '-' : v + 'd'; }
+
+    function drawSla(root) {
+        var el = root.querySelector('#slaBody');
+        if (!el) return;
+        if (sla.loading) { el.innerHTML = '<div class="t-dim" style="padding:14px;">Loading SLA report...</div>'; return; }
+        if (sla.err) { el.innerHTML = '<div style="padding:14px;color:var(--danger,#f66);">' + U.esc(sla.err) + '</div>'; return; }
+        if (!sla.data) { el.innerHTML = '<div class="t-dim" style="padding:14px;">No report yet.</div>'; return; }
+        var d = sla.data, t = d.totals || {};
+        var h = '<div class="row row--wrap" style="gap:8px;margin-bottom:12px;">' +
+            '<span class="badge ' + (t.onTimePct == null ? 'badge--neutral' : (t.onTimePct >= 90 ? 'badge--ok' : (t.onTimePct >= 70 ? 'badge--warn' : 'badge--danger'))) + '">on time ' + pct(t.onTimePct) + '</span>' +
+            '<span class="badge badge--neutral">avg ship ' + day(t.avgShipDays) + '</span>' +
+            '<span class="badge ' + (t.openBreaches ? 'badge--danger' : 'badge--ok') + '">' + (t.openBreaches || 0) + ' breached</span>' +
+            '<span class="badge badge--neutral">lead ' + day(d.defaultLeadDays) + '</span>' +
+            '<span class="fs-xs t-mute" style="align-self:center;">' + (t.submitted || 0) + ' forwarded - checked ' + (d.checkedAt ? app().ago(d.checkedAt) : 'just now') + '</span></div>';
+
+        var sups = d.suppliers || [];
+        h += '<div class="table-wrap"><table class="table table--compact"><thead><tr><th>Supplier</th><th class="num">Forwarded</th><th class="num">Shipped</th><th class="num">On time</th><th class="num">Avg ship</th><th class="num">Open breaches</th></tr></thead><tbody>';
+        if (!sups.length) {
+            h += '<tr><td colspan="6" class="t-dim" style="padding:12px;">No forwarded orders yet - nothing to score.</td></tr>';
+        }
+        for (var i = 0; i < sups.length; i++) {
+            var s = sups[i];
+            var p = s.onTimePct;
+            h += '<tr><td class="fw-600">' + U.esc(s.supplierId === 'unassigned' ? 'Unassigned' : String(s.supplierId)) + '</td>' +
+                '<td class="num">' + s.submitted + '</td>' +
+                '<td class="num">' + s.shipped + '</td>' +
+                '<td class="num">' + (p == null ? '-' : '<span class="badge ' + (p >= 90 ? 'badge--ok' : (p >= 70 ? 'badge--warn' : 'badge--danger')) + '">' + p + '%</span>') + '</td>' +
+                '<td class="num">' + day(s.avgShipDays) + '</td>' +
+                '<td class="num">' + (s.openBreaches ? '<span class="badge badge--danger">' + s.openBreaches + '</span>' : '0') + '</td></tr>';
+        }
+        h += '</tbody></table></div>';
+
+        var br = d.openBreaches || [];
+        if (br.length) {
+            h += '<div class="t-label" style="margin:16px 0 6px;">Breached now</div>' +
+                '<div class="table-wrap"><table class="table table--compact"><thead><tr><th>Order</th><th>Status</th><th class="num">Days over</th><th>Deadline</th></tr></thead><tbody>';
+            for (var j = 0; j < br.length; j++) {
+                var b = br[j];
+                h += '<tr><td class="mono-id">' + U.esc(b.orderNumber) + '</td>' +
+                    '<td>' + U.statusBadge(b.status) + '</td>' +
+                    '<td class="num"><span class="badge badge--danger">' + b.daysOver + 'd over</span></td>' +
+                    '<td class="fs-sm t-mute">' + U.esc(b.deadline || '-') + '</td></tr>';
+            }
+            h += '</tbody></table></div>';
+        }
+        h += '<div class="fs-xs t-mute" style="margin-top:10px;">Lead time precedence: product lead time, then the supplier-sla-watch rule, then Settings → supplier lead.</div>';
+        el.innerHTML = h;
+    }
+
     function draw(root) {
         root.querySelector('#cjEmail').value = st.email;
         root.querySelector('#cjMarkup').value = st.markup;
@@ -127,6 +194,11 @@
                 '<span class="t-dim" id="cjSyncMsg" style="margin-left:12px;"></span>' +
                 '</div></div>' +
 
+                '<div class="panel" style="margin-bottom:16px;"><div class="panel__head"><h3>Supplier SLA</h3><span class="fs-xs t-mute">lead-time performance across forwarded orders</span></div>' +
+                '<div class="panel__body"><div id="slaBody"></div>' +
+                '<div style="margin-top:10px;"><button class="btn btn--sm" id="slaReload" type="button">' + A().icon('refresh', 13) + 'Refresh report</button></div>' +
+                '</div></div>' +
+
                 '<div class="panel"><div class="panel__head"><h3>Import products from CJ</h3></div><div class="panel__body">' +
                 '<div class="toolbar"><div class="search">' + A().icon('search', 14) + '<input id="cjQ" type="text" placeholder="Search CJ catalog..."></div>' +
                 '<button class="btn btn--sm" id="cjSearch" type="button">Search</button></div>' +
@@ -137,8 +209,10 @@
             root.querySelector('#cjSearch').addEventListener('click', function () { search(root); });
             root.querySelector('#cjQ').addEventListener('keydown', function (e) { if (e.key === 'Enter') search(root); });
             root.querySelector('#cjSync').addEventListener('click', function () { syncTracking(root); root.querySelector('#cjSyncMsg').textContent = st.syncMsg; });
+            root.querySelector('#slaReload').addEventListener('click', function () { loadSla(root); });
 
             loadSettings(root);
+            loadSla(root);
         },
     };
 })();
