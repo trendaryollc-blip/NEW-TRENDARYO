@@ -328,6 +328,11 @@ async function listRules(db) {
   });
 }
 
+async function getRule(db, key) {
+  const ref = db.collection('automations').doc(key);
+  const s = await ref.get();
+  return s.exists ? { key, ...s.data() } : null;
+}
 async function updateRule(db, key, patch) {
   const def = DEFINITIONS[key];
   if (!def) throw new Error('Unknown automation rule: ' + key);
@@ -477,6 +482,8 @@ async function runRule(db, key, ctx) {
   return record;
 }
 
+function emitEvent(db, name, payload) { return (async () => { try { const rules = await listRules(db); for (const r of rules) { if (r.enabled) { const def = DEFINITIONS[r.key]; if (def && Array.isArray(def.on) && def.on.includes(name)) { try { await runRule(db, r.key, { trigger: 'event:' + name }); } catch (e) { console.error('[automations:emit]', e.message); } } } } } catch (e) { console.error('[automations:emit]', e.message); } })(); }
+
 async function runAll(db, ctx) {
   const rules = await listRules(db);
   const out = [];
@@ -497,22 +504,6 @@ async function runAll(db, ctx) {
   return out;
 }
 
-module.exports = {
-  DEFINITIONS,
-  listRules,
-  updateRule,
-  runRule,
-  runAll,
-  ensureSeeded,
-};
+module.exports = { ensureSeeded, listRules, getRule, updateRule, runRule, runAll, DEFINITIONS, emitEvent };
 
-module.exports = {
-  ensureSeeded,
-  listRules,
-  getRule,
-  updateRule,
-  runRule,
-  runAll,
-  DEFINITIONS,
-  emitEvent
-};
+module.exports = { ensureSeeded, listRules, getRule, updateRule, runRule, runAll, DEFINITIONS, emitEvent };
