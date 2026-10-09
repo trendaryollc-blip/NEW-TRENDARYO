@@ -54,7 +54,7 @@ function bool(value, fallback) {
    ========================================================================== */
 
 const DEFINITIONS = {
-  'supplier-auto-fulfillment': {
+  'supplier-auto-fulfillment': { on:['order.paid'],
     name: 'Supplier auto-fulfillment',
     group: 'Orders',
     icon: 'truck',
@@ -504,4 +504,15 @@ module.exports = {
   runRule,
   runAll,
   ensureSeeded,
+};
+
+module.exports = {
+  ensureSeeded,
+  listRules,
+  getRule,
+  updateRule,
+  runRule,
+  runAll,
+  DEFINITIONS,
+  emitEvent
 };
