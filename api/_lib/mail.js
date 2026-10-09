@@ -185,6 +185,24 @@ async function sendOrderConfirmation(order) {
   return send({ to: String(to).trim(), subject: mail.subject, html: mail.html, text: mail.text });
 }
 
+/* Owner-facing operational email. Recipient comes from settings/store
+   .supportEmail (same source the webhook dispute alert uses); when nobody
+   configured one the message is skipped instead of bouncing. */
+async function sendToAdmin(db, opts) {
+  try {
+    const st = await db.collection('settings').doc('store').get();
+    const to = st.exists ? st.data().supportEmail : null;
+    if (!to) {
+      console.warn('[mail] supportEmail not configured; skipped: ' + (opts.subject || ''));
+      return { ok: false, skipped: true };
+    }
+    return await send({ to: String(to).trim(), subject: opts.subject, html: opts.html || '', text: opts.text || '' });
+  } catch (e) {
+    console.error('[mail:admin]', e.message);
+    return { ok: false };
+  }
+}
+
 async function sendShippingUpdate(order) {
   const to = (order.shippingAddress && order.shippingAddress.email) || order.email || null;
   if (!to) return { ok: false, skipped: true };
@@ -194,6 +212,7 @@ async function sendShippingUpdate(order) {
 
 module.exports = {
   send,
+  sendToAdmin,
   sendOrderConfirmation,
   sendShippingUpdate,
   orderConfirmationEmail,

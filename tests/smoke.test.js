@@ -28,7 +28,7 @@ test('automations: seeded disabled', async () => {
   const auto = loadEngine();
   await auto.ensureSeeded(db);
   const rules = await auto.listRules(db);
-  assert.strictEqual(rules.length, 5);
+  assert.strictEqual(rules.length, Object.keys(auto.DEFINITIONS).length);
   assert.ok(rules.every((r) => !r.enabled), 'every rule must ship paused');
 });
 

@@ -2,6 +2,9 @@ const { initFirebase } = require('../_lib/firebase');
 const { handleCors } = require('../_lib/cors');
 const { requireAdmin } = require('../_lib/auth');
 const { applyRateLimit } = require('../_lib/security');
+const { canTransition } = require('../_lib/order-state');
+const { beat } = require('../_lib/health');
+const { FieldValue } = require('firebase-admin/firestore');
 const cj = require('../_lib/cj');
 
 async function syncTracking(db) {
@@ -19,7 +22,16 @@ async function syncTracking(db) {
       if (trackNumber && trackNumber !== o.trackingNumber) {
         patch.trackingNumber = trackNumber;
         patch.trackingCarrier = logisticName || o.trackingCarrier || '';
-        patch.status = 'shipped';
+        if (canTransition(o.status || 'pending', 'shipped', 'system')) {
+          patch.status = 'shipped';
+          patch.statusHistory = FieldValue.arrayUnion({
+            status: 'shipped',
+            timestamp: new Date().toISOString(),
+            note: 'Supplier sync: tracking received',
+            actor: 'system',
+          });
+          patch.supplierShippedAt = new Date().toISOString();
+        }
       }
       await db.collection('orders').doc(o.id).set(patch, { merge: true });
       updated++;

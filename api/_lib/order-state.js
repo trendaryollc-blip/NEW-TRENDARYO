@@ -3,7 +3,7 @@
 const TRANSITIONS = {
   pending: ['confirmed', 'cancelled', 'refunded'],
   confirmed: ['processing', 'cancelled', 'refunded'],
-  processing: ['packed', 'cancelled', 'refunded'],
+  processing: ['packed', 'shipped', 'cancelled', 'refunded'],
   packed: ['shipped', 'refunded'],
   shipped: ['delivered', 'refunded'],
   delivered: ['refunded'],

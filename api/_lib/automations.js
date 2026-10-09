@@ -25,7 +25,8 @@ const { FieldValue } = require('firebase-admin/firestore');
 const { assertTransition } = require('./order-state');
 const { fulfillOrder } = require('../admin/supplier-fulfill');
 const { getSettings } = require('./pricing');
-const { send } = require('./mail');
+const { send, sendToAdmin } = require('./mail');
+const { readAll: readHealth, statusOf } = require('./health');
 
 const RULES = 'automations';
 const RUNS = 'automation_runs';
@@ -45,6 +46,61 @@ function num(value, fallback, min, max) {
 
 function bool(value, fallback) {
   return value === undefined ? fallback : !!value;
+}
+
+/* Probes every healthy deployment should be beating. */
+const EXPECTED_PROBES = ['cron:automations', 'cron:supplier-sync', 'stripe-webhook'];
+
+/* One pass over the collections the owner cares about. Read-only. */
+async function collectOpsItems(db, cfg) {
+  const items = [];
+  const maxItems = num(cfg.maxItems, 30, 5, 100);
+  const staleMinutes = num(cfg.staleAfterMinutes, 90, 5, 1440);
+  const dayAgo = Date.now() - 24 * 60 * 60 * 1000;
+
+  try {
+    const alerts = await db.collection(ALERTS).where('resolved', '==', false).limit(maxItems).get();
+    alerts.docs.forEach((doc) => {
+      const a = doc.data();
+      items.push({ severity: 'error', label: 'Open alert: ' + (a.type || 'ops'), detail: a.reason || a.name || doc.id });
+    });
+  } catch (e) { console.error('[digest:alerts]', e.message); }
+
+  try {
+    const probes = await readHealth(db);
+    const byKey = {};
+    probes.forEach((p) => { byKey[p.id] = p; });
+    for (const key of EXPECTED_PROBES) {
+      const probe = byKey[key];
+      const state = statusOf(probe, staleMinutes);
+      if (state === 'ok') continue;
+      items.push({
+        severity: state === 'error' ? 'error' : 'warn',
+        label: 'Probe ' + key + ': ' + state,
+        detail: probe && probe.lastRunAt ? 'last beat ' + probe.lastRunAt + (probe.detail ? ' - ' + probe.detail : '') : 'never beat',
+      });
+    }
+  } catch (e) { console.error('[digest:probes]', e.message); }
+
+  try {
+    const failed = await db.collection('stripe_events').where('status', '==', 'failed').limit(20).get();
+    failed.docs.forEach((doc) => {
+      const ev = doc.data();
+      const at = ev.receivedAt ? new Date(ev.receivedAt).getTime() : 0;
+      if (at && at < dayAgo) return;
+      items.push({ severity: 'error', label: 'Stripe webhook failed: ' + (ev.type || doc.id), detail: ev.error || 'unknown error' });
+    });
+  } catch (e) { console.error('[digest:webhooks]', e.message); }
+
+  try {
+    const attention = await db.collection('orders').where('needsAttention', '==', true).limit(50).get();
+    attention.docs.forEach((doc) => {
+      const o = doc.data();
+      items.push({ severity: 'warn', label: 'Order needs attention: ' + (o.orderNumber || doc.id), detail: o.attentionReason || o.status || '' });
+    });
+  } catch (e) { console.error('[digest:orders]', e.message); }
+
+  return items.slice(0, maxItems);
 }
 
 /* ==========================================================================
@@ -330,6 +386,47 @@ const DEFINITIONS = {
       }
     },
   },
+
+  'daily-ops-digest': {
+    name: 'Daily ops digest',
+    group: 'Ops',
+    icon: 'activity',
+    about: 'Collects everything an owner should look at once a day - unresolved automation alerts, monitoring probes that stopped beating, failed Stripe webhook deliveries in the last 24 hours and orders flagged as needing attention - and emails a single digest to the admin. Sends at most once per day at the configured hour, and stays silent when there is nothing to report.',
+    defaults: { hour: 9, staleAfterMinutes: 90, emailAdmin: true, maxItems: 30 },
+    fields: [
+      { key: 'hour', label: 'Send hour (UTC)', type: 'number', min: 0, max: 23, step: 1, help: 'Digest goes out on the cron run closest after this hour (0-23, UTC).' },
+      { key: 'staleAfterMinutes', label: 'Stale after (minutes)', type: 'number', min: 5, max: 1440, step: 5, help: 'A monitoring probe with no beat for this long is reported as stale.' },
+      { key: 'emailAdmin', label: 'Email digest to admin', type: 'boolean', help: 'Send the digest email. Off means the run only records the report.' },
+      { key: 'maxItems', label: 'Max items', type: 'number', min: 5, max: 100, step: 1 },
+    ],
+    async scan(db, cfg, ctx) {
+      const trigger = (ctx && ctx.trigger) || 'manual';
+      if (trigger !== 'cron' || new Date().getUTCHours() === num(cfg.hour, 9, 0, 23)) return [{ id: 'ops-digest' }];
+      return [];
+    },
+    async act(db, entity, cfg) {
+      const items = await collectOpsItems(db, cfg);
+      if (!items.length) {
+        return { ok: true, message: 'All clear - nothing to report' };
+      }
+      if (cfg.emailAdmin !== false) {
+        const text = [
+          'TRENDARYO OPS DIGEST',
+          'Generated: ' + nowIso(),
+          '',
+          ...items.map((i) => '- [' + i.severity + '] ' + i.label + ' (' + i.detail + ')'),
+          '',
+          'Admin dashboard: /admin',
+        ].join('\n');
+        try {
+          await sendToAdmin(db, { subject: 'Trendaryo ops digest - ' + items.length + ' item(s)', text });
+        } catch (e) {
+          console.error('[digest:mail]', e.message);
+        }
+      }
+      return { ok: true, message: items.length + ' item(s): ' + items.map((i) => i.label).slice(0, 5).join(', ') };
+    },
+  },
 };
 
 /* ==========================================================================
@@ -470,7 +567,7 @@ async function runRule(db, key, ctx) {
   };
 
   try {
-    const candidates = await def.scan(db, cfg);
+    const candidates = await def.scan(db, cfg, { trigger, dryRun });
     record.matched = candidates.length;
 
     const results = [];
@@ -481,7 +578,7 @@ async function runRule(db, key, ctx) {
         continue;
       }
       try {
-        const out = await def.act(db, entity, cfg);
+        const out = await def.act(db, entity, cfg, { trigger, dryRun });
         if (out && out.skipped) {
           record.skipped++;
         } else {

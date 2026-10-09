@@ -148,9 +148,23 @@ service cloud.firestore {
       allow write: if false;
     }
 
-            match /stripe_events/{id} { allow read: if isAdmin(); allow write: if false; }
-    match /inventory_movements/{id} { allow read: if isAdmin(); allow write: if false; }
+    match /stripe_events/{id} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+    match /inventory_movements/{id} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
     match /automation_alerts/{alertId} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+
+    /* ---------- system health probes ---------- */
+    // Written by the serverless API (Admin SDK). The dashboard reads them
+    // through /api/admin/health, so clients never touch this collection.
+    match /system_health/{probeId} {
       allow read: if isAdmin();
       allow write: if false;
     }

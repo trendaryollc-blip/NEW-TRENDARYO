@@ -53,9 +53,17 @@ module.exports = async function handler(req, res) {
     try {
       await handleEvent(db, event);
       await evRef.set({ status: 'processed', processedAt: nowIso() }, { merge: true });
+      try {
+        const { beat } = require('../_lib/health');
+        await beat(db, 'stripe-webhook', { status: 'ok', detail: event.type });
+      } catch (ignored) { /* health must never break delivery */ }
       return res.status(200).json({ received: true });
     } catch (err) {
       await evRef.set({ status: 'failed', error: err.message }, { merge: true });
+      try {
+        const { beat } = require('../_lib/health');
+        await beat(db, 'stripe-webhook', { status: 'error', detail: event.type + ': ' + err.message });
+      } catch (ignored) { /* ignore */ }
       throw err;
     }
   } catch (e) {
@@ -174,11 +182,8 @@ async function handleEvent(db, event) {
 
 async function notifyAdmin(db, subject, text) {
   try {
-    const st = await db.collection('settings').doc('store').get();
-    const to = st.exists ? st.data().supportEmail : null;
-    if (!to) return;
-    const { send } = require('../_lib/mail');
-    await send({ to, subject, text });
+    const { sendToAdmin } = require('../_lib/mail');
+    await sendToAdmin(db, { subject, text });
   } catch (e) {
     console.error('[wh:notify]', e.message);
   }
