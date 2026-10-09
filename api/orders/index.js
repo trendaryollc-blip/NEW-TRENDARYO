@@ -245,6 +245,21 @@ module.exports = async function handler(req, res) {
       const nowIso = new Date().toISOString();
       const orderNumber = makeOrderNumber();
 
+      let risk = null;
+      try {
+        const { scoreOrder } = require('../_lib/risk');
+        risk = await scoreOrder(db, {
+          userId: user.uid,
+          email: user.email || (shippingAddress && shippingAddress.email) || null,
+          addressFingerprint: addressFingerprint(shippingAddress),
+          total: pricing.total,
+          isCod,
+          now: nowIso,
+        });
+      } catch (riskError) {
+        console.error('[orders:risk]', riskError.message);
+      }
+
       const statusHistory = [
         { status: 'pending', timestamp: nowIso, note: 'Order placed' },
       ];
@@ -273,6 +288,17 @@ module.exports = async function handler(req, res) {
         createdAt: nowIso,
         updatedAt: nowIso,
       };
+
+      if (risk && risk.enabled) {
+        orderData.risk = { score: risk.score, flags: risk.flags, at: risk.at };
+        orderData.addressFingerprint = addressFingerprint(shippingAddress);
+        if (risk.review) {
+          orderData.riskLevel = 'review';
+          orderData.autoFulfillOptOut = true;
+          orderData.needsAttention = true;
+          orderData.attentionReason = 'risk score ' + risk.score + ' >= ' + risk.threshold;
+        }
+      }
 
       let transactionResult;
       try {
@@ -426,6 +452,35 @@ module.exports = async function handler(req, res) {
           }
         } catch (ffError) {
           console.error('[orders] CJ auto-fulfill failed:', ffError.message);
+        }
+      }
+
+      if (transactionResult.created && transactionResult.data && transactionResult.data.riskLevel === 'review') {
+        try {
+          await db.collection('automation_alerts').doc('risk-' + transactionResult.data.id).set({
+            id: 'risk-' + transactionResult.data.id,
+            type: 'risk',
+            orderId: transactionResult.data.id,
+            message: 'Order held for review (score ' + (transactionResult.data.risk ? transactionResult.data.risk.score : '?') + '): ' + (transactionResult.data.risk ? transactionResult.data.risk.flags.join(', ') : ''),
+            resolved: false,
+            createdAt: new Date().toISOString(),
+          }, { merge: true });
+        } catch (alertError) {
+          console.error('[orders] risk alert failed:', alertError.message);
+        }
+        try {
+          const { send } = require('../_lib/mail');
+          const st = await db.collection('settings').doc('store').get();
+          const supportEmail = st.exists ? st.data().supportEmail : null;
+          if (supportEmail) {
+            await send({
+              to: supportEmail,
+              subject: 'Trendaryo: order held for review (' + transactionResult.data.orderNumber + ')',
+              text: 'Order ' + transactionResult.data.orderNumber + ' was flagged by risk rules and will NOT auto-fulfil. Score: ' + (transactionResult.data.risk ? transactionResult.data.risk.score : '?') + '. Flags: ' + (transactionResult.data.risk ? transactionResult.data.risk.flags.join(', ') : '') + '. Review it in the admin dashboard.',
+            });
+          }
+        } catch (mailError) {
+          console.error('[orders] risk email failed:', mailError.message);
         }
       }
 

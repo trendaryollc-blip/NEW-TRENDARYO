@@ -21,6 +21,7 @@
  */
 'use strict';
 
+const { FieldValue } = require('firebase-admin/firestore');
 const { assertTransition } = require('./order-state');
 const { fulfillOrder } = require('../admin/supplier-fulfill');
 const { getSettings } = require('./pricing');
@@ -77,12 +78,16 @@ const DEFINITIONS = {
         .filter((o) => o.autoFulfillSkipped !== true)
         .filter((o) => ['confirmed', 'processing'].includes(o.status))
         .filter((o) => o.autoFulfillOptOut !== true)
+        .filter((o) => o.riskLevel !== 'review' && o.riskLevel !== 'disputed')
         .filter((o) => new Date(o.createdAt).getTime() <= cutoff)
         .slice(0, num(cfg.maxPerRun, 25, 1, 100));
     },
     async act(db, order) {
       const out = await fulfillOrder(db, order.id);
-      if (out && out.skipped) return { ok: true, skipped: true, message: 'Already submitted (CJ ' + out.cjOrderId + ')' };
+      if (out && out.skipped) {
+        if (out.cjOrderId) return { ok: true, skipped: true, message: 'Already submitted (CJ ' + out.cjOrderId + ')' };
+        return { ok: true, skipped: true, message: out.reason || 'Skipped' };
+      }
       return { ok: true, message: 'Submitted to supplier (CJ ' + (out && out.cjOrderId) + ')' };
     },
     /* Orders with no CJ variant ids will never fulfil from a supplier - stop retrying them. */
@@ -122,6 +127,7 @@ const DEFINITIONS = {
     },
     async act(db, order, cfg) {
       const hours = num(cfg.hours, 48, 1, 336);
+      assertTransition(order.status || 'pending', 'cancelled', 'system');
       await db.collection('orders').doc(order.id).update({
         status: 'cancelled',
         cancelReason: 'unpaid',
@@ -129,9 +135,16 @@ const DEFINITIONS = {
           status: 'cancelled',
           timestamp: nowIso(),
           note: 'Automation: unpaid order watchdog after ' + hours + 'h',
+          actor: 'system',
         }),
         updatedAt: nowIso(),
       });
+      try {
+        const { restockForOrder } = require('./stock');
+        await restockForOrder(db, order, 'cancel', null);
+      } catch (e) {
+        console.error('[automations:watchdog] restock failed:', e.message);
+      }
       return { ok: true, message: 'Cancelled unpaid order ' + (order.orderNumber || order.id) };
     },
   },
@@ -265,6 +278,53 @@ const DEFINITIONS = {
         if (doc.data().resolved) continue;
         const order = await db.collection('orders').doc(doc.data().orderId).get();
         if (!order.exists || order.data().status !== 'processing') {
+          await doc.ref.set({ resolved: true, resolvedAt: nowIso() }, { merge: true });
+        }
+      }
+    },
+  },
+
+  'risk-review-queue': {
+    name: 'Risk review queue',
+    group: 'Orders',
+    icon: 'shield',
+    about: 'Orders whose risk score crossed the review threshold are held here instead of being sent to the supplier. This rule keeps the hold visible on the board and closes it automatically once an admin clears the order. Held orders are excluded from auto-fulfilment until released.',
+    defaults: { maxPerRun: 50 },
+    fields: [
+      { key: 'maxPerRun', label: 'Max per run', type: 'number', min: 1, max: 200, step: 1, help: 'How many held orders to surface per run.' },
+    ],
+    async scan(db, cfg) {
+      const snap = await db.collection('orders')
+        .where('riskLevel', '==', 'review')
+        .orderBy('createdAt', 'asc')
+        .limit(num(cfg.maxPerRun, 50, 1, 200))
+        .get();
+      return snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    },
+    async act(db, order) {
+      await db.collection('orders').doc(order.id).update({
+        needsAttention: true,
+        attentionReason: 'held for risk review',
+        attentionAt: nowIso(),
+        updatedAt: nowIso(),
+      });
+      await db.collection(ALERTS).doc('risk-' + order.id).set({
+        type: 'risk',
+        ruleKey: 'risk-review-queue',
+        orderId: order.id,
+        name: order.orderNumber || order.id,
+        reason: order.attentionReason || 'risk review',
+        resolved: false,
+        lastAlertedAt: nowIso(),
+      }, { merge: true });
+      return { ok: true, message: 'Held ' + (order.orderNumber || order.id) + ' for review' };
+    },
+    async sync(db) {
+      const alerts = await db.collection(ALERTS).where('type', '==', 'risk').limit(200).get();
+      for (const doc of alerts.docs) {
+        if (doc.data().resolved) continue;
+        const order = await db.collection('orders').doc(doc.data().orderId).get();
+        if (!order.exists || order.data().riskLevel !== 'review') {
           await doc.ref.set({ resolved: true, resolvedAt: nowIso() }, { merge: true });
         }
       }

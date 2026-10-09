@@ -10,6 +10,12 @@ async function fulfillOrder(db, orderId) {
   if (!snap.exists) throw new Error('Order not found');
   const order = { id: snap.id, ...snap.data() };
   if (order.cjOrderId) return { skipped: true, cjOrderId: order.cjOrderId };
+  if (order.autoFulfillOptOut === true) {
+    return { skipped: true, reason: order.attentionReason || 'fulfillment held (order flagged)' };
+  }
+  if (order.riskLevel === 'review' || order.riskLevel === 'disputed') {
+    return { skipped: true, reason: 'order held for review: ' + order.riskLevel };
+  }
 
   const itemIds = Array.isArray(order.items) ? order.items : [];
   const lineItems = [];

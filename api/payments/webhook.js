@@ -1,14 +1,26 @@
 'use strict';
 const { initFirebase } = require('../_lib/firebase');
 const { handleCors } = require('../_lib/cors');
-const { buffer } = require('../_lib/raw-body');
 const { verify } = require('../_lib/stripe');
 const { FieldValue } = require('firebase-admin/firestore');
 const { restockForOrder } = require('../_lib/stock');
-const { assertTransition } = require('../_lib/order-state');
+const { canTransition } = require('../_lib/order-state');
+const { emitEvent } = require('../_lib/automations');
 
 function nowIso() {
   return new Date().toISOString();
+}
+
+/* Stripe signs the RAW payload, so read the body exactly as it arrived.
+   Vercel gives us a string/Buffer when body parsing is skipped, otherwise a
+   parsed object which we re-stringify. */
+function readRawBody(req) {
+  if (typeof req.rawBody === 'string') return req.rawBody;
+  if (Buffer.isBuffer(req.rawBody)) return req.rawBody;
+  if (typeof req.body === 'string') return req.body;
+  if (Buffer.isBuffer(req.body)) return req.body;
+  if (req.body && typeof req.body === 'object') return JSON.stringify(req.body);
+  return '';
 }
 
 module.exports = async function handler(req, res) {
@@ -16,10 +28,9 @@ module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: { message: 'Method not allowed' } });
 
   const sig = req.headers['stripe-signature'];
-  const rawBody = await buffer(req);
   let event;
   try {
-    event = verify(rawBody, sig);
+    event = verify(readRawBody(req), sig);
   } catch (e) {
     return res.status(400).json({ error: { message: 'Invalid signature' } });
   }
@@ -72,9 +83,12 @@ async function handleEvent(db, event) {
     const pi = event.data.object.id;
     const order = await getOrderByPaymentIntent(db, pi);
     if (order) {
-      try { assertTransition(order.status || 'pending', 'confirmed', 'webhook'); } catch (e) {}
-      await db.collection('orders').doc(order.id).set({ paymentStatus: 'paid', paidAt: nowIso(), updatedAt: nowIso(), status: 'confirmed' }, { merge: true });
-    try { await emitEvent(db, 'order.paid', { orderId: order.id }); } catch (e) { console.error('[wh:emit]', e.message); }
+      if (canTransition(order.status || 'pending', 'confirmed', 'webhook')) {
+        await db.collection('orders').doc(order.id).set({ paymentStatus: 'paid', paidAt: nowIso(), updatedAt: nowIso(), status: 'confirmed' }, { merge: true });
+      } else {
+        await db.collection('orders').doc(order.id).set({ paymentStatus: 'paid', paidAt: nowIso(), updatedAt: nowIso() }, { merge: true });
+      }
+      await emitEvent(db, 'order.paid', { orderId: order.id });
     }
     const ps = await db.collection('payments').where('paymentIntentId', '==', pi).limit(1).get();
     if (!ps.empty) await ps.docs[0].ref.set({ status: 'succeeded', updatedAt: nowIso() }, { merge: true });
@@ -90,9 +104,12 @@ async function handleEvent(db, event) {
     const pi = event.data.object.id;
     const order = await getOrderByPaymentIntent(db, pi);
     if (order) {
-      try { assertTransition(order.status || 'pending', 'cancelled', 'webhook'); } catch (e) {}
-      await db.collection('orders').doc(order.id).set({ status: 'cancelled', updatedAt: nowIso() }, { merge: true });
-      try { await restockForOrder(db, order, 'cancel', null); } catch (e) { console.error('[wh:restock]', e.message); }
+      if (canTransition(order.status || 'pending', 'cancelled', 'webhook')) {
+        await db.collection('orders').doc(order.id).set({ status: 'cancelled', updatedAt: nowIso() }, { merge: true });
+        try { await restockForOrder(db, order, 'cancel', null); } catch (e) { console.error('[wh:restock]', e.message); }
+      } else {
+        await db.collection('orders').doc(order.id).set({ attentionReason: 'payment cancelled in stripe', needsAttention: true, updatedAt: nowIso() }, { merge: true });
+      }
     }
     const ps = await db.collection('payments').where('paymentIntentId', '==', pi).limit(1).get();
     if (!ps.empty) await ps.docs[0].ref.set({ status: 'canceled', updatedAt: nowIso() }, { merge: true });
@@ -103,13 +120,17 @@ async function handleEvent(db, event) {
     const pi = ch.payment_intent;
     const order = await getOrderByPaymentIntent(db, pi);
     if (order) {
-      const reason = ch.amount_refunded < ch.amount ? 'partially_refunded' : 'refunded';
-      const to = reason === 'refunded' ? 'refunded' : order.status;
-      if (reason === 'refunded') {
-        try { assertTransition(order.status || 'pending', 'refunded', 'webhook'); } catch (e) {}
+      const full = !(ch.amount_refunded < ch.amount);
+      const target = full ? 'refunded' : (order.status || 'pending');
+      const patch = { refundAmount: ch.amount_refunded / 100, paymentStatus: 'refunded', updatedAt: nowIso() };
+      if (canTransition(order.status || 'pending', target, 'webhook')) {
+        patch.status = target;
+      } else {
+        patch.needsAttention = true;
+        patch.attentionReason = 'refund recorded in stripe while order is ' + (order.status || 'pending');
       }
-      await db.collection('orders').doc(order.id).set({ status: reason === 'refunded' ? 'refunded' : order.status, refundAmount: ch.amount_refunded / 100, updatedAt: nowIso() }, { merge: true });
-      if (reason === 'refunded') {
+      await db.collection('orders').doc(order.id).set(patch, { merge: true });
+      if (patch.status === 'refunded') {
         try { await restockForOrder(db, order, 'refund', null); } catch (e) { console.error('[wh:restock]', e.message); }
       }
     }
@@ -123,7 +144,9 @@ async function handleEvent(db, event) {
     const order = await getOrderByPaymentIntent(db, pi);
     if (order) {
       await db.collection('orders').doc(order.id).set({ riskLevel: 'disputed', needsAttention: true, attentionReason: 'dispute ' + d.id, autoFulfillOptOut: true, updatedAt: nowIso() }, { merge: true });
-      try { await db.collection('automation_alerts').doc('dispute-' + d.id).set({ id: 'dispute-' + d.id, type: 'dispute', orderId: order.id, message: 'Dispute opened ' + d.id, resolved: false, createdAt: nowIso() }, { merge: true }); } catch (e) {}
+      await db.collection('automation_alerts').doc('dispute-' + d.id).set({ id: 'dispute-' + d.id, type: 'dispute', orderId: order.id, name: order.orderNumber || order.id, reason: 'dispute ' + d.id, resolved: false, createdAt: nowIso(), lastAlertedAt: nowIso() }, { merge: true });
+      await notifyAdmin(db, 'Trendaryo: chargeback on order ' + (order.orderNumber || order.id),
+        'Stripe opened a dispute (' + d.id + ') on order ' + (order.orderNumber || order.id) + '. Amount: ' + ((d.amount || 0) / 100) + '. Reason: ' + (d.reason || 'unknown') + '. The order is now held - fulfilment is blocked and refunds are paused until you resolve it.');
     }
     return;
   }
@@ -132,9 +155,31 @@ async function handleEvent(db, event) {
     const pi = d.payment_intent;
     const order = await getOrderByPaymentIntent(db, pi);
     if (order) {
-      await db.collection('orders').doc(order.id).set({ needsAttention: false, updatedAt: nowIso() }, { merge: true });
-      try { await db.collection('automation_alerts').doc('dispute-' + d.id).set({ resolved: true, resolvedAt: nowIso() }, { merge: true }); } catch (e) {}
+      const won = d.status === 'won';
+      const patch = { updatedAt: nowIso() };
+      if (won) {
+        patch.needsAttention = false;
+        patch.riskLevel = 'cleared';
+        patch.autoFulfillOptOut = false;
+        patch.attentionReason = FieldValue.delete();
+      }
+      await db.collection('orders').doc(order.id).set(patch, { merge: true });
+      await db.collection('automation_alerts').doc('dispute-' + d.id).set({ resolved: true, resolvedAt: nowIso(), outcome: d.status }, { merge: true });
+      await notifyAdmin(db, 'Trendaryo: dispute ' + (won ? 'won' : 'closed') + ' (' + (order.orderNumber || order.id) + ')',
+        'The dispute ' + d.id + ' closed with status "' + d.status + '" on order ' + (order.orderNumber || order.id) + '.' + (won ? ' The hold has been lifted.' : ' Review the order before releasing it.'));
     }
     return;
+  }
+}
+
+async function notifyAdmin(db, subject, text) {
+  try {
+    const st = await db.collection('settings').doc('store').get();
+    const to = st.exists ? st.data().supportEmail : null;
+    if (!to) return;
+    const { send } = require('../_lib/mail');
+    await send({ to, subject, text });
+  } catch (e) {
+    console.error('[wh:notify]', e.message);
   }
 }

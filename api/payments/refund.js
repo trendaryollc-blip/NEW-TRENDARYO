@@ -48,11 +48,47 @@ module.exports = async function handler(req, res) {
       });
 
       if (paymentData.orderId) {
-        await db.collection('orders').doc(paymentData.orderId).update({
+        const oRef = db.collection('orders').doc(paymentData.orderId);
+        const oSnap = await oRef.get();
+        const beforeStatus = oSnap.exists ? (oSnap.data().status || 'pending') : 'pending';
+        const { assertTransition } = require('../_lib/order-state');
+        let refundStatus = 'refunded';
+        try {
+          assertTransition(beforeStatus, 'refunded', 'admin');
+        } catch (e) {
+          refundStatus = beforeStatus;
+        }
+        await oRef.update({
           paymentStatus: 'refunded',
-          status: 'refunded',
+          status: refundStatus,
+          refundAmount: amount || paymentData.amount,
           updatedAt: new Date().toISOString(),
         });
+        if (refundStatus === 'refunded' && oSnap.exists) {
+          try {
+            const { restockForOrder } = require('../_lib/stock');
+            await restockForOrder(db, { id: oSnap.id, ...oSnap.data() }, 'refund', adminUser.uid);
+          } catch (restockError) {
+            console.error('[refund] restock failed:', restockError.message);
+          }
+        }
+      }
+
+      try {
+        const { log } = require('../_lib/audit');
+        await log(db, {
+          actorUid: adminUser.uid,
+          actorEmail: adminUser.email || null,
+          action: 'payment.refunded',
+          targetType: 'payment',
+          targetId: paymentId,
+          before: { status: paymentData.status, amount: paymentData.amount },
+          after: { status: 'refunded', refundId: refund.id, amount: amount || paymentData.amount, reason: reason || 'requested_by_customer' },
+          ip: req.headers['x-forwarded-for'] || null,
+          userAgent: req.headers['user-agent'] || null,
+        });
+      } catch (auditError) {
+        console.error('[refund] audit failed:', auditError.message);
       }
 
       return res.status(200).json({

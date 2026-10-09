@@ -1,11 +1,11 @@
 'use strict';
 
 const TRANSITIONS = {
-  pending: ['confirmed', 'cancelled'],
-  confirmed: ['processing', 'cancelled'],
-  processing: ['packed', 'cancelled'],
-  packed: ['shipped'],
-  shipped: ['delivered'],
+  pending: ['confirmed', 'cancelled', 'refunded'],
+  confirmed: ['processing', 'cancelled', 'refunded'],
+  processing: ['packed', 'cancelled', 'refunded'],
+  packed: ['shipped', 'refunded'],
+  shipped: ['delivered', 'refunded'],
   delivered: ['refunded'],
   cancelled: [],
   refunded: [],
@@ -13,7 +13,7 @@ const TRANSITIONS = {
 
 const ACTORS = {
   customer: ['cancelled'],
-  webhook: ['confirmed'],
+  webhook: ['confirmed', 'cancelled', 'refunded'],
   admin: ['*'],
   system: ['processing', 'shipped', 'cancelled', 'confirmed', 'packed', 'delivered', 'refunded'],
 };

@@ -1,5 +1,4 @@
 'use strict';
-const { FieldValue } = require('firebase-admin/firestore');
 
 function log(db, entry) {
   const rec = {

@@ -39,13 +39,14 @@ module.exports = async function handler(req, res) {
       const user = await requireAuth(req, res);
       if (!user) return;
 
-      const { status, note, trackingNumber, carrier } = req.body;
+      const { status, note, trackingNumber, carrier, riskRelease } = req.body;
       const doc = await db.collection('orders').doc(id).get();
       if (!doc.exists) {
         return res.status(404).json({ error: { message: 'Order not found' } });
       }
 
       const order = doc.data();
+      const userDoc = await db.collection('users').doc(user.uid).get();
       const isAdmin = userDoc.exists && userDoc.data().role === 'admin';
       const isOwner = order.userId === user.uid;
 
@@ -81,11 +82,42 @@ module.exports = async function handler(req, res) {
       if (trackingNumber) updateData.trackingNumber = trackingNumber;
       if (carrier) updateData.carrier = carrier;
 
+      if (riskRelease && isAdmin) {
+        updateData.riskLevel = 'cleared';
+        updateData.needsAttention = false;
+        updateData.attentionReason = '';
+        updateData.autoFulfillOptOut = false;
+      }
+
       await db.collection('orders').doc(id).update(updateData);
-      try { if (status === 'cancelled' || status === 'refunded') { await restockForOrder(db, updatedOrder || order || { id, ...updateData }, status, user.uid); } } catch (e) { console.error('[order:restock] failed', e.message); }
+
+      try {
+        const { log } = require('../_lib/audit');
+        await log(db, {
+          actorUid: user.uid,
+          actorEmail: user.email || null,
+          action: status ? 'order.status_changed' : (riskRelease ? 'order.risk_released' : 'order.updated'),
+          targetType: 'order',
+          targetId: id,
+          before: status || riskRelease ? { status: order.status, riskLevel: order.riskLevel || null } : null,
+          after: status || riskRelease ? { status: updateData.status || order.status, riskLevel: updateData.riskLevel || order.riskLevel || null } : null,
+          ip: req.headers['x-forwarded-for'] || req.socket && req.socket.remoteAddress || null,
+          userAgent: req.headers['user-agent'] || null,
+        });
+      } catch (auditError) {
+        console.error('[orders:id] audit failed:', auditError.message);
+      }
 
       const updatedDoc = await db.collection('orders').doc(id).get();
       const updatedOrder = { id: updatedDoc.id, ...updatedDoc.data() };
+
+      if (status === 'cancelled' || status === 'refunded') {
+        try {
+          await restockForOrder(db, { id, ...order, ...updateData }, status, user.uid);
+        } catch (e) {
+          console.error('[order:restock] failed', e.message);
+        }
+      }
 
       // Notify the customer when an order moves to shipped. Best-effort:
       // a missing email provider or delivery failure never fails the update.

@@ -26,6 +26,7 @@ class MockFirestore {
       serverTimestamp: () => new Date().toISOString(),
       arrayUnion: (...vals) => ({ _fv: 'arrayUnion', vals }),
       arrayRemove: (...vals) => ({ _fv: 'arrayRemove', vals }),
+      delete: () => ({ _fv: 'delete' }),
     };
   }
 
@@ -58,6 +59,16 @@ class MockFirestore {
     return this._data[col];
   }
 
+  /* Convenience for assertions: returns the raw doc data (with id). */
+  raw(col, id) {
+    const d = this._getStore(col).find((x) => x.id === id);
+    return d ? d.data : undefined;
+  }
+
+  rawAll(col) {
+    return this._getStore(col).map((d) => d.data);
+  }
+
   _doc(col, did) {
     const self = this;
     return {
@@ -72,8 +83,10 @@ class MockFirestore {
         const cur = store.find((x) => x.id === did);
         if (cur && opts && opts.merge) {
           cur.data = self._merge(cur.data, rec);
+        } else if (cur) {
+          cur.data = self._merge({}, rec);
         } else {
-          store.push({ id: did, data: clone({ ...rec, id: did }) });
+          store.push({ id: did, data: self._merge({}, rec) });
         }
       },
       update: async (rec) => {
@@ -91,12 +104,26 @@ class MockFirestore {
   }
 
   _merge(cur, rec) {
-    const plain = (v) => v && typeof v === 'object' && !Array.isArray(v);
+    const plain = (v) => v && typeof v === 'object' && !Array.isArray(v) && !v._fv;
     const out = clone(cur);
     for (const k of Object.keys(rec)) {
       const v = rec[k];
-      if (v && v._fv) {
-        out[k] = v; // keep sentinel for tests if needed
+      if (v && v._fv === 'increment') {
+        out[k] = Number(out[k] || 0) + v.n;
+        continue;
+      }
+      if (v && v._fv === 'delete') {
+        delete out[k];
+        continue;
+      }
+      if (v && v._fv === 'arrayUnion') {
+        const arr = Array.isArray(out[k]) ? out[k].slice() : [];
+        for (const item of v.vals) if (!arr.includes(item)) arr.push(item);
+        out[k] = arr;
+        continue;
+      }
+      if (v && v._fv === 'arrayRemove') {
+        out[k] = (Array.isArray(out[k]) ? out[k] : []).filter((x) => !v.vals.includes(x));
         continue;
       }
       if (plain(v) && plain(out[k])) out[k] = Object.assign({}, out[k], v);
@@ -130,9 +157,11 @@ class MockFirestore {
       });
     }
     list = list.slice(q._off, q._off + q._lim);
+    const docs = list.map((d) => ({ id: d.id, data: () => clone(d.data), ref: this._doc(q._col, d.id) }));
     return Promise.resolve({
-      empty: list.length === 0,
-      docs: list.map((d) => ({ id: d.id, data: () => clone(d.data), ref: this._doc(q._col, d.id) })),
+      empty: docs.length === 0,
+      size: docs.length,
+      docs,
     });
   }
 

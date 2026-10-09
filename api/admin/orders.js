@@ -18,7 +18,11 @@ module.exports = async function handler(req, res) {
 
     let query = db.collection('orders').orderBy('createdAt', 'desc');
     const snapshot = await query.get();
-    let orders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    let orders = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+      allowedTransitions: allowedFrom(doc.data().status || 'pending'),
+    }));
 
     if (status) orders = orders.filter(o => o.status === status);
     if (search) {
