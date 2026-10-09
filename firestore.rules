@@ -106,7 +106,7 @@ service cloud.firestore {
     /* ---------- coupons ---------- */
     // Validated server-side only, so clients cannot enumerate codes.
     match /coupons/{couponId} {
-      allow read, write: if isAdmin();
+      allow read: if isAdmin(); allow write: if false;
     }
 
     /* ---------- settings ---------- */
@@ -131,7 +131,7 @@ service cloud.firestore {
 
     /* ---------- admin activity log ---------- */
     match /adminLogs/{logId} {
-      allow read, write: if isAdmin();
+      allow read: if isAdmin(); allow write: if false;
     }
 
     /* ---------- automations ---------- */

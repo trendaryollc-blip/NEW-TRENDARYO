@@ -30,6 +30,7 @@ const ROUTES = {
   '/admin/products': require('./admin/products'),
   '/admin/supplier': require('./admin/supplier'),
   '/admin/supplier-products': require('./admin/supplier-products'),
+    '/admin/audit': require('./admin/audit'),
   '/admin/supplier-fulfill': require('./admin/supplier-fulfill'),
   '/admin/supplier-sync': require('./admin/supplier-sync'),
   '/automations': require('./automations/index'),
