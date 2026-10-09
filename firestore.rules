@@ -169,6 +169,14 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    /* ---------- back-in-stock waitlist ---------- */
+    // Joined through /api/waitlist (Admin SDK); the restock rule emails and
+    // expires rows. Clients never read emails of other customers.
+    match /stock_waitlist/{entryId} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+
     /* ---------- deny anything else ---------- */
     match /{document=**} {
       allow read, write: if false;

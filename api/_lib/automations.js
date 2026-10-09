@@ -32,6 +32,7 @@ const { effectiveThreshold } = require('./product-ops');
 const RULES = 'automations';
 const RUNS = 'automation_runs';
 const ALERTS = 'automation_alerts';
+const WAITLIST = 'stock_waitlist';
 
 const RUN_HISTORY_CAP = 300;
 
@@ -383,6 +384,83 @@ const DEFINITIONS = {
         const order = await db.collection('orders').doc(doc.data().orderId).get();
         if (!order.exists || order.data().riskLevel !== 'review') {
           await doc.ref.set({ resolved: true, resolvedAt: nowIso() }, { merge: true });
+        }
+      }
+    },
+  },
+
+  'restock-notify': {
+    on: ['product.restocked'],
+    name: 'Back-in-stock notifications',
+    group: 'Inventory',
+    icon: 'bell',
+    about: 'Emails everyone on the waitlist for a product the moment it is back in stock. Rows are re-checked against live stock before sending, so nobody gets a false alarm; a failed send stays pending and retries on the next run. Waitlist rows expire after the configured window or when their product is removed from the catalog.',
+    defaults: { maxPerRun: 50, expiryDays: 60 },
+    fields: [
+      { key: 'maxPerRun', label: 'Max emails per run', type: 'number', min: 1, max: 200, step: 1, help: 'Batch cap so one restock cannot burst the mail provider.' },
+      { key: 'expiryDays', label: 'Expire entries after (days)', type: 'number', min: 1, max: 365, step: 1, help: 'Old waitlist rows stop being emailed after this window.' },
+    ],
+    async scan(db, cfg) {
+      const cutoff = new Date(Date.now() - num(cfg.expiryDays, 60, 1, 365) * 86400000).toISOString();
+      const pending = await db.collection(WAITLIST)
+        .where('status', '==', 'pending')
+        .limit(num(cfg.maxPerRun, 50, 1, 200))
+        .get();
+      /* Aged rows are skipped here and expired by sync below - never email them. */
+      const rows = pending.docs
+        .map((doc) => ({ id: doc.id, ...doc.data() }))
+        .filter((row) => String(row.createdAt || '') >= cutoff);
+      const productCache = {};
+      for (const row of rows) {
+        if (productCache[row.productId] !== undefined) continue;
+        const snap = await db.collection('products').doc(row.productId).get();
+        productCache[row.productId] = snap.exists ? snap.data() : null;
+      }
+      return rows.filter((row) => {
+        const p = productCache[row.productId];
+        return !!p && (!p.status || p.status === 'active') && num(p.stock, 0, 0, 1e9) > 0;
+      });
+    },
+    async act(db, row) {
+      const snap = await db.collection('products').doc(row.productId).get();
+      const p = snap.exists ? snap.data() : null;
+      if (!p || (p.status && p.status !== 'active') || num(p.stock, 0, 0, 1e9) <= 0) {
+        return { ok: true, skipped: true, message: (p && p.name || row.productId) + ' no longer in stock' };
+      }
+      const link = 'https://trendaryo.com/product.html?id=' + encodeURIComponent(row.productId);
+      const res = await send({
+        to: row.email,
+        subject: (p.name || 'Item') + ' is back in stock',
+        text: [
+          'Good news - ' + (p.name || 'the item you wanted') + ' is back in stock.',
+          '',
+          'Grab it before it goes again: ' + link,
+          '',
+          'You are receiving this because you asked to be notified on Trendaryo.',
+        ].join('\n'),
+      });
+      if (!res || !res.ok) {
+        return { ok: true, skipped: true, message: 'mail provider unavailable - will retry' };
+      }
+      await db.collection(WAITLIST).doc(row.id).set({
+        status: 'notified',
+        notifiedAt: nowIso(),
+        updatedAt: nowIso(),
+      }, { merge: true });
+      return { ok: true, message: 'notified ' + row.email + ' about ' + (p.name || row.productId) };
+    },
+    /* Expire rows whose product is gone or who aged out. */
+    async sync(db, cfg) {
+      const expiryDays = num(cfg.expiryDays, 60, 1, 365);
+      const cutoff = new Date(Date.now() - expiryDays * 86400000).toISOString();
+      const snap = await db.collection(WAITLIST).where('status', '==', 'pending').limit(500).get();
+      for (const doc of snap.docs) {
+        const row = doc.data();
+        const prod = await db.collection('products').doc(row.productId).get();
+        const inactive = !prod.exists || (prod.data().status && prod.data().status !== 'active');
+        const agedOut = String(row.createdAt || '') < cutoff;
+        if (inactive || agedOut) {
+          await doc.ref.set({ status: 'expired', expiredAt: nowIso(), updatedAt: nowIso(), expiredReason: inactive ? 'product' : 'age' }, { merge: true });
         }
       }
     },

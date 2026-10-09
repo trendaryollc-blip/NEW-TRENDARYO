@@ -41,6 +41,7 @@ const ROUTES = {
   '/cron/supplier-sync': require('./cron/supplier-sync'),
   '/cron/automations': require('./cron/automations'),
   '/wishlist': require('./wishlist/index'),
+  '/waitlist': require('./waitlist/index'),
   '/newsletter': require('./newsletter/index'),
   '/contact': require('./contact/index'),
   '/contact/:id': require('./contact/[id]'),

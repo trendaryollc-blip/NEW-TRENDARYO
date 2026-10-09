@@ -28,6 +28,17 @@ async function move(db, { productId, delta, reason, orderId, actorUid, note }) {
     createdAt: new Date().toISOString(),
   };
   await ref.set(rec);
+  /* Let waiting customers know the moment the shelf refills. Lazy require:
+     the automations engine imports supplier-fulfill, which imports this
+     module - a top-level require here would deadlock the export cycle. */
+  if (delta > 0 && stock > 0) {
+    try {
+      const { emitEvent } = require('./automations');
+      await emitEvent(db, 'product.restocked', { productId, stock });
+    } catch (e) {
+      console.error('[stock:emit]', e.message);
+    }
+  }
   return rec;
 }
 
