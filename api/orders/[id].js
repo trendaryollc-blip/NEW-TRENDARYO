@@ -4,6 +4,7 @@ const { requireAuth, requireAdmin } = require('../_lib/auth');
 const { applyRateLimit } = require('../_lib/security');
 const { sendShippingUpdate } = require('../_lib/mail');
 const { assertTransition, allowedFrom } = require('../_lib/order-state');
+const { restockForOrder } = require('../_lib/stock');
 
 module.exports = async function handler(req, res) {
   if (handleCors(req, res)) return;
@@ -81,6 +82,7 @@ module.exports = async function handler(req, res) {
       if (carrier) updateData.carrier = carrier;
 
       await db.collection('orders').doc(id).update(updateData);
+      try { if (status === 'cancelled' || status === 'refunded') { await restockForOrder(db, updatedOrder || order || { id, ...updateData }, status, user.uid); } } catch (e) { console.error('[order:restock] failed', e.message); }
 
       const updatedDoc = await db.collection('orders').doc(id).get();
       const updatedOrder = { id: updatedDoc.id, ...updatedDoc.data() };

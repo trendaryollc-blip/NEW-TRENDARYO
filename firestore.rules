@@ -148,6 +148,7 @@ service cloud.firestore {
       allow write: if false;
     }
 
+        match /inventory_movements/{id} { allow read: if isAdmin(); allow write: if false; }
     match /automation_alerts/{alertId} {
       allow read: if isAdmin();
       allow write: if false;
