@@ -27,6 +27,7 @@ const { fulfillOrder } = require('../admin/supplier-fulfill');
 const { getSettings } = require('./pricing');
 const { send, sendToAdmin } = require('./mail');
 const { readAll: readHealth, statusOf } = require('./health');
+const { effectiveThreshold } = require('./product-ops');
 
 const RULES = 'automations';
 const RUNS = 'automation_runs';
@@ -209,10 +210,10 @@ const DEFINITIONS = {
     name: 'Low-stock alerts',
     group: 'Inventory',
     icon: 'warehouse',
-    about: 'Watches the live shelf for products at or below the stock threshold (your store setting, or an override here) and raises one alert per product so nothing sells out silently. Alerts are deduplicated for the cooldown window, and a single digest email goes to the store support address.',
+    about: 'Watches the live shelf for products at or below their reorder point and raises one alert per product so nothing sells out silently. Threshold precedence: this rule\u2019s override (if set) beats the product\u2019s own reorder point, which beats the store low-stock setting. Alerts are deduplicated for the cooldown window, and a single digest email goes to the store support address.',
     defaults: { threshold: 0, cooldownHours: 24, emailAdmin: true, maxPerRun: 25 },
     fields: [
-      { key: 'threshold', label: 'Threshold override', type: 'number', min: 0, max: 999, step: 1, help: '0 = use the store low-stock setting.' },
+      { key: 'threshold', label: 'Threshold override', type: 'number', min: 0, max: 999, step: 1, help: '0 = per-product reorder point, falling back to the store low-stock setting.' },
       { key: 'cooldownHours', label: 'Re-alert after (hours)', type: 'number', min: 1, max: 168, step: 1, help: 'Quiet period before the same product alerts again.' },
       { key: 'emailAdmin', label: 'Email the store inbox', type: 'boolean', help: 'One digest per run to supportEmail.' },
       { key: 'maxPerRun', label: 'Max products per run', type: 'number', min: 1, max: 100, step: 1, help: 'Batch cap while clearing a backlog.' },
@@ -222,13 +223,12 @@ const DEFINITIONS = {
         db.collection('products').where('status', '==', 'active').orderBy('createdAt', 'desc').limit(400).get(),
         getSettings(db).catch(() => ({})),
       ]);
-      const threshold = num(cfg.threshold, 0, 0, 999) > 0
-        ? num(cfg.threshold, 0, 0, 999)
-        : num(store.lowStock, 8, 0, 999);
       return products.docs
         .map((doc) => ({ id: doc.id, ...doc.data() }))
-        .filter((p) => num(p.stock, 0, 0, 1e9) <= threshold)
-        .slice(0, num(cfg.maxPerRun, 25, 1, 100));
+        .map((p) => ({ product: p, threshold: effectiveThreshold(p, cfg.threshold, store.lowStock === undefined || store.lowStock === null ? 8 : store.lowStock) }))
+        .filter((row) => num(row.product.stock, 0, 0, 1e9) <= row.threshold)
+        .slice(0, num(cfg.maxPerRun, 25, 1, 100))
+        .map((row) => ({ ...row.product, _threshold: row.threshold }));
     },
     async act(db, product, cfg) {
       const cooldown = num(cfg.cooldownHours, 24, 1, 168);
@@ -244,11 +244,12 @@ const DEFINITIONS = {
         productId: product.id,
         name: product.name || product.id,
         stock: num(product.stock, 0, 0, 1e9),
+        threshold: product._threshold,
         resolved: false,
         lastAlertedAt: nowIso(),
         count: (snap.exists ? snap.data().count || 0 : 0) + 1,
       }, { merge: true });
-      return { ok: true, message: product.name + ' down to ' + (num(product.stock, 0, 0, 1e9)) + ' units' };
+      return { ok: true, message: product.name + ' down to ' + num(product.stock, 0, 0, 1e9) + ' units (threshold ' + num(product._threshold, 0, 0, 1e9) + ')' };
     },
     async after(db, cfg, results) {
       if (!bool(cfg.emailAdmin, true)) return;

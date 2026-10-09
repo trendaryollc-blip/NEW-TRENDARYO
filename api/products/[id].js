@@ -2,6 +2,7 @@ const { initFirebase } = require('../_lib/firebase');
 const { handleCors } = require('../_lib/cors');
 const { requireAuth, requireAdmin } = require('../_lib/auth');
 const { applyRateLimit } = require('../_lib/security');
+const { normalizeOpsFields } = require('../_lib/product-ops');
 
 module.exports = async function handler(req, res) {
   if (handleCors(req, res)) return;
@@ -26,6 +27,11 @@ module.exports = async function handler(req, res) {
 
       const updateData = { ...req.body, updatedAt: new Date().toISOString() };
       delete updateData.id;
+      /* F7: coerce ops fields so garbage never lands in the catalog. */
+      Object.assign(updateData, normalizeOpsFields(req.body));
+      for (const key of ['costPrice', 'reorderPoint', 'leadTimeDays']) {
+        if (key in updateData && updateData[key] === undefined) delete updateData[key];
+      }
 
       await db.collection('products').doc(id).update(updateData);
       const updatedDoc = await db.collection('products').doc(id).get();

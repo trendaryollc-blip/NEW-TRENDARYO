@@ -2,6 +2,7 @@ const { initFirebase } = require('../_lib/firebase');
 const { handleCors } = require('../_lib/cors');
 const { requireAdmin } = require('../_lib/auth');
 const { applyRateLimit } = require('../_lib/security');
+const { normalizeOpsFields } = require('../_lib/product-ops');
 
 module.exports = async function handler(req, res) {
   if (handleCors(req, res)) return;
@@ -108,6 +109,12 @@ module.exports = async function handler(req, res) {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
+
+      /* F7: reorder point / lead time / cost price (admin-only fields). */
+      Object.assign(productData, normalizeOpsFields(req.body));
+      if (productData.costPrice === undefined) delete productData.costPrice;
+      if (productData.reorderPoint === undefined) delete productData.reorderPoint;
+      if (productData.leadTimeDays === undefined) delete productData.leadTimeDays;
 
       const docRef = await db.collection('products').add(productData);
       return res.status(201).json({ data: { id: docRef.id, ...productData } });
