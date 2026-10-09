@@ -26,6 +26,7 @@ const WRITABLE = [
   'riskEnabled',
   'riskReviewThreshold',
   'riskMaxOrderValue',
+  'supplierLeadDays',
 ];
 
 module.exports = async function handler(req, res) {
@@ -55,6 +56,13 @@ module.exports = async function handler(req, res) {
         update.freeShippingThreshold = round2(update.freeShippingThreshold);
       }
       if (update.lowStock !== undefined) update.lowStock = Math.max(0, parseInt(update.lowStock) || 0);
+      if (update.supplierLeadDays !== undefined) {
+        const days = parseInt(update.supplierLeadDays, 10);
+        if (!Number.isFinite(days) || days < 0 || days > 120) {
+          return res.status(400).json({ error: { message: 'supplierLeadDays must be between 0 and 120' } });
+        }
+        update.supplierLeadDays = days;
+      }
       for (const key of ['taxRatesByCountry', 'taxRatesByRegion']) {
         if (update[key] !== undefined) {
           if (!update[key] || typeof update[key] !== 'object' || Array.isArray(update[key])) {

@@ -33,6 +33,7 @@ const ROUTES = {
   '/admin/audit': require('./admin/audit'),
   '/admin/health': require('./admin/health'),
   '/admin/reorder': require('./admin/reorder'),
+  '/admin/supplier-sla': require('./admin/supplier-sla'),
   '/admin/supplier-fulfill': require('./admin/supplier-fulfill'),
   '/admin/supplier-sync': require('./admin/supplier-sync'),
   '/automations': require('./automations/index'),

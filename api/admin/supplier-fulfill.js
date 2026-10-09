@@ -2,9 +2,11 @@ const { initFirebase } = require('../_lib/firebase');
 const { handleCors } = require('../_lib/cors');
 const { requireAdmin } = require('../_lib/auth');
 const { applyRateLimit } = require('../_lib/security');
+const { canTransition } = require('../_lib/order-state');
+const { log } = require('../_lib/audit');
 const cj = require('../_lib/cj');
 
-async function fulfillOrder(db, orderId) {
+async function fulfillOrder(db, orderId, actor) {
   const ref = db.collection('orders').doc(orderId);
   const snap = await ref.get();
   if (!snap.exists) throw new Error('Order not found');
@@ -32,8 +34,33 @@ async function fulfillOrder(db, orderId) {
 
   const result = await cj.createOrder(db, order, lineItems);
   const cjOrderId = (result && (result.orderId || result.id)) || '';
-  await ref.set({ cjOrderId: String(cjOrderId), fulfillment: 'cj', fulfillmentStatus: 'submitted', status: 'processing', updatedAt: new Date().toISOString() }, { merge: true });
+  const patch = {
+    cjOrderId: String(cjOrderId),
+    fulfillment: 'cj',
+    fulfillmentStatus: 'submitted',
+    /* F9: start the SLA clock the moment the supplier receives the order. */
+    supplierSubmittedAt: nowIsoSafe(),
+    updatedAt: nowIsoSafe(),
+  };
+  /* Only move the state when the machine allows it; the supplier hand-off
+     itself must never roll an order backwards. */
+  if (canTransition(order.status || 'pending', 'processing', 'system')) {
+    patch.status = 'processing';
+  }
+  await ref.set(patch, { merge: true });
+  await log(db, {
+    actorUid: (actor && actor.uid) || null,
+    actorEmail: (actor && actor.email) || null,
+    action: 'order.supplier_fulfill',
+    targetType: 'order',
+    targetId: order.id,
+    after: { cjOrderId: String(cjOrderId), fulfillment: 'cj', supplierSubmittedAt: patch.supplierSubmittedAt },
+  });
   return { cjOrderId: String(cjOrderId) };
+}
+
+function nowIsoSafe() {
+  return new Date().toISOString();
 }
 
 module.exports = async function handler(req, res) {
@@ -49,7 +76,7 @@ module.exports = async function handler(req, res) {
     const { orderId } = req.body || {};
     if (!orderId) return res.status(400).json({ error: { message: 'orderId required' } });
 
-    const out = await fulfillOrder(db, orderId);
+    const out = await fulfillOrder(db, orderId, adminUser);
     res.status(200).json({ data: out });
   } catch (error) {
     console.error('Fulfill error:', error);

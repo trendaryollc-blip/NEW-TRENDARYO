@@ -28,6 +28,24 @@ const { getSettings } = require('./pricing');
 const { send, sendToAdmin } = require('./mail');
 const { readAll: readHealth, statusOf } = require('./health');
 const { effectiveThreshold } = require('./product-ops');
+const sla = require('./supplier-sla');
+
+const { isBreached, isOpen, daysOver, resolveDefaultLead } = sla;
+
+/* productId -> leadTimeDays (only products that define one). */
+async function productLeadMap(db) {
+  const map = {};
+  try {
+    const snap = await db.collection('products').limit(1000).get();
+    snap.docs.forEach((doc) => {
+      const lead = Number(doc.data().leadTimeDays);
+      if (Number.isFinite(lead) && lead > 0) map[doc.id] = lead;
+    });
+  } catch (e) {
+    console.error('[automations:leadMap]', e.message);
+  }
+  return map;
+}
 
 const RULES = 'automations';
 const RUNS = 'automation_runs';
@@ -461,6 +479,76 @@ const DEFINITIONS = {
         const agedOut = String(row.createdAt || '') < cutoff;
         if (inactive || agedOut) {
           await doc.ref.set({ status: 'expired', expiredAt: nowIso(), updatedAt: nowIso(), expiredReason: inactive ? 'product' : 'age' }, { merge: true });
+        }
+      }
+    },
+  },
+
+  'supplier-sla-watch': {
+    name: 'Supplier SLA watch',
+    group: 'Orders',
+    icon: 'clock',
+    about: 'Fires when a supplier-handled order has not shipped within its lead time. The deadline is confirmed/hand-off time plus the slowest item\u2019s lead time (the product\u2019s own leadTimeDays wins over this rule\u2019s default). Breached orders are flagged, held for attention and alerted once; the alert clears automatically when the order finally ships or closes.',
+    defaults: { leadTimeDays: 0, maxPerRun: 50 },
+    fields: [
+      { key: 'leadTimeDays', label: 'Default lead time (days)', type: 'number', min: 0, max: 120, step: 1, help: '0 = store supplierLeadDays setting (7 days when unset). Products with their own leadTimeDays always win.' },
+      { key: 'maxPerRun', label: 'Max breaches per run', type: 'number', min: 1, max: 200, step: 1 },
+    ],
+    async scan(db, cfg) {
+      const [ordersSnap, leadMap, store] = await Promise.all([
+        db.collection('orders').where('fulfillment', '==', 'cj').limit(1000).get(),
+        productLeadMap(db),
+        getSettings(db).catch(() => ({})),
+      ]);
+      const defaultLead = resolveDefaultLead(cfg.leadTimeDays, store.supplierLeadDays);
+      return ordersSnap.docs
+        .map((doc) => ({ id: doc.id, ...doc.data() }))
+        .filter((o) => !o.slaBreached && isBreached(o, leadMap, defaultLead))
+        .slice(0, num(cfg.maxPerRun, 50, 1, 200));
+    },
+    async act(db, order, cfg) {
+      const [leadMap, store] = await Promise.all([productLeadMap(db), getSettings(db).catch(() => ({}))]);
+      const defaultLead = resolveDefaultLead(cfg.leadTimeDays, store.supplierLeadDays);
+      if (!isBreached(order, leadMap, defaultLead)) {
+        return { ok: true, skipped: true, message: 'shipped within SLA' };
+      }
+      const name = order.orderNumber || order.id;
+      const over = daysOver(order, leadMap, defaultLead);
+      await db.collection('orders').doc(order.id).set({
+        slaBreached: true,
+        slaBreachAt: nowIso(),
+        needsAttention: true,
+        attentionReason: 'supplier SLA breached (' + over + 'd over)',
+        attentionAt: nowIso(),
+        updatedAt: nowIso(),
+      }, { merge: true });
+      await db.collection(ALERTS).doc('sla-' + order.id).set({
+        type: 'supplier-sla',
+        ruleKey: 'supplier-sla-watch',
+        orderId: order.id,
+        name,
+        reason: 'not shipped within lead time - ' + over + 'd over',
+        resolved: false,
+        lastAlertedAt: nowIso(),
+      }, { merge: true });
+      return { ok: true, message: name + ' breached supplier SLA by ' + over + 'd' };
+    },
+    /* Close alerts once the order leaves the open states. */
+    async sync(db) {
+      const alerts = await db.collection(ALERTS).where('type', '==', 'supplier-sla').limit(200).get();
+      for (const doc of alerts.docs) {
+        if (doc.data().resolved) continue;
+        const orderId = doc.data().orderId;
+        const orderSnap = await db.collection('orders').doc(orderId).get();
+        if (!orderSnap.exists || !isOpen(orderSnap.data())) {
+          await doc.ref.set({ resolved: true, resolvedAt: nowIso() }, { merge: true });
+          if (orderSnap.exists && String(orderSnap.data().attentionReason || '').startsWith('supplier SLA')) {
+            await db.collection('orders').doc(orderId).set({
+              needsAttention: false,
+              attentionReason: null,
+              updatedAt: nowIso(),
+            }, { merge: true });
+          }
         }
       }
     },
