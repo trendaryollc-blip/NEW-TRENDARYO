@@ -73,12 +73,12 @@
     { "src": "/(.*)", "dest": "/$1" }
   ],
   "crons": [
-    { "path": "/api/cron/supplier-sync", "schedule": "0 */6 * * *" },
-    { "path": "/api/cron/automations", "schedule": "0 * * * *" },
-    { "path": "/api/cron/reconciliation", "target": "0 3 * * *", "schedule": "0 3 * * *" },
-    { "path": "/api/cron/abandoned-checkout", "schedule": "0 */4 * * *" },
+    { "path": "/api/cron/supplier-sync", "schedule": "0 2 * * *" },
+    { "path": "/api/cron/automations", "schedule": "0 6 * * *" },
+    { "path": "/api/cron/reconciliation", "schedule": "0 3 * * *" },
+    { "path": "/api/cron/abandoned-checkout", "schedule": "0 8 * * *" },
     { "path": "/api/cron/backup", "schedule": "0 4 * * *" },
-    { "path": "/api/cron/publish-posts", "schedule": "*/15 * * * *" }
+    { "path": "/api/cron/publish-posts", "schedule": "0 9 * * *" }
   ],
   "headers": [
     {
