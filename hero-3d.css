@@ -364,6 +364,87 @@
 }
 
 /* â”€â”€ Reduced motion: no animation loop, no blink, no float â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── MOBILE-FIRST HERO RECOMPOSITION (≤768px) ───────────────────────────────
+   Phones/small tablets get a DEDICATED stacked composition instead of
+   inheriting desktop spacing: a SHORT 3D band (smaller wordmark riding near
+   the top + short-hung products as a decorative frame — see MOBILE_STAGE in
+   hero-3d-scene.js), then a compact headline / lede / CTA block. The hero is
+   fold-exact (100svh − real header offset) so wordmark → products →
+   headline → lede → CTAs all land inside the first viewport at 375×667,
+   390×844, 412×915 and 430×932 with zero scrolling. These blocks must stay
+   AFTER the ≤900px / ≤560px / max-height blocks above so they win the
+   cascade. */
+@media (max-width: 768px) {
+  .tr-hero {
+    /* Content-driven height: the compact scene band + copy block measured
+       420-535px tall at every target device — always under the first
+       viewport (587-852px available) — so auto height keeps the fold
+       guarantee WITHOUT a sea of dead space on tall phones, and lets the
+       next section peek in as a scroll cue. */
+    height: auto;
+    min-height: 0;
+    padding-bottom: 12px;
+  }
+  .tr-hero__scene {
+    height: clamp(170px, 26svh, 245px);
+  }
+  .tr-hero__copy {
+    margin-top: 0;
+    padding: 10px 16px 14px;
+  }
+  .tr-hero__title {
+    font-size: clamp(1.65rem, 5.9vw, 2.3rem);
+    line-height: 1.06;
+  }
+  .tr-hero__lede {
+    margin-top: 6px;
+    font-size: 0.92rem;
+    line-height: 1.45;
+    max-width: none;
+  }
+  .tr-hero__cta {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .tr-hero__btn {
+    padding: 12px 20px;
+    font-size: 14px;
+    gap: 8px;
+  }
+}
+
+/* ── Small phones (≤480px) — one step tighter ───────────────────────────────
+   Same stacked composition, shorter band and smaller type, so even a
+   375×667 screen shows the full hero with room to spare. CTAs stay one row
+   (wrapping only if the viewport truly cannot fit them side by side). */
+@media (max-width: 480px) {
+  .tr-hero__scene {
+    height: clamp(150px, 23svh, 200px);
+  }
+  .tr-hero__copy {
+    padding: 8px 12px 12px;
+  }
+  .tr-hero__title {
+    font-size: clamp(1.5rem, 6.4vw, 1.95rem);
+  }
+  .tr-hero__lede {
+    margin-top: 5px;
+    font-size: 0.87rem;
+    line-height: 1.42;
+  }
+  .tr-hero__cta {
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .tr-hero__btn {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .tr-hero__dot,
   .tr-hero__fallback img { animation: none; }

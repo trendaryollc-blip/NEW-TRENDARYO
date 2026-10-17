@@ -293,6 +293,18 @@ const glowTex = (() => {
   return new THREE.CanvasTexture(c);
 })();
 
+/* ── Mobile stage (≤768px) ──────────────────────────────────────────────────
+   Phones get a dedicated compact composition instead of inheriting the
+   desktop rhythm: a SMALLER wordmark riding nearer the top of a short scene
+   band, ropes ~60% shorter, and a product run spread WIDER than the wordmark
+   so the hanging products read as a decorative frame around the copy below.
+   The CSS side of this lives in the ≤768px blocks of hero-3d.css. */
+const MOBILE_STAGE = window.matchMedia('(max-width: 768px)').matches;
+/* Product run multiplier: on phones the anchors spread past the wordmark
+   edges (the wordmark itself shrank), so the models stay large enough to
+   read as a frame instead of a micro-row of specks. */
+const RUN_MULT = MOBILE_STAGE ? 1.7 : 1.0;
+
 /* ── Curated exhibition layout ─────────────────────────────────────────────
    Small offsets applied ON TOP of the responsive layout so the products form
    a gentle arc with mixed distances from the camera, instead of a flat
@@ -317,6 +329,9 @@ const EXHIBITION = {
   spin:    [0.0050, 0.0035, 0.0062, 0.0042, 0.0058, 0.0030, 0.0048],
   bob:     [0.0009, 0.0013, 0.0011, 0.0007, 0.0015, 0.0009, 0.0012],
 };
+/* Phones: ~60% shorter ropes — the band is short, so the products hug the
+   wordmark and the copy block gets the rest of the first viewport. */
+if (MOBILE_STAGE) EXHIBITION.rope = EXHIBITION.rope.map(r => r * 0.40);
 const exh = (arr, i) => arr[i % arr.length];
 /* Small screens get a gentler boost — the stage is a short band with the
    copy stacked below, so full-size models would crowd it. */
@@ -429,8 +444,10 @@ function layoutStage() {
 
   /* Wordmark size: 0.62 of the region width (~13% smaller than the old
      0.71) — the wordmark supports the hero rather than dominating it, and
-     the shorter ropes bring the products up to frame it. */
-  const FILL = 0.62;
+     the shorter ropes bring the products up to frame it. Phones shrink it a
+     further ~32% (0.62 → 0.42) and the RUN_MULT spread keeps the products
+     readable as a frame around the compact copy block. */
+  const FILL = MOBILE_STAGE ? 0.42 : 0.62;
   const scale = Math.max(0.1, (regionWpx * FILL) / natural.w);
   const wordPx = natural.w * scale;
 
@@ -441,16 +458,19 @@ function layoutStage() {
   const worldPerPx = vis.w / stage.w;
   const centerX = pxToWorld(leftPx + wordPx / 2);
 
-  /* Rope anchors inset to 80% of wordmark width so they sit under letters. */
-  const spreadPx = wordPx * 0.80;
+  /* Rope anchors inset to 80% of wordmark width so they sit under letters.
+     Phones widen the run (RUN_MULT) so the products frame the copy. */
+  const spreadPx = wordPx * 0.80 * RUN_MULT;
   const spread = spreadPx * worldPerPx;
 
   /* Vertical: wordmark centre sits at 30% down the visible scene — higher
      than the old 36%, so the whole composition rides up toward the header
      and leaves more room for the products + copy below. The header is
      measured by syncHeaderOffset, so the scene band always starts below the
-     real header and the letters keep a clear gap at every canvas height. */
-  const topWorld = 1.1 + (0.5 - 0.30) * vis.h;
+     real header and the letters keep a clear gap at every canvas height.
+     Phones ride higher still (20%) — the band is short and the wordmark
+     must sit close to the navbar with the products fringing just below. */
+  const topWorld = 1.1 + (0.5 - (MOBILE_STAGE ? 0.20 : 0.30)) * vis.h;
 
   /* Measure real letter bottom after positioning. */
   titleGroup.scale.setScalar(scale);
@@ -531,9 +551,11 @@ function computeSlots(n) {
   const regionPx = Math.max(80, rightLimit - leftLimit);
   const d = CAMERA_DIST;
 
-  /* Eyelets must stay under the letters: cap the run at 92% of the wordmark. */
+  /* Eyelets stay under the letters: cap the run at ~98% of the wordmark.
+     Phones multiply that by RUN_MULT — the wordmark shrank, and the frame
+     around the copy should not shrink with it. */
   const wordPx = stage.span * stage.scale;
-  const extent = Math.min(regionPx, wordPx > 4 ? wordPx * 0.98 : regionPx);
+  const extent = Math.min(regionPx, wordPx > 4 ? wordPx * 0.98 * RUN_MULT : regionPx);
 
   /* Rotation-INVARIANT footprints: the models spin on their ropes, so an
      instantaneous Box3 would design the gaps for this frame's angle and then
@@ -604,6 +626,11 @@ function anchorFor(i, n) {
        Equal gaps between every model regardless of individual letter widths.
        Model 0 anchors at T, model n-1 anchors at O. */
     x = letterPositions[0] + (letterPositions[letterPositions.length - 1] - letterPositions[0]) * t;
+    /* Phones: expand the letter span past the wordmark edges (RUN_MULT) so
+       the products spread as a decorative frame around the copy instead of
+       clustering under the shrunken wordmark. The uniform fallback spread
+       below already includes RUN_MULT (via stage.spread) — do not double it. */
+    if (RUN_MULT !== 1) x = stage.centerX + (x - stage.centerX) * RUN_MULT;
   } else {
     /* Fallback: equal-gap slots while fonts/models are still loading. */
     const slots = stage.slots;
@@ -668,7 +695,10 @@ function fitModels() {
   /* Free region minus the bounds pads — identical to computeSlots' region. */
   const regionPx = Math.max(80, (rightLimit - leftLimit) - insetPx);
   const wordPx = stage.span * stage.scale;
-  const extentPx = Math.min(regionPx, wordPx > 4 ? wordPx * 1.0 : regionPx);
+  /* Same run extent computeSlots uses — phones widen it by RUN_MULT so the
+     models scale up to frame the copy instead of shrinking with the
+     wordmark. */
+  const extentPx = Math.min(regionPx, wordPx > 4 ? wordPx * RUN_MULT : regionPx);
 
   /* 1 — uniform scale so all models + equal gaps fit the run. Initial guess:
      each pair gets 7% of the run as its gap in load-time-diagonal terms. */
