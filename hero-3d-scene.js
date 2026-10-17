@@ -981,7 +981,7 @@ function buildHangers(span) {
 
 const fontLoader = new FontLoader();
 fontLoader.load(
-  'https://unpkg.com/three@0.160.0/examples/fonts/helvetiker_bold.typeface.json',
+  'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/fonts/helvetiker_bold.typeface.json',
   font => {
     const word = 'TRENDARYO';
     const tracking = 0.18;

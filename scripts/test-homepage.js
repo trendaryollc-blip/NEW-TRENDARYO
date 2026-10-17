@@ -169,7 +169,7 @@ async function main() {
   /* ══════════════════ FALLBACK — three.js blocked ══════════════════ */
   console.log('\n=== FALLBACK (three.js CDN blocked) ===');
   const fb = await browser.newPage({ viewport: { width: 1360, height: 900 } });
-  await fb.route('**/unpkg.com/**', r => r.abort());
+  await fb.route('**/three@0.160.0/**', r => r.abort());
   await fb.goto(`http://127.0.0.1:${PORT}/index.html`, { waitUntil: 'load' });
   const fbState = await fb.waitForFunction(() =>
     document.getElementById('hero').classList.contains('is-fallback'), null, { timeout: 15000 }
