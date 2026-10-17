@@ -1508,7 +1508,7 @@
                             var feats = (s.features || []).length
                                 ? '<h3>Key features</h3><ul class="ov-approved">' + s.features.map(function (f) { return '<li>' + escH(f) + '</li>'; }).join('') + '</ul>' : '';
                             var bens = (s.benefits || []).length
-                                ? '<h3>What that means for you</h3><ul class="ov-approved">' + s.benefits.map(function (f) { return '<li>' + escH(f) + '</li>'; }).join('') + '</ul>';
+                                ? '<h3>What that means for you</h3><ul class="ov-approved">' + s.benefits.map(function (f) { return '<li>' + escH(f) + '</li>'; }).join('') + '</ul>' : '';
                             ov.innerHTML = '<div class="ov-editorial">' + paras + feats + bens + '</div>' + ov.innerHTML;
                         }
                     }

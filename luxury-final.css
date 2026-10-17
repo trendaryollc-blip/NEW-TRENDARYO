@@ -372,3 +372,58 @@ img { content-visibility: auto; }
 main.page-offset { width: 100% !important; margin: 0 !important; }
 /* Rails always span the full centered column, never shrink to content */
 .rail, .shop-grid, .toolbar, .chip-rail, .deck-hero { width: 100% !important; max-width: 100% !important; }
+
+/* ═════════ DENSITY PASS — homepage (same philosophy as the 3D hero) ═════════
+   Whitespace-only optimisation: more content per viewport, less dead space.
+   Nothing is removed, nothing shrinks visually — padding/margins/gaps only.
+   Card-internal trims are scoped to >=601px so home.css's mobile
+   compaction rules (@media max-width:600px) keep winning on phones. */
+
+/* Global section rhythm: 48-80px -> 36-52px */
+#trending, #pipeline, #constellations, #vortex, #testimonials {
+  padding-top: clamp(2.25rem, 4vw, 3.25rem) !important;
+  padding-bottom: clamp(2.25rem, 4vw, 3.25rem) !important;
+}
+#trending { padding: 2.5rem 1.5rem 2rem !important; }
+/* #pipeline had margin-top:4rem + padding-top:4.5rem stacked = 136px dead zone */
+#pipeline { margin-top: 1.5rem !important; padding: 2.5rem 1.5rem 0.5rem !important; }
+
+/* Section headers */
+.sec-head { margin-bottom: 1.25rem !important; }
+.sec-kicker { margin-bottom: 0.4rem !important; }
+.sec-sub { margin-top: 0.4rem !important; font-size: 0.95rem !important; line-height: 1.55 !important; }
+
+/* Pipeline punchline */
+.pipe-punch { margin-top: 1.75rem !important; padding: 1.75rem 1.5rem !important; }
+
+/* Category tiles */
+.constellation { min-height: 120px !important; padding: 1.25rem 0.9rem !important; gap: 0.45rem !important; }
+.cs-name { margin-top: 0.45rem !important; }
+.cs-count { margin-top: 0.15rem !important; }
+
+/* Stats strip inside testimonials */
+.stats-grid { margin-top: 2rem !important; gap: 1.5rem !important; }
+
+/* Trust strip */
+.trust-item { padding: 0.9rem 1.1rem !important; }
+
+/* Newsletter band (had 72px of bottom padding alone) */
+.nl-band { padding: 0.5rem 1.25rem 3rem !important; }
+.nl-card { padding: 2rem 1.75rem !important; }
+.nl-sub { margin-bottom: 1.1rem !important; }
+.nl-note { margin-top: 0.7rem !important; }
+
+/* Desktop card internals — mobile keeps home.css's tighter values */
+@media (min-width: 601px) {
+  .vx-body { padding: 1.1rem 1.15rem 1.15rem !important; }
+  .vx-price { margin: 0.35rem 0 0.7rem !important; }
+  .vx-desc { margin-bottom: 0.85rem !important; }
+  .vx-grid { gap: 1.1rem !important; }
+  #trending .vx-grid { gap: 1.1rem !important; }
+  .hologram { padding: 1.4rem 1.5rem !important; }
+  .holo-quote { margin-bottom: 0.9rem !important; }
+  .holo-stars { margin-bottom: 0.6rem !important; }
+  .tst-grid { gap: 1.1rem !important; }
+  .pipe-step { padding: 1.15rem 1.1rem !important; }
+  .pipe-stat { padding-top: 0.55rem !important; }
+}
