@@ -43,6 +43,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="home.css">
+    <!-- ProductCard v2 — shared with shop.html so home cards === shop cards -->
+    <link rel="stylesheet" href="product-card.css">
     <!-- 3D hero styles — scoped under .tr-hero so they cannot leak -->
     <link rel="stylesheet" href="hero-3d.css">
     <link rel="stylesheet" href="luxury-final.css">
@@ -350,6 +352,7 @@
     <script src="products-data.js"></script>
     <script src="cart-manager.js"></script>
     <script src="backend-bridge.js"></script>
+    <script src="product-card.js"></script>
     <script src="home-engine.js"></script>
     <!-- 3D hero: the fallback script must load BEFORE the module so its
          watchdog is armed before the scene can possibly report ready. -->
@@ -524,7 +527,7 @@
         });
 
         // Vortex cards slide up
-        gsap.from('.vortex-card', {
+        gsap.from('.vortex-card, #vortex .pc-card', {
             scrollTrigger: { trigger: '#vortex', start: 'top 85%', once: true },
             opacity: 0, y: 32,
             duration: 0.55, stagger: 0.08, ease: 'power2.out', overwrite: 'auto'

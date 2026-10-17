@@ -125,7 +125,7 @@ async function main() {
   const data = await page.evaluate(() => ({
     stats: Array.from(document.querySelectorAll('[data-stat]')).map(e => e.getAttribute('data-stat') + '=' + e.getAttribute('data-count')),
     cats: document.querySelectorAll('#constellations .constellation').length,
-    cards: document.querySelectorAll('#vortex .vx-card').length,
+    cards: document.querySelectorAll('#vortex .pc-card').length,
     da: document.querySelector('.pipe-stat b[data-pipe="reviews"]')?.textContent || '',
   }));
   log(data.stats.length === 4 && data.stats.every(s => !/=null$/.test(s)), 'proof stats computed', data.stats.join(', '));

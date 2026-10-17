@@ -1,0 +1,336 @@
+/* ==========================================================================
+   TRENDARYO — PRODUCTCARD v2 (shared, shop-parity)
+   ---------------------------------------------------------------------------
+   Single source of truth for the product card VISUAL layer. Extracted verbatim
+   from the shop.html inline <style> so the home page cards render IDENTICALLY
+   to the shop page cards (same DOM from product-card.js, same cascade here).
+
+   Cascade order matters and is preserved from shop.html:
+     1 · base card + media stage + body + actions + states
+     2 · "Cleaner DTC" overrides (the card you actually SEE)
+     3 · conversion polish (ATC + qty always visible)
+   Do not reorder these without re-checking shop.html.
+
+   Everything is scoped under .pc-card / .pc-* so it cannot leak page-wide.
+   ========================================================================== */
+
+/* ── 1 · BASE — media stage, body, actions, states ────────────────────────── */
+.pc-card {
+    position: relative; display: flex; flex-direction: column; min-width: 0;
+    isolation: isolate; content-visibility: auto;
+    contain-intrinsic-size: auto 370px;
+    background: var(--card-grad); border: 1px solid var(--glass-border);
+    border-radius: var(--r-lg); overflow: hidden;
+    --mx: 50%; --my: 0%;
+    transition: transform 0.42s var(--ease), border-color 0.35s ease, box-shadow 0.35s ease;
+}
+.pc-card::after {
+    content: ''; position: absolute; inset: 0; border-radius: inherit;
+    pointer-events: none; opacity: 0; transition: opacity 0.3s ease;
+    background: radial-gradient(320px circle at var(--mx) var(--my), rgba(0, 240, 255, 0.16), transparent 62%);
+}
+.pc-card:hover::after, .pc-card:focus-within::after { opacity: 1; }
+.pc-card:hover, .pc-card:focus-within {
+    transform: translateY(-8px); border-color: rgba(0, 240, 255, 0.55);
+    box-shadow: 0 18px 42px rgba(0, 240, 255, 0.15), 0 10px 34px rgba(0, 0, 0, 0.5);
+}
+.pc-media {
+    position: relative; flex: 0 0 auto; overflow: hidden;
+    background:
+        radial-gradient(120% 90% at 50% 8%, rgba(0, 240, 255, 0.16), rgba(8, 8, 30, 0.92) 62%),
+        linear-gradient(135deg, rgba(0, 240, 255, 0.07), rgba(255, 0, 170, 0.07));
+}
+.pc-stage { position: relative; display: block; width: 100%; aspect-ratio: 16 / 10; overflow: hidden; text-decoration: none; }
+.pc-grid-tex {
+    position: absolute; inset: 0; opacity: 0.45;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 26px 26px;
+    -webkit-mask-image: radial-gradient(circle at 50% 42%, #000 28%, transparent 78%);
+    mask-image: radial-gradient(circle at 50% 42%, #000 28%, transparent 78%);
+}
+.pc-spot { position: absolute; inset: 0; background: radial-gradient(58% 52% at 50% 30%, rgba(255, 255, 255, 0.14), transparent 70%); }
+.pc-img {
+    position: relative; z-index: 2; width: 100%; height: 100%;
+    object-fit: contain; padding: 5% 6%;
+    color: transparent; /* never paint alt text over the stage while a photo loads/fails */
+    font-size: 0;
+    filter: drop-shadow(0 16px 26px rgba(0, 0, 0, 0.55));
+    transition: transform 0.6s var(--ease), opacity 0.4s ease;
+}
+.pc-card:hover .pc-img { transform: scale(1.06) translateY(-2px); }
+.pc-detail {
+    position: absolute; inset: 0; z-index: 3; opacity: 0; pointer-events: none;
+    mix-blend-mode: screen; background-size: cover; background-position: center;
+    transform: scale(1.08); transition: opacity 0.5s ease, transform 0.7s var(--ease);
+}
+.pc-card:hover .pc-detail, .pc-card.is-zoomed .pc-detail { opacity: 0.34; transform: scale(1); }
+.pc-card.is-zoomed .pc-img { transform: scale(1.16); }
+.pc-shine {
+    position: absolute; top: 0; left: -60%; z-index: 5; width: 45%; height: 100%;
+    pointer-events: none; opacity: 0; transform: skewX(-18deg);
+    background: transparent;
+}
+.pc-card:hover .pc-shine { animation: pcSweep 1.05s ease-out; }
+@keyframes pcSweep {
+    0% { left: -60%; opacity: 0; }
+    18% { opacity: 0.9; }
+    100% { left: 125%; opacity: 0; }
+}
+/* 7a-2 · overlays: flags · tools · foot chips · spec ticker */
+.pc-flags {
+    position: absolute; z-index: 6; top: 0.6rem; left: 0.6rem;
+    display: flex; flex-direction: column; gap: 0.35rem; align-items: flex-start;
+    max-width: calc(100% - 3.6rem);
+}
+.pc-badge {
+    padding: 0.3rem 0.58rem; border-radius: var(--r-pill);
+    font-family: var(--font-d); font-size: 0.58rem; font-weight: 900;
+    letter-spacing: 1.1px; text-transform: uppercase;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+.pc-badge.hot { background: rgba(255, 68, 68, 0.85); box-shadow: 0 0 16px rgba(255, 68, 68, 0.4); }
+.pc-badge.trending { background: rgba(255, 0, 170, 0.85); }
+.pc-badge.premium { background: rgba(0, 255, 136, 0.85); color: #00230f; }
+.pc-badge.new { background: rgba(0, 240, 255, 0.85); color: #00232a; }
+.pc-badge.sale { background: rgba(255, 215, 0, 0.9); color: #2a2000; }
+.pc-save {
+    display: inline-flex; align-items: center; gap: 0.3rem;
+    padding: 0.26rem 0.55rem; border-radius: 8px;
+    background: rgba(6, 6, 26, 0.74); border: 1px solid rgba(0, 255, 136, 0.42);
+    color: var(--accent-3); font-family: var(--font-d); font-size: 0.58rem;
+    font-weight: 800; letter-spacing: 0.6px;
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+.pc-rank {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 30px; padding: 0.26rem 0.45rem; border-radius: 8px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #05131c; font-family: var(--font-d); font-size: 0.62rem; font-weight: 900;
+}
+.pc-tools { position: absolute; z-index: 7; top: 0.6rem; right: 0.6rem; display: flex; flex-direction: column; gap: 0.4rem; }
+.pc-tool {
+    width: 34px; height: 34px; border-radius: 11px; cursor: pointer; color: #fff;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.22); background: rgba(6, 6, 26, 0.62);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    transition: 0.25s var(--ease);
+}
+.pc-tool:hover { background: rgba(0, 240, 255, 0.2); border-color: var(--accent); color: var(--accent); transform: scale(1.06); }
+.pc-wish.is-on { color: var(--accent-2); border-color: var(--accent-2); background: rgba(255, 0, 170, 0.22); }
+.pc-cmp.is-on { color: var(--accent-3); border-color: var(--accent-3); background: rgba(0, 255, 136, 0.18); }
+.pc-foot {
+    position: absolute; z-index: 6; left: 0.6rem; right: 0.6rem; bottom: 0.5rem;
+    display: flex; gap: 0.3rem; flex-wrap: wrap; align-items: center;
+}
+.pc-chip {
+    padding: 0.22rem 0.48rem; border-radius: 7px; font-size: 0.62rem; white-space: nowrap;
+    color: rgba(255, 255, 255, 0.84); background: rgba(6, 6, 26, 0.62);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+.pc-chip--cat { color: var(--accent); }
+.pc-chip--in { color: #9dffcf; border-color: rgba(0, 255, 136, 0.35); }
+.pc-chip--low { color: #ffd980; border-color: rgba(255, 204, 0, 0.42); }
+.pc-chip--fast { color: #bff4ff; border-color: rgba(0, 240, 255, 0.3); }
+.pc-zoomdot { margin-left: auto; display: inline-flex; gap: 3px; align-items: center; }
+.pc-zoomdot i { width: 5px; height: 5px; border-radius: 50%; background: rgba(255, 255, 255, 0.3); }
+.pc-card:hover .pc-zoomdot i:first-child, .pc-card.is-zoomed .pc-zoomdot i:last-child { background: var(--accent); }
+.pc-specbar {
+    position: absolute; z-index: 6; left: 0; right: 0; bottom: 0; padding: 0.45rem 0.7rem;
+    transform: translateY(102%); transition: transform 0.35s var(--ease);
+    background: linear-gradient(0deg, rgba(6, 6, 26, 0.96), rgba(6, 6, 26, 0.62));
+    border-top: 1px solid rgba(0, 240, 255, 0.22);
+    font-size: 0.64rem; color: rgba(255, 255, 255, 0.85);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.pc-card:hover .pc-specbar, .pc-card:focus-within .pc-specbar { transform: none; }
+/* 7b-1 · PRODUCTCARD v2 — BODY · PRICE */
+.pc-body { display: flex; flex-direction: column; gap: 0.36rem; padding: 0.7rem 0.85rem 0.85rem; flex: 1 1 auto; min-width: 0; }
+.pc-eyebrow {
+    display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap;
+    font-size: 0.64rem; letter-spacing: 1.1px; text-transform: uppercase; color: var(--muted-2);
+}
+.pc-cat { color: var(--accent); font-weight: 700; }
+.pc-sku { font-family: var(--font-d); font-size: 0.58rem; letter-spacing: 0.8px; }
+.pc-rev { margin-left: auto; }
+.pc-name {
+    font-family: var(--font-d); font-size: 0.88rem; font-weight: 800; line-height: 1.3;
+    overflow-wrap: anywhere; min-height: 2.6em;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.pc-name a { color: #fff; text-decoration: none; transition: color 0.2s ease; }
+.pc-name a:hover { color: var(--accent); }
+.pc-desc {
+    font-size: 0.74rem; color: var(--muted); line-height: 1.4;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.pc-highs { display: flex; flex-wrap: wrap; gap: 0.2rem; list-style: none; }
+.pc-high {
+    padding: 0.14rem 0.4rem; border-radius: 6px; font-size: 0.6rem;
+    background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.8); max-width: 100%;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.pc-rating { display: flex; align-items: center; gap: 0.35rem; font-size: 0.7rem; color: var(--muted); }
+.pc-rating .pc-stars { display: inline-flex; gap: 1px; color: var(--accent-4); }
+.pc-rating b { font-family: var(--font-d); font-size: 0.74rem; color: #fff; }
+/* Histogram + instalments stay out of the compact cards — restored in list view */
+.pc-dist { display: none; align-items: flex-end; gap: 3px; height: 22px; }
+.pc-dist i { flex: 1 1 0; min-height: 3px; border-radius: 3px 3px 0 0; background: linear-gradient(180deg, var(--accent), rgba(0, 240, 255, 0.25)); }
+.pc-price { display: flex; align-items: baseline; gap: 0.4rem; flex-wrap: wrap; margin-top: 0; }
+.pc-now {
+    font-family: var(--font-d); font-size: 1.12rem; font-weight: 900;
+    background: linear-gradient(135deg, var(--accent), var(--accent-3));
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.pc-old { color: var(--muted-2); text-decoration: line-through; font-size: 0.78rem; }
+.pc-savechip {
+    margin-left: auto; padding: 0.18rem 0.48rem; border-radius: 6px;
+    background: rgba(255, 68, 68, 0.16); border: 1px solid rgba(255, 68, 68, 0.36);
+    color: #ff9a9a; font-family: var(--font-d); font-size: 0.6rem; font-weight: 800;
+}
+.pc-inst { display: none; font-size: 0.68rem; color: var(--muted-2); }
+/* 7b-2 · PRODUCTCARD v2 — PRICE METER · STOCK · FACTS · ACTIONS */
+.pc-meter { display: flex; flex-direction: column; gap: 0.18rem; }
+.pc-meter-track {
+    position: relative; height: 4px; border-radius: var(--r-pill);
+    background: rgba(255, 255, 255, 0.1);
+}
+.pc-meter-fill {
+    position: absolute; left: 0; top: 0; height: 100%; border-radius: inherit;
+    background: linear-gradient(90deg, var(--accent-3), var(--accent));
+}
+.pc-meter-avg {
+    position: absolute; top: 50%; width: 2px; height: 11px;
+    transform: translate(-50%, -50%); border-radius: 2px;
+    background: var(--accent-2); box-shadow: 0 0 6px rgba(255, 0, 170, 0.6);
+}
+.pc-meter-lab {
+    display: flex; justify-content: space-between; gap: 0.4rem;
+    font-size: 0.58rem; color: var(--muted-2);
+}
+.pc-stockline { font-size: 0.68rem; font-weight: 600; color: #9dffcf; }
+.pc-stockline.is-low { color: #ffd980; }
+/* Fact grid — hidden in grid view */
+.pc-facts {
+    display: none; grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.1rem 1rem;
+}
+.pc-fact {
+    display: flex; flex-direction: column; min-width: 0;
+    font-size: 0.8rem; color: var(--muted);
+    padding: 0.3rem 0; border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+}
+.pc-fact b {
+    font-family: var(--font-d); font-size: 0.58rem; font-weight: 800;
+    letter-spacing: 1.2px; text-transform: uppercase;
+    color: var(--muted-2); margin-bottom: 0.1rem;
+}
+.pc-actions {
+    display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;
+    margin-top: auto; padding-top: 0.3rem;
+}
+.pc-add {
+    flex: 1 1 auto; padding: 0.5rem 0.9rem; border-radius: 11px; cursor: pointer;
+    border: 1px solid rgba(0, 240, 255, 0.5);
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(0, 255, 136, 0.14));
+    color: #fff; font-family: var(--font-d); font-size: 0.66rem; font-weight: 800;
+    letter-spacing: 1px; text-transform: uppercase; transition: 0.25s var(--ease);
+}
+.pc-add:hover {
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.38), rgba(0, 255, 136, 0.26));
+    box-shadow: 0 0 18px rgba(0, 240, 255, 0.3);
+}
+.pc-add.is-added {
+    border-color: rgba(0, 255, 136, 0.55); color: #bfffdf;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 240, 255, 0.12));
+}
+/* Quantity stepper reveals with the card (touch devices: always on) */
+.pc-qty {
+    display: inline-flex; align-items: center; gap: 0.1rem; border-radius: 10px;
+    border: 1px solid var(--glass-border-2); background: rgba(6, 6, 26, 0.6);
+    opacity: 0; transform: translateX(6px); pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s var(--ease);
+}
+.pc-card:hover .pc-qty, .pc-card:focus-within .pc-qty,
+.pc-card.is-in-cart .pc-qty { opacity: 1; transform: none; pointer-events: auto; }
+.pc-qty button {
+    width: 26px; height: 30px; border: 0; background: transparent; cursor: pointer;
+    color: #fff; font-size: 0.95rem; line-height: 1; border-radius: 8px;
+}
+.pc-qty button:hover { background: rgba(0, 240, 255, 0.16); color: var(--accent); }
+.pc-qty span {
+    min-width: 20px; text-align: center;
+    font-family: var(--font-d); font-size: 0.74rem; font-weight: 800;
+}
+.pc-actions .pc-quick {
+    padding: 0.5rem 0.75rem; border-radius: 11px; cursor: pointer;
+    border: 1px solid var(--glass-border-2); background: rgba(255, 255, 255, 0.05);
+    color: #fff; font-family: var(--font-d); font-size: 0.62rem; font-weight: 800;
+    letter-spacing: 0.9px; text-transform: uppercase; transition: 0.25s var(--ease);
+}
+.pc-actions .pc-quick:hover { border-color: var(--accent); color: var(--accent); }
+.pc-more {
+    font-size: 0.78rem; color: var(--muted); text-decoration: none;
+    white-space: nowrap; transition: color 0.2s ease;
+}
+.pc-more:hover { color: var(--accent); }
+/* 7c · PRODUCTCARD v2 — STATES */
+.pc-card.is-saved { border-color: rgba(255, 0, 170, 0.45); }
+.pc-card.is-in-cart { border-color: rgba(0, 255, 136, 0.4); }
+.pc-card.is-zoomed .pc-specbar { transform: none; }
+/* Touch devices: the quantity stepper must be reachable without hover */
+@media (hover: none) {
+    .pc-qty { opacity: 1; transform: none; pointer-events: auto; }
+    .pc-specbar { transform: none; }
+}
+
+/* ── 2 · "Cleaner DTC" — the card you actually SEE on the shop page ────────
+   Light product stage + dark body. Hides the telemetry layer (spec ticker,
+   foot chips, highs, desc, meter, stockline, eyebrow) and restyles what's
+   left. Verbatim from shop.html so home === shop. */
+.pc-card { border-radius: 20px; border: 1px solid rgba(255,255,255,.1); background: rgba(8,8,32,.55); }
+.pc-grid-tex, .pc-spot, .pc-detail, .pc-specbar, .pc-shine, .pc-foot, .pc-highs, .pc-desc, .pc-meter-lab, .pc-stockline { display: none !important; }
+.pc-media { background: #f6f7fb; border-radius: 18px 18px 0 0; }
+.pc-img { padding: 7%; filter: none; }
+.pc-card:hover .pc-img { transform: scale(1.03); }
+.pc-body { padding: .9rem 1rem 1rem; gap:.35rem; }
+.pc-eyebrow { display:none; }
+.pc-name { color:#fff; font-family: var(--font-d); min-height: 0; font-size:.9rem; }
+.pc-rating { margin-bottom:.1rem; }
+.pc-price { margin:.2rem 0 .55rem; }
+.pc-now {
+    background: none; -webkit-background-clip: border-box; background-clip: border-box;
+    -webkit-text-fill-color: #fff; color: #fff; font-size: 1.12rem;
+}
+.pc-old { color: rgba(255,255,255,.45); }
+.pc-add {
+    background: rgba(0,240,255,.08); border: 1px solid rgba(0,240,255,.5); color: var(--accent);
+}
+.pc-add:hover { background: rgba(0,240,255,.16); box-shadow: none; }
+.pc-quick, .pc-more { border-color: rgba(255,255,255,.14); color: rgba(255,255,255,.82); }
+.pc-tools { opacity: 0; transition: opacity .2s ease; }
+.pc-card:hover .pc-tools, .pc-card:focus-within .pc-tools { opacity: 1; }
+@media (hover: none) { .pc-tools { opacity: 1; } }
+.pc-badge { box-shadow: none; backdrop-filter: none; background: rgba(255,255,255,.88); color: #060614; border: 1px solid rgba(6,6,26,.08); }
+.pc-badge.hot, .pc-badge.trending, .pc-badge.premium, .pc-badge.new, .pc-badge.sale { box-shadow: none; }
+
+/* ── 3 · CONVERSION POLISH — ATC + qty always reachable, no hover-gating ── */
+.pc-qty { opacity: 1; transform: none; pointer-events: auto; }
+.pc-add { min-height: 42px; }
+.pc-name { font-size: 0.9rem; }
+.pc-now { font-size: 1.15rem; }
+
+/* Small phones: tighter body, smaller name (mirrors shop @640) */
+@media (max-width: 640px) {
+    .pc-body { padding: 0.6rem 0.65rem 0.7rem; }
+    .pc-name { font-size: 0.82rem; }
+}
+
+/* Reduced motion: no lift */
+@media (prefers-reduced-motion: reduce) {
+    .pc-card:hover { transform: none; }
+}

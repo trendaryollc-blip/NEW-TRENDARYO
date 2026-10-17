@@ -43,7 +43,6 @@
     function valueScore(p) { return num(p.price) > 0 ? num(p.rating) / (num(p.price) / 100) : 0; }
 
     var RANKED = ALL.slice().sort(function (a, b) { return momentum(b) - momentum(a); });
-    var VALUE_KING = ALL.slice().sort(function (a, b) { return valueScore(b) - valueScore(a); })[0];
 
     /* ── 2 · Home category model (order matches the six tiles in the DOM) ─ */
     var CATS = [
@@ -65,21 +64,10 @@
         if (c) { (BYCAT[c.id] = BYCAT[c.id] || []).push(p); }
     });
 
-    /* A tag that is always a true, computed statement about the product */
-    function verdictTag(p, rank) {
-        if (rank === 1) { return 'Bestseller'; }
-        if (VALUE_KING && p.id === VALUE_KING.id) { return 'Great value'; }
-        var c = catOf(p);
-        if (c && BYCAT[c.id]) {
-            var best = BYCAT[c.id].slice().sort(function (a, b) {
-                return num(b.rating) - num(a.rating) || num(b.reviews) - num(a.reviews);
-            })[0];
-            if (best && best.id === p.id) { return 'Top rated · ' + c.label; }
-        }
-        return 'Bestseller #' + rank;
-    }
-
-    var CART_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/><path d="M12 5v6m-3-3h6"/></svg>';
+    /* ProductCard v2 (shared with shop) — configure the price meter envelope
+       once, so every card shows the same floor/ceiling/average as the shop. */
+    var CARD = window.TrendaryoProductCard;
+    if (CARD) { CARD.configure({ all: ALL }); }
 
     function safe(fn) {
         try { fn(); } catch (err) { /* one renderer failing must not kill the rest */ }
@@ -229,34 +217,13 @@
         set('drops', String(DROPS.length));
     }
 
-    /* ── 5 · Bestseller cards (top 6 by demand, replacing the static grid) ── */
-    function cardHTML(p, rank, trending) {
-        var save = num(p.oldPrice) > num(p.price) ? Math.round(num(p.oldPrice) - num(p.price)) : 0;
-        var img = P.media(p).replace('<img ', '<img onload="this.previousElementSibling.classList.add(\'is-done\')" ');
-        var url = 'product.html?id=' + encodeURIComponent(P.idOf(p));
-        return '<article class="vortex-card vx-card" data-product="' + P.idOf(p) + '">' +
-            '<a class="vx-media-link" href="' + url + '" aria-label="View ' + esc(p.name) + '">' +
-            '<div class="vx-media">' +
-                '<div class="media-skeleton" aria-hidden="true"></div>' +
-                img +
-                '<span class="vx-badge">' + (trending ? 'Trending' : 'Bestseller #' + rank) + '</span>' +
-            '</div>' +
-            '</a>' +
-            '<div class="vx-body">' +
-                '<div class="vx-rating">' + P.stars(p.rating) + '<span>' + num(p.rating).toFixed(1) + ' · ' + fmt(num(p.reviews)) + ' reviews</span></div>' +
-                '<h3 class="vx-name"><a href="' + url + '">' + esc(p.name) + '</a></h3>' +
-                '<div class="vx-tags">' +
-                    '<span class="vx-tag">' + (trending ? 'Trending now' : esc(verdictTag(p, rank))) + '</span>' +
-                    (save ? '<span class="vx-tag vx-tag--save">Save ' + P.price(save) + '</span>' : '') +
-                '</div>' +
-                '<p class="vx-desc">' + esc(p.description) + '</p>' +
-                '<div class="vx-price"><span>' + P.price(p.price) + '</span>' +
-                    (save ? '<span class="vx-price-old">' + P.price(p.oldPrice) + '</span>' : '') +
-                '</div>' +
-                '<button class="vx-btn vx-add" data-add="' + P.idOf(p) + '" data-name="' + esc(p.name) + '" data-price="' + num(p.price) + '">' +
-                    CART_SVG + ' Add to Cart</button>' +
-            '</div>' +
-        '</article>';
+    /* ── 5 · Product cards — ProductCard v2 (shared with shop) ─────────────
+       Same markup, same styles (product-card.css) as shop.html, so the home
+       grids look identical to the shop grid. Rank is passed so bestseller /
+       trending cards keep their #N flag. */
+    function cardHTML(p, rank) {
+        if (CARD) { return CARD.html(p, { rank: rank }); }
+        return ''; /* shared builder missing — grid stays empty rather than diverging */
     }
 
     function renderVerdicts() {
@@ -327,6 +294,7 @@
     safe(renderTrending);
     safe(renderTiles);
     safe(renderStats);
+    if (CARD) { safe(CARD.wire); } /* delegated qty / add-to-cart / wish / compare */
 
     /* Expose for later phases (budget lanes, momentum rail) + debugging */
     window.TrendaryoHome = {
