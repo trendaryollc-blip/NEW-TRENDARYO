@@ -525,7 +525,7 @@
     V.settings = {
         title: 'Settings',
         icon: 'settings',
-        sub: 'Store identity, AI keys, security and the maintenance bench',
+        sub: 'Store control, risk, AI keys, ops health, audit trail and the maintenance bench',
         render: function (root, ctx) {
             var S = ctx.S, App = ctx.App, engine = ctx.AI;
             var s = S.settings();
@@ -534,7 +534,7 @@
             for (var pk in provs) popts += '<option value="' + pk + '"' + (s.aiProvider === pk ? ' selected' : '') + '>' + U.esc(provs[pk].label) + '</option>';
             var modelHint = { openai: 'e.g. gpt-4o-mini', openrouter: 'e.g. openai/gpt-4o-mini', groq: 'e.g. llama-3.3-70b-versatile', gemini: 'e.g. gemini-2.0-flash', anthropic: 'e.g. claude-3-5-sonnet-latest', offline: 'built-in - no model needed' };
 
-            root.innerHTML = U.head('Settings', 'Identity, intelligence and the maintenance bench', '') +
+            root.innerHTML = U.head('Settings', 'Store control, intelligence, ops health and the maintenance bench', '') +
 
             '<div class="grid grid--split" style="margin-bottom:16px;">' +
                 '<div class="panel"><div class="panel__head"><div><div class="panel__title">Store identity</div></div></div><div class="panel__body">' +
@@ -617,6 +617,7 @@
                     supportEmail: root.querySelector('#stSupportEmail').value.trim()
                 });
                 App.toast('Store control saved', 'ok', 'Settings');
+                app().badges();
             });
             root.querySelector('#stRiskSave').addEventListener('click', function () {
                 var thr = parseInt(root.querySelector('#stRiskThr').value, 10);
@@ -641,11 +642,15 @@
                 if (!d) { el.innerHTML = '<div class="t-dim" style="padding:12px;">No health data yet - probes report after the next cron run.</div>'; return; }
                 var c = d.counts || {};
                 var ov = d.overall || 'ok';
+                var q = d.quota || {};
                 var h = '<div class="row row--wrap" style="gap:8px;margin-bottom:10px;">' +
                     '<span class="badge ' + (ov === 'ok' ? 'badge--ok' : (ov === 'degraded' ? 'badge--warn' : 'badge--danger')) + '">overall ' + U.esc(ov) + '</span>' +
                     '<span class="badge ' + (c.openAlerts ? 'badge--warn' : 'badge--neutral') + '">' + (c.openAlerts || 0) + ' open alerts</span>' +
                     '<span class="badge ' + (c.failedWebhooks ? 'badge--danger' : 'badge--neutral') + '">' + (c.failedWebhooks || 0) + ' failed webhooks</span>' +
                     '<span class="badge ' + (c.attentionOrders ? 'badge--warn' : 'badge--neutral') + '">' + (c.attentionOrders || 0) + ' orders need attention</span>' +
+                    '<span class="badge ' + (c.api5xx ? 'badge--danger' : 'badge--neutral') + '">' + (c.api5xx || 0) + ' API 5xx</span>' +
+                    '<span class="badge ' + (c.cjFailures ? 'badge--danger' : 'badge--neutral') + '">' + (c.cjFailures || 0) + ' CJ failures</span>' +
+                    '<span class="badge ' + (q.status === 'critical' ? 'badge--danger' : q.status === 'warning' ? 'badge--warn' : 'badge--neutral') + '">quota ' + Math.round((q.usage || 0) * 100) + '%</span>' +
                     '<span class="fs-xs t-mute" style="align-self:center;">checked ' + (d.checkedAt ? App.ago(d.checkedAt) : 'just now') + '</span></div>';
                 var probes = d.probes || [];
                 if (!probes.length) { h += '<div class="fs-sm t-mute">No probes have reported yet.</div>'; }

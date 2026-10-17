@@ -214,6 +214,8 @@
         jobs.settings = getJSON('/settings');
         jobs.newsletter = getJSON('/newsletter');
         jobs.reviews = api().request('/reviews').catch(function () { return { data: [] }; });
+        /* Drafts and published posts both live in the studio queue. */
+        jobs.blog = getJSON('/blog?status=all&limit=500').catch(function () { return { data: [] }; });
 
         return Promise.all([
             jobs.products.catch(function () { return { data: [] }; }),
@@ -221,7 +223,8 @@
             jobs.users.catch(function () { return { data: [] }; }),
             jobs.settings.catch(function () { return { data: null }; }),
             jobs.newsletter.catch(function () { return { data: [] }; }),
-            jobs.reviews.catch(function () { return { data: [] }; })
+            jobs.reviews.catch(function () { return { data: [] }; }),
+            jobs.blog.catch(function () { return { data: [] }; })
         ]).then(function (results) {
             var products = (results[0].data || []).map(mapProductToCatalog);
             var orders = (results[1].data || []).map(mapOrderToAdmin);
@@ -229,12 +232,14 @@
             var settings = results[3].data || null;
             var newsletter = (results[4].data || []).map(function (n) { return (n.email || '').toLowerCase(); });
             var reviews = (results[5].data || []).map(mapReviewToAdmin);
+            var posts = results[6].data || [];
 
             refreshProductCache(products);
             lsSet('trendaryo_orders', orders);
             lsSet('trendaryo_admin_customers', users);
             lsSet('trendaryo_newsletter', newsletter);
             lsSet('trendaryo_reviews', reviews);
+            lsSet('trendaryo_admin_blog', posts);
 
             if (settings) {
                 var S = window.TrendaryoAdminStore;
@@ -327,9 +332,21 @@
                     status: p.hidden ? 'draft' : 'active',
                     costPrice: p.costPrice != null ? Number(p.costPrice) : undefined,
                     reorderPoint: p.reorderPoint != null ? Number(p.reorderPoint) : undefined,
-                    leadTimeDays: p.leadTimeDays != null ? Number(p.leadTimeDays) : undefined
+                    leadTimeDays: p.leadTimeDays != null ? Number(p.leadTimeDays) : undefined,
+                    /* Keep the backend row on the same id the dashboard just
+                       assigned, so content, briefs and relations resolve. */
+                    clientId: String(p.id)
                 };
-                api().createProduct(payload).catch(notify);
+                api().createProduct(payload).then(function () {
+                    var App = window.TrendaryoAdminApp;
+                    if (App && App.toast) App.toast(p.name + ' synced to the catalog', 'ok', 'Catalog');
+                }).catch(function (err) {
+                    notify(err);
+                    var App2 = window.TrendaryoAdminApp;
+                    if (App2 && App2.toast) {
+                        App2.toast('Saved locally only - the catalog sync failed (' + ((err && err.message) || 'unknown error') + '). Reload the catalog and retry before publishing content.', 'warn', 'Catalog');
+                    }
+                });
             }
             return res;
         };
@@ -431,6 +448,72 @@
         S.deleteReview = function (id) {
             origDeleteReview.call(S, id);
             if (api()) api().request('/reviews/' + encodeURIComponent(String(id)), { method: 'DELETE' }).catch(notify);
+        };
+
+        /* ---------- BLOG write-through ----------
+           The server owns the document (id = slug), so after a create/delete we
+           re-pull the list rather than guessing which id Firestore assigned. */
+        var BLOG_FIELDS = ['title', 'excerpt', 'content', 'coverImage', 'coverAlt',
+            'category', 'tags', 'author', 'readMinutes', 'status',
+            'featured', 'scheduledFor', 'seo', 'relatedProductIds', 'blocks'];
+
+        function blogPayload(obj) {
+            var out = {}, i;
+            for (i = 0; i < BLOG_FIELDS.length; i++) {
+                if (obj[BLOG_FIELDS[i]] !== undefined) out[BLOG_FIELDS[i]] = obj[BLOG_FIELDS[i]];
+            }
+            return out;
+        }
+
+        function reloadBlog() {
+            if (!api()) return;
+            getJSON('/blog?status=all&limit=500').then(function (r) {
+                lsSet('trendaryo_admin_blog', r.data || []);
+                if (App && App.route && /blog/.test(String(location.hash || ''))) App.route();
+            }).catch(notify);
+        }
+        window.TrendaryoAdminSync = window.TrendaryoAdminSync || {};
+        window.TrendaryoAdminSync.reloadBlog = reloadBlog;
+
+        var origAddBlogPost = S.addBlogPost;
+        S.addBlogPost = function (p) {
+            var res = origAddBlogPost.call(S, p);
+            if (api()) {
+                api().createPost(blogPayload(p)).then(function () {
+                    reloadBlog();
+                }).catch(function (err) {
+                    notify(err);
+                    App.toast('Saved locally - the server rejected it: ' + ((err && err.message) || 'error'), 'warn', 'Blog');
+                });
+            }
+            return res;
+        };
+
+        var origSaveBlogPost = S.saveBlogPost;
+        S.saveBlogPost = function (id, patch) {
+            var res = origSaveBlogPost.call(S, id, patch);
+            var target = res ? (res.slug || res.id) : id;
+            if (api() && target) {
+                api().updatePost(String(target), blogPayload(patch)).then(function (r) {
+                    /* Reconcile with the authoritative doc (slug, timestamps). */
+                    if (r && r.data) origSaveBlogPost.call(S, id, r.data);
+                }).catch(function (err) {
+                    notify(err);
+                    App.toast('Local only - the server refused this save: ' + ((err && err.message) || 'error'), 'warn', 'Blog');
+                });
+            }
+            return res;
+        };
+
+        var origDeleteBlogPost = S.deleteBlogPost;
+        S.deleteBlogPost = function (id) {
+            var post = S.blogPost(id);
+            origDeleteBlogPost.call(S, id);
+            if (api() && post) {
+                api().deletePost(String(post.slug || post.id || id))
+                    .then(reloadBlog)
+                    .catch(function (err) { notify(err); reloadBlog(); });
+            }
         };
     }
 

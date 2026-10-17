@@ -54,4 +54,45 @@ function statusOf(probe, intervalMinutes, now = Date.now()) {
   return isStale(probe, intervalMinutes, now) ? 'stale' : 'ok';
 }
 
-module.exports = { beat, readAll, isStale, statusOf, COL };
+async function recordApiError(db, route, statusCode, message) {
+  try {
+    await db.collection('api_errors').add({
+      route: String(route || 'unknown'),
+      statusCode: Number(statusCode) || 500,
+      message: String(message || '').slice(0, 500),
+      at: nowIso(),
+    });
+  } catch (e) {
+    console.error('[health:apiError]', e.message);
+  }
+}
+
+async function recordCjTokenFailure(db, reason) {
+  try {
+    await db.collection('cj_failures').add({
+      reason: String(reason || 'unknown').slice(0, 500),
+      at: nowIso(),
+    });
+  } catch (e) {
+    console.error('[health:cjFailure]', e.message);
+  }
+}
+
+async function checkFirestoreQuota(db) {
+  try {
+    const snap = await db.collection('orders').count().get();
+    const count = snap.data().count;
+    const limit = 50000;
+    const usage = count / limit;
+    return {
+      orders: count,
+      limit,
+      usage,
+      status: usage > 0.9 ? 'critical' : usage > 0.75 ? 'warning' : 'ok',
+    };
+  } catch (e) {
+    return { orders: 0, limit: 50000, usage: 0, status: 'unknown', error: e.message };
+  }
+}
+
+module.exports = { beat, readAll, isStale, statusOf, COL, recordApiError, recordCjTokenFailure, checkFirestoreQuota };

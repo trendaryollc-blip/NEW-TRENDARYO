@@ -96,7 +96,17 @@
         .featured-post .blog-image { height: 300px; }
         .featured-post .blog-title { font-size: 1.5rem; }
         .featured-post .blog-excerpt { font-size: 1.1rem; }
-        
+
+        .blog-controls { display: flex; flex-direction: column; gap: 1.25rem; align-items: center; margin-bottom: 3rem; }
+        .blog-search { width: 100%; max-width: 480px; position: relative; }
+        .blog-search input { width: 100%; padding: 0.85rem 1.25rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 25px; color: #fff; font-family: 'Rajdhani', sans-serif; font-size: 1rem; transition: border-color .3s ease; }
+        .blog-search input:focus { outline: none; border-color: var(--accent); }
+        .blog-search input::placeholder { color: rgba(255,255,255,0.5); }
+        .blog-loading { grid-column: 1/-1; text-align: center; padding: 4rem 1rem; color: rgba(255,255,255,0.7); }
+        .blog-loading .spinner { width: 36px; height: 36px; border: 3px solid rgba(255,255,255,0.15); border-top-color: var(--accent); border-radius: 50%; display: inline-block; animation: blspin 0.9s linear infinite; }
+        @keyframes blspin { to { transform: rotate(360deg); } }
+        .blog-more { text-align: center; margin: 2rem 0; }
+
         @media (max-width: 768px) {
             .blog-grid { grid-template-columns: 1fr; gap: 1.5rem; }
             .featured-post { grid-column: span 1; }
@@ -121,116 +131,22 @@
                 <p>Discover the latest trends in fashion, technology, and lifestyle. Get inspired by our curated content and stay ahead of the curve.</p>
             </div>
             
-            <div class="blog-categories">
-                <button class="category-btn active" onclick="filterCategory('all')">All Posts</button>
-                <button class="category-btn" onclick="filterCategory('fashion')">Fashion</button>
-                <button class="category-btn" onclick="filterCategory('tech')">Technology</button>
-                <button class="category-btn" onclick="filterCategory('lifestyle')">Lifestyle</button>
-                <button class="category-btn" onclick="filterCategory('guides')">Guides</button>
+            <div class="blog-controls">
+                <div class="blog-search">
+                    <input type="search" id="blogSearch" placeholder="Search articles..." aria-label="Search articles">
+                </div>
+                <div class="blog-categories" id="blogCats">
+                    <button class="category-btn active" data-cat="all" type="button">All Posts</button>
+                </div>
             </div>
-            
+
             <div class="blog-grid" id="blogGrid">
-
-                <article class="blog-card featured-post" data-category="tech">
-                    <div class="blog-image">
-                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=800&fit=crop" alt="Wireless headphones on a desk" loading="lazy" decoding="async">
-                        <span class="blog-category">Technology</span>
-                    </div>
-                    <div class="blog-content">
-                        <div class="blog-meta">
-                            <span class="blog-author"><span class="author-avatar"></span> Editor's Pick</span>
-                            <span class="blog-date">8 min read</span>
-                        </div>
-                        <h2 class="blog-title">How to Choose Wireless Headphones in 2026</h2>
-                        <p class="blog-excerpt">ANC or open-back? 30-hour battery or lightweight? We break down the five specs that actually change how headphones sound day to day � and the three marketing terms you can safely ignore.</p>
-                        <a href="blog-post.html?id=1" class="read-more">Read article</a>
-                    </div>
-                </article>
-
-                <article class="blog-card" data-category="guides">
-                    <div class="blog-image">
-                        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&h=800&fit=crop" alt="Smart watch on a wrist" loading="lazy" decoding="async">
-                        <span class="blog-category">Guides</span>
-                    </div>
-                    <div class="blog-content">
-                        <div class="blog-meta">
-                            <span class="blog-author"><span class="author-avatar"></span> Buying Guide</span>
-                            <span class="blog-date">6 min read</span>
-                        </div>
-                        <h2 class="blog-title">Smartwatch vs Fitness Band: Which One Fits Your Life?</h2>
-                        <p class="blog-excerpt">Both track your steps. Only one will still be on your wrist in six months. Here's an honest comparison of battery life, accuracy, apps and price.</p>
-                        <a href="blog-post.html?id=2" class="read-more">Read article</a>
-                    </div>
-                </article>
-
-                <article class="blog-card" data-category="fashion">
-                    <div class="blog-image">
-                        <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&h=800&fit=crop" alt="Everyday carry backpack" loading="lazy" decoding="async">
-                        <span class="blog-category">Fashion</span>
-                    </div>
-                    <div class="blog-content">
-                        <div class="blog-meta">
-                            <span class="blog-author"><span class="author-avatar"></span> Style Desk</span>
-                            <span class="blog-date">5 min read</span>
-                        </div>
-                        <h2 class="blog-title">5 Everyday Carry Upgrades Under $100</h2>
-                        <p class="blog-excerpt">Small, cheap changes that make your daily routine noticeably better � a better wallet, a real power bank, and the one bag upgrade worth every dollar.</p>
-                        <a href="blog-post.html?id=3" class="read-more">Read article</a>
-                    </div>
-                </article>
-<article class="blog-card" data-category="lifestyle">
-                    <div class="blog-image">
-                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&h=800&fit=crop" alt="Premium sneakers" loading="lazy" decoding="async">
-                        <span class="blog-category">Lifestyle</span>
-                    </div>
-                    <div class="blog-content">
-                        <div class="blog-meta">
-                            <span class="blog-author"><span class="author-avatar"></span> Style Desk</span>
-                            <span class="blog-date">7 min read</span>
-                        </div>
-                        <h2 class="blog-title">The Real Difference Between Cheap and Premium Sneakers</h2>
-                        <p class="blog-excerpt">It isn't the logo. It's the midsole foam, the knit density and the glue. We explain what you're actually paying for � and when it's worth it.</p>
-                        <a href="blog-post.html?id=4" class="read-more">Read article</a>
-                    </div>
-                </article>
-
-                <article class="blog-card" data-category="tech">
-                    <div class="blog-image">
-                        <img src="https://images.unsplash.com/photo-1588872657840-790ff3bde08c?w=800&h=800&fit=crop" alt="Work from home desk setup with laptop" loading="lazy" decoding="async">
-                        <span class="blog-category">Technology</span>
-                    </div>
-                    <div class="blog-content">
-                        <div class="blog-meta">
-                            <span class="blog-author"><span class="author-avatar"></span> Product Team</span>
-                            <span class="blog-date">9 min read</span>
-                        </div>
-                        <h2 class="blog-title">Working From Home: The Desk Setup That Actually Helps</h2>
-                        <p class="blog-excerpt">A monitor, a keyboard and lighting � in that order. How to build a desk setup that reduces fatigue instead of just looking good in photos.</p>
-                        <a href="blog-post.html?id=5" class="read-more">Read article</a>
-                    </div>
-                </article>
-
-                <article class="blog-card" data-category="guides">
-                    <div class="blog-image">
-                        <img src="https://images.unsplash.com/photo-1484704849700-f032a568e944?w=800&h=800&fit=crop" alt="Wireless earbuds as a gift" loading="lazy" decoding="async">
-                        <span class="blog-category">Guides</span>
-                    </div>
-                    <div class="blog-content">
-                        <div class="blog-meta">
-                            <span class="blog-author"><span class="author-avatar"></span> Gift Guide</span>
-                            <span class="blog-date">6 min read</span>
-                        </div>
-                        <h2 class="blog-title">Gift Guide: Tech Gifts They'll Actually Use</h2>
-                        <p class="blog-excerpt">Skip the novelty gadgets. Six tech gifts under $150 that people keep using long after the wrapping paper is gone � plus what to avoid.</p>
-                        <a href="blog-post.html?id=6" class="read-more">Read article</a>
-                    </div>
-                </article>
-
+                <div class="blog-loading"><div class="spinner"></div><p style="margin-top:1rem;">Loading the latest articles...</p></div>
             </div>
 
             <div id="blogEmpty" style="display:none; text-align:center; padding:3rem 1rem; color:rgba(255,255,255,0.7);">
-                <p style="margin-bottom:1rem;">No articles in this category yet.</p>
-                <button class="category-btn" onclick="filterCategory('all')">Show all posts</button>
+                <p style="margin-bottom:1rem;">No articles match yet.</p>
+                <button class="category-btn" type="button" id="blogReset">Show all posts</button>
             </div>
             
             <div class="cta-band">
@@ -244,39 +160,159 @@
     <!-- Footer -->
     <div id="footer-container"></div>
     <script src="components.js"></script>
+    <script src="api-client.js"></script>
     <script>
-      /* Category filter � works for click events AND programmatic calls */
-      function filterCategory(category, btn) {
-        var buttons = document.querySelectorAll('.category-btn');
-        for (var i = 0; i < buttons.length; i++) buttons[i].classList.remove('active');
-        if (!btn) {
-          for (var j = 0; j < buttons.length; j++) {
-            if (buttons[j].textContent.trim().toLowerCase().indexOf(category === 'all' ? 'all' : category) === 0) { btn = buttons[j]; break; }
-          }
-        }
-        if (btn) btn.classList.add('active');
+    (function () {
+        'use strict';
 
-        var cards = document.querySelectorAll('#blogGrid .blog-card');
-        var shown = 0;
-        for (var k = 0; k < cards.length; k++) {
-          var match = (category === 'all') || (cards[k].getAttribute('data-category') === category);
-          cards[k].style.display = match ? '' : 'none';
-          if (match) shown++;
-        }
-        var empty = document.getElementById('blogEmpty');
-        if (empty) empty.style.display = shown === 0 ? 'block' : 'none';
-      }
+        var BASE_CATS = [
+            { key: 'all', label: 'All Posts' },
+            { key: 'fashion', label: 'Fashion' },
+            { key: 'tech', label: 'Technology' },
+            { key: 'lifestyle', label: 'Lifestyle' },
+            { key: 'guides', label: 'Guides' }
+        ];
 
-      /* Wire the category buttons to the filter */
-      document.addEventListener('DOMContentLoaded', function () {
-        var buttons = document.querySelectorAll('.category-btn');
-        var map = ['all', 'fashion', 'tech', 'lifestyle', 'guides'];
-        for (var i = 0; i < buttons.length; i++) {
-          (function (i) {
-            buttons[i].addEventListener('click', function () { filterCategory(map[i] || 'all', buttons[i]); });
-          })(i);
+        /* Offline/dev fallback so the page never renders empty when the API
+           is unreachable - same six articles the static blog shipped with. */
+        var FALLBACK = [
+            { id: 'how-to-choose-wireless-headphones', slug: 'how-to-choose-wireless-headphones', title: 'How to Choose Wireless Headphones in 2026', excerpt: 'ANC or open-back? 30-hour battery or lightweight? We break down the five specs that actually change how headphones sound day to day.', category: 'tech', author: "Editor's Pick", readMinutes: 8, coverImage: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=800&fit=crop', coverAlt: 'Wireless headphones on a desk', featured: true, createdAt: '2026-01-08T10:00:00.000Z', _offline: true },
+            { id: 'smartwatch-vs-fitness-band', slug: 'smartwatch-vs-fitness-band', title: 'Smartwatch vs Fitness Band: Which One Fits Your Life?', excerpt: "Both track your steps. Only one will still be on your wrist in six months. Here's an honest comparison of battery life, accuracy, apps and price.", category: 'guides', author: 'Buying Guide', readMinutes: 6, coverImage: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&h=800&fit=crop', coverAlt: 'Smart watch on a wrist', createdAt: '2026-01-05T10:00:00.000Z', _offline: true },
+            { id: 'everyday-carry-upgrades', slug: 'everyday-carry-upgrades', title: '5 Everyday Carry Upgrades Under $100', excerpt: 'Small, cheap changes that make your daily routine noticeably better - a better wallet, a real power bank, and the one bag upgrade worth every dollar.', category: 'fashion', author: 'Style Desk', readMinutes: 5, coverImage: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&h=800&fit=crop', coverAlt: 'Everyday carry backpack', createdAt: '2026-01-02T10:00:00.000Z', _offline: true },
+            { id: 'cheap-vs-premium-sneakers', slug: 'cheap-vs-premium-sneakers', title: 'The Real Difference Between Cheap and Premium Sneakers', excerpt: "It isn't the logo. It's the midsole foam, the knit density and the glue. We explain what you're actually paying for - and when it's worth it.", category: 'lifestyle', author: 'Style Desk', readMinutes: 7, coverImage: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&h=800&fit=crop', coverAlt: 'Premium sneakers', createdAt: '2025-12-28T10:00:00.000Z', _offline: true },
+            { id: 'work-from-home-desk-setup', slug: 'work-from-home-desk-setup', title: 'Working From Home: The Desk Setup That Actually Helps', excerpt: 'A monitor, a keyboard and lighting - in that order. How to build a desk setup that reduces fatigue instead of just looking good in photos.', category: 'tech', author: 'Product Team', readMinutes: 9, coverImage: 'https://images.unsplash.com/photo-1588872657840-790ff3bde08c?w=800&h=800&fit=crop', coverAlt: 'Work from home desk setup with laptop', createdAt: '2025-12-20T10:00:00.000Z', _offline: true },
+            { id: 'tech-gift-guide', slug: 'tech-gift-guide', title: "Gift Guide: Tech Gifts They'll Actually Use", excerpt: 'Skip the novelty gadgets. Six tech gifts under $150 that people keep using long after the wrapping paper is gone - plus what to avoid.', category: 'guides', author: 'Gift Guide', readMinutes: 6, coverImage: 'https://images.unsplash.com/photo-1484704849700-f032a568e944?w=800&h=800&fit=crop', coverAlt: 'Wireless earbuds as a gift', createdAt: '2025-12-15T10:00:00.000Z', _offline: true }
+        ];
+
+        var state = { posts: [], cat: 'all', q: '' };
+        var grid = document.getElementById('blogGrid');
+
+        function esc(s) {
+            return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
-      });
+
+        function dateLabel(p) {
+            var d = p.publishedAt || p.createdAt;
+            if (!d) return '';
+            try { return new Date(d).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }); }
+            catch (e) { return ''; }
+        }
+
+        function cardHtml(p, featured) {
+            var href = 'blog-post.html?slug=' + encodeURIComponent(p.slug || p.id);
+            var img = p.coverImage || 'assets/trendaryo-crown-star-logo.svg';
+            var read = (p.readMinutes || (window.BlogBlocks ? BlogBlocks.readMinutes(p.blocks, p.content) : 5)) + ' min read';
+            return '<article class="blog-card' + (featured ? ' featured-post' : '') + '" data-category="' + esc(p.category || 'guides') + '">' +
+                '<div class="blog-image">' +
+                    '<img src="' + esc(img) + '" alt="' + esc(p.coverAlt || p.title || '') + '" loading="lazy" decoding="async">' +
+                    '<span class="blog-category">' + esc(p.category || 'guides') + '</span>' +
+                '</div>' +
+                '<div class="blog-content">' +
+                    '<div class="blog-meta">' +
+                        '<span class="blog-author"><span class="author-avatar"></span>' + esc(p.author || 'Trendaryo Editorial') + '</span>' +
+                        '<span class="blog-date">' + esc(read) + (dateLabel(p) ? ' - ' + esc(dateLabel(p)) : '') + '</span>' +
+                    '</div>' +
+                    '<h2 class="blog-title">' + esc(p.title || 'Untitled') + '</h2>' +
+                    '<p class="blog-excerpt">' + esc(p.excerpt || (window.BlogBlocks ? BlogBlocks.excerptOf(p) : '')) + '</p>' +
+                    '<a href="' + href + '" class="read-more">Read article</a>' +
+                '</div>' +
+            '</article>';
+        }
+
+        function visible() {
+            var q = state.q.trim().toLowerCase();
+            var out = [];
+            for (var i = 0; i < state.posts.length; i++) {
+                var p = state.posts[i];
+                if (state.cat !== 'all' && String(p.category || '').toLowerCase() !== state.cat) continue;
+                if (q) {
+                    var hay = (p.title || '') + ' ' + (p.excerpt || '') + ' ' + (p.tags || []).join(' ');
+                    if (hay.toLowerCase().indexOf(q) < 0) continue;
+                }
+                out.push(p);
+            }
+            /* Featured first, then newest */
+            out.sort(function (a, b) {
+                var fa = a.featured ? 1 : 0, fb = b.featured ? 1 : 0;
+                if (fa !== fb) return fb - fa;
+                return new Date(b.publishedAt || b.createdAt || 0) - new Date(a.publishedAt || a.createdAt || 0);
+            });
+            return out;
+        }
+
+        function render() {
+            var list = visible();
+            var empty = document.getElementById('blogEmpty');
+            if (!list.length) {
+                grid.innerHTML = '';
+                grid.style.display = 'none';
+                if (empty) empty.style.display = 'block';
+                return;
+            }
+            grid.style.display = '';
+            if (empty) empty.style.display = 'none';
+            var h = '', featuredUsed = false;
+            for (var i = 0; i < list.length; i++) {
+                var feat = !!list[i].featured && !featuredUsed && state.cat === 'all' && !state.q;
+                if (feat) featuredUsed = true;
+                h += cardHtml(list[i], feat);
+            }
+            grid.innerHTML = h;
+        }
+
+        function renderCats() {
+            var seen = {}, extra = [];
+            for (var i = 0; i < state.posts.length; i++) {
+                var c = String(state.posts[i].category || '').toLowerCase();
+                if (c && !seen[c]) { seen[c] = 1; if (!BASE_CATS.some(function (b) { return b.key === c; })) extra.push(c); }
+            }
+            var cats = BASE_CATS.concat(extra.map(function (c) { return { key: c, label: c.charAt(0).toUpperCase() + c.slice(1) }; }));
+            var el = document.getElementById('blogCats');
+            if (!el) return;
+            var h = '';
+            for (var j = 0; j < cats.length; j++) {
+                h += '<button class="category-btn' + (cats[j].key === state.cat ? ' active' : '') + '" type="button" data-cat="' + esc(cats[j].key) + '">' + esc(cats[j].label) + '</button>';
+            }
+            el.innerHTML = h;
+        }
+
+        document.getElementById('blogCats').addEventListener('click', function (e) {
+            var btn = e.target.closest('[data-cat]');
+            if (!btn) return;
+            state.cat = btn.getAttribute('data-cat');
+            renderCats();
+            render();
+        });
+
+        var search = document.getElementById('blogSearch');
+        var t = null;
+        search.addEventListener('input', function () {
+            if (t) clearTimeout(t);
+            t = setTimeout(function () { state.q = search.value; render(); }, 220);
+        });
+
+        document.getElementById('blogReset').addEventListener('click', function () {
+            state.cat = 'all'; state.q = ''; search.value = '';
+            renderCats(); render();
+        });
+
+        function load() {
+            if (!window.API) { state.posts = FALLBACK; renderCats(); render(); return Promise.resolve(); }
+            return window.API.getPosts({ limit: 100, sort: 'newest' }).then(function (res) {
+                var posts = (res && res.data) || [];
+                if (!posts.length) { state.posts = FALLBACK; }
+                else { state.posts = posts; }
+                renderCats();
+                render();
+            }).catch(function () {
+                state.posts = FALLBACK;
+                renderCats();
+                render();
+            });
+        }
+
+        load();
+    })();
     </script>
 </body>
 </html>

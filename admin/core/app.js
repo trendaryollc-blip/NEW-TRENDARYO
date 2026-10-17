@@ -271,6 +271,8 @@
         { id: 'inbox', group: 'Support' },
         { id: 'automations', group: 'Growth' },
         { id: 'marketing', group: 'Growth' },
+        { id: 'blog', group: 'Growth' },
+        { id: 'content', group: 'Growth' },
         { id: 'ai-studio', group: 'Intelligence' },
         { id: 'settings', group: 'System' }
     ];
@@ -291,6 +293,17 @@
         try { b['ai-studio'] = S.aiHistory().length; } catch (e) { b['ai-studio'] = 0; }
         try { b.automations = views().automations.openAlerts || 0; } catch (e) { b.automations = 0; }
         try { b.inbox = views().inbox.unread || 0; } catch (e) { b.inbox = 0; }
+        /* Blog queue: drafts waiting to be edited/published. */
+        try {
+            var bp = st().blogPosts(), bd = 0;
+            for (var bi = 0; bi < bp.length; bi++) if (bp[bi].status !== 'published') bd++;
+            b.blog = bd;
+        } catch (e) { b.blog = 0; }
+        /* Store gate (F5): flag a paused checkout directly on the nav. */
+        try {
+            var gs = st();
+            b.settings = (gs.checkoutEnabled === false || gs.maintenanceMode === true) ? 1 : 0;
+        } catch (e) { b.settings = 0; }
         var items = document.querySelectorAll('.nav-item[data-nav]');
         for (var i = 0; i < items.length; i++) {
             var id = items[i].getAttribute('data-nav');
@@ -303,7 +316,7 @@
             if (id === 'reviews' && val > 0) el.classList.add('is-alert');
             if (id === 'inbox' && val > 0) el.classList.add('is-alert');
             if (id === 'automations' && val > 0) el.classList.add('is-warn');
-            if ((id === 'products' || id === 'orders') && val > 0) el.classList.add('is-warn');
+            if ((id === 'products' || id === 'orders' || id === 'settings') && val > 0) el.classList.add('is-warn');
         }
     };
 
@@ -334,6 +347,7 @@
                     '<div class="sidebar__scroll">' + nav + '</div>' +
                     '<div class="sidebar__foot">' +
                         '<a class="nav-item" href="shop.html" target="_blank" rel="noopener">' + A.icon('store', 16) + '<span>View store</span>' + A.icon('externalLink', 13) + '</a>' +
+                        '<div class="fs-xs t-mute" id="tlDeployInfo" style="padding:4px 12px;">Loading deploy info...</div>' +
                         '<div class="row" style="padding:10px 12px;gap:10px;"><span class="avatar avatar--accent">' + App.esc(ini) + '</span><div style="min-width:0;flex:1;"><div class="fs-sm fw-600 t-truncate">' + App.esc(email) + '</div><div class="fs-xs t-mute">Administrator</div></div>' +
                         '<button class="icon-btn" id="tlLogout" type="button" title="Log out" aria-label="Log out">' + A.icon('logout', 15) + '</button></div>' +
                     '</div>' +
@@ -361,6 +375,19 @@
         document.getElementById('tlHamburger').addEventListener('click', toggleMobile);
         document.getElementById('tlScrim').addEventListener('click', closeMobile);
         document.getElementById('tlCopilotBtn').addEventListener('click', function () { App.copilot(); });
+
+        try {
+            fetch('/api/config/deploy').then(function (r) { return r.json(); }).then(function (d) {
+                var el = document.getElementById('tlDeployInfo');
+                if (!el || !d || !d.data) return;
+                var sha = d.data.gitSha || 'local';
+                var at = d.data.deployedAt ? new Date(d.data.deployedAt).toLocaleString() : 'unknown';
+                el.textContent = 'v' + sha + ' | deployed ' + at;
+            }).catch(function () {
+                var el = document.getElementById('tlDeployInfo');
+                if (el) el.textContent = 'deploy info unavailable';
+            });
+        } catch (e) { /* ignore */ }
     };
 
     function toggleMobile() {
@@ -381,15 +408,48 @@
 
     App.current = 'dashboard';
 
+    /* Hash grammar: #/view, #/view/param, #/view?key=value&...
+       Views read ctx.route instead of touching location.hash. */
+    App.parseHash = function () {
+        var raw = String(location.hash || '').replace(/^#\/?/, '');
+        var query = {};
+        var qIdx = raw.indexOf('?');
+        if (qIdx >= 0) {
+            var pairs = raw.slice(qIdx + 1).split('&');
+            for (var i = 0; i < pairs.length; i++) {
+                var kv = pairs[i].split('=');
+                var k = decodeURIComponent(kv[0] || '');
+                if (k) query[k] = decodeURIComponent((kv[1] || '').replace(/\+/g, ' '));
+            }
+            raw = raw.slice(0, qIdx);
+        }
+        var parts = raw.split('/');
+        var segs = [];
+        for (var j = 0; j < parts.length; j++) {
+            var seg = parts[j].trim();
+            if (seg) segs.push(decodeURIComponent(seg));
+        }
+        return {
+            view: segs[0] || 'dashboard',
+            param: segs.length > 1 ? segs.slice(1).join('/') : null,
+            query: query
+        };
+    };
+
     App.ctx = function () {
-        return { App: App, S: st(), AI: ai(), A: A, refresh: function () { App.route(); } };
+        return { App: App, S: st(), AI: ai(), A: A, route: App.parseHash(), refresh: function () { App.route(); } };
     };
 
     App.route = function () {
         var V = views();
-        var id = String(location.hash || '').replace(/^#\/?/, '') || 'dashboard';
-        if (!V[id]) id = 'dashboard';
+        var r = App.parseHash();
+        var id = r.view;
+        if (!V[id]) {
+            id = 'dashboard';
+            r = { view: 'dashboard', param: null, query: {} };
+        }
         App.current = id;
+        App.routeInfo = r;
         var v = V[id];
         var root = document.getElementById('tlView');
         if (!root) return;
@@ -397,9 +457,11 @@
         var sub = document.getElementById('tlSub');
         if (title) title.textContent = v.title || id;
         if (sub) sub.textContent = v.sub || '';
+        /* Sub-routes light up their parent module in the sidebar. */
+        var navId = id === 'product-detail' ? 'products' : id;
         var items = document.querySelectorAll('.nav-item[data-nav]');
         for (var i = 0; i < items.length; i++) {
-            if (items[i].getAttribute('data-nav') === id) items[i].classList.add('is-active');
+            if (items[i].getAttribute('data-nav') === navId) items[i].classList.add('is-active');
             else items[i].classList.remove('is-active');
         }
         App.drawer.close();

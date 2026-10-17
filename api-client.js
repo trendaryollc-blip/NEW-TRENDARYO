@@ -377,6 +377,46 @@ class APIClient {
       body: { file, folder, type },
     });
   }
+
+  /**
+   * BLOG
+   * Public reads return published posts only; writes are requireAdmin.
+   * The document id IS the slug, so URLs survive title renames.
+   * @param {object} [params] page, limit, category, search, sort, status, featured
+   */
+  async getPosts(params = {}) {
+    const query = new URLSearchParams(
+      Object.keys(params)
+        .filter((k) => params[k] !== undefined && params[k] !== null && params[k] !== '')
+        .reduce((acc, k) => ({ ...acc, [k]: String(params[k]) }), {})
+    ).toString();
+    return this.request(`/blog${query ? `?${query}` : ''}`);
+  }
+
+  async getPostBySlug(slug) {
+    return this.request(`/blog/${encodeURIComponent(slug)}`);
+  }
+
+  async createPost(postData) {
+    return this.request('/blog', { method: 'POST', body: postData });
+  }
+
+  async updatePost(id, postData) {
+    return this.request(`/blog/${encodeURIComponent(id)}`, { method: 'PUT', body: postData });
+  }
+
+  async deletePost(id) {
+    return this.request(`/blog/${encodeURIComponent(id)}`, { method: 'DELETE' });
+  }
+
+  async duplicatePost(id) {
+    return this.request(`/blog/${encodeURIComponent(id)}`, { method: 'POST', body: { action: 'duplicate' } });
+  }
+
+  /** Fire-and-forget view ping from the storefront (public, IP-hashed). */
+  async countPostView(id) {
+    return this.request(`/blog/${encodeURIComponent(id)}`, { method: 'POST', body: { action: 'view' } });
+  }
 }
 
 const API = new APIClient();

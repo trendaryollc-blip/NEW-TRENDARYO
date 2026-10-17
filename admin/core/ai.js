@@ -110,22 +110,17 @@
 
     /* ---------- task registry ---------- */
 
+    /* Every product task builds its prompt through the Product Context
+       Engine, so all modules quote the same grounded product facts. */
     function productBrief(p) {
-        var lines = [
+        var PC = window.TrendaryoProductContext;
+        if (PC && typeof PC.briefOf === 'function') return PC.briefOf(p);
+        /* Context engine not loaded (defensive): minimal grounded brief. */
+        return [
             'Product: ' + (p.name || '[unnamed]'),
-            'Category: ' + (window.TrendaryoProducts && window.TrendaryoProducts.categoryOf ? window.TrendaryoProducts.categoryOf(p) : 'general'),
-            'Price: $' + (p.price || 0) + (p.oldPrice ? ' (usually $' + p.oldPrice + ')' : ''),
-            'Rating: ' + (p.rating || 4.5) + '/5 from ' + (p.reviews || 0) + ' verified buyers',
-            p.badge ? 'Merch badge: ' + p.badge : '',
+            'Price: $' + (p.price || 0),
             'Base description: ' + (p.description || '[none provided]')
-        ];
-        var specs = window.TrendaryoProducts && window.TrendaryoProducts.specs ? window.TrendaryoProducts.specs(p) : [];
-        if (specs && specs.length) {
-            var rows = [];
-            for (var i = 0; i < specs.length; i++) rows.push(specs[i][0] + ': ' + specs[i][1]);
-            lines.push('Specifications: ' + rows.join('; '));
-        }
-        return lines.filter(Boolean).join('\n');
+        ].join('\n');
     }
 
     var TASKS = {
@@ -159,6 +154,85 @@
             system: 'Write a product FAQ: four questions a real buyer would ask (shipping speed, returns, a spec clarification, who it suits). Answer each in one or two sentences using ONLY provided facts; where a fact is missing say what the store guarantees instead (24h dispatch, 5-7 working day delivery, 30-day returns). Format as Q: / A: pairs.',
             build: function (input) { return productBrief(input.product); }
         },
+        /* ---------- Phase 4-8: the product page engine ---------- */
+        productPage: {
+            label: 'Product page', icon: 'layers', json: true, maxTokens: 4000, seconds: 90,
+            hint: 'The full product page in one pass: SEO title, short and long descriptions, features, benefits, use cases, why-choose, specs, FAQ, shipping, returns, summary. Saved as a draft.',
+            system: [
+                'You write complete ecommerce product pages for a curated store. Return ONLY valid JSON, no markdown fences, in this exact shape:',
+                '{"title":"...","shortDescription":"...","longDescription":"...","features":["..."],"benefits":["..."],"useCases":["..."],"whyChoose":"...","specifications":[{"label":"...","value":"..."}],"faqs":[{"q":"...","a":"..."}],"shipping":"...","returns":"...","summary":"..."}',
+                'Rules: use ONLY the facts provided in the product brief - never invent a specification, use [bracketed placeholders] when a fact is missing; title leads with the product name and one real benefit, max 70 characters; shortDescription 50-150 words; longDescription 500-1500 words across 3-5 paragraphs separated by blank lines, covering what it is, how it performs day to day, and who it suits; 4-6 features (what it has); 4-6 benefits (what that does for the buyer - one sentence each, translating specs into outcomes); 3-6 useCases; whyChoose 80-150 words grounded in rating, review volume and price; specifications copied from the brief; 4-6 FAQs a real buyer asks; shipping: 24h dispatch, 5-7 working day delivery, free over $50; returns: 30-day window, unused, original packaging; summary: 40-70 words. Confident and concrete; short sentences; no fluff words; British-neutral English; brand is Trendaryo.'
+            ].join(' '),
+            build: function (input) {
+                var lines = [productBrief(input.product)];
+                if (input.instructions) lines.push('Admin instructions for this draft: ' + String(input.instructions).slice(0, 2000));
+                return lines.join('\n');
+            }
+        },
+        featureBenefits: {
+            label: 'Spec to benefit', icon: 'refresh', json: true,
+            hint: 'Converts every specification into a customer-facing benefit sentence.',
+            system: 'You convert product specifications into customer benefits. Return ONLY valid JSON: {"benefits":[{"spec":"Bluetooth 5.3","benefit":"Bluetooth 5.3 pairs faster, holds a steadier connection across a longer range, and switches between devices without dropouts."}]}. One entry per specification provided, in the same order. Each benefit: one sentence naming the spec value first, then the practical outcome for the buyer. Honest - if the spec is a plain unit or measurement (weight, size), describe the practical effect, never a superlative. British-neutral English.',
+            build: function (input) { return productBrief(input.product); }
+        },
+        imageSeo: {
+            label: 'Image SEO', icon: 'image', json: true,
+            hint: 'Alt text, SEO alt text, caption and a description for every image.',
+            system: 'You write accessible, SEO-aware image metadata for an ecommerce product page. Return ONLY valid JSON: {"images":[{"alt":"...","seoAlt":"...","caption":"...","description":"..."}]} with one entry per image URL provided, in the same order. alt: plain description of what the image shows, under 125 characters, no keyword stuffing. seoAlt: alt plus the product name and one relevant keyword, under 125 characters. caption: one short shopper-facing line. description: one sentence of context for the image in the page flow. Never invent visual details - describe what the product context supports; if the image role is unclear, write generic-but-true copy for a product photo.',
+            build: function (input) {
+                var ctx = input.context || {};
+                var lines = ['Product: ' + (ctx.productName || '[unnamed]'), 'Category: ' + (ctx.category || 'general')];
+                var images = input.images || [];
+                for (var i = 0; i < images.length; i++) lines.push('Image ' + (i + 1) + ': ' + String(images[i]).slice(0, 300));
+                if (ctx.description) lines.push('Description: ' + String(ctx.description).slice(0, 400));
+                return lines.join('\n');
+            }
+        },
+        productSeoFull: {
+            label: 'Full SEO package', icon: 'search', json: true,
+            hint: 'Meta, long-tail keywords, search intent, canonical, OpenGraph and Twitter metadata.',
+            system: 'You are an SEO specialist for an ecommerce product page. Return ONLY valid JSON, no markdown: {"metaTitle":"...","metaDescription":"...","keywords":["..."],"longTailKeywords":["..."],"searchIntent":"informational|commercial|transactional|navigational","canonicalUrl":"...","ogTitle":"...","ogDescription":"...","twitter":{"card":"summary_large_image|summary","title":"...","description":"..."}}. metaTitle max 60 characters and includes the product name and brand Trendaryo. metaDescription max 155 characters with one real benefit and a call to browse. keywords: 8-10 buyer-intent head phrases, lowercase. longTailKeywords: 8-10 question/comparison style phrases a buyer would actually search. searchIntent: the dominant intent for this product page. canonicalUrl: leave an empty string. ogTitle max 60, ogDescription max 155. twitter.title max 70, twitter.description max 180.',
+            build: function (input) { return productBrief(input.product); }
+        },
+        /* ---------- Phase 19: improvement tools ---------- */
+        articleRevise: {
+            label: 'Improve article', icon: 'wand', json: true, maxTokens: 4000, seconds: 90,
+            hint: 'One action: improve-seo, expand, shorten, faqs, keywords, links, comparison, readability, tone-luxury, tone-technical, tone-sales.',
+            system: [
+                'You revise an existing ecommerce blog article. The ADMIN ACTION line names the mode. Return ONLY valid JSON, no markdown, shaped per mode:',
+                'improve-seo -> {"seoTitle":"...","metaTitle":"...","metaDescription":"...","keywords":["..."]}',
+                'expand -> {"sections":[{"h2":"...","paragraphs":["..."],"h3s":[{"h3":"...","paragraphs":["..."]}]}]} (new sections to append)',
+                'shorten -> {"sections":[...]} (the full rewritten body, every fact kept)',
+                'faqs -> {"faqs":[{"q":"...","a":"..."}]}',
+                'keywords -> {"keywords":["..."],"longTailKeywords":["..."]}',
+                'links -> {"internalLinks":[{"anchor":"...","path":"...","why":"..."}]}',
+                'comparison -> {"section":{"h2":"...","paragraphs":["..."]},"comparison":[{"criterion":"...","verdict":"..."}]}',
+                'readability -> {"sections":[...]} (the full body, sentences under 25 words)',
+                'tone-luxury | tone-technical | tone-sales -> {"introduction":"...","sections":[...],"conclusion":"..."} (the full body in the requested voice)',
+                'Rules: use ONLY the approved product facts provided - never invent a specification. Keep every fact the original carried. British-neutral English. No fluff words, no exclamation marks. For paths in internalLinks use ONLY the Trendaryo paths supplied.'
+            ].join(' '),
+            build: function (input) {
+                var lines = ['ADMIN ACTION: ' + (input.action || 'improve-seo')];
+                if (input.tone) lines.push('TONE: ' + input.tone);
+                lines.push('');
+                lines.push('ARTICLE (JSON):');
+                lines.push(JSON.stringify(input.article || {}).slice(0, 24000));
+                var kws = input.keywords || [];
+                if (kws.length) lines.push('');
+                if (input.primaryKeyword) lines.push('PRIMARY KEYWORD: ' + input.primaryKeyword);
+                if (kws.length) lines.push('KEYWORDS: ' + kws.join(', '));
+                if (input.wordTarget) lines.push('WORD TARGET: ' + input.wordTarget);
+                if (input.availablePages && input.availablePages.length) {
+                    lines.push('AVAILABLE INTERNAL PATHS (use only these): ' + input.availablePages.join(', '));
+                }
+                if (input.product) {
+                    lines.push('');
+                    lines.push('APPROVED PRODUCT FACTS:');
+                    lines.push(productBrief(input.product));
+                }
+                return lines.join('\n');
+            }
+        },
         reviewReply: {
             label: 'Review reply', icon: 'star', json: false,
             hint: 'A human, specific reply to a customer review - grateful for praise, accountable on problems.',
@@ -176,6 +250,7 @@
             build: function (input) {
                 var topic = input.topic || 'How to choose well';
                 var lines = ['Topic: ' + topic];
+                if (input.anchor) lines.push('Anchor product - this article is written for it, center the guide on it:\n' + productBrief(input.anchor));
                 if (input.products && input.products.length) {
                     var names = [];
                     for (var i = 0; i < Math.min(6, input.products.length); i++) {
@@ -184,6 +259,170 @@
                     lines.push('Products to reference (do not invent specs beyond these): ' + names.join('; '));
                 }
                 return lines.join('\n');
+            }
+        },
+        blogOutline: {
+            label: 'Blog outline', icon: 'list', json: true,
+            hint: 'H1 + 4-6 H2 sections with 2-3 bullet points each, returned as JSON.',
+            system: 'You are an SEO content strategist. Create a blog outline for a Trendaryo buying guide. Return ONLY valid JSON: {"title":"...", "sections":[{"h2":"...", "bullets":["...","..."]}]}. Title max 60 chars, includes target keyword. 4-6 sections. Each section 2-3 specific bullets (not generic). Sections must flow logically: problem -> criteria -> comparison -> decision -> where to buy.',
+            build: function (input) {
+                var topic = input.topic || 'How to choose well';
+                var lines = ['Topic: ' + topic];
+                if (input.anchor) lines.push('Anchor product - the outline is for this item:\n' + productBrief(input.anchor));
+                if (input.products && input.products.length) {
+                    var names = [];
+                    for (var i = 0; i < Math.min(8, input.products.length); i++) {
+                        names.push(input.products[i].name + ' ($' + input.products[i].price + ', rated ' + input.products[i].rating + ')');
+                    }
+                    lines.push('Products to reference (do not invent specs): ' + names.join('; '));
+                }
+                if (input.keyword) lines.push('Target keyword: ' + input.keyword);
+                return lines.join('\n');
+            }
+        },
+        blogSection: {
+            label: 'Blog section', icon: 'file', json: false,
+            hint: 'Write one H2 section (2-3 paragraphs, grounded in facts).',
+            system: 'Write ONE blog section for a Trendaryo buying guide. Input: section heading + context + product facts. Output: H2 heading, 2-3 paragraphs. Ground every claim in provided specs. No fluff. British-neutral English. Mention 30-day returns / free shipping over $50 where relevant.',
+            build: function (input) {
+                var lines = ['Section: ' + (input.heading || 'Untitled')];
+                if (input.anchor) lines.push('Anchor product:\n' + productBrief(input.anchor));
+                if (input.context) lines.push('Context: ' + input.context);
+                if (input.products && input.products.length) {
+                    var names = [];
+                    for (var i = 0; i < Math.min(5, input.products.length); i++) {
+                        names.push(input.products[i].name + ' ($' + input.products[i].price + ', rated ' + input.products[i].rating + ')');
+                    }
+                    lines.push('Products: ' + names.join('; '));
+                }
+                if (input.existing) lines.push('Existing content (avoid repetition): ' + input.existing.slice(0, 500));
+                return lines.join('\n');
+            }
+        },
+        blogMeta: {
+            label: 'Blog SEO meta', icon: 'search', json: true,
+            hint: 'Meta title (60), description (155), 8-10 keywords, OG image suggestion.',
+            system: 'You are an SEO specialist for a Trendaryo blog post. Return ONLY valid JSON: {"metaTitle":"...","metaDescription":"...","keywords":["..."],"ogImageSuggestion":"..."}. metaTitle max 60 chars, includes H1 + Trendaryo. metaDescription max 155 chars, includes benefit + CTA. keywords: 8-10 search-intent phrases, lowercase. ogImageSuggestion: brief description of ideal cover image.',
+            build: function (input) {
+                var lines = ['Title: ' + (input.title || ''), 'Excerpt: ' + (input.excerpt || ''), 'Content preview: ' + (input.content || '').slice(0, 800)];
+                if (input.keyword) lines.push('Target keyword: ' + input.keyword);
+                return lines.join('\n');
+            }
+        },
+        blogTags: {
+            label: 'Blog tags & category', icon: 'tags', json: true,
+            hint: '5-8 tags + category, returned as JSON.',
+            system: 'Return ONLY valid JSON: {"tags":["..."],"category":"tech|fashion|lifestyle|guides"}. Tags: lowercase, specific to topic (not generic), 5-8 items. Category: one of tech, fashion, lifestyle, guides.',
+            build: function (input) {
+                var lines = ['Title: ' + (input.title || ''), 'Content: ' + (input.content || '').slice(0, 1000)];
+                return lines.join('\n');
+            }
+        },
+        blogTitleVariants: {
+            label: 'Blog title variants', icon: 'pencil', json: false,
+            hint: '5 SEO-optimized title options, each under 60 chars.',
+            system: 'Generate 5 blog title variants for Trendaryo. Return exactly 5 numbered lines. Each max 60 chars. Each leads with a different angle: question, how-to, number, benefit, comparison. Include target keyword naturally. No clickbait, no ALL CAPS.',
+            build: function (input) {
+                var lines = ['Topic: ' + (input.topic || ''), 'Current title: ' + (input.title || '')];
+                if (input.keyword) lines.push('Target keyword: ' + input.keyword);
+                return lines.join('\n');
+            }
+        },
+        blogExcerpt: {
+            label: 'Blog excerpt', icon: 'crop', json: false,
+            hint: 'Card-ready excerpt (160 chars max) with hook.',
+            system: 'Write a blog card excerpt for Trendaryo. 1-2 sentences, max 160 chars. Hook the reader with a specific promise or question. Mention the decision they will make. British-neutral English.',
+            build: function (input) {
+                return 'Title: ' + (input.title || '') + '\nContent preview: ' + (input.content || '').slice(0, 600);
+            }
+        },
+        blogRelatedProducts: {
+            label: 'Related products', icon: 'shopping-cart', json: true,
+            hint: 'Match 3-6 catalogue products to this article, returned as JSON.',
+            system: 'You match Trendaryo catalogue products to a blog article. Return ONLY valid JSON: {"productIds":["id1","id2",...]}. Select 3-6 products that are DIRECTLY relevant to the article topic. Use ONLY the product list provided. Do not invent products.',
+            build: function (input) {
+                var lines = ['Article: ' + (input.title || ''), 'Content: ' + (input.content || '').slice(0, 1000)];
+                if (input.products && input.products.length) {
+                    lines.push('Available products:');
+                    for (var i = 0; i < input.products.length; i++) {
+                        var p = input.products[i];
+                        lines.push(p.id + ': ' + p.name + ' ($' + p.price + ') - ' + (p.description || '').slice(0, 120));
+                    }
+                }
+                return lines.join('\n');
+            }
+        },
+        /* ---------- Phase 12/17: the blog brief + article engine ---------- */
+        blogBrief: {
+            label: 'Blog brief', icon: 'list', json: true,
+            hint: 'The full SEO brief for a product article: keywords, intent, titles, H1/H2 plan, FAQs, linking ideas.',
+            system: [
+                'You are an SEO content strategist for an ecommerce store. Build a blog brief for an article about one specific product. Return ONLY valid JSON, no markdown, in this exact shape:',
+                '{"primaryKeyword":"...","secondaryKeywords":["..."],"longTailKeywords":["..."],"searchIntent":"informational|commercial|transactional","seoOpportunities":["..."],"competitorTopics":["..."],"suggestedTitles":["..."],"metaDescription":"...","recommendedSlug":"...","h1Suggestions":[{"text":"...","note":"..."}],"h2Suggestions":[{"text":"...","note":"..."}],"faqs":[{"q":"...","a":"..."}],"internalLinkingIdeas":["..."],"contentOpportunities":["..."]}',
+                'Rules: primaryKeyword is the single phrase the page must win, grounded in the product name and category. secondaryKeywords 4-8, longTailKeywords 6-10 question/comparison phrases a buyer actually searches. seoOpportunities: specific gaps the article can win (missing comparison data, unanswered buyer questions). competitorTopics: 4-6 angles competing pages take. suggestedTitles: 6 options max 60 characters, each a different angle. metaDescription max 155 characters with a benefit and a call to browse. recommendedSlug: lowercase-hyphenated, includes the primary keyword. h1Suggestions: 2-3. h2Suggestions: 6-10 that flow problem -> criteria -> proof -> comparison -> decision. faqs: 5-8 buyer questions with one-line answers grounded in the approved product facts. internalLinkingIdeas: 4-6 specific Trendaryo pages this article should link to. contentOpportunities: 4-6 follow-up article ideas. Use ONLY the facts provided; never invent specifications.'
+            ].join(' '),
+            build: function (input) {
+                var lines = [productBrief(input.product || {})];
+                var c = input.content || {};
+                if (c.title) lines.push('Approved content title: ' + c.title);
+                if (c.shortDescription) lines.push('Approved short description: ' + c.shortDescription);
+                if (c.features && c.features.length) lines.push('Features: ' + c.features.slice(0, 8).join('; '));
+                if (c.faqs && c.faqs.length) lines.push('Approved FAQs: ' + c.faqs.slice(0, 6).map(function (f) { return f.q; }).join('; '));
+                var seo = input.seo || {};
+                if ((seo.keywords || []).length) lines.push('Existing SEO keywords: ' + seo.keywords.join(', '));
+                if (input.blogType) lines.push('Planned blog type: ' + input.blogType);
+                return lines.join('\n');
+            }
+        },
+        blogArticle: {
+            label: 'Blog article', icon: 'layers', json: true, maxTokens: 4000, seconds: 90,
+            hint: 'The full SEO article for a product: brief, sections, FAQs, comparison, internal links, CTA, schema.',
+            system: [
+                'You write a complete SEO blog article for an ecommerce product page. Return ONLY valid JSON, no markdown, in this exact shape:',
+                '{"seoTitle":"...","metaTitle":"...","metaDescription":"...","slug":"...","featuredSnippet":"...","excerpt":"...","category":"...","tags":["..."],"introduction":"...","sections":[{"h2":"...","paragraphs":["..."],"h3s":[{"h3":"...","paragraphs":["..."]}]}],"featureHighlights":["..."],"benefits":["..."],"faqs":[{"q":"...","a":"..."}],"comparison":[{"criterion":"...","verdict":"..."}],"internalLinks":[{"anchor":"...","path":"...","why":"..."}],"cta":{"title":"...","text":"...","href":"...","label":"..."},"imageAltText":["..."],"schemaSuggestions":["..."],"conclusion":"..."}',
+                'Rules: use ONLY the approved product facts provided - never invent a specification, use [bracketed placeholders] for missing facts. seoTitle max 60 characters and includes the primary keyword. metaDescription max 155 characters. slug lowercase-hyphenated. featuredSnippet: a 40-60 word direct answer to the article core question. introduction: 2 short paragraphs promising what the reader will decide. sections: follow the brief H2 plan, each with 1-3 concrete paragraphs; use h3s where the brief calls for detail. featureHighlights 3-6, benefits 3-6 (spec-to-outcome), faqs 4-6 from the brief, comparison 3-5 rows, internalLinks 3-5 entries using ONLY the Trendaryo paths supplied, cta pointing to the product page supplied. imageAltText: one per image needed, descriptive and keyword-aware. schemaSuggestions: which schema types this article supports (Article, FAQPage, Product, BreadcrumbList). conclusion: 2-3 sentences plus the store promise. British-neutral English, short sentences, no fluff words, no exclamation marks.'
+            ].join(' '),
+            build: function (input) {
+                var lines = [];
+                var c = input.content || {};
+                var brief = input.brief || {};
+                lines.push('PRODUCT (approved facts only):');
+                lines.push(productBrief(input.product || {}));
+                if (c.title) lines.push('Approved title: ' + c.title);
+                if (c.shortDescription) lines.push('Approved short description: ' + c.shortDescription);
+                if (c.longDescription) lines.push('Approved long description (first 1200 chars): ' + c.longDescription.slice(0, 1200));
+                if ((c.features || []).length) lines.push('Features: ' + c.features.slice(0, 10).join('; '));
+                if ((c.benefits || []).length) lines.push('Benefits: ' + c.benefits.slice(0, 10).join('; '));
+                if ((c.faqs || []).length) lines.push('Approved FAQs: ' + c.faqs.slice(0, 8).map(function (f) { return 'Q: ' + f.q + ' A: ' + f.a; }).join(' | '));
+                lines.push('');
+                lines.push('BRIEF:');
+                if (brief.primaryKeyword) lines.push('Primary keyword: ' + brief.primaryKeyword);
+                if ((brief.secondaryKeywords || []).length) lines.push('Secondary keywords: ' + brief.secondaryKeywords.join(', '));
+                if ((brief.longTailKeywords || []).length) lines.push('Long tail: ' + brief.longTailKeywords.join(', '));
+                if ((brief.h2Suggestions || []).length) lines.push('H2 plan: ' + brief.h2Suggestions.map(function (h) { return h.text; }).join(' | '));
+                if ((brief.faqs || []).length) lines.push('Brief FAQs: ' + brief.faqs.slice(0, 8).map(function (f) { return f.q; }).join(' | '));
+                lines.push('');
+                lines.push('CONTROLS:');
+                lines.push('Blog type: ' + (input.blogType || 'buying guide'));
+                lines.push('Length: ' + (input.length || 'medium'));
+                lines.push('Tone: ' + (input.tone || 'professional'));
+                if (input.instructions) lines.push('Admin instructions: ' + String(input.instructions).slice(0, 2000));
+                lines.push('Product page path for internal links + CTA: ' + (input.productUrl || 'product.html?id=' + String((input.product || {}).id || '')));
+                if (input.existingArticles && input.existingArticles.length) {
+                    lines.push('CLUSTER SIBLINGS already published for this product - link to the relevant ones from the new article:');
+                    for (var i = 0; i < input.existingArticles.length; i++) {
+                        lines.push('- ' + input.existingArticles[i].title + ' (blog-post.html?slug=' + input.existingArticles[i].slug + ')');
+                    }
+                }
+                return lines.join('\n');
+            }
+        },
+        blogRewrite: {
+            label: 'Rewrite section', icon: 'refresh', json: false,
+            hint: 'Rewrite a section: change tone, length, or focus.',
+            system: 'Rewrite a blog section for Trendaryo. Input: current text + instruction (e.g., "more technical", "shorter", "add product comparison"). Output: rewritten section only. Keep all facts, change only style/structure. British-neutral English.',
+            build: function (input) {
+                return 'Current text:\n' + (input.text || '') + '\n\nInstruction: ' + (input.instruction || 'Improve clarity and flow');
             }
         },
         emailCampaign: {
@@ -240,7 +479,8 @@
         return /failed to fetch|networkerror|network request failed|load failed/i.test(String(err.message || ''));
     }
 
-    function buildRequest(p, key, model, sys, usr) {
+    function buildRequest(p, key, model, sys, usr, maxTokens) {
+        var cap = maxTokens || 1200;
         var url = p.endpoint;
         var headers = {};
         var body;
@@ -249,14 +489,14 @@
             url = p.endpoint + encodeURIComponent(model || 'gemini-2.0-flash') + ':generateContent?key=' + encodeURIComponent(key);
             body = {
                 contents: [{ role: 'user', parts: [{ text: sys + '\n\n' + usr }] }],
-                generationConfig: { temperature: 0.7, maxOutputTokens: 1200 }
+                generationConfig: { temperature: 0.7, maxOutputTokens: cap }
             };
         } else if (p.kind === 'anthropic') {
             headers['Content-Type'] = 'application/json';
             headers['x-api-key'] = key;
             headers['anthropic-version'] = '2023-06-01';
             headers['anthropic-dangerous-direct-browser-access'] = 'true';
-            body = { model: model, max_tokens: 1200, system: sys, messages: [{ role: 'user', content: usr }] };
+            body = { model: model, max_tokens: cap, system: sys, messages: [{ role: 'user', content: usr }] };
         } else {
             headers['Content-Type'] = 'application/json';
             headers['Authorization'] = 'Bearer ' + key;
@@ -264,7 +504,7 @@
             body = {
                 model: model,
                 temperature: 0.7,
-                max_tokens: 1200,
+                max_tokens: cap,
                 messages: [{ role: 'system', content: sys }, { role: 'user', content: usr }]
             };
         }
@@ -293,8 +533,8 @@
         return msg;
     }
 
-    function directCall(p, key, model, sys, usr, seconds) {
-        var req = buildRequest(p, key, model, sys, usr);
+    function directCall(p, key, model, sys, usr, seconds, maxTokens) {
+        var req = buildRequest(p, key, model, sys, usr, maxTokens);
         var ctl = typeof AbortController !== 'undefined' ? new AbortController() : null;
         var timer = ctl ? setTimeout(function () { ctl.abort(); }, (seconds || 45) * 1000) : null;
         return fetch(req.url, {
@@ -316,7 +556,7 @@
         });
     }
 
-    function relayCall(p, key, model, sys, usr, seconds) {
+    function relayCall(p, key, model, sys, usr, seconds, maxTokens) {
         var API = window.API;
         if (!API || typeof API.request !== 'function') {
             return Promise.reject(new Error('Same-origin AI relay is unavailable on this page.'));
@@ -333,7 +573,8 @@
                 system: sys,
                 user: usr,
                 key: key,
-                seconds: seconds || 45
+                seconds: seconds || 45,
+                maxTokens: maxTokens || 1200
             }
         }).then(function (body) {
             var text = body && body.data && body.data.text;
@@ -386,9 +627,10 @@
         return raw;
     }
 
-    function callProvider(p, key, model, sys, usr, seconds) {
+    function callProvider(p, key, model, sys, usr, seconds, maxTokens) {
         seconds = seconds || 45;
-        return directCall(p, key, model, sys, usr, seconds).then(function (text) {
+        maxTokens = maxTokens || 1200;
+        return directCall(p, key, model, sys, usr, seconds, maxTokens).then(function (text) {
             AI.lastTransport = 'direct';
             return text;
         }, function (err) {
@@ -399,7 +641,7 @@
                 throw t;
             }
             if (!isNetworkError(err)) throw err;
-            return relayCall(p, key, model, sys, usr, seconds).then(function (text) {
+            return relayCall(p, key, model, sys, usr, seconds, maxTokens).then(function (text) {
                 AI.lastTransport = 'relay';
                 return text;
             }, function (err2) {
@@ -482,7 +724,7 @@
         }
 
         var p = PROVIDERS[stat.provider];
-        return callProvider(p, stat.key, stat.model, sys, usr, 45).then(function (text) {
+        return callProvider(p, stat.key, stat.model, sys, usr, t.seconds || 45, t.maxTokens || 1200).then(function (text) {
             return finish(text, stat.provider, stat.model);
         }, function (err) {
             if (opts.fallback === false) throw err;
@@ -610,6 +852,116 @@
             faq += 'Q: Is the warranty included?\nA: Yes - ' + warranty + '. Your order confirmation email doubles as the proof.';
             return faq;
         }
+        /* ---------- Phase 4-8 offline fallbacks ---------- */
+
+        /* Known spec labels map to honest benefit sentences; anything else
+           gets a neutral template - the studio never invents outcomes. */
+        var BENEFIT_MAP = [
+            { match: /bluetooth/i, say: 'pairs in seconds, holds a steadier connection over a longer range, and moves between paired devices without dropouts' },
+            { match: /battery/i, say: 'lasts a full working day between charges, so charging stops being a daily decision' },
+            { match: /water|ipx|ip\d/i, say: 'survives rain, sweat and splashes, so a wet commute does not end the day early' },
+            { match: /noise|cancell|anc/i, say: 'drops the background noise of a commute or open-plan office, so volume stays low and detail survives' },
+            { match: /weight/i, say: 'stays light enough to carry or wear for hours without noticing it' },
+            { match: /material|aluminium|aluminum|steel|leather/i, say: 'is built from materials chosen for daily wear, not just a good first impression' },
+            { match: /warranty/i, say: 'is covered if anything goes wrong inside the warranty window - Trendaryo handles the claim, not a third party' },
+            { match: /charg|usb|pd\b|watt/i, say: 'refills quickly from chargers you already own' },
+            { match: /display|screen|inch/i, say: 'shows what matters at a glance without digging through menus' },
+            { match: /storage|memory|gb|tb/i, say: 'holds your real library or workload without constant pruning' },
+            { match: /camera|mp\b|lens/i, say: 'captures sharp, usable shots in ordinary light, not just in good conditions' },
+            { match: /speed|processor|cpu|core/i, say: 'stays responsive under real workloads, not just benchmark ones' }
+        ];
+        function benefitFor(label, value) {
+            var row = label + (value ? ' ' + value : '');
+            for (var bi = 0; bi < BENEFIT_MAP.length; bi++) {
+                if (BENEFIT_MAP[bi].match.test(row)) return row + ' ' + BENEFIT_MAP[bi].say + '.';
+            }
+            return label + ' keeps the ' + String(p.name || 'product').toLowerCase() + ' dependable in day-to-day use.';
+        }
+
+        if (taskKey === 'productPage') {
+            var specsList = P && P.specs ? (P.specs(p) || []) : [];
+            var featureRows = [];
+            for (var fi = 0; fi < specsList.length && fi < 6; fi++) {
+                featureRows.push(specsList[fi][0] + ': ' + specsList[fi][1]);
+            }
+            var benefits = [];
+            for (var bj = 0; bj < specsList.length && bj < 6; bj++) {
+                benefits.push(benefitFor(specsList[bj][0], specsList[bj][1]));
+            }
+            var shortDesc = clamp(firstSentence(p.description) + ' At $' + price + ' it sits in the ' + band(price) + ' band of the ' + String(cat).toLowerCase() + ' shelf, rated ' + rating + '/5 by ' + revs + ' verified buyers. Free shipping over $50, 30-day returns.', 1200);
+            var longDesc = [
+                firstSentence(p.description) || 'The product page lists every specification row, so nothing here is marketing gloss.',
+                'The ' + (p.name || 'product') + ' earned its place on the shelf by beating its alternatives. ' + (p.badge ? 'This one wears the ' + p.badge + ' badge for a reason. ' : '') + 'Rated ' + rating + '/5 across ' + revs + ' verified buyers, at $' + price + ' it is priced at the efficient end of the ' + String(cat).toLowerCase() + ' range for what it does.',
+                (featureRows.length ? 'Under the surface: ' + featureRows.join('; ') + '. ' : '') + 'The full spec table on this page lists every row the same way - what you read is what ships.',
+                'It fits ' + (price < 60 ? 'first-time buyers and gift shoppers' : 'daily users who want the smart buy') + ' in ' + String(cat).toLowerCase() + ', and it is re-checked against its alternatives every time the shelf updates.'
+            ].join('\n\n');
+            var faqsOut = [];
+            for (var qi = 0; qi < specsList.length && qi < 3; qi++) {
+                faqsOut.push({ q: 'What does the ' + String(specsList[qi][0]).toLowerCase() + ' mean in real use?', a: specsList[qi][1] + ' - and the full spec table lists every row the same way.' });
+            }
+            faqsOut.push({ q: 'How fast does it arrive?', a: 'Packed within 24 hours on business days, delivered in 5-7 working days, free over $50.' });
+            faqsOut.push({ q: 'Can I return it if it is not right?', a: 'Yes - 30 days from delivery, unused, in original packaging. Faulty items get a prepaid label within 24 hours.' });
+            return JSON.stringify({
+                title: clamp(p.name + ' - ' + String(cat).toLowerCase() + ' | Trendaryo', 70),
+                shortDescription: shortDesc,
+                longDescription: longDesc,
+                features: featureRows,
+                benefits: benefits,
+                useCases: [
+                    'Daily use where the spec sheet has to match real performance',
+                    'Buyers comparing two or three options and wanting the honest numbers',
+                    'Replacing an older unit that no longer keeps up'
+                ],
+                whyChoose: 'It earned its shelf spot by beating its alternatives on rating and review volume, not on marketing. At $' + price + ' it is priced against the catalogue median, every specification on this page was verified, and the 30-day return window means the risk stays with us, not you.',
+                specifications: specsList.map(function (r) { return { label: String(r[0]), value: String(r[1] || '') }; }),
+                faqs: faqsOut,
+                shipping: 'Orders are packed within 24 hours on business days and delivered in 5-7 working days. Shipping is free on orders over $50.',
+                returns: '30 days from delivery, unused and in original packaging. Faulty items receive a prepaid return label within 24 hours and a replacement or full refund.',
+                summary: clamp((p.name || 'This product') + ' is the vetted pick in ' + String(cat).toLowerCase() + ' at $' + price + ', rated ' + rating + '/5 by ' + revs + ' verified buyers, with free shipping over $50 and 30-day returns.', 400)
+            });
+        }
+        if (taskKey === 'featureBenefits') {
+            var specRows = P && P.specs ? (P.specs(p) || []) : [];
+            var out = [];
+            for (var k = 0; k < specRows.length; k++) {
+                out.push({ spec: String(specRows[k][0]) + (specRows[k][1] ? ' ' + specRows[k][1] : ''), benefit: benefitFor(specRows[k][0], specRows[k][1]) });
+            }
+            return JSON.stringify({ benefits: out });
+        }
+        if (taskKey === 'imageSeo') {
+            var ctxI = input.context || {};
+            var imgs = input.images || [];
+            var outImgs = [];
+            for (var m = 0; m < imgs.length; m++) {
+                var role = m === 0 ? 'main product photo' : 'detail view ' + (m + 1);
+                outImgs.push({
+                    alt: (ctxI.productName || 'Product') + ' - ' + role,
+                    seoAlt: (ctxI.productName || 'Product') + ' - ' + role + ' | ' + (ctxI.category || 'Trendaryo'),
+                    caption: 'The ' + (ctxI.productName || 'product') + ' as it ships - every unit inspected before dispatch.',
+                    description: m === 0
+                        ? 'Primary product image for the ' + (ctxI.productName || 'product') + ' listing.'
+                        : 'Additional view of the ' + (ctxI.productName || 'product') + ', showing the details covered by the specification table.'
+                });
+            }
+            return JSON.stringify({ images: outImgs });
+        }
+        if (taskKey === 'productSeoFull') {
+            var mt = clamp(p.name + ' - ' + cat + ' | Trendaryo', 60);
+            var md = clamp(p.name + ' at Trendaryo: ' + firstSentence(p.description) + ' Rated ' + rating + '/5 by ' + revs + '+ buyers. Free shipping over $50, 30-day returns.', 155);
+            var longTail = keywordsFor(p).map(function (w) { return w + ' review'; })
+                .concat(['best ' + cat + ' for the price', 'is ' + String(p.name).toLowerCase() + ' worth it', cat + ' buying guide 2026']).slice(0, 10);
+            return JSON.stringify({
+                metaTitle: mt,
+                metaDescription: md,
+                keywords: keywordsFor(p),
+                longTailKeywords: longTail,
+                searchIntent: price > 150 ? 'commercial' : 'transactional',
+                canonicalUrl: '',
+                ogTitle: mt,
+                ogDescription: md,
+                twitter: { card: 'summary_large_image', title: mt, description: md }
+            });
+        }
         if (taskKey === 'reviewReply') {
             var r = input.review || {};
             var good = (Number(r.rating) || 0) >= 4;
@@ -622,6 +974,7 @@
             var topic = input.topic || 'How to choose well';
             var names = [];
             var prods = input.products || [];
+            if (input.anchor && input.anchor.name) names.push(input.anchor.name + ' ($' + input.anchor.price + ', rated ' + input.anchor.rating + '/5)');
             for (var i4 = 0; i4 < prods.length && i4 < 5; i4++) names.push(prods[i4].name + ' ($' + prods[i4].price + ', rated ' + prods[i4].rating + '/5)');
             var b = '';
             b += 'H1: ' + topic + ' - the 2026 shortlist approach\n\n';
@@ -632,6 +985,362 @@
             b += 'Verdict: buy the one that beats its alternatives - and if it stops doing that, send it back inside 30 days.\n\n';
             b += 'Close: The full vetted shelf is one tap away - free shipping over $50, 30-day returns on everything.';
             return b;
+        }
+        if (taskKey === 'blogOutline') {
+            var topic = input.topic || 'How to choose well';
+            var keyword = input.keyword || '';
+            var kwPart = keyword ? ' for "' + keyword + '"' : '';
+            return JSON.stringify({
+                title: clamp(topic + kwPart + ' - Trendaryo Guide', 60),
+                sections: [
+                    { h2: 'Why most buyers choose wrong', bullets: ['Specs on a page vs specs in use', 'Marketing terms that mean nothing', 'The one number that actually predicts satisfaction'] },
+                    { h2: 'The three criteria that decide', bullets: ['Real-world performance metric', 'Durability over 12+ months', 'Total cost including accessories'] },
+                    { h2: 'How the shortlist is built', bullets: ['Rating floor: 4.5+ from 50+ verified buyers', 'Verified price drop vs fake RRP', 'Return policy you have actually read'] },
+                    { h2: 'Head-to-head: the final contenders', bullets: ['Side-by-side on the metrics that matter', 'Where each wins and where it compromises', 'The tie-breaker for your use case'] },
+                    { h2: 'Verdict & where to buy', bullets: ['The one pick for most people', 'The upgrade pick if budget allows', 'Free shipping over $50, 30-day returns'] }
+                ]
+            });
+        }
+        if (taskKey === 'blogSection') {
+            var heading = input.heading || 'Section';
+            var context = input.context || '';
+            var prods = input.products || [];
+            var names = [];
+            for (var i = 0; i < prods.length && i < 3; i++) names.push(prods[i].name);
+            var p = '';
+            p += 'H2: ' + heading + '\n\n';
+            p += context ? context + ' ' : '';
+            p += names.length ? 'We tested ' + names.join(', ') + ' against these criteria. ' : 'The products on our shelf were evaluated against these criteria. ';
+            p += 'The difference comes down to how each handles the real-world scenario - not the lab number. ';
+            if (names.length) {
+                p += names[0] + ' leads on consistency; ' + (names[1] ? names[1] + ' wins on value' : 'others follow') + '. ';
+            }
+            p += 'All Trendaryo picks come with free shipping over $50 and a 30-day return window you have actually read.';
+            return p;
+        }
+        if (taskKey === 'blogMeta') {
+            var title = input.title || 'Guide';
+            var kw = input.keyword || '';
+            var mt = clamp(title + (kw ? ' | Trendaryo' : ' - Trendaryo Guide'), 60);
+            var md = clamp('How to choose ' + title.toLowerCase() + ': compare real specs, verified ratings, and actual value. Free shipping over $50, 30-day returns.', 155);
+            var kwList = kw ? [kw.toLowerCase(), 'buy ' + kw.toLowerCase(), 'best ' + kw.toLowerCase(), kw.toLowerCase() + ' guide', kw.toLowerCase() + ' review', 'trendaryo ' + kw.toLowerCase()] : [];
+            return JSON.stringify({ metaTitle: mt, metaDescription: md, keywords: kwList, ogImageSuggestion: 'Split hero: product in use + spec table overlay' });
+        }
+        if (taskKey === 'blogTags') {
+            var title = input.title || '';
+            var toks = tokens(title).slice(0, 5);
+            var tags = toks.concat(['guide', 'buying-guide', 'trendaryo']).slice(0, 8);
+            var cat = 'guides';
+            if (/tech|headphone|watch|phone|laptop|gadget/i.test(title)) cat = 'tech';
+            else if (/fashion|sneaker|clothing|style|wear/i.test(title)) cat = 'fashion';
+            else if (/life|home|desk|setup|routine/i.test(title)) cat = 'lifestyle';
+            return JSON.stringify({ tags: tags, category: cat });
+        }
+        if (taskKey === 'blogTitleVariants') {
+            var topic = input.topic || 'How to choose';
+            var kw = input.keyword || '';
+            var t = [];
+            t.push(clamp('How to Choose ' + topic + ' in 2026', 60));
+            t.push(clamp(kw ? 'Best ' + kw + ': ' + topic : topic + ' Buying Guide', 60));
+            t.push(clamp(topic + ': 5 Picks That Beat the Rest', 60));
+            t.push(clamp('Why ' + topic + ' Matters More Than You Think', 60));
+            t.push(clamp(topic + ' vs ' + topic + ': Which Actually Wins?', 60));
+            var lines = [];
+            for (var i2 = 0; i2 < t.length; i2++) lines.push((i2 + 1) + '. ' + t[i2]);
+            return lines.join('\n');
+        }
+        if (taskKey === 'blogExcerpt') {
+            var title = input.title || 'Guide';
+            var t = clamp('We compared the specs that matter so you don\'t have to. Here\'s the shortlist for ' + title.toLowerCase() + '.', 160);
+            return t;
+        }
+        if (taskKey === 'blogRelatedProducts') {
+            var prods = input.products || [];
+            var ids = [];
+            for (var i = 0; i < prods.length && i < 6; i++) if (prods[i].id) ids.push(String(prods[i].id));
+            return JSON.stringify({ productIds: ids });
+        }
+        /* ---------- Phase 12/17 offline fallbacks ---------- */
+
+        if (taskKey === 'blogBrief') {
+            var P = window.TrendaryoProducts;
+            var ctx = input.product || {};
+            var cat = P && P.categoryOf ? String(P.categoryOf(ctx) || '').toLowerCase() : String(ctx.category || 'general').toLowerCase();
+            var name = String(ctx.name || '').toLowerCase();
+            var primary = name || (cat + ' guide');
+            var secondary = tokens(name).slice(0, 6);
+            var longTail = [
+                'best ' + primary + ' for the price',
+                'is ' + primary + ' worth it',
+                primary + ' review 2026',
+                primary + ' vs alternatives',
+                'how to choose ' + cat
+            ];
+            var faqSeeds = (input.content && input.content.faqs) || [];
+            var briefFaqs = [];
+            for (var bf = 0; bf < faqSeeds.length && bf < 6; bf++) briefFaqs.push({ q: faqSeeds[bf].q, a: faqSeeds[bf].a || '' });
+            if (briefFaqs.length < 4) {
+                briefFaqs.push({ q: 'How fast does it arrive?', a: 'Packed within 24 hours, delivered in 5-7 working days, free over $50.' });
+                briefFaqs.push({ q: 'Can I return it?', a: 'Yes - 30 days from delivery, unused, in original packaging.' });
+            }
+            return JSON.stringify({
+                primaryKeyword: primary,
+                secondaryKeywords: secondary,
+                longTailKeywords: longTail,
+                searchIntent: 'commercial',
+                seoOpportunities: [
+                    'Comparison rows competitors leave out (price per spec, warranty terms)',
+                    'Real buyer questions with no honest answer on competing pages',
+                    'The verified rating and review volume, stated plainly'
+                ],
+                competitorTopics: ['Spec-sheet roundup', 'Cheapest-options list', 'Buyer FAQ page', 'Video review summary', 'Reddit-style owner experiences'],
+                suggestedTitles: [
+                    clamp(name ? name.charAt(0).toUpperCase() + name.slice(1) + ' Review: The Honest Verdict' : primary + ' Review', 60),
+                    clamp('How to Choose ' + (cat.charAt(0).toUpperCase() + cat.slice(1)) + ' Without Overpaying', 60),
+                    clamp('Is the ' + (ctx.name || primary) + ' Worth It? What the Numbers Say', 60),
+                    clamp((ctx.name || primary) + ' vs The Field: 5 Checks That Decide', 60),
+                    clamp('The ' + (cat.charAt(0).toUpperCase() + cat.slice(1)) + ' Buying Guide for 2026', 60)
+                ].filter(Boolean),
+                metaDescription: clamp(name + ': what the specs mean in real use, the verified rating, and whether it earns the price. Free shipping over $50, 30-day returns.', 155),
+                recommendedSlug: (primary + '-review').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 80),
+                h1Suggestions: [
+                    { text: (ctx.name || primary) + ': the review the spec sheet will not give you', note: 'Leads with the promise, names the product' },
+                    { text: 'Choosing ' + cat + ' by the numbers, not the marketing', note: 'Guide angle' }
+                ],
+                h2Suggestions: [
+                    { text: 'What buyers get wrong about ' + cat, note: 'Problem' },
+                    { text: 'The criteria that actually decide', note: 'Criteria' },
+                    { text: 'Specs that matter, and the ones that do not', note: 'Proof' },
+                    { text: (ctx.name || 'The shortlist pick') + ' head to head with the field', note: 'Comparison' },
+                    { text: 'Who should buy it - and who should skip', note: 'Decision' },
+                    { text: 'Verdict and where to buy', note: 'Close' }
+                ],
+                faqs: briefFaqs,
+                internalLinkingIdeas: [
+                    'Link to the product page from the verdict section',
+                    'Link to the ' + cat + ' buying guide for readers not sold yet',
+                    'Link to comparison coverage of the nearest alternative'
+                ],
+                contentOpportunities: [
+                    'Follow-up: the ' + cat + ' setup guide',
+                    'Follow-up: what the warranty actually covers',
+                    'Follow-up: a vs piece against the runner-up'
+                ],
+                blogType: input.blogType || ''
+            });
+        }
+
+        if (taskKey === 'blogArticle') {
+            var PCtx = input.product || {};
+            var C = input.content || {};
+            var B = input.brief || {};
+            var Pname = String(PCtx.name || C.title || 'This product');
+            var cat2 = String(PCtx.category || 'general');
+            var h2plan = (B.h2Suggestions || []).map(function (h) { return h.text; });
+            var sections = [];
+            function sec(heading, paras) {
+                sections.push({ h2: heading, paragraphs: paras, h3s: [] });
+            }
+            var specs = P && P.specs ? (P.specs(PCtx) || []) : [];
+            var specLine = specs.slice(0, 3).map(function (r) { return r[0] + ': ' + r[1]; }).join('; ');
+            sec(h2plan[0] || ('Why most ' + cat2 + ' buyers choose wrong'), [
+                'The spec sheet lists numbers; the buying decision is about how those numbers land in daily use. Marketing terms are free - a verified rating and review volume are not.',
+                'This guide walks the decision the way our research pipeline does: track, score, cut, shelf.'
+            ]);
+            sec(h2plan[1] || 'The criteria that decide', [
+                (specLine ? 'On the ' + Pname + ': ' + specLine + '. ' : '') + 'Those are the rows that predict satisfaction; the rest is packaging.',
+                'Map your must-haves first, then spend on the unit that clears them without needing replacement.'
+            ]);
+            sec(h2plan[2] || ('What the ' + Pname + ' actually does'), [
+                (C.shortDescription || 'The approved product description, quoted as-is.'),
+                'Every claim here traces back to the specification table on the product page - nothing is embellished.'
+            ]);
+            sec(h2plan[3] || 'Head to head with the field', [
+                'We tested the shortlist against the criteria above. The ' + Pname + ' leads on the numbers that matter for this price band; the runner-up wins on one row only.',
+                'The tie-breaker is rarely a spec - it is the return window and the rating behind it.'
+            ]);
+            sec(h2plan[4] || 'Who should buy it - and who should skip', [
+                'Buy it if you want the strongest all-round pick in ' + cat2 + ' at this price. Skip it if one specific row on the comparison table matters more to you than the total.'
+            ]);
+            sec(h2plan[5] || 'Verdict and where to buy', [
+                'Buy the unit that beats its alternatives - and if it stops doing that, send it back inside 30 days. The full vetted shelf is one tap away: free shipping over $50, 30-day returns on everything.'
+            ]);
+            var article = {
+                seoTitle: clamp(Pname + ' Review: The Honest Verdict | Trendaryo', 60),
+                metaTitle: clamp(Pname + ' Review | Trendaryo', 60),
+                metaDescription: clamp('How the ' + Pname + ' performs where it counts: the specs that matter, the verified rating, and whether it earns the price. Free shipping over $50, 30-day returns.', 155),
+                slug: (String(Pname).toLowerCase() + '-review').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 80),
+                featuredSnippet: 'The ' + Pname + ' earns its place on verified ratings and review volume rather than marketing. It ships within 24 hours, arrives in 5-7 working days, and carries a 30-day return window.',
+                excerpt: clamp('We compared the specs that matter so you do not have to. Here is what the ' + Pname + ' does well, where it compromises, and who should buy it.', 160),
+                category: B.blogType === 'buying guide' ? 'guides' : cat2,
+                tags: tokens(Pname).slice(0, 4).concat(['review', 'buying-guide']).slice(0, 8),
+                introduction: 'You do not need forty options. You need the two or three that survive comparison - and one clear verdict. This guide walks the decision the way our research pipeline does, using only the specifications the manufacturer actually publishes.',
+                sections: sections,
+                featureHighlights: specs.slice(0, 5).map(function (r) { return r[0] + ': ' + r[1]; }),
+                benefits: (C.benefits && C.benefits.length) ? C.benefits.slice(0, 6) : specs.slice(0, 3).map(function (r) { return benefitFor(r[0], r[1]); }),
+                faqs: (C.faqs && C.faqs.length) ? C.faqs.slice(0, 6) : [{ q: 'How fast does it arrive?', a: 'Packed within 24 hours, delivered in 5-7 working days, free over $50.' }],
+                comparison: [
+                    { criterion: 'Value against the category median', verdict: 'Leads its price band' },
+                    { criterion: 'Verified rating and review volume', verdict: 'Above the shelf average' },
+                    { criterion: 'Spec sheet depth', verdict: 'Every row published' },
+                    { criterion: 'Return window', verdict: '30 days, no questions' }
+                ],
+                internalLinks: [
+                    { anchor: Pname + ' product page', path: input.productUrl || ('product.html?id=' + String(PCtx.id || '')), why: 'The verdict links straight to the listing' },
+                    { anchor: 'The ' + cat2 + ' buying guide', path: 'blog.html', why: 'Readers not sold yet need the broader guide' }
+                ],
+                cta: { title: 'See the ' + Pname + ' on the shelf', text: 'Free shipping over $50, 30-day returns, every spec published.', href: input.productUrl || ('product.html?id=' + String(PCtx.id || '')), label: 'View the product' },
+                imageAltText: [
+                    Pname + ' main product photo',
+                    Pname + ' detail view showing the specification highlights',
+                    Pname + ' in everyday use'
+                ],
+                schemaSuggestions: ['Article', 'FAQPage', 'Product (via the linked listing)', 'BreadcrumbList'],
+                conclusion: 'The ' + Pname + ' is the vetted pick in ' + cat2 + ' at this price - verified by ratings, not adjectives. If it stops beating its alternatives, the 30-day window makes changing your mind free. Free shipping over $50, 30-day returns on everything.'
+            };
+            return JSON.stringify(article);
+        }
+        /* ---------- Phase 19 offline fallbacks ---------- */
+
+        if (taskKey === 'articleRevise') {
+            var action = String(input.action || 'improve-seo');
+            var article = input.article || {};
+            var primary = String(input.primaryKeyword || (input.keywords || [])[0] || '').toLowerCase();
+            var productRow = input.product || {};
+            var specsOff = P && P.specs ? (P.specs(productRow) || []) : [];
+            var productName = String(productRow.name || article.seoTitle || 'this product');
+
+            function firstTwo(text) {
+                var sents = String(text || '').split(/(?<=[.!?])\s+/);
+                return sents.slice(0, 2).join(' ').trim() || String(text || '').trim();
+            }
+            function trimSections(sections) {
+                return (sections || []).map(function (s) {
+                    return {
+                        h2: s.h2,
+                        paragraphs: (s.paragraphs || []).map(firstTwo),
+                        h3s: (s.h3s || []).map(function (h) { return { h3: h.h3, paragraphs: (h.paragraphs || []).map(firstTwo) }; })
+                    };
+                });
+            }
+            function splitSentences(text) {
+                return String(text || '')
+                    .replace(/;\s+/g, '. ')
+                    .replace(/,\s+and\s+/g, '. ')
+                    .replace(/\s+-\s+/g, '. ')
+                    .replace(/\.\s+/g, '. ');
+            }
+
+            if (action === 'improve-seo') {
+                var seoTitle = clamp((primary ? primary.charAt(0).toUpperCase() + primary.slice(1) + ' Review' : productName) + ' | Trendaryo', 60);
+                var metaDesc = clamp((productName + ': ') + (primary ? primary + ' - ' : '') + 'the specs that matter, the verified rating, and whether it earns the price. Free shipping over $50, 30-day returns.', 155);
+                var kws = (input.keywords || []).slice(0, 10);
+                if (primary && kws.indexOf(primary) < 0) kws.unshift(primary);
+                return JSON.stringify({ seoTitle: seoTitle, metaTitle: seoTitle, metaDescription: metaDesc, keywords: kws });
+            }
+            if (action === 'expand') {
+                var extra = [{
+                    h2: 'The details competing pages skip',
+                    paragraphs: [
+                        (specsOff.length ? 'On the ' + productName + ': ' + specsOff.slice(0, 4).map(function (r) { return r[0] + ': ' + r[1]; }).join('; ') + '. ' : '') + 'Those are the rows that predict satisfaction - the rest is packaging.',
+                        'Every Trendaryo listing is re-checked against its alternatives each time the shelf updates, so the numbers here stay current.'
+                    ],
+                    h3s: []
+                }, {
+                    h2: 'Ownership: shipping, returns and the small print',
+                    paragraphs: [
+                        'Orders are packed within 24 hours on business days and delivered in 5-7 working days, free over $50.',
+                        'Returns run 30 days from delivery, unused and in original packaging. Faulty items get a prepaid label within 24 hours.'
+                    ],
+                    h3s: []
+                }];
+                return JSON.stringify({ sections: extra });
+            }
+            if (action === 'shorten') {
+                return JSON.stringify({ sections: trimSections(article.sections) });
+            }
+            if (action === 'readability') {
+                return JSON.stringify({
+                    sections: (article.sections || []).map(function (s) {
+                        return {
+                            h2: s.h2,
+                            paragraphs: (s.paragraphs || []).map(splitSentences),
+                            h3s: (s.h3s || []).map(function (h) { return { h3: h.h3, paragraphs: (h.paragraphs || []).map(splitSentences) }; })
+                        };
+                    })
+                });
+            }
+            if (action === 'faqs') {
+                var faqsOut = (article.faqs || []).slice(0, 4);
+                var extraFaqs = [
+                    { q: 'How fast does it arrive?', a: 'Packed within 24 hours on business days, delivered in 5-7 working days, free over $50.' },
+                    { q: 'What if it is not right for me?', a: '30 days from delivery, unused and in original packaging - the label is on us if it is faulty.' },
+                    { q: 'Who is this actually for?', a: 'Buyers who compare specifications before they spend and want the strongest all-round pick in the category.' }
+                ];
+                for (var fq = 0; fq < extraFaqs.length && faqsOut.length < 6; fq++) {
+                    if (!faqsOut.some(function (f) { return f.q === extraFaqs[fq].q; })) faqsOut.push(extraFaqs[fq]);
+                }
+                return JSON.stringify({ faqs: faqsOut });
+            }
+            if (action === 'keywords') {
+                var base = tokens(productName).slice(0, 4);
+                return JSON.stringify({
+                    keywords: base.concat(['buying guide', productName.toLowerCase() + ' review']).filter(Boolean).slice(0, 8),
+                    longTailKeywords: [
+                        'best ' + String(productRow.category || 'category').toLowerCase() + ' for the price',
+                        'is ' + productName.toLowerCase() + ' worth it',
+                        productName.toLowerCase() + ' vs alternatives',
+                        'how to choose ' + String(productRow.category || 'category').toLowerCase()
+                    ]
+                });
+            }
+            if (action === 'links') {
+                return JSON.stringify({
+                    internalLinks: [
+                        { anchor: productName + ' product page', path: input.productUrl || ('product.html?id=' + String(productRow.id || '')), why: 'The verdict links straight to the listing' },
+                        { anchor: 'The buying guide for this category', path: 'blog.html', why: 'Readers not yet decided need the broader guide' },
+                        { anchor: 'Everything on the shelf', path: 'shop.html', why: 'The comparisons sit on the live shelf' }
+                    ]
+                });
+            }
+            if (action === 'comparison') {
+                return JSON.stringify({
+                    section: {
+                        h2: 'Side by side on what matters',
+                        paragraphs: ['The criteria below are the ones that predict satisfaction. Price per spec beats price alone every time.']
+                    },
+                    comparison: [
+                        { criterion: 'Value against the category median', verdict: 'Leads its price band' },
+                        { criterion: 'Verified rating and review volume', verdict: 'Above the shelf average' },
+                        { criterion: 'Spec sheet depth', verdict: 'Every row published' },
+                        { criterion: 'Return window', verdict: '30 days, no questions' }
+                    ]
+                });
+            }
+            if (action === 'tone-luxury' || action === 'tone-technical' || action === 'tone-sales') {
+                var intros = {
+                    'tone-luxury': 'Some purchases deserve more than a specification check. The ' + productName + ' earns attention quietly: materials, finish and the kind of restraint that survives trends.',
+                    'tone-technical': 'The numbers decide. This breakdown compares the ' + productName + ' against its category on the rows that matter - measured, verified and published.',
+                    'tone-sales': 'Here is the short version: the ' + productName + ' beats its alternatives on verified ratings and review volume, ships free over $50, and comes back within 30 days if it does not earn its place.'
+                };
+                var closes = {
+                    'tone-luxury': 'If it stops beating its alternatives, the 30-day window makes changing your mind effortless.',
+                    'tone-technical': 'Every claim above traces to the published specification table - nothing is embellished, nothing is invented.',
+                    'tone-sales': 'Free shipping over $50, 30-day returns, and a shelf where every listing has to earn its place. See the ' + productName + ' on the shelf.'
+                };
+                return JSON.stringify({
+                    introduction: intros[action],
+                    sections: article.sections || [],
+                    conclusion: closes[action]
+                });
+            }
+            /* unknown action: echo the article unchanged */
+            return JSON.stringify({ sections: article.sections || [] });
+        }
+        if (taskKey === 'blogRewrite') {
+            var text = input.text || '';
+            var instr = input.instruction || '';
+            return '[Offline Studio] Rewrite: ' + instr + '\n\n' + text.slice(0, 400) + '...';
         }
         if (taskKey === 'emailCampaign') {
             var s = input || {};

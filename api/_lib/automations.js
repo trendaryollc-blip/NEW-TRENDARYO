@@ -69,7 +69,7 @@ function bool(value, fallback) {
 }
 
 /* Probes every healthy deployment should be beating. */
-const EXPECTED_PROBES = ['cron:automations', 'cron:supplier-sync', 'stripe-webhook'];
+const EXPECTED_PROBES = ['cron:automations', 'cron:supplier-sync', 'cron:reconciliation', 'cron:abandoned-checkout', 'cron:backup', 'stripe-webhook'];
 
 /* One pass over the collections the owner cares about. Read-only. */
 async function collectOpsItems(db, cfg) {
@@ -592,6 +592,86 @@ const DEFINITIONS = {
         }
       }
       return { ok: true, message: items.length + ' item(s): ' + items.map((i) => i.label).slice(0, 5).join(', ') };
+    },
+  },
+
+  /* Phase 27 - every published product gets its blog brief, even when the
+     publish happened through a path that skipped the API (imports, seeds). */
+  'missing-brief-backfill': {
+    name: 'Missing brief backfill',
+    group: 'Content',
+    icon: 'book',
+    about: 'Products with published content but no blog brief lose their place in the article pipeline. This rule creates the READY_FOR_GENERATION brief shells from the frozen snapshots, so the Blog Generator always has a starting point.',
+    defaults: { maxPerRun: 25 },
+    fields: [
+      { key: 'maxPerRun', label: 'Max products per run', type: 'number', min: 1, max: 100, step: 1, help: 'Batch cap so briefs are created gradually.' },
+    ],
+    async scan(db, cfg) {
+      const { missingBriefs } = require('./content-briefs');
+      return (await missingBriefs(db, num(cfg.maxPerRun, 25, 1, 100))).slice(0, num(cfg.maxPerRun, 25, 1, 100));
+    },
+    async act(db, content) {
+      const { ensureBlogBrief } = require('./content-briefs');
+      const productId = content.id;
+      let product = null;
+      try {
+        const productDoc = await db.collection('products').doc(productId).get();
+        if (productDoc.exists) product = productDoc.data();
+      } catch (e) { /* product row is optional garnish for the brief */ }
+      const result = await ensureBlogBrief(db, productId, content.published || {}, { uid: 'automation', email: null }, product);
+      if (!result) return { ok: false, message: 'Brief creation failed for ' + productId };
+      return { ok: true, message: 'Brief ' + (result.created ? 'created' : 'refreshed') + ' for ' + productId };
+    },
+  },
+
+  /* Phase 27 - content drafts that stop moving get a nudge before they rot. */
+  'content-draft-escalation': {
+    name: 'Content draft escalation',
+    group: 'Content',
+    icon: 'flag',
+    about: 'Product content drafts parked for review (or left as drafts) for days usually mean the review step was missed. This rule flags them so they surface instead of quietly going stale.',
+    defaults: { days: 5, maxPerRun: 25 },
+    fields: [
+      { key: 'days', label: 'Stale after (days)', type: 'number', min: 1, max: 30, step: 1, help: 'Time without an update before a draft is flagged.' },
+      { key: 'maxPerRun', label: 'Max drafts per run', type: 'number', min: 1, max: 100, step: 1, help: 'Batch cap so flags land gradually.' },
+    ],
+    async scan(db, cfg) {
+      const days = num(cfg.days, 5, 1, 30);
+      const cutoff = Date.now() - days * 86400000;
+      const snap = await db.collection('product_content')
+        .where('status', 'in', ['draft', 'review_pending'])
+        .limit(num(cfg.maxPerRun, 25, 1, 100) * 4)
+        .get();
+      return snap.docs
+        .map((doc) => ({ id: doc.id, ...doc.data() }))
+        .filter((c) => {
+          const t = new Date(c.updatedAt || c.createdAt || 0).getTime();
+          return t && t <= cutoff;
+        })
+        .slice(0, num(cfg.maxPerRun, 25, 1, 100));
+    },
+    async act(db, content) {
+      await db.collection(ALERTS).doc('content-' + content.id).set({
+        type: 'content-draft',
+        ruleKey: 'content-draft-escalation',
+        productId: content.id,
+        name: (content.sections && content.sections.title) || content.productId || content.id,
+        reason: 'content ' + content.status + ' with no update',
+        resolved: false,
+        lastAlertedAt: nowIso(),
+      }, { merge: true });
+      return { ok: true, message: 'Flagged content draft for ' + content.id };
+    },
+    /* Drafts that moved on close their alert automatically. */
+    async sync(db) {
+      const alerts = await db.collection(ALERTS).where('type', '==', 'content-draft').limit(200).get();
+      for (const doc of alerts.docs) {
+        if (doc.data().resolved) continue;
+        const content = await db.collection('product_content').doc(doc.data().productId).get();
+        if (!content.exists || ['ready_to_publish', 'published'].indexOf(content.data().status) >= 0) {
+          await doc.ref.set({ resolved: true, resolvedAt: nowIso() }, { merge: true });
+        }
+      }
     },
   },
 };

@@ -32,96 +32,31 @@
     }
 
     // Phase 1: Void to Discovery (Initial Load)
+    // The hero is now the 3D product stage (.tr-hero); its own scene animates
+    // the models. This phase just fades the copy/pills/trust rail in, and
+    // self-skips entirely when none of those elements are present.
     function initVoidToDiscovery() {
         if (!window.gsap) return;
 
+        const bits = [
+            '.tr-hero__title',
+            '.tr-hero__lede',
+            '.tr-hero__cta',
+            '.tr-hero__feats'
+        ];
+        const present = gsap.utils.toArray(bits.join(', '));
+        if (!present.length) { state.animationsComplete = true; return; }
+
         const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+        gsap.set(present, { opacity: 0, y: 30 });
 
-        // Start with everything hidden
-        gsap.set([
-            '#hero .hero-eyebrow',
-            '#hero-tagline',
-            '#hero .hero-sub',
-            '#hero .orbiting-products',
-            '#hero .hero-cta-row',
-            '#hero .hero-trust'
-        ], { opacity: 0, y: 30 });
-
-        // Nebulas fade in subtly
-        gsap.set('#hero .hero-nebula', { opacity: 0 });
-        tl.to('#hero .hero-nebula', {
-            opacity: 0.08,
-            duration: 2,
-            stagger: 0.3,
-            ease: 'power2.inOut'
-        }, 0);
-
-        // Orbit ring appears
-        gsap.set('#hero .hero-orbit-ring', { opacity: 0, scale: 0.8 });
-        tl.to('#hero .hero-orbit-ring', {
-            opacity: 1,
-            scale: 1,
-            duration: 1.5,
-            ease: 'back.out(1.2)'
-        }, 0.3);
-
-        // Eyebrow reveals
-        tl.to('#hero .hero-eyebrow', {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            ease: 'power3.out'
-        }, 0.8);
-
-        // Tagline reveals with character-by-character effect
-        tl.to('#hero-tagline', {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: 'power3.out'
-        }, 1);
-
-        // Subtitle reveals
-        tl.to('#hero .hero-sub', {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            ease: 'power3.out'
-        }, 1.3);
-
-        // Product pods float in with stagger
-        tl.to('#hero .orbiting-products', {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            ease: 'power3.out'
-        }, 1.5);
-
-        // Individual pods scale in
-        gsap.set('#hero .product-pod', { scale: 0, opacity: 0 });
-        tl.to('#hero .product-pod', {
-            scale: 1,
-            opacity: 1,
-            duration: 0.6,
-            stagger: 0.15,
-            ease: 'back.out(1.4)'
-        }, 1.6);
-
-        // CTA buttons reveal
-        tl.to('#hero .hero-cta-row', {
+        tl.to(present, {
             opacity: 1,
             y: 0,
             duration: 0.7,
+            stagger: 0.12,
             ease: 'power3.out'
-        }, 2);
-
-        // Trust strip reveals
-        tl.to('#hero .hero-trust', {
-            opacity: 1,
-            y: 0,
-            duration: 0.7,
-            ease: 'power3.out'
-        }, 2.2);
+        });
 
         state.animationsComplete = true;
     }
@@ -212,63 +147,64 @@
             });
         });
     }
-    // Phase 3: Scroll-Triggered Animations — scrub removed (scrub:1 makes
-    // scroll feel "stuck" because content lags the wheel by ~1s). One-shot
-    // reveals only; hero parallax killed (nebulas are display:none anyway).
-    function initScrollAnimations() {
-        if (!window.gsap || !window.ScrollTrigger) return;
+        // Phase 3: Scroll-Triggered Animations - scrub removed (scrub:1 makes
+        // scroll feel "stuck" because content lags the wheel by ~1s). One-shot
+        // reveals only; the hero's 3D scene drives its own motion now.
+        function initScrollAnimations() {
+            if (!window.gsap || !window.ScrollTrigger) return;
 
-        gsap.registerPlugin(ScrollTrigger);
-        ScrollTrigger.config({ ignoreMobileResize: true });
+            gsap.registerPlugin(ScrollTrigger);
+            ScrollTrigger.config({ ignoreMobileResize: true });
 
-        const heroSection = document.getElementById('hero');
-        if (!heroSection) return;
-
-        // Gentle single fade of category chips on exit — no scrub lag.
-        gsap.to('#hero .orbiting-products', {
-            scrollTrigger: {
-                trigger: '#hero',
-                start: 'top top',
-                end: 'bottom 30%',
-                toggleActions: 'play none none reverse',
-                markers: false
-            },
-            opacity: 0.35,
-            duration: 0.4,
-            ease: 'power1.out',
-            overwrite: 'auto'
-        });
-    }
-
-    // Phase 4: Continuous Breathing Animation — OFF by default.
-    // Infinite opacity/box-shadow tweens repaint every frame and keep the
-    // main thread busy during scroll. Only run on fine-pointer desktops
-    // that did not request reduced motion, and pause when hero is hidden.
-    function initBreathingAnimation() {
-        if (!window.gsap) return;
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-        const hero = document.getElementById('hero');
-        if (!hero) return;
-        let breathing = null;
-        const bobTarget = document.querySelector('#hero .hero-neon');
-        if (!bobTarget) return;
-        new IntersectionObserver((entries) => {
-            const visible = entries[0].isIntersecting;
-            if (visible && !breathing) {
-                breathing = gsap.to(bobTarget, {
-                    y: -6,
-                    duration: 3.2,
-                    yoyo: true,
-                    repeat: -1,
-                    ease: 'sine.inOut'
+            // Fade the 3D canvas container out as the hero scrolls away, so
+            // the GPU load drops once it is off-screen anyway.
+            const scene = document.querySelector('#tr-hero-scene');
+            if (scene) {
+                gsap.to(scene, {
+                    scrollTrigger: {
+                        trigger: '#hero',
+                        start: 'top top',
+                        end: 'bottom 30%',
+                        toggleActions: 'play none none reverse',
+                        markers: false
+                    },
+                    opacity: 0.4,
+                    duration: 0.4,
+                    ease: 'power1.out',
+                    overwrite: 'auto'
                 });
-            } else if (!visible && breathing) {
-                breathing.kill(); breathing = null;
             }
-        }, { threshold: 0 }).observe(hero);
-    }
+        }
 
+        // Phase 4: Continuous Breathing Animation - OFF by default.
+        // Infinite opacity/box-shadow tweens repaint every frame and keep the
+        // main thread busy during scroll. Only run on fine-pointer desktops
+        // that did not request reduced motion, and pause when hero is hidden.
+        function initBreathingAnimation() {
+            if (!window.gsap) return;
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+            const hero = document.getElementById('hero');
+            if (!hero) return;
+            // The pills this bobbed were removed; the 3D wordmark already
+            // floats in-scene, so the hero copy stays static and this is a no-op.
+            const bobTarget = null;
+            if (!bobTarget) return;
+            new IntersectionObserver((entries) => {
+                const visible = entries[0].isIntersecting;
+                if (visible && !breathing) {
+                    breathing = gsap.to(bobTarget, {
+                        y: -6,
+                        duration: 3.2,
+                        yoyo: true,
+                        repeat: -1,
+                        ease: 'sine.inOut'
+                    });
+                } else if (!visible && breathing) {
+                    breathing.kill(); breathing = null;
+                }
+            }, { threshold: 0 }).observe(hero);
+        }
     // Phase 5: Text Animation with Stagger (simplified - no DOM manipulation)
     function initTextAnimations() {
         // Text animations handled by main GSAP timeline in index.html

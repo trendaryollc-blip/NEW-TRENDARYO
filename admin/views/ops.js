@@ -59,13 +59,30 @@
     /* ================================================================
        ORDERS
        ================================================================ */
+    /* Deep-link hook: other views (dashboard tiles) preselect a filter
+       before navigating to #/orders. */
+    window.TrendaryoOrdersView = {
+        filter: function (v) { stO.status = v || ''; }
+    };
+
     V.orders = {
         title: 'Orders',
         icon: 'receipt',
-        sub: 'The fulfilment board - drag cards between stages or work the table',
+        sub: 'The fulfilment board - state-machine moves, risk holds and SLA flags',
         render: function (root, ctx) {
             var S = ctx.S, App = ctx.App;
             var k = S.orderKpis();
+
+            var chipDefs = [
+                ['', 'All'], ['pending', 'Pending'], ['confirmed', 'Confirmed'], ['processing', 'Processing'],
+                ['packed', 'Packed'], ['shipped', 'Shipped'], ['delivered', 'Delivered'],
+                ['cancelled', 'Cancelled'], ['refunded', 'Refunded'],
+                ['held', 'Risk hold'], ['attention', 'Needs attention']
+            ];
+            var chipHtml = '';
+            for (var ch = 0; ch < chipDefs.length; ch++) {
+                chipHtml += '<button class="chip' + (stO.status === chipDefs[ch][0] ? ' is-active' : '') + '" data-st="' + chipDefs[ch][0] + '">' + chipDefs[ch][1] + '</button>';
+            }
 
             root.innerHTML = U.head('Orders', k.total + ' orders on the ledger - ' + k.open + ' open right now',
                 '<button class="btn btn--sm" id="orExport" type="button">' + A().icon('download', 13) + 'Export CSV</button>') +
@@ -80,17 +97,7 @@
 
             '<div class="panel"><div class="toolbar">' +
                 '<div class="search">' + A().icon('search', 14) + '<input id="orQ" type="text" placeholder="Search order id or customer..."></div>' +
-                '<div class="chip-row" id="orStatus">' +
-                    '<button class="chip is-active" data-st="">All</button>' +
-                    '<button class="chip" data-st="pending">Pending</button>' +
-                    '<button class="chip" data-st="confirmed">Confirmed</button>' +
-                    '<button class="chip" data-st="processing">Processing</button>' +
-                    '<button class="chip" data-st="packed">Packed</button>' +
-                    '<button class="chip" data-st="shipped">Shipped</button>' +
-                    '<button class="chip" data-st="delivered">Delivered</button>' +
-                    '<button class="chip" data-st="cancelled">Cancelled</button>' +
-                    '<button class="chip" data-st="refunded">Refunded</button>' +
-                '</div>' +
+                '<div class="chip-row" id="orStatus">' + chipHtml + '</div>' +
                 '<span class="spacer"></span>' +
                 '<div class="subtabs"><button type="button" data-mode="table" class="is-active">Table</button><button type="button" data-mode="board">Board</button></div>' +
             '</div>' +
@@ -174,7 +181,12 @@
         for (i = 0; i < list.length; i++) {
             var o = list[i];
             if (q && (String(o.id) + ' ' + ((o.shipping && o.shipping.name) || '')).toLowerCase().indexOf(q) < 0) continue;
-            if (stO.status && o.status !== stO.status) continue;
+            /* Pseudo filters: risk holds (F6) and attention/SLA flags (F9). */
+            if (stO.status === 'held') {
+                if (!(o.riskLevel === 'review' || o.riskLevel === 'disputed')) continue;
+            } else if (stO.status === 'attention') {
+                if (!(o.needsAttention || o.slaBreached)) continue;
+            } else if (stO.status && o.status !== stO.status) continue;
             out.push(o);
         }
         if (stO.sort === 'new') out.sort(function (a, b) { return new Date(b.date) - new Date(a.date); });
@@ -258,25 +270,25 @@
             body.innerHTML = U.empty('receipt', 'No orders match', 'Adjust the filters, or wait for the storefront to write its first order.');
             return;
         }
-        var h = '<div class="table-wrap"><table class="table table--compact"><thead><tr>' +
-            '<th style="width:26px;"><label class="check"><input type="checkbox" id="orSelAll"></label></th>' +
-            '<th>Order</th><th>Customer</th><th class="num">Items</th><th class="num">Total</th><th>Status</th><th>Placed</th><th></th></tr></thead><tbody>';
+        var h = '<div class="cards"><div class="cards__selectbar"><label class="check"><input type="checkbox" id="orSelAll"></label><span>Select all</span></div>';
         for (var i = 0; i < list.length; i++) {
             var o = list[i];
             var nx = allowedNext(S, o);
-            h += '<tr><td><label class="check"><input type="checkbox" data-osel="' + U.esc(o.id) + '"></label></td>' +
-                '<td class="mono-id">' + U.esc(o.id) + '</td>' +
-                '<td><div class="table__primary">' + U.esc((o.shipping && o.shipping.name) || 'Guest') + '</div><div class="table__secondary">' + U.esc(((o.shipping && o.shipping.city) || '') + ((o.shipping && o.shipping.country) ? ', ' + o.shipping.country : '')) + '</div></td>' +
-                '<td class="num">' + (o.items || []).length + '</td>' +
-                '<td class="num fw-600">' + U.money(o.total) + '</td>' +
-                '<td>' + U.statusBadge(o.status) + ' ' + flagBadges(o) + '</td>' +
-                '<td class="fs-sm t-mute">' + App.ago(o.date) + '</td>' +
-                '<td><div class="cell-actions">' +
-                    (nx ? '<button class="btn btn--sm" data-adv="' + U.esc(o.id) + '" type="button" title="Advance to ' + nx + '">' + A().icon('zap', 12) + nx + '</button>' : '') +
-                    '<button class="icon-btn" data-view="' + U.esc(o.id) + '" type="button" title="Details">' + A().icon('eye', 14) + '</button>' +
-                '</div></td></tr>';
+            h += '<div class="card-row"><div class="card-row__check"><label class="check"><input type="checkbox" data-osel="' + U.esc(o.id) + '"></label></div>' +
+                '<div class="card-row__main">' +
+                    '<div class="card-row__topline">' +
+                        '<div class="card-row__title"><div class="mono-id">' + U.esc(o.id) + '</div>' +
+                        '<div class="table__secondary">' + U.esc((o.shipping && o.shipping.name) || 'Guest') + ' - ' + U.esc(((o.shipping && o.shipping.city) || '') + ((o.shipping && o.shipping.country) ? ', ' + o.shipping.country : '')) + ' - ' + (o.items || []).length + ' items - ' + App.ago(o.date) + '</div></div>' +
+                        '<div class="card-row__side"><span class="card-row__price">' + U.money(o.total) + '</span>' +
+                        '<div class="card-row__actions">' +
+                            (nx ? '<button class="btn btn--sm" data-adv="' + U.esc(o.id) + '" type="button" title="Advance to ' + nx + '">' + A().icon('zap', 12) + nx + '</button>' : '') +
+                            '<button class="icon-btn" data-view="' + U.esc(o.id) + '" type="button" title="Details">' + A().icon('eye', 14) + '</button>' +
+                        '</div></div>' +
+                    '</div>' +
+                    '<div class="card-row__meta">' + U.statusBadge(o.status) + ' ' + flagBadges(o) + '</div>' +
+                '</div></div>';
         }
-        h += '</tbody></table></div>';
+        h += '</div>';
         body.innerHTML = h;
 
         var selAll = body.querySelector('#orSelAll');
@@ -458,7 +470,7 @@
                 '<div class="search">' + A().icon('search', 14) + '<input id="cuQ" type="text" placeholder="Search name, email, city..."></div>' +
                 '<select class="filter-select" id="cuSource"><option value="">All sources</option><option value="orders">Has orders</option><option value="newsletter">Newsletter</option><option value="account">Signed-in account</option><option value="demo">Demo contacts</option></select>' +
                 '<span class="filter-count" id="cuCount"></span></div>' +
-                '<div class="table-wrap" id="cuTable"></div></div>';
+                '<div class="cards-wrap" id="cuTable"></div></div>';
 
             root.querySelector('#cuQ').addEventListener('input', App.debounce(function () { stC.q = this.value; drawC(root, ctx); }, 220));
             root.querySelector('#cuSource').addEventListener('change', function () { stC.source = this.value; drawC(root, ctx); });
@@ -495,27 +507,33 @@
             return;
         }
         var SRC = { demo: 'badge--neutral', newsletter: 'badge--accent', account: 'badge--info', orders: 'badge--ok', admin: 'badge--accent' };
-        var h = '<table class="table table--compact"><thead><tr><th>Contact</th><th>Sources</th><th>Location</th><th class="num">Orders</th><th class="num">Spend</th><th>Last order</th><th></th></tr></thead><tbody>';
+        var h = '<div class="cards">';
         for (i = 0; i < list.length; i++) {
             var c2 = list[i];
             var label = c2.name || c2.email || 'Unknown';
             var ini = (c2.name || c2.email || '?').replace(/@.*$/, '').slice(0, 2).toUpperCase();
             var badges = '';
-            for (var j2 = 0; j2 < c2.sources.length; j2++) badges += '<span class="badge ' + (SRC[c2.sources[j2]] || 'badge--neutral') + '" style="margin-right:4px;">' + c2.sources[j2] + '</span>';
+            for (var j2 = 0; j2 < c2.sources.length; j2++) badges += '<span class="badge ' + (SRC[c2.sources[j2]] || 'badge--neutral') + '">' + c2.sources[j2] + '</span>';
             var removable = String(c2.id).indexOf('nl-') !== 0 && String(c2.id).indexOf('buyer-') !== 0 && String(c2.id) !== 'acct';
-            h += '<tr><td><div class="table__user"><span class="avatar">' + U.esc(ini) + '</span><div style="min-width:0;"><div class="table__primary t-truncate" style="max-width:220px;">' + U.esc(label) + '</div>' +
-                (c2.email ? '<div class="table__secondary">' + U.esc(c2.email) + '</div>' : '') + '</div></div></td>' +
-                '<td>' + badges + '</td>' +
-                '<td class="fs-sm">' + U.esc((c2.city || '-') + (c2.country ? ', ' + c2.country : '')) + '</td>' +
-                '<td class="num">' + c2.orders + '</td>' +
-                '<td class="num fw-600">' + U.money(c2.spend) + '</td>' +
-                '<td class="fs-sm t-mute">' + (c2.lastAt ? App.ago(c2.lastAt) : '-') + '</td>' +
-                '<td><div class="cell-actions">' +
-                    '<button class="icon-btn" data-view="' + U.esc(c2.id) + '" type="button" title="Details">' + A().icon('eye', 14) + '</button>' +
-                    (removable ? '<button class="icon-btn" data-del="' + U.esc(c2.id) + '" type="button" title="Remove contact">' + A().icon('trash', 14) + '</button>' : '') +
-                '</div></td></tr>';
+            h += '<div class="card-row"><div class="card-row__main">' +
+                '<div class="card-row__topline">' +
+                    '<div class="card-row__identity"><span class="avatar">' + U.esc(ini) + '</span>' +
+                    '<div class="card-row__title"><div class="table__primary t-truncate">' + U.esc(label) + '</div>' +
+                    (c2.email ? '<div class="table__secondary t-truncate">' + U.esc(c2.email) + '</div>' : '') + '</div></div>' +
+                    '<div class="card-row__side"><span class="card-row__price">' + U.money(c2.spend) + '</span>' +
+                    '<div class="card-row__actions">' +
+                        '<button class="icon-btn" data-view="' + U.esc(c2.id) + '" type="button" title="Details">' + A().icon('eye', 14) + '</button>' +
+                        (removable ? '<button class="icon-btn" data-del="' + U.esc(c2.id) + '" type="button" title="Remove contact">' + A().icon('trash', 14) + '</button>' : '') +
+                    '</div></div>' +
+                '</div>' +
+                '<div class="card-row__meta">' + badges +
+                    '<span class="fs-sm t-mute">' + U.esc((c2.city || '-') + (c2.country ? ', ' + c2.country : '')) + '</span>' +
+                    '<span class="fs-xs t-mute">' + c2.orders + ' orders</span>' +
+                    '<span class="fs-xs t-mute">last ' + (c2.lastAt ? App.ago(c2.lastAt) : '-') + '</span>' +
+                '</div>' +
+            '</div></div>';
         }
-        el.innerHTML = h + '</tbody></table>';
+        el.innerHTML = h + '</div>';
 
         el.addEventListener('click', function (e) {
             var t;

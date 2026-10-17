@@ -47,51 +47,56 @@ const PROVIDERS = {
 
 const MAX_PROMPT_CHARS = 60000;
 const MAX_SECONDS = 60;
+/* Full product pages and long blog drafts need more than the small-task
+   default; the ceiling still protects the relay's own timeout budget. */
+const DEFAULT_MAX_TOKENS = 1200;
+const CEILING_MAX_TOKENS = 8000;
 
 function clean(value, max) {
-  return String(value == null ? '' : value).slice(0, max);
+    return String(value == null ? '' : value).slice(0, max);
 }
 
-function buildUpstream(provider, key, model, system, user) {
-  const headers = { 'Content-Type': 'application/json' };
+function buildUpstream(provider, key, model, system, user, maxTokens) {
+    const headers = { 'Content-Type': 'application/json' };
+    const cap = maxTokens || DEFAULT_MAX_TOKENS;
 
-  if (provider.kind === 'gemini') {
-    const url = `${provider.endpoint}${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(key)}`;
+    if (provider.kind === 'gemini') {
+        const url = `${provider.endpoint}${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(key)}`;
+        return {
+            url,
+            headers,
+            body: {
+                contents: [{ role: 'user', parts: [{ text: `${system}\n\n${user}` }] }],
+                generationConfig: { temperature: 0.7, maxOutputTokens: cap },
+            },
+        };
+    }
+
+    if (provider.kind === 'anthropic') {
+        headers['x-api-key'] = key;
+        headers['anthropic-version'] = '2023-06-01';
+        return {
+            url: provider.endpoint,
+            headers,
+            body: { model, max_tokens: cap, system, messages: [{ role: 'user', content: user }] },
+        };
+    }
+
+    headers.Authorization = `Bearer ${key}`;
+    Object.assign(headers, provider.headers || {});
     return {
-      url,
-      headers,
-      body: {
-        contents: [{ role: 'user', parts: [{ text: `${system}\n\n${user}` }] }],
-        generationConfig: { temperature: 0.7, maxOutputTokens: 1200 },
-      },
+        url: provider.endpoint,
+        headers,
+        body: {
+            model,
+            temperature: 0.7,
+            max_tokens: cap,
+            messages: [
+                { role: 'system', content: system },
+                { role: 'user', content: user },
+            ],
+        },
     };
-  }
-
-  if (provider.kind === 'anthropic') {
-    headers['x-api-key'] = key;
-    headers['anthropic-version'] = '2023-06-01';
-    return {
-      url: provider.endpoint,
-      headers,
-      body: { model, max_tokens: 1200, system, messages: [{ role: 'user', content: user }] },
-    };
-  }
-
-  headers.Authorization = `Bearer ${key}`;
-  Object.assign(headers, provider.headers || {});
-  return {
-    url: provider.endpoint,
-    headers,
-    body: {
-      model,
-      temperature: 0.7,
-      max_tokens: 1200,
-      messages: [
-        { role: 'system', content: system },
-        { role: 'user', content: user },
-      ],
-    },
-  };
 }
 
 function extractText(kind, data) {
@@ -155,7 +160,8 @@ module.exports = async function handler(req, res) {
     }
 
     const seconds = Math.min(MAX_SECONDS, Math.max(5, parseInt(body.seconds, 10) || 45));
-    const upstream = buildUpstream(provider, key, model, system, user);
+    const maxTokens = Math.min(CEILING_MAX_TOKENS, Math.max(200, parseInt(body.maxTokens, 10) || DEFAULT_MAX_TOKENS));
+    const upstream = buildUpstream(provider, key, model, system, user, maxTokens);
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), seconds * 1000);
 

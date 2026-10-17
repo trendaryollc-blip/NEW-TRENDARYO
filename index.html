@@ -42,1073 +42,19 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
-    <style>
-        /* ── Midnight Luxury 2.0 tokens — calm, premium, accessible ── */
-        :root {
-            --primary: #060614;
-            --bg-deep: #060614;
-            --accent: #00e5ff;
-            --accent-2: #ff3da6;
-            --accent-3: #2ee6a8;
-            --accent-4: #ffd166;
-            --danger: #ff5c7a;
-            --text: #f5f6fa;
-            --muted: rgba(245, 246, 250, 0.74);
-            --muted-2: rgba(245, 246, 250, 0.56);
-            --glass: rgba(255, 255, 255, 0.05);
-            --glass-2: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --glass-border-2: rgba(255, 255, 255, 0.14);
-            --card-grad: rgba(255, 255, 255, 0.035);
-            --shadow-lift: 0 18px 44px rgba(0, 0, 0, 0.45);
-            --glow-cyan: 0 0 0 rgba(0,0,0,0);
-            --r-sm: 10px;
-            --r-md: 16px;
-            --r-lg: 20px;
-            --r-pill: 14px;
-            --ease: cubic-bezier(0.22, 1, 0.36, 1);
-            --font-d: 'Sora', 'Inter', system-ui, sans-serif;
-            --font-b: 'Inter', system-ui, sans-serif;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', system-ui, sans-serif; color: #f5f6fa; overflow-x: hidden; background: #060614; line-height: 1.6; }
-        html { background: #060614; }
-        #three-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; opacity: 0.55; }
-
-        .store-header { position: fixed; top: 0; left: 0; right: 0; z-index: 10000; background: rgba(6,6,20,0.82); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid rgba(255,255,255,0.09); }
-        .store-header-inner { max-width: 1280px; margin: 0 auto; padding: 0.7rem 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
-        .store-brand { display: flex; align-items: center; gap: 0.75rem; min-width: 170px; }
-        .store-logo { font-family: 'Orbitron', sans-serif; font-size: 1.35rem; font-weight: 900; letter-spacing: 2px; background: linear-gradient(135deg, #fff, var(--accent)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; white-space: nowrap; }
-
-        .store-search { flex: 1; max-width: 520px; display: flex; align-items: center; gap: 0.5rem; padding: 0.55rem 1rem; border-radius: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); min-width: 200px; }
-        .store-search input { width: 100%; border: none; outline: none; background: transparent; color: #fff; font-family: inherit; font-size: 0.95rem; }
-        .store-search input::placeholder { color: rgba(245,246,250,0.5); }
-
-        .store-actions { display: flex; align-items: center; gap: 0.5rem; }
-        .store-icon-btn { width: 40px; height: 40px; border-radius: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; color: #fff; text-decoration: none; transition: border-color 0.2s ease, background 0.2s ease; }
-        .store-icon-btn:hover { border-color: rgba(0,229,255,0.4); background: rgba(0,229,255,0.1); transform: none; }
-
-        .store-nav { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem 0.6rem; }
-        .store-nav-list { display: flex; align-items: center; justify-content: flex-start; gap: 0.25rem; list-style: none; }
-
-        .store-nav-item { position: relative; }
-        .store-nav-link { font-family: 'Inter', sans-serif; font-size: 0.92rem; font-weight: 600; letter-spacing: 0.01em; color: rgba(245,246,250,0.78); text-decoration: none; padding: 0.55rem 0.85rem; border-radius: 10px; display: inline-flex; align-items: center; gap: 0.4rem; }
-        .store-nav-link:hover { background: rgba(255,255,255,0.07); color: #fff; }
-        .store-nav-link[aria-current="page"] { background: rgba(0,229,255,0.12); color: #fff; border: 1px solid rgba(0,229,255,0.22); }
-        .store-caret { font-size: 0.75rem; opacity: 0.7; }
-
-        .store-dropdown { position: absolute; left: 0; top: calc(100% + 8px); min-width: 260px; background: rgba(10,10,30,0.96); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 0.5rem; box-shadow: 0 18px 44px rgba(0,0,0,0.5); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease; }
-        .store-dropdown a { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.7rem 0.8rem; border-radius: 10px; color: rgba(245,246,250,0.88); text-decoration: none; font-weight: 500; }
-        .store-dropdown a:hover { background: rgba(0,229,255,0.1); color: #fff; }
-        .store-dropdown small { color: rgba(245,246,250,0.55); font-size: 0.82rem; }
-
-        .store-nav-item:hover .store-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
-        .store-nav-item.is-open .store-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
-
-        .store-mobile-toggle { display: none; width: 40px; height: 40px; border-radius: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; cursor: pointer; }
-
-        /* Slim header: 108px total */
-        .page-offset { padding-top: 112px; }
-
-        .section-wrap { max-width: 1280px; margin: 0 auto; }
-        .section-pad { padding: clamp(3rem, 6vw, 5rem) 1.5rem; }
-        /* ── Slim trust strip (4 pillars) ── */
-        .trust-strip { max-width: 1200px; margin: 0 auto; padding: 2.25rem 1.25rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
-        .trust-item { display: flex; align-items: center; gap: 0.85rem; padding: 1.1rem 1.25rem; border-radius: 16px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); transition: border-color 0.3s ease, background 0.3s ease; }
-        .trust-item:hover { border-color: rgba(0,240,255,0.35); background: rgba(0,240,255,0.05); }
-        .trust-icon { width: 42px; height: 42px; flex-shrink: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(0,240,255,0.08); border: 1px solid rgba(0,240,255,0.25); color: var(--accent); }
-        .trust-icon svg { width: 20px; height: 20px; }
-        .trust-label { font-family: 'Orbitron', sans-serif; font-size: 0.78rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.92); }
-        .trust-sub { font-size: 0.85rem; color: rgba(255,255,255,0.68); margin-top: 0.15rem; }
-
-        /* ── Stats ── */
-        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-top: 3.5rem; }
-        .stat-item { text-align: center; }
-        .stat-num { font-family: 'Orbitron', sans-serif; font-size: 3rem; font-weight: 900; background: transparent; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.35rem; }
-        .stat-label { color: rgba(255,255,255,0.8); font-size: 1.05rem; }
-
-        /* ── Offer code card + copy ── */
-        .code-card { display: inline-flex; align-items: center; gap: 0.9rem; margin-top: 1.75rem; padding: 0.85rem 0.85rem 0.85rem 1.5rem; border-radius: 999px; background: rgba(255,215,0,0.08); border: 1px dashed rgba(255,215,0,0.45); }
-        .code-value { font-family: 'Orbitron', sans-serif; font-size: 1.05rem; font-weight: 900; letter-spacing: 2px; color: var(--accent-4); text-shadow: 0 0 16px rgba(255,215,0,0.4); }
-        .copy-btn { padding: 0.5rem 1.1rem; border: none; border-radius: 999px; background: transparent; color: #211a00; font-family: 'Orbitron', sans-serif; font-size: 0.68rem; font-weight: 900; letter-spacing: 1px; cursor: pointer; transition: transform 0.2s ease, opacity 0.2s ease; }
-        .copy-btn:hover { transform: translateY(-1px); opacity: 0.9; }
-        .copy-btn.copied { background: linear-gradient(135deg, var(--accent-3), #00c853); color: #04240f; }
-
-        .meteor-countdown { color: rgba(255,215,0,0.75); font-size: 0.78rem; font-weight: 700; letter-spacing: 1px; }
-
-        /* ── Reduced motion (accessibility) ── */
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-                scroll-behavior: auto !important;
-            }
-        }
-
-        .section-pad { padding: 4.5rem 1.25rem; }
-        .section-wrap { max-width: 1200px; margin: 0 auto; }
-
-
-        .preloader-3d { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 2rem; }
-        .preloader-3d.hidden { opacity: 0; pointer-events: none; transition: opacity 0.5s; }
-        .preloader-logo-3d { font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 900; background: transparent; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        /* ═══════════════════════════════════════════
-           TRENDARYO HERO — ORBIT STAGE
-           backdrop wordmark · orbiting products · copy lane
-           Layers:  0 backdrop/wordmark/ring → 1 WebGL → 2 copy
-        ═══════════════════════════════════════════ */
-        #hero {
-            --brand-size: clamp(2.6rem, 11.5vw, 11rem);
-            position: relative;
-            min-height: 90vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            text-align: left;
-            background: transparent;
-            max-width: none;
-            margin: 0;
-            padding: 1.5rem 0 0;
-        }
-        #hero-starfield, #hero .hero-nebula { display: none; }
-        #hero .hero-bg { display: none; }
-        /* Eyebrow rides ABOVE the product layer so it never gets occluded */
-        #hero .hero-eyebrow-wrap {
-            position: relative; z-index: 2; width: 100%;
-            display: flex; justify-content: center;
-            margin-bottom: 1.5rem; pointer-events: none;
-        }
-        /* Wordmark + orbit ring sit BELOW the product layer:
-           products fly in front of the letters (the depth trick) */
-        #hero .hero-head {
-            position: relative; z-index: 0; width: 100%;
-            display: flex; justify-content: center; align-items: center;
-            margin-bottom: 2.05rem; pointer-events: none;
-        }
-        #hero .hero-ring {
-            position: absolute; left: 50%; top: 50%;
-            width: min(82vw, 1300px); height: calc(var(--brand-size) * 1.42);
-            transform: translate(-50%, -50%); overflow: visible;
-            pointer-events: none;
-        }
-        #hero .hero-ring ellipse {
-            fill: none; stroke: rgba(255,255,255,0.17); stroke-width: 1;
-            stroke-dasharray: 4 13; animation: heroDash 30s linear infinite;
-        }
-        #hero .hero-ring ellipse.is-solid {
-            stroke: rgba(46,230,168,0.16); stroke-dasharray: none;
-            animation: none;
-        }
-        @keyframes heroDash { to { stroke-dashoffset: -340; } }
-
-        #hero .hero-content {
-            position: relative; z-index: 2; width: 100%;
-            max-width: 1180px; margin: 0 auto;
-            display: grid; grid-template-columns: 1fr;
-            gap: 1.4rem; align-items: center;
-            padding: 0 1.5rem;
-        }
-        #hero .hero-copy {
-            grid-column: 1 / -1; width: 100%; max-width: 720px; margin: 0 auto;
-            display: flex; flex-direction: column; align-items: center;
-            gap: 0; text-align: center;
-        }
-        #hero .hero-eyebrow {
-            display: flex; align-items: center; gap: 0.75rem;
-            font-family: 'Inter', sans-serif;             font-size: 0.72rem; font-weight: 700;
-            letter-spacing: 0.3em; text-transform: uppercase; color: rgba(245,246,250,0.72);
-            text-shadow: 0 1px 14px rgba(6,6,20,0.95), 0 0 4px rgba(6,6,20,0.8);
-            margin: 0; visibility: visible; text-align: center;
-        }
-        #hero .hero-eyebrow::before,
-        #hero .hero-eyebrow::after { content: ""; width: 40px; height: 1px; display: inline-block; }
-        #hero .hero-eyebrow::before { background: linear-gradient(90deg, transparent, var(--accent-3)); }
-        #hero .hero-eyebrow::after { background: linear-gradient(90deg, var(--accent-3), transparent); }
-
-        #hero .hero-brand {
-            font-family: 'Sora', 'Inter', sans-serif; font-weight: 800;
-            font-size: var(--brand-size); letter-spacing: -0.035em; line-height: 0.88;
-            margin: 0; text-align: center; padding: 0 1rem;
-            background: linear-gradient(177deg, #ffffff 22%, #c3ccff 72%, #7de9c8 100%);
-            -webkit-background-clip: text; background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 22px 60px rgba(0,0,0,0.6)) drop-shadow(0 0 46px rgba(46,230,168,0.14));
-            animation: heroBrandIn 1.05s var(--ease) both;
-        }
-        #hero .hero-brand em {
-            font-style: normal;
-            background: linear-gradient(176deg, #a8ffe6 6%, var(--accent-3) 58%, #0fb37e 100%);
-            -webkit-background-clip: text; background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        @keyframes heroBrandIn {
-            from { opacity: 0; transform: translateY(30px) scale(0.985); }
-            to { opacity: 1; transform: none; }
-        }
-
-        #hero .hero-tagline {
-            grid-column: 1 / -1; justify-self: center; text-align: center;
-            display: block; font-family: 'Sora', 'Inter', sans-serif;
-            font-size: clamp(1.12rem, 2.4vw, 1.8rem); font-weight: 700; letter-spacing: -0.01em;
-            line-height: 1.3; color: rgba(255,255,255,0.94); margin: 0;
-            text-shadow: 0 2px 26px rgba(6,6,20,0.95);
-        }
-        #hero .hero-tagline em { font-style: normal; color: var(--accent-4); }
-        /* Proof numbers — replace the wall of copy */
-        #hero .hero-stats {
-            display: flex; flex-wrap: wrap; align-items: stretch;
-            justify-content: center;
-            margin: 0 0 1.4rem; row-gap: 1rem;
-        }
-        #hero .hero-stat { padding: 0 1.35rem; border-left: 1px solid rgba(255,255,255,0.13); }
-        #hero .hero-stat:first-child { padding-left: 0; border-left: none; }
-        #hero .stat-num {
-            font-family: 'Sora', 'Inter', sans-serif; font-size: clamp(1.45rem, 2.3vw, 2rem);
-            font-weight: 800; line-height: 1.05; letter-spacing: -0.02em;
-            background: none; -webkit-text-fill-color: var(--accent-3);
-            color: var(--accent-3); margin: 0;
-            text-shadow: 0 0 28px rgba(46,230,168,0.35);
-        }
-        #hero .hero-stat-lab {
-            display: block; margin-top: 0.35rem;
-            font-size: 0.63rem; font-weight: 700; letter-spacing: 0.17em;
-            text-transform: uppercase; color: rgba(245,246,250,0.52);
-        }
-        #hero .hero-cta-row { display: flex; gap: 0.9rem; flex-wrap: wrap; justify-content: center; margin-bottom: 1.4rem; }
-        #hero .hero-cta {
-            display: inline-flex; align-items: center; gap: 0.55rem;
-            padding: 0.95rem 1.7rem; border-radius: 999px;
-            font-family: 'Sora', sans-serif; font-size: 0.95rem; font-weight: 700;
-            text-decoration: none; transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-        }
-        #hero .hero-cta--primary { background: var(--accent-4); border: 1px solid var(--accent-4); color: #231500; box-shadow: 0 12px 30px rgba(255,209,102,0.25); }
-        #hero .hero-cta--primary:hover { transform: translateY(-2px); box-shadow: 0 18px 40px rgba(255,209,102,0.35); }
-        #hero .hero-cta--secondary { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.14); color: #fff; }
-        #hero .hero-cta--secondary:hover { border-color: rgba(255,255,255,0.35); background: rgba(255,255,255,0.09); transform: translateY(-2px); }
-        #hero .hero-proof { display: flex; align-items: center; justify-content: center; gap: 0.9rem; font-size: 0.9rem; color: rgba(245,246,250,0.75); }
-        #hero .hero-avatars { display: flex; }
-        #hero .hero-avatars img { width: 38px; height: 38px; border-radius: 50%; border: 2px solid #0b0d14; object-fit: cover; margin-left: -10px; }
-        #hero .hero-avatars img:first-child { margin-left: 0; }
-        #hero .hero-proof .stars { color: var(--accent-4); letter-spacing: 2px; font-size: 0.9rem; }
-        #hero .hero-proof b { color: #fff; }
-
-        #hero #hero-3d { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: default; z-index: 1; opacity: 0; transition: opacity 0.8s ease; }
-        #hero .hero-content { pointer-events: none; }
-        #hero .hero-content a, #hero .hero-content .market-widget { pointer-events: auto; }
-        /* Flanking decorations — direct children of #hero, clear of the centred copy lane */
-        #hero .hero-neon {
-            position: absolute; top: 55%; right: 4.5%; z-index: 3; text-align: center;
-            font-family: 'Caveat', cursive; font-size: clamp(1.6rem, 2.4vw, 2.3rem); line-height: 1.15;
-            color: #ffd9a0; text-shadow: 0 0 8px rgba(255,190,90,0.9), 0 0 24px rgba(255,160,50,0.55), 0 0 60px rgba(255,140,30,0.35);
-            transform: rotate(-4deg); pointer-events: none;
-        }
-
-        /* Rotating wax-seal badge */
-        #hero .hero-seal {
-            position: absolute; top: 54%; left: 3.5%; z-index: 3;
-            width: 132px; height: 132px; pointer-events: none;
-        }
-        #hero .hero-seal-ring { width: 100%; height: 100%; animation: sealSpin 26s linear infinite; }
-        #hero .hero-seal text {
-            font-family: 'Sora', 'Inter', sans-serif; font-size: 11px; font-weight: 700;
-            letter-spacing: 3.1px; fill: var(--accent-4);
-        }
-        #hero .hero-seal-core {
-            position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-            font-size: 1.45rem; color: var(--accent-4);
-            text-shadow: 0 0 18px rgba(255,209,102,0.65);
-        }
-        @keyframes sealSpin { to { transform: rotate(360deg); } }
-
-        /* Product spec card — appears on hover over an orbiting model */
-        #hero .hero-card {
-            position: absolute; z-index: 5; width: 236px;
-            padding: 0.85rem 0.95rem 0.9rem; border-radius: 16px;
-            background: rgba(9, 10, 26, 0.86);
-            border: 1px solid rgba(46,230,168,0.28);
-            box-shadow: 0 22px 50px rgba(0,0,0,0.55);
-            backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-            pointer-events: none; opacity: 0; transform: translate(-50%, 8px) scale(0.97);
-            transition: opacity 0.22s ease, transform 0.22s var(--ease);
-        }
-        #hero .hero-card.is-on { opacity: 1; transform: translate(-50%, 0) scale(1); }
-        #hero .hero-card-kicker {
-            display: block; font-size: 0.58rem; font-weight: 700; letter-spacing: 0.2em;
-            text-transform: uppercase; color: var(--accent-3); margin-bottom: 0.35rem;
-        }
-        #hero .hero-card-title {
-            display: block; font-family: 'Sora', sans-serif; font-size: 1rem; font-weight: 700;
-            color: #fff; line-height: 1.2;
-        }
-        #hero .hero-card-row { display: flex; align-items: baseline; gap: 0.5rem; margin-top: 0.4rem; }
-        #hero .hero-card-score {
-            font-family: 'Sora', sans-serif; font-size: 1.05rem; font-weight: 800;
-            color: var(--accent-4); white-space: nowrap;
-        }
-        #hero .hero-card-score em { font-style: normal; font-size: 0.68rem; color: rgba(245,246,250,0.5); }
-        #hero .hero-card-verdict { font-size: 0.74rem; line-height: 1.35; color: rgba(245,246,250,0.62); }
-        #hero .hero-card-go {
-            display: inline-block; margin-top: 0.6rem; font-size: 0.72rem; font-weight: 700;
-            letter-spacing: 0.06em; color: var(--accent-3); text-decoration: none;
-            border-top: 1px solid rgba(255,255,255,0.1); padding-top: 0.55rem; width: 100%;
-        }
-
-        /* Proof rail — hairline, centred, no card boxes */
-        #hero .hero-feats {
-            position: relative; z-index: 2; width: 100%; max-width: 1280px;
-            margin: 1.5rem auto 0; padding: 0.9rem 1.5rem 1.15rem;
-            display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start;
-            border-top: 1px solid rgba(255,255,255,0.09);
-            background: none;
-        }
-        #hero .hero-feat {
-            display: flex; gap: 0.6rem; align-items: flex-start;
-            padding: 0.15rem 1.5rem; border-right: 1px solid rgba(255,255,255,0.08);
-            text-align: left;
-        }
-        #hero .hero-feat:last-child { border-right: none; }
-        #hero .hero-feat svg { width: 19px; height: 19px; flex: 0 0 auto; color: var(--accent-3); margin-top: 1px; }
-        #hero .hero-feat strong {
-            display: block; font-family: 'Inter', sans-serif; color: rgba(245,246,250,0.9);
-            font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
-            margin-bottom: 0.15rem; white-space: nowrap;
-        }
-        #hero .hero-feat span { font-size: 0.74rem; color: rgba(245,246,250,0.45); white-space: nowrap; }
-
-        #hero .orbiting-products, #hero .product-pod, #hero .pod-glow, #hero .pod-chip, #hero .pod-label,
-        #hero .hero-float, #hero .hero-trust { display: none; }
-
-        @media (max-width: 1100px) {
-            #hero .hero-feat { padding: 0.15rem 1rem; }
-            #hero .hero-seal { width: 114px; height: 114px; left: 2%; }
-            #hero .hero-neon { right: 2.5%; }
-        }
-        @media (max-width: 960px) {
-            #hero .hero-head { margin-bottom: 3.2rem; }
-            #hero .hero-ring { height: calc(var(--brand-size) * 1.45); }
-            #hero .hero-feats { gap: 0.9rem 0; }
-            #hero .hero-feat { border-right: none; padding: 0.15rem 1.1rem; }
-            #hero .hero-neon { display: none; }
-            #hero .hero-seal { top: 3%; bottom: auto; left: 3%; width: 104px; height: 104px; }
-        }
-        @media (max-width: 560px) {
-            #hero .hero-ring { width: min(76vw, 560px); height: calc(var(--brand-size) * 1.5); }
-            #hero .hero-head { margin-bottom: 3rem; }
-            #hero .hero-seal { display: none; }
-            #hero .hero-feats { flex-direction: column; align-items: center; }
-            #hero .hero-feat { border-right: none; padding: 0.25rem 0; text-align: center; }
-            #hero .hero-feat strong, #hero .hero-feat span { white-space: normal; }
-            #hero .hero-stats { gap: 1rem 0; }
-            #hero .hero-stat { padding: 0 0.85rem; border-left: none; }
-        }
-
-        /* Market widget — calm card */
-        .market-widget {
-            max-width: 560px;
-            margin: 0;
-            padding: 1rem 1.2rem;
-            text-align: left;
-            background: rgba(255,255,255,0.035);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 16px;
-            box-shadow: none;
-        }
-        .mw-kicker { display: block; font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem; }
-        .mw-row { display: flex; align-items: center; gap: 0.9rem; }
-        .mw-thumb { width: 52px; height: 52px; flex: 0 0 auto; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.12); background: #0c0c28; }
-        .mw-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .mw-main { flex: 1 1 auto; min-width: 0; }
-        .mw-name { display: block; font-family: 'Sora', sans-serif; font-size: 0.92rem; font-weight: 700; color: #fff; margin-bottom: 0.15rem; }
-        .mw-sub { display: block; font-size: 0.82rem; color: rgba(245,246,250,0.6); margin-bottom: 0.5rem; }
-        .mw-bar-row { display: flex; align-items: center; gap: 0.55rem; margin-top: 0.35rem; }
-        .mw-lab { flex: 0 0 52px; font-family: 'Inter', sans-serif; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(245,246,250,0.6); }
-        .mw-bar { position: relative; flex: 1 1 auto; height: 6px; border-radius: 999px; background: rgba(255, 255, 255, 0.1); }
-        .mw-bar i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: inherit; background: var(--accent); box-shadow: none; }
-        .mw-bar u { position: absolute; top: -3px; width: 2px; height: 12px; background: rgba(255, 255, 255, 0.6); border-radius: 1px; }
-        .mw-val { flex: 0 0 auto; font-family: 'Sora', sans-serif; font-size: 0.88rem; font-weight: 800; color: #fff; white-space: nowrap; }
-        .mw-val small { font-size: 0.72rem; font-weight: 600; color: rgba(245,246,250,0.55); }
-        .mw-go { flex: 0 0 auto; font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 700; color: var(--accent); text-decoration: none; border-left: 1px solid rgba(255,255,255,0.1); padding: 0.4rem 0 0.4rem 0.9rem; white-space: nowrap; }
-        .mw-go:hover { color: #fff; }
-        @media (max-width: 640px) { .mw-go { display: none; } }
-
-
-        @media (max-width: 600px) {
-            #hero .orbiting-products { gap: 0.5rem; }
-            #hero .hero-cta-row { flex-direction: column; align-items: stretch; }
-            #hero .hero-cta { justify-content: center; }
-            #hero .hero-trust { font-size: 0.85rem; }
-        }
-        @media(max-width:900px){
-            .store-search { display: none; }
-            .store-mobile-toggle { display: inline-flex; align-items: center; justify-content: center; }
-            .store-nav { display: none; }
-            .store-header.is-open .store-nav { display: block; padding-bottom: 1rem; }
-            .store-nav-list { flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 0.4rem; }
-            .store-nav-link { width: 100%; justify-content: space-between; }
-            .store-dropdown { position: static; opacity: 1; visibility: visible; transform: none; box-shadow: none; background: rgba(255,255,255,0.04); }
-            .store-nav-item:hover .store-dropdown { opacity: 1; visibility: visible; transform: none; }
-            .cs-grid { grid-template-columns: repeat(3, 1fr); }
-            .vx-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-            .jn-grid { grid-template-columns: 1fr; }
-            .tst-grid { grid-template-columns: 1fr; }
-            .trust-strip { grid-template-columns: repeat(2, 1fr); }
-            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
-            .page-offset { padding-top: 96px; }
-        }
-        @media (max-width: 600px) {
-            .cs-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
-            .trust-strip { grid-template-columns: 1fr; padding: 1.5rem 1rem; }
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
-            .brand-strip { gap: 1.25rem 1.75rem; }
-        }
-
-        /* ═══════════════════════════════════════════
-           COSMIC SECTIONS — scoped to homepage only
-        ═══════════════════════════════════════════ */
-
-        /* ── Section headers — same system as shop.html (.sec-head/.sec-kicker) ── */
-        .sec-head {
-            display: flex; align-items: flex-end; justify-content: space-between;
-            gap: 1.25rem; flex-wrap: wrap; margin-bottom: 1.75rem; text-align: left;
-        }
-        .sec-head-txt { max-width: 720px; }
-        .sec-kicker {
-            display: inline-flex; align-items: center; gap: 0.5rem;
-            font-family: 'Inter', sans-serif; font-size: 0.74rem; font-weight: 700;
-            letter-spacing: 0.14em; text-transform: uppercase;
-            color: var(--accent); margin-bottom: 0.6rem;
-        }
-        .sec-kicker::before {
-            content: ''; width: 22px; height: 2px; border-radius: 2px;
-            background: var(--accent);
-        }
-        .sec-title {
-            font-family: 'Sora', 'Inter', sans-serif;
-            font-size: clamp(1.5rem, 2.8vw, 2.1rem);
-            font-weight: 800; line-height: 1.12; letter-spacing: -0.02em;
-            color: #fff; background: none; -webkit-text-fill-color: #fff;
-        }
-        .sec-sub { color: rgba(245,246,250,0.7); line-height: 1.65; font-size: 1rem; margin: 0.6rem 0 0; }
-        .sec-note { font-size: 0.82rem; color: rgba(245,246,250,0.5); }
-
-        /* ── #constellations ── */
-        #constellations {
-            text-align: center;
-            padding: 5rem 1.5rem;
-            position: relative;
-        }
-        #constellations .cs-inner { max-width: 1440px; margin: 0 auto; }
-        .cs-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 1.25rem;
-        }
-        .constellation {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.6rem;
-            padding: 1.75rem 1rem;
-            border-radius: var(--r-md);
-            background: var(--card-grad);
-            border: 1px solid var(--glass-border);
-            cursor: pointer;
-            transition: transform 0.28s var(--ease), border-color 0.28s ease, box-shadow 0.28s ease;
-            aspect-ratio: 1;
-            justify-content: center;
-        }
-        .constellation:hover {
-            transform: translateY(-4px);
-            border-color: rgba(0, 240, 255, 0.5);
-            box-shadow: 0 14px 34px rgba(0, 240, 255, 0.14);
-        }
-        .cs-orb { font-size: 2rem; line-height: 1; }
-        .cs-name {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.65rem;
-            font-weight: 800;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.85);
-            text-align: center;
-        }
-        .cs-count {
-            font-size: 0.78rem;
-            color: var(--accent);
-            font-weight: 600;
-        }
-
-        /* ── #vortex ── */
-        #vortex {
-            text-align: center;
-            padding: 5rem 1.5rem;
-        }
-        #vortex .vx-inner { max-width: 1440px; margin: 0 auto; }
-        .vx-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-        }
-        .vortex-card {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            padding: 0;
-            border-radius: var(--r-lg);
-            background: var(--card-grad);
-            border: 1px solid var(--glass-border);
-            cursor: default;
-            isolation: isolate;
-            overflow: hidden;
-            text-align: left;
-            --mx: 50%; --my: 0%;
-            transition: transform 0.42s var(--ease), border-color 0.35s ease, box-shadow 0.35s ease;
-        }
-        /* Cursor-tracking spotlight — same recipe as shop's .pc-card::after.
-           (The old .vx-glow divs are retired; empty ones in markup are inert.) */
-        .vortex-card::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
-            pointer-events: none;
-            opacity: 0;
-            z-index: 3;
-            transition: opacity 0.3s ease;
-            background: radial-gradient(320px circle at var(--mx) var(--my), rgba(0, 240, 255, 0.16), transparent 62%);
-        }
-        .vortex-card:hover::after, .vortex-card:focus-within::after { opacity: 1; }
-        .vortex-card:hover, .vortex-card:focus-within {
-            transform: translateY(-8px);
-            border-color: rgba(0, 240, 255, 0.55);
-            box-shadow: 0 18px 42px rgba(0, 240, 255, 0.15), 0 10px 34px rgba(0, 0, 0, 0.5);
-        }
-        .vx-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.1rem; }
-        .vx-orb {
-            width: 62px; height: 62px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            background: radial-gradient(circle at 30% 30%, rgba(0,240,255,0.28), transparent 65%), linear-gradient(135deg, rgba(0,240,255,0.12), rgba(255,0,170,0.12));
-            border: 1px solid rgba(0,240,255,0.3);
-            color: var(--accent);
-        }
-        .vx-orb svg { width: 28px; height: 28px; }
-        .vx-badge {
-            display: inline-block;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.62rem;
-            font-weight: 900;
-            letter-spacing: 2px;
-            padding: 0.28rem 0.7rem;
-            border-radius: 999px;
-            background: transparent;
-            color: #000;
-        }
-        .vx-name {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.05rem;
-            font-weight: 900;
-            color: #fff;
-            margin-bottom: 0.4rem;
-        }
-        .vx-desc {
-            color: rgba(255,255,255,0.62);
-            font-size: 0.92rem;
-            line-height: 1.55;
-            margin-bottom: 1.25rem;
-            flex: 1;
-        }
-        .vx-foot { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
-        .vx-price {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.3rem;
-            font-weight: 900;
-            color: var(--accent);
-        }
-        .vx-btn {
-            padding: 0.5rem 0.9rem;
-            border: 1px solid rgba(0, 240, 255, 0.5);
-            border-radius: 11px;
-            background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(0, 255, 136, 0.14));
-            color: #fff;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.66rem;
-            font-weight: 800;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: 0.25s var(--ease);
-            white-space: nowrap;
-        }
-        .vx-btn:hover {
-            background: linear-gradient(135deg, rgba(0, 240, 255, 0.38), rgba(0, 255, 136, 0.26));
-            box-shadow: 0 0 18px rgba(0, 240, 255, 0.3);
-        }
-        .vx-btn:active { transform: scale(0.98); }
-        .vx-btn.added {
-            border-color: rgba(0, 255, 136, 0.55);
-            color: #bfffdf;
-            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 240, 255, 0.12));
-        }
-
-        /* ── #pipeline — how a product makes the shelf ── */
-        #pipeline { padding: 4.5rem 1.5rem 1rem; }
-        .pipe-inner { max-width: 1440px; margin: 0 auto; }
-        .pipe-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
-        .pipe-step {
-            position: relative; display: flex; flex-direction: column; gap: 0.5rem;
-            padding: 1.5rem 1.35rem; text-align: left;
-            background: var(--card-grad); border: 1px solid var(--glass-border);
-            border-radius: var(--r-lg);
-            transition: transform 0.28s var(--ease), border-color 0.28s ease, box-shadow 0.28s ease;
-        }
-        .pipe-step:hover { transform: translateY(-4px); border-color: rgba(0, 240, 255, 0.5); box-shadow: 0 14px 34px rgba(0, 240, 255, 0.14); }
-        .pipe-step:not(:last-child)::after {
-            content: '\2192'; position: absolute; top: 50%; right: -0.85rem; transform: translateY(-50%);
-            z-index: 2; color: var(--accent); font-size: 1.1rem; font-weight: 900;
-            text-shadow: 0 0 12px rgba(0, 240, 255, 0.6); pointer-events: none;
-        }
-        .pipe-num { font-family: 'Orbitron', sans-serif; font-size: 0.62rem; font-weight: 800; letter-spacing: 2px; color: var(--accent); }
-        .pipe-name { font-family: 'Orbitron', sans-serif; font-size: 1rem; font-weight: 900; color: #fff; }
-        .pipe-desc { font-size: 0.84rem; color: var(--muted); line-height: 1.55; flex: 1; }
-        .pipe-stat { display: flex; align-items: baseline; gap: 0.45rem; padding-top: 0.75rem; margin-top: auto; border-top: 1px solid var(--glass-border); }
-        .pipe-stat b { font-family: 'Orbitron', sans-serif; font-size: 1.15rem; font-weight: 900; color: var(--accent-3); }
-        .pipe-stat span { font-size: 0.72rem; color: var(--muted-2); line-height: 1.3; }
-
-        /* Verdict tags on the featured cards */
-        .vx-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin: 0.1rem 0 0.8rem; }
-        .vx-tag {
-            font-family: 'Orbitron', sans-serif; font-size: 0.58rem; font-weight: 800;
-            letter-spacing: 0.8px; text-transform: uppercase;
-            padding: 0.28rem 0.6rem; border-radius: var(--r-pill);
-            background: rgba(0, 240, 255, 0.1); border: 1px solid rgba(0, 240, 255, 0.32);
-            color: var(--accent);
-        }
-        .vx-tag--save { background: rgba(0, 255, 136, 0.1); border-color: rgba(0, 255, 136, 0.38); color: var(--accent-3); }
-
-        @media (max-width: 1080px) {
-            .pipe-grid { grid-template-columns: repeat(2, 1fr); }
-            .pipe-step:not(:last-child)::after { display: none; }
-        }
-        @media (max-width: 560px) {
-            .pipe-grid { grid-template-columns: 1fr; }
-        }
-
-        /* ── #deals ── */
-        #deals {
-            text-align: center;
-            padding: 5rem 1.5rem;
-            overflow: hidden;
-        }
-        #deals .dl-inner { max-width: 1440px; margin: 0 auto; }
-        .dl-track {
-            display: flex;
-            flex-direction: column;
-            gap: 1.25rem;
-            margin-bottom: 2.5rem;
-            overflow: hidden;
-        }
-        .meteor {
-            position: relative;
-            display: flex;
-            align-items: center;
-            height: 60px;
-            border-radius: 30px;
-            background: transparent;
-            border: 1px solid rgba(255,215,0,0.3);
-            overflow: hidden;
-            cursor: pointer;
-            will-change: transform;
-            text-decoration: none;
-        }
-        .meteor:hover { border-color: rgba(255,215,0,0.6); }
-        .meteor-tail {
-            position: absolute;
-            left: 0; top: 0; bottom: 0;
-            width: 60%;
-            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.25), transparent);
-            animation: meteorShimmer 2.5s ease-in-out infinite;
-        }
-        @keyframes meteorShimmer {
-            0%   { transform: translateX(-100%); }
-            100% { transform: translateX(200%); }
-        }
-        .meteor-label {
-            position: relative;
-            z-index: 1;
-            flex: 1;
-            text-align: center;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.9rem;
-            font-weight: 900;
-            letter-spacing: 2px;
-            color: var(--accent-4);
-            text-shadow: 0 0 20px rgba(255,215,0,0.45);
-        }
-        .meteor-countdown {
-            position: relative;
-            z-index: 1;
-            padding-right: 1.5rem;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.72rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: rgba(255,255,255,0.85);
-            white-space: nowrap;
-        }
-        @media (max-width: 640px) {
-            .meteor-label { font-size: 0.68rem; letter-spacing: 1px; }
-            .meteor-countdown { display: none; }
-        }
-        .dl-cta {
-            display: inline-block;
-            padding: 0.78rem 1.5rem;
-            border-radius: var(--r-pill);
-            background: linear-gradient(135deg, var(--accent), var(--accent-3));
-            color: #00202a;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.72rem;
-            font-weight: 800;
-            letter-spacing: 1.2px;
-            text-transform: uppercase;
-            text-decoration: none;
-            transition: transform 0.25s var(--ease), box-shadow 0.25s ease;
-        }
-        .dl-cta:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0, 240, 255, 0.28); }
-
-        /* ── #testimonials ── */
-        #testimonials {
-            text-align: center;
-            padding: 5rem 1.5rem;
-        }
-        #testimonials .tst-inner { max-width: 1440px; margin: 0 auto; }
-        .tst-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-            text-align: left;
-        }
-        .hologram {
-            position: relative;
-            padding: 2rem;
-            border-radius: var(--r-lg);
-            background: var(--card-grad);
-            border: 1px solid var(--glass-border);
-            overflow: hidden;
-            cursor: pointer;
-            transition: border-color 0.28s ease, box-shadow 0.28s ease;
-        }
-        .hologram:hover { border-color: rgba(0, 240, 255, 0.5); box-shadow: 0 14px 34px rgba(0, 240, 255, 0.14); }
-        .holo-scan {
-            position: absolute;
-            top: -40%; left: 0; right: 0;
-            height: 40%;
-            background: linear-gradient(180deg, transparent, rgba(0,255,255,0.06), transparent);
-            animation: holoScan 4s ease-in-out infinite;
-            pointer-events: none;
-        }
-        @keyframes holoScan { 0% { top: -40%; } 100% { top: 120%; } }
-        .holo-stars { font-size: 0.9rem; margin-bottom: 0.75rem; letter-spacing: 2px; }
-        .holo-quote {
-            color: rgba(255,255,255,0.82);
-            font-size: 0.97rem;
-            line-height: 1.65;
-            margin-bottom: 1.25rem;
-            font-style: italic;
-        }
-        .holo-author { display: flex; align-items: center; gap: 0.75rem; }
-        .holo-avatar {
-            width: 40px; height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, rgba(0,255,255,0.2), rgba(255,0,170,0.2));
-            border: 1px solid rgba(0,255,255,0.3);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.1rem; flex-shrink: 0;
-        }
-        .holo-name {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.78rem; font-weight: 800;
-            color: #00ffff; letter-spacing: 1px;
-        }
-        .holo-tag { font-size: 0.78rem; color: rgba(255,255,255,0.45); margin-top: 0.1rem; }
-
-        /* ── #blackhole ── */
-        #blackhole {
-            position: relative;
-            text-align: center;
-            padding: 6rem 1.25rem;
-            overflow: hidden;
-            background: transparent;
-        }
-        .bh-ring {
-            position: absolute;
-            border-radius: 50%;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-        }
-        .bh-ring--1 { width: 320px; height: 320px; border: 1px solid rgba(0,240,255,0.12); animation: bhSpin 18s linear infinite; }
-        .bh-ring--2 { width: 520px; height: 520px; border: 1px solid rgba(255,0,170,0.08); animation: bhSpin 28s linear infinite reverse; }
-        @keyframes bhSpin { to { transform: translate(-50%, -50%) rotate(360deg); } }
-        .bh-core {
-            position: absolute;
-            width: 80px; height: 80px; border-radius: 50%;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            background: radial-gradient(circle, rgba(0,240,255,0.35) 0%, transparent 70%);
-            filter: blur(18px); pointer-events: none;
-            animation: bhCorePulse 3s ease-in-out infinite alternate;
-        }
-        @keyframes bhCorePulse {
-            from { opacity: 0.5; transform: translate(-50%,-50%) scale(1); }
-            to   { opacity: 1;   transform: translate(-50%,-50%) scale(1.4); }
-        }
-        .bh-inner { position: relative; z-index: 2; max-width: 700px; margin: 0 auto; }
-        .bh-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 900;
-            background: linear-gradient(135deg, #fff, #00f0ff, #ff00aa);
-            background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin-bottom: 0.75rem;
-        }
-        .bh-sub { color: rgba(255,255,255,0.55); font-size: 1rem; line-height: 1.65; margin-bottom: 2.5rem; }
-
-
-
-
-        .bh-cta {
-            display: inline-block; padding: 0.78rem 1.5rem; border-radius: var(--r-pill);
-            background: linear-gradient(135deg, var(--accent), var(--accent-3));
-            color: #00202a; font-family: 'Orbitron', sans-serif;
-            font-size: 0.72rem; font-weight: 800; letter-spacing: 1.2px;
-            text-transform: uppercase;
-            text-decoration: none;
-            transition: transform 0.25s var(--ease), box-shadow 0.25s ease;
-        }
-        .bh-cta:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0, 240, 255, 0.28); }
-
-        /* ═══════════════════════════════════════════
-           REFINEMENT PASS — pods, constellations, vortex
-        ═══════════════════════════════════════════ */
-
-        /* ─ Hero pods: wrapper carries only a GENTLE ambient bob.
-           GSAP magnetism removed — pods stay fixed in position. ── */
-        #hero .pod-wrap {
-            display: block;
-            will-change: transform;
-            animation: podFloat 6s ease-in-out infinite;
-        }
-        #hero .pod-wrap--2 { animation: podFloat2 7s ease-in-out infinite; animation-delay: -2s; }
-        #hero .pod-wrap--3 { animation: podFloat3 6.5s ease-in-out infinite; animation-delay: -4s; }
-        #hero .pod-wrap--4 { animation: podFloat4 7.5s ease-in-out infinite; animation-delay: -1s; }
-        @keyframes podFloat  { 0%,100%{ transform: translateY(0) }    50%{ transform: translateY(-7px) } }
-        @keyframes podFloat2 { 0%,100%{ transform: translateY(0) }    50%{ transform: translateY(-6px) } }
-        @keyframes podFloat3 { 0%,100%{ transform: translateY(0) }    50%{ transform: translateY(-8px) } }
-        @keyframes podFloat4 { 0%,100%{ transform: translateY(0) }    50%{ transform: translateY(-6px) } }
-        #hero #pod1, #hero #pod2, #hero #pod3, #hero #pod4 { animation: none; }
-
-        /* Media inside a pod: small circular product shot */
-        #hero .pod-media {
-            width: 54px; height: 54px;
-            border-radius: 50%;
-            overflow: hidden;
-            flex-shrink: 0;
-            border: 1px solid rgba(0,240,255,0.25);
-            transition: transform 0.3s ease;
-        }
-        #hero .pod-media img {
-            width: 100%; height: 100%; object-fit: cover;
-            display: block;
-        }
-        #hero .product-pod:hover .pod-media { transform: scale(1.1); }
-
-        /* ── Constellation orbs: SVG instead of OS-dependent emoji ── */
-        .cs-orb {
-            width: 42px; height: 42px;
-            display: flex; align-items: center; justify-content: center;
-            border-radius: 50%;
-            background: rgba(0, 240, 255, 0.08);
-            border: 1px solid rgba(0, 240, 255, 0.22);
-            color: var(--accent);
-            transition: background 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
-        }
-        .cs-orb svg { width: 22px; height: 22px; }
-        .constellation:hover .cs-orb {
-            background: rgba(0, 240, 255, 0.16);
-            box-shadow: 0 0 22px rgba(0, 240, 255, 0.35);
-        }
-        .constellation { text-decoration: none; color: inherit; }
-
-        /* ── Vortex product cards: real imagery + working add-to-cart ── */
-        #vortex .vx-grid { grid-template-columns: repeat(3, 1fr); }
-        .vx-card { padding: 0; overflow: hidden; display: flex; flex-direction: column; }
-        .vx-media {
-            position: relative;
-            aspect-ratio: 4 / 3;
-            overflow: hidden;
-            background:
-                radial-gradient(120% 90% at 50% 8%, rgba(0, 240, 255, 0.16), rgba(8, 8, 30, 0.92) 62%),
-                linear-gradient(135deg, rgba(0, 240, 255, 0.07), rgba(255, 0, 170, 0.07));
-        }
-        .vx-media img {
-            width: 100%; height: 100%;
-            object-fit: cover;
-            display: block;
-            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        .vx-card:hover .vx-media img { transform: scale(1.07); }
-        .vx-body { padding: 1.5rem; display: flex; flex-direction: column; flex: 1; text-align: left; }
-        .vx-rating {
-            display: flex; align-items: center; gap: 0.4rem;
-            font-size: 0.76rem; color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 0.35rem;
-        }
-        .vx-rating svg { color: var(--accent); }
-        .vx-price { display: flex; align-items: baseline; gap: 0.5rem; margin: 0.5rem 0 1rem; }
-        .vx-price-old {
-            font-size: 0.82rem; color: rgba(255, 255, 255, 0.45);
-            text-decoration: line-through;
-        }
-
-        /* Real add-to-cart button (visuals from .vx-btn, reveal from here) */
-        .vx-add {
-            margin-top: auto; width: 100%;
-            display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
-        }
-        .vx-add svg { width: 15px; height: 15px; }
-        @media (hover: hover) and (pointer: fine) {
-            .vx-add {
-                opacity: 0; transform: translateY(8px);
-                transition: opacity 0.3s ease, transform 0.3s ease, background 0.2s ease, box-shadow 0.2s ease;
-            }
-            .vx-card:hover .vx-add, .vx-add:focus-visible { opacity: 1; transform: translateY(0); }
-        }
-        /* Badge overlays the photo */
-        .vx-media .vx-badge { position: absolute; top: 1rem; left: 1rem; z-index: 2; box-shadow: 0 4px 18px rgba(0,0,0,0.35); }
-
-        /* ── Testimonials: crisp SVG stars + initial avatars ── */
-        .holo-stars { display: flex; gap: 3px; margin-bottom: 0.9rem; color: var(--accent-4); }
-        .holo-stars svg { width: 15px; height: 15px; }
-        .holo-avatar {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.82rem; font-weight: 800; letter-spacing: 0.5px;
-            color: var(--accent);
-        }
-
-        /* ── Features: one slim scannable strip (was 5 tall emoji cards) ── */
-        .feat-strip {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1rem;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-        .feat-item {
-            display: flex; align-items: center; gap: 0.85rem;
-            padding: 1.15rem 1.25rem;
-            border-radius: 16px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: left;
-            transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
-        }
-        .feat-item:hover {
-            border-color: rgba(0, 240, 255, 0.4);
-            background: rgba(0, 240, 255, 0.06);
-            transform: translateY(-3px);
-        }
-        .feat-item svg {
-            width: 42px; height: 42px; padding: 10px; box-sizing: border-box; flex-shrink: 0;
-            border-radius: 12px;
-            background: rgba(0, 240, 255, 0.08);
-            border: 1px solid rgba(0, 240, 255, 0.26);
-            color: var(--accent);
-        }
-        .feat-item strong {
-            display: block;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.72rem; font-weight: 800; letter-spacing: 1px;
-            text-transform: uppercase; color: #fff;
-        }
-        .feat-item span { font-size: 0.8rem; color: rgba(255, 255, 255, 0.62); }
-
-        /* ── Product media shimmer while the photo loads ── */
-        .media-skeleton {
-            position: absolute; inset: 0;
-            background: transparent;
-            background-size: 200% 100%;
-            animation: mediaShimmer 1.4s ease-in-out infinite;
-        }
-        @keyframes mediaShimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-        .media-skeleton.is-done { display: none; }
-
-        /* ── Media shimmer (native scroll stays auto; anchors smooth via JS) ── */
-        html { scroll-behavior: auto; }
-
-        /* ── In-page anchors: JS adds .smooth-anchors briefly; native stays auto ── */
-        html.smooth-anchors { scroll-behavior: smooth; }
-
-        /* ── Reduced motion: honour vestibular preferences everywhere ── */
-        @media (prefers-reduced-motion: reduce) {
-            #hero .pod-wrap,
-            .hero-nebula,
-            .holo-scan,
-            .bh-ring--1, .bh-ring--2, .bh-core,
-            .hero-tagline,
-            .hero-brand, .hero-ring, .hero-seal-ring,
-            .media-skeleton {
-                animation: none !important;
-            }
-            *, *::before, *::after {
-                transition-duration: 0.01ms !important;
-            }
-        }
-
-        /* Responsive for new sections */
-        @media (max-width: 900px) {
-            .cs-grid { grid-template-columns: repeat(3, 1fr); }
-            .vx-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-            .tst-grid { grid-template-columns: 1fr; }
-            .bh-ring--2 { display: none; }
-            .feat-strip { grid-template-columns: repeat(2, 1fr); }
-        }
-        @media (max-width: 600px) {
-            .vx-card { border-radius: 14px; }
-            .vx-media { aspect-ratio: 4 / 3; }
-            .vx-body { padding: 0.7rem 0.75rem 0.8rem; }
-            .vx-rating { font-size: 0.66rem; margin-bottom: 0.2rem; gap: 0.3rem; }
-            .vx-price { font-size: 0.95rem; margin: 0.4rem 0; }
-            .vx-price-old { font-size: 0.68rem; }
-            .vx-name { font-size: 0.78rem; line-height: 1.2; margin-bottom: 0.25rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-            .vx-desc { display: none; }
-            .vx-tags { display: none; }
-            .vx-foot { gap: 0.35rem; flex-wrap: wrap; }
-            .vx-btn { padding: 0.45rem 0.5rem; font-size: 0.56rem; letter-spacing: 0.5px; border-radius: 9px; }
-            #vortex .vx-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.7rem; }
-        }
-        @media (max-width: 480px) {
-            .cs-grid { grid-template-columns: repeat(2, 1fr); }
-            .feat-strip { grid-template-columns: 1fr; }
-        }
-
-        /* ── Newsletter offer band ── */
-        .nl-band { max-width: 720px; margin: 0 auto; padding: 1rem 1.25rem 4.5rem; }
-        .nl-card { background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 2.5rem 2rem; text-align: center; }
-        .nl-title { font-family: 'Sora','Inter',sans-serif; font-size: clamp(1.4rem, 2.6vw, 1.9rem); font-weight: 800; color: #fff; margin-bottom: 0.5rem; }
-        .nl-sub { color: rgba(245,246,250,0.7); margin-bottom: 1.5rem; }
-        .nl-form { display: flex; gap: 0.6rem; max-width: 460px; margin: 0 auto; }
-        .nl-form input { flex: 1; min-width: 0; padding: 0.8rem 1rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.05); color: #fff; font: inherit; font-size: 0.95rem; }
-        .nl-form input::placeholder { color: rgba(245,246,250,0.5); }
-        .nl-form button { padding: 0.8rem 1.3rem; border: none; border-radius: 12px; background: #fff; color: #060614; font-family: 'Sora','Inter',sans-serif; font-weight: 700; font-size: 0.9rem; cursor: pointer; white-space: nowrap; }
-        .nl-form button:hover { background: var(--accent); }
-        .nl-note { margin-top: 0.9rem; font-size: 0.8rem; color: rgba(245,246,250,0.5); }
-        @media (max-width: 560px) { .nl-form { flex-direction: column; } .nl-card { padding: 2rem 1.25rem; } }
-    </style>
+    <link rel="stylesheet" href="home.css">
+    <!-- 3D hero styles — scoped under .tr-hero so they cannot leak -->
+    <link rel="stylesheet" href="hero-3d.css">
     <link rel="stylesheet" href="luxury-final.css">
+    <!-- three.js for the 3D hero. This is the ONLY importmap on the page. -->
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+    </script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -1157,95 +103,46 @@
     <main class="page-offset">
     
     <!-- HERO SECTION — homepage only -->
-    <section id="hero">
+    <!-- ══════════════════════════════════════════════════════════════════
+         HERO — 3D product stage (hanging models + TRENDARYO wordmark)
+         Copy is left, the three.js scene fills the right. The scene JS lives
+         in hero-3d-scene.js (module) with hero-3d-fallback.js as a no-WebGL
+         / no-CDN safety net; styles are scoped under .tr-hero in hero-3d.css.
+         ══════════════════════════════════════════════════════════════════ -->
+    <section id="hero" class="tr-hero">
 
-        <div class="hero-bg"></div>
-        <canvas id="hero-starfield"></canvas>
-        <div class="hero-nebula hero-nebula--1"></div>
-        <div class="hero-nebula hero-nebula--2"></div>
+        <div class="tr-hero__scene" id="tr-hero-scene"></div>
+        <div class="tr-hero__fallback" id="tr-hero-fallback" role="img" aria-label="A selection of our product models"></div>
+        <div class="tr-hero__scrim"></div>
 
-        <div class="hero-eyebrow-wrap">
-            <span class="hero-eyebrow">Smarter shopping. A better you.</span>
+        <div class="tr-hero__copy">
+            <h1 class="tr-hero__title">The Internet Has Millions Of <span class="grad">Products.</span></h1>
+            <p class="tr-hero__lede">We Select The Few Worth Your Attention. Our team researches quality, value, and customer feedback to bring you products you can buy with confidence.</p>
+            <div class="tr-hero__cta">
+                <a class="tr-hero__btn tr-hero__btn--primary" href="shop.html">Shop bestsellers
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+                </a>
+                <a class="tr-hero__btn tr-hero__btn--ghost" href="#vortex">See today&rsquo;s winner</a>
+            </div>
         </div>
 
-        <div class="hero-head">
-            <svg class="hero-ring" aria-hidden="true">
-                <ellipse class="is-solid" cx="50%" cy="50%" rx="50%" ry="50%"/>
-                <ellipse cx="50%" cy="50%" rx="50%" ry="50%"/>
-            </svg>
-            <h1 class="hero-brand">TREND<em>ARYO</em></h1>
-        </div>
+    </section><!-- /hero -->
 
-        <div class="hero-content">
-            <span class="hero-tagline" id="hero-tagline">We do all the research <em>for you.</em></span>
-            <div class="hero-copy">
-                <div class="hero-stats">
-                    <div class="hero-stat">
-                        <div class="stat-num" data-count="1240" data-suffix="+">0</div>
-                        <span class="hero-stat-lab">Products tested</span>
-                    </div>
-                    <div class="hero-stat">
-                        <div class="stat-num" data-count="48" data-suffix="h">0</div>
-                        <span class="hero-stat-lab">Research per pick</span>
-                    </div>
-                    <div class="hero-stat">
-                        <div class="stat-num" data-count="100" data-suffix="%">0</div>
-                        <span class="hero-stat-lab">Handpicked only</span>
-                    </div>
+    <!-- TRENDING NOW — top products by live buyer demand, rendered by home-engine.js -->
+    <section id="trending" aria-labelledby="trendTitle">
+        <div class="pipe-inner">
+            <div class="sec-head">
+                <div class="sec-head-txt">
+                    <span class="sec-kicker">Trending now</span>
+                    <h2 class="sec-title" id="trendTitle">What everyone is buying right now.</h2>
+                    <p class="sec-sub">Ranked live from verified buyer demand and refreshed daily. Tap a product to see the full story.</p>
                 </div>
-                <div class="hero-cta-row">
-                    <a href="shop.html" class="hero-cta hero-cta--primary">
-                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-                        Shop Top Picks →
-                    </a>
-                </div>
-                <div class="hero-proof" aria-label="Social proof">
-                    <div class="hero-avatars">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=64&h=64&fit=crop" alt="Customer" width="38" height="38" loading="lazy">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=64&h=64&fit=crop" alt="Customer" width="38" height="38" loading="lazy">
-                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=64&h=64&fit=crop" alt="Customer" width="38" height="38" loading="lazy">
-                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=64&h=64&fit=crop" alt="Customer" width="38" height="38" loading="lazy">
-                    </div>
-                    <div>
-                        <span class="stars" aria-hidden="true">★★★★★</span>
-                        <div><b>50,000+ Happy Customers</b></div>
-                        <div style="font-size:0.78rem;color:rgba(245,246,250,0.5)">Trusted by real people, every day.</div>
-                    </div>
-                </div>
-                <div class="hero-trust market-widget" id="marketWidget" aria-live="polite"></div>
-                <div class="orbiting-products" id="orbiting-products"></div>
+                <span class="sec-note">Live from the store</span>
+            </div>
+            <div class="vx-grid" id="trendingGrid">
+                <p class="vx-status" role="status">Loading trending products&hellip;</p>
             </div>
         </div>
-        <canvas id="hero-3d"></canvas>
-
-        <div class="hero-neon">Your<br>Time<br>Matters</div>
-        <div class="hero-seal" aria-hidden="true">
-            <svg class="hero-seal-ring" viewBox="0 0 140 140">
-                <defs><path id="sealPath" d="M70,70 m-53,0 a53,53 0 1,1 106,0 a53,53 0 1,1 -106,0"/></defs>
-                <text><textPath href="#sealPath" startOffset="0">TESTED · TRUSTED · TRENDARYO · </textPath></text>
-            </svg>
-            <span class="hero-seal-core">✦</span>
-        </div>
-
-        <div class="hero-feats">
-            <div class="hero-feat">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg>
-                <div><strong>100% Tested Products</strong><span>We check everything for you.</span></div>
-            </div>
-            <div class="hero-feat">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
-                <div><strong>Best Quality</strong><span>Only the best makes the list.</span></div>
-            </div>
-            <div class="hero-feat">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12.6 2.6 21.4 11.4a2 2 0 0 1 0 2.8l-7.2 7.2a2 2 0 0 1-2.8 0L2.6 12.6A2 2 0 0 1 2 11.2V4a2 2 0 0 1 2-2h7.2a2 2 0 0 1 1.4.6z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>
-                <div><strong>Honest Prices</strong><span>Great value, no overhyped claims.</span></div>
-            </div>
-            <div class="hero-feat">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
-                <div><strong>Real Reviews</strong><span>From real buyers, all perspectives.</span></div>
-            </div>
-        </div>
-
     </section>
 
     <!-- WHY SHOP WITH US — quality, prices, delivery, returns -->
@@ -1351,12 +248,7 @@
                 <span class="sec-note">Updated automatically</span>
             </div>
             <div class="vx-grid">
-                <article class="vortex-card vx-card" data-product="1">                     <div class="vx-glow"></div>                     <div class="vx-media">                         <div class="media-skeleton" aria-hidden="true"></div>                         <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=640&h=480&fit=crop" alt="Wireless Headphones" loading="lazy" decoding="async" onload="this.previousElementSibling.classList.add('is-done')">                         <span class="vx-badge">HOT</span>                     </div>                     <div class="vx-body">                         <div class="vx-rating"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 17.27 6.18 3.73-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21Z"/></svg><span>4.5 &middot; 234 reviews</span></div>                         <h3 class="vx-name">Wireless Headphones</h3>                         <div class="vx-desc">Premium ANC headphones with a 30-hour battery.</div>                         <div class="vx-price"><span>$149</span><span class="vx-price-old">$199</span></div>                         <button class="vx-btn vx-add" data-add="1" data-name="Wireless Headphones" data-price="149"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/><path d="M12 5v6m-3-3h6"/></svg> Add to Cart</button>                     </div>                 </article>
-                    <article class="vortex-card vx-card" data-product="6">                     <div class="vx-glow"></div>                     <div class="vx-media">                         <div class="media-skeleton" aria-hidden="true"></div>                         <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=640&h=480&fit=crop" alt="Smart Watch" loading="lazy" decoding="async" onload="this.previousElementSibling.classList.add('is-done')">                         <span class="vx-badge">HOT</span>                     </div>                     <div class="vx-body">                         <div class="vx-rating"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 17.27 6.18 3.73-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21Z"/></svg><span>4.6 &middot; 445 reviews</span></div>                         <h3 class="vx-name">Smart Watch</h3>                         <div class="vx-desc">AMOLED display, health tracking, 7-day battery.</div>                         <div class="vx-price"><span>$299</span><span class="vx-price-old">$399</span></div>                         <button class="vx-btn vx-add" data-add="6" data-name="Smart Watch" data-price="299"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/><path d="M12 5v6m-3-3h6"/></svg> Add to Cart</button>                     </div>                 </article>
-                    <article class="vortex-card vx-card" data-product="4">                     <div class="vx-glow"></div>                     <div class="vx-media">                         <div class="media-skeleton" aria-hidden="true"></div>                         <img src="https://images.unsplash.com/photo-1588872657840-790ff3bde08c?w=640&h=480&fit=crop" alt="Gaming Laptop" loading="lazy" decoding="async" onload="this.previousElementSibling.classList.add('is-done')">                         <span class="vx-badge">PREMIUM</span>                     </div>                     <div class="vx-body">                         <div class="vx-rating"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 17.27 6.18 3.73-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21Z"/></svg><span>4.8 &middot; 312 reviews</span></div>                         <h3 class="vx-name">Gaming Laptop</h3>                         <div class="vx-desc">RTX graphics, 16GB RAM, lightning-fast SSD.</div>                         <div class="vx-price"><span>$1299</span><span class="vx-price-old">$1599</span></div>                         <button class="vx-btn vx-add" data-add="4" data-name="Gaming Laptop" data-price="1299"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/><path d="M12 5v6m-3-3h6"/></svg> Add to Cart</button>                     </div>                 </article>
-                    <article class="vortex-card vx-card" data-product="7">                     <div class="vx-glow"></div>                     <div class="vx-media">                         <div class="media-skeleton" aria-hidden="true"></div>                         <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=640&h=480&fit=crop" alt="Premium Sneakers" loading="lazy" decoding="async" onload="this.previousElementSibling.classList.add('is-done')">                         <span class="vx-badge">TRENDING</span>                     </div>                     <div class="vx-body">                         <div class="vx-rating"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 17.27 6.18 3.73-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21Z"/></svg><span>4.3 &middot; 198 reviews</span></div>                         <h3 class="vx-name">Premium Sneakers</h3>                         <div class="vx-desc">Breathable knit upper, cushioned foam sole.</div>                         <div class="vx-price"><span>$159</span><span class="vx-price-old">$229</span></div>                         <button class="vx-btn vx-add" data-add="7" data-name="Premium Sneakers" data-price="159"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/><path d="M12 5v6m-3-3h6"/></svg> Add to Cart</button>                     </div>                 </article>
-                    <article class="vortex-card vx-card" data-product="5">                     <div class="vx-glow"></div>                     <div class="vx-media">                         <div class="media-skeleton" aria-hidden="true"></div>                         <img src="https://images.unsplash.com/photo-1484704849700-f032a568e944?w=640&h=480&fit=crop" alt="Wireless Earbuds" loading="lazy" decoding="async" onload="this.previousElementSibling.classList.add('is-done')">                         <span class="vx-badge">TRENDING</span>                     </div>                     <div class="vx-body">                         <div class="vx-rating"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 17.27 6.18 3.73-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21Z"/></svg><span>4.4 &middot; 267 reviews</span></div>                         <h3 class="vx-name">Wireless Earbuds</h3>                         <div class="vx-desc">True wireless, 28-hour total battery, IPX5.</div>                         <div class="vx-price"><span>$89</span><span class="vx-price-old">$149</span></div>                         <button class="vx-btn vx-add" data-add="5" data-name="Wireless Earbuds" data-price="89"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/><path d="M12 5v6m-3-3h6"/></svg> Add to Cart</button>                     </div>                 </article>
-                    <article class="vortex-card vx-card" data-product="3">                     <div class="vx-glow"></div>                     <div class="vx-media">                         <div class="media-skeleton" aria-hidden="true"></div>                         <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=640&h=480&fit=crop" alt="Designer Backpack" loading="lazy" decoding="async" onload="this.previousElementSibling.classList.add('is-done')">                         <span class="vx-badge">PREMIUM</span>                     </div>                     <div class="vx-body">                         <div class="vx-rating"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 17.27 6.18 3.73-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21Z"/></svg><span>4.7 &middot; 189 reviews</span></div>                         <h3 class="vx-name">Designer Backpack</h3>                         <div class="vx-desc">Water-resistant 30L with USB charging port.</div>                         <div class="vx-price"><span>$199</span><span class="vx-price-old">$299</span></div>                         <button class="vx-btn vx-add" data-add="3" data-name="Designer Backpack" data-price="199"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/><path d="M12 5v6m-3-3h6"/></svg> Add to Cart</button>                     </div>                 </article></div>
+                <p class="vx-status" role="status">Loading best sellers&hellip;</p>
         </div>
     </section>
 
@@ -1403,20 +295,17 @@
 
     
 
-    <!-- FIRST-ORDER OFFER -->
-    <div id="blackhole">
-        <div class="bh-ring bh-ring--1"></div>
-        <div class="bh-ring bh-ring--2"></div>
-        <div class="bh-core"></div>
-        <div class="bh-inner">
-            <span class="sec-kicker">First order offer</span>
-            <h2 class="bh-title">Get 10% off your first order.</h2>
-            <p class="bh-sub">Join 50,000+ happy shoppers. Quality-checked products, fair prices, flat-rate shipping and 30-day returns.</p>
-            <a href="shop.html" class="bh-cta">Start shopping</a>
+    <!-- TRUST BAR — the boring strip every pro store has (reuses .trust-strip cards) -->
+    <div class="section-wrap section-pad" style="padding-top:0;padding-bottom:0" aria-label="Why shoppers trust Trendaryo">
+        <div class="trust-strip" style="max-width:none;padding:0">
+            <div class="trust-item"><span class="trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></span><span><span class="trust-label">Secure checkout</span><span class="trust-sub" style="display:block">256-bit SSL encryption</span></span></div>
+            <div class="trust-item"><span class="trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></span><span><span class="trust-label">Visa · Mastercard · PayPal</span><span class="trust-sub" style="display:block">Pay how you like</span></span></div>
+            <div class="trust-item"><span class="trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span><span><span class="trust-label">$4.99 flat shipping</span><span class="trust-sub" style="display:block">Tracked US delivery</span></span></div>
+            <div class="trust-item"><span class="trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></span><span><span class="trust-label">30-day returns</span><span class="trust-sub" style="display:block">Change of mind included</span></span></div>
         </div>
     </div>
 
-    <!-- NEWSLETTER — 10% off first order -->
+    <!-- NEWSLETTER — 10% off first order (single offer band) -->
     <section id="newsletter" aria-labelledby="nlTitle">
         <div class="nl-band">
             <div class="nl-card">
@@ -1441,18 +330,31 @@
     <!-- Service Worker Registration -->
     <!-- Removed: sw.js (not needed for basic functionality) -->
 
-    <script src="advanced-features.js"></script>
+    <!-- Non-critical, DOMContentLoaded/load-gated enhancements: deferred so they
+         never block first paint. Order is preserved and these have no parse-time
+         dependency on the critical chain below (verified: each self-gates on
+         DOMContentLoaded / window load). -->
+    <script src="advanced-features.js" defer></script>
     <script src="components.js"></script>
-    <script src="bg-optimized.js"></script>
-    <script src="hero-3d.js"></script>
-    <script src="cursor-particles.js"></script>
-    <script src="hero-particles.js"></script>
-    <script src="storytelling-animations.js"></script>
-    <script src="surprise-interactions.js"></script>
+    <script src="bg-optimized.js" defer></script>
+    <script src="js/vitals.js" defer></script>
+    <!-- Retired: hero-3d.js + hero-particles.js — the old WebGL orbit stage.
+         The hero is now the 3D product stage driven by hero-3d-scene.js
+         (module, loaded further down) with hero-3d-fallback.js as its net. -->
+    <script src="cursor-particles.js" defer></script>
+    <script src="storytelling-animations.js" defer></script>
+    <script src="surprise-interactions.js" defer></script>
+    <!-- CRITICAL CHAIN — left non-deferred so it executes in document order
+         during parse, before the inline scripts below that rely on it:
+         products-data.js -> cart-manager.js -> home-engine.js. -->
     <script src="products-data.js"></script>
     <script src="cart-manager.js"></script>
     <script src="backend-bridge.js"></script>
     <script src="home-engine.js"></script>
+    <!-- 3D hero: the fallback script must load BEFORE the module so its
+         watchdog is armed before the scene can possibly report ready. -->
+    <script src="hero-3d-fallback.js" defer></script>
+    <script type="module" src="hero-3d-scene.js"></script>
     <script>
         // Analytics — page view + pod/product interest tracking
         window.addEventListener('load', () => {
@@ -1461,14 +363,11 @@
             }
         });
 
-        // Track product pod interest (navigation itself is handled by the native <a>)
-        document.querySelectorAll('#hero .product-pod').forEach(pod => {
-            pod.addEventListener('click', () => {
-                const labelEl = pod.querySelector('.pod-label');
-                if (typeof Analytics !== 'undefined' && labelEl) {
-                    Analytics.trackProductView(pod.id, labelEl.textContent);
-                }
-            });
+        // A 3D-product click is a product interest signal (navigation is native)
+        document.getElementById('hero').addEventListener('pointerdown', function (e) {
+            if (e.target && e.target.tagName === 'CANVAS' && typeof Analytics !== 'undefined') {
+                Analytics.trackEvent && Analytics.trackEvent('hero_3d_interact', {});
+            }
         });
 
         // Preloader is handled centrally by components.js (first-paint hide).
@@ -1556,14 +455,16 @@
            or an inner link) opens product.html?id=…. Covers the static
            pre-render cards and any dynamically rendered ones. ── */
         (function () {
-            const grid = document.querySelector('#vortex .vx-grid');
-            if (!grid) return;
-            grid.addEventListener('click', (e) => {
-                if (e.target.closest('button, a')) return;
-                const card = e.target.closest('.vx-card[data-product]');
-                if (!card) return;
-                const id = card.getAttribute('data-product');
-                if (id) window.location.href = 'product.html?id=' + encodeURIComponent(id);
+            ['#vortex .vx-grid', '#trending .vx-grid'].forEach(sel => {
+                const grid = document.querySelector(sel);
+                if (!grid) return;
+                grid.addEventListener('click', (e) => {
+                    if (e.target.closest('button, a')) return;
+                    const card = e.target.closest('.vx-card[data-product]');
+                    if (!card) return;
+                    const id = card.getAttribute('data-product');
+                    if (id) window.location.href = 'product.html?id=' + encodeURIComponent(id);
+                });
             });
         })();
 

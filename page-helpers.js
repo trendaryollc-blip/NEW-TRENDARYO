@@ -187,7 +187,7 @@
             '<div class="trust-item">' + truck + '<div><b>Tracked Shipping</b><span>From $4.99, insured</span></div></div>' +
             '<div class="trust-item">' + rotate + '<div><b>30-Day Returns</b><span>Changed your mind? No problem</span></div></div>' +
             '<div class="trust-item">' + lock + '<div><b>Secure Checkout</b><span>256-bit SSL encryption</span></div></div>' +
-            '<div class="trust-item">' + shield + '<div><b>Quality Guarantee</b><span>Authentic products, full warranty</span></div></div>' +
+            '<div class="trust-item">' + shield + '<div><b>Quality Guarantee</b><span>Vetted suppliers, as described</span></div></div>' +
         '</div>';
     };
 

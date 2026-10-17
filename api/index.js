@@ -10,6 +10,15 @@ const ROUTES = {
   '/auth/me': require('./auth/me'),
   '/products': require('./products/index'),
   '/products/:id': require('./products/[id]'),
+  '/products/:id/content': require('./products/[id]/content'),
+  '/blog': require('./blog/index'),
+  '/blog/:id': require('./blog/[id]'),
+  '/blog/briefs': require('./blog/briefs/index'),
+  '/blog/briefs/:id': require('./blog/briefs/[id]'),
+  '/blog/rss': require('./blog/rss'),
+  '/rss': require('./blog/rss'),
+  '/sitemap': require('./blog/sitemap'),
+  '/sitemap.xml': require('./blog/sitemap'),
   '/cart': require('./cart/index'),
   '/checkout/quote': require('./checkout/quote'),
   '/orders': require('./orders/index'),
@@ -33,6 +42,7 @@ const ROUTES = {
   '/admin/audit': require('./admin/audit'),
   '/admin/health': require('./admin/health'),
   '/admin/reorder': require('./admin/reorder'),
+  '/admin/content-overview': require('./admin/content-overview'),
   '/admin/supplier-sla': require('./admin/supplier-sla'),
   '/admin/supplier-fulfill': require('./admin/supplier-fulfill'),
   '/admin/supplier-sync': require('./admin/supplier-sync'),
@@ -41,6 +51,11 @@ const ROUTES = {
   '/automations/:id': require('./automations/[id]'),
   '/cron/supplier-sync': require('./cron/supplier-sync'),
   '/cron/automations': require('./cron/automations'),
+  '/cron/reconciliation': require('./cron/reconciliation'),
+  '/cron/abandoned-checkout': require('./cron/abandoned-checkout'),
+  '/cron/backup': require('./cron/backup'),
+  '/cron/publish-posts': require('./cron/publish-posts'),
+  '/vitals': require('./vitals'),
   '/wishlist': require('./wishlist/index'),
   '/waitlist': require('./waitlist/index'),
   '/newsletter': require('./newsletter/index'),
@@ -50,6 +65,7 @@ const ROUTES = {
   '/ai': require('./ai'),
   '/upload': require('./upload'),
   '/config/public': require('./config/public'),
+  '/config/deploy': require('./config/deploy'),
 };
 
 const MAX_BODY_BYTES = 10 * 1024 * 1024;
@@ -165,8 +181,14 @@ module.exports = async function handler(req, res) {
         target = ROUTES[`/${segments[0]}/:id`];
         if (target) id = segments[1];
       } else if (segments.length === 3) {
+        /* collection/:id/sub (e.g. /orders/x/refund) */
         target = ROUTES[`/${segments[0]}/${segments[1]}/:id`];
         if (target) id = segments[2];
+        if (!target) {
+          /* collection/:id/action (e.g. /products/p1/content) */
+          target = ROUTES[`/${segments[0]}/:id/${segments[2]}`];
+          if (target) id = segments[1];
+        }
       }
     }
 
@@ -180,6 +202,11 @@ module.exports = async function handler(req, res) {
     return await target(req, res);
   } catch (error) {
     console.error('Gateway error:', error);
+    try {
+      const { recordApiError } = require('./_lib/health');
+      const { db } = require('./_lib/firebase').initFirebase();
+      await recordApiError(db, routePath, 500, error.message);
+    } catch (ignored) { /* health must never mask the failure */ }
     if (res.headersSent) {
       return res.end();
     }

@@ -103,6 +103,21 @@ module.exports = async function handler(req, res) {
       }
 
       await db.collection('settings').doc('store').set(update, { merge: true });
+      try {
+        const { log } = require('./_lib/audit');
+        await log(db, {
+          actorUid: adminUser.uid,
+          actorEmail: adminUser.email || null,
+          action: 'settings.updated',
+          targetType: 'settings',
+          targetId: 'store',
+          after: update,
+          ip: req.headers['x-forwarded-for'] || null,
+          userAgent: req.headers['user-agent'] || null,
+        });
+      } catch (auditError) {
+        console.error('[settings] audit failed:', auditError.message);
+      }
       const settings = await getSettings(db);
       return res.status(200).json({ data: settings });
     }

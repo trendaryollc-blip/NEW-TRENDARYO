@@ -2104,3 +2104,125 @@ table { border-collapse: collapse; width: 100%; }
     .main { grid-column: 1; }
     .panel { border-color: #ccc; break-inside: avoid; }
 }
+
+/* --------------------------------------------------------------------------
+   24. NO-X-SCROLL CARD LISTS (Products / Reviews / Orders / Customers)
+   Replaces wide <table> layouts so the first row's actions are always
+   visible without dragging a left-right scrollbar. Everything wraps.
+   -------------------------------------------------------------------------- */
+.cards-wrap { overflow: visible; min-width: 0; }
+.cards { display: flex; flex-direction: column; min-width: 0; }
+.cards__selectbar {
+    display: flex; align-items: center; gap: var(--s-2);
+    padding: var(--s-2) var(--s-4);
+    border-bottom: 1px solid var(--line);
+    background: var(--surface-2);
+    font-size: var(--t-sm); color: var(--text-mute);
+}
+.card-row {
+    display: flex; gap: var(--s-3);
+    padding: var(--s-3) var(--s-4);
+    border-bottom: 1px solid var(--line-soft);
+    align-items: flex-start;
+    min-width: 0;
+}
+.card-row:last-child { border-bottom: none; }
+.card-row:hover { background: var(--surface-2); }
+.card-row__check { flex: 0 0 auto; padding-top: 3px; }
+.card-row__main { flex: 1 1 auto; min-width: 0; }
+.card-row__topline {
+    display: flex; align-items: flex-start; gap: var(--s-3);
+    min-width: 0;
+}
+.card-row__title { flex: 1 1 auto; min-width: 0; font-weight: 550; overflow-wrap: anywhere; }
+.card-row__title .table__secondary { margin-top: 1px; overflow-wrap: anywhere; }
+.card-row__side {
+    flex: 0 0 auto; display: flex; align-items: center; gap: var(--s-2);
+    margin-left: auto;
+}
+.card-row__price { font-weight: 650; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.card-row__actions { display: flex; gap: 2px; align-items: center; flex: 0 0 auto; }
+.card-row__actions .btn--sm { white-space: nowrap; }
+.card-row__meta {
+    display: flex; flex-wrap: wrap; gap: 6px 8px;
+    align-items: center; margin-top: 6px; min-width: 0;
+}
+.card-row__meta .fs-sm, .card-row__meta .fs-xs { min-width: 0; overflow-wrap: anywhere; }
+.card-row__comment {
+    margin-top: 6px; font-size: var(--t-sm); color: var(--text-dim);
+    line-height: 1.5; overflow-wrap: anywhere; word-break: break-word;
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.card-row__identity { display: flex; align-items: center; gap: var(--s-3); min-width: 0; flex: 1 1 auto; }
+.card-row__identity .table__thumb { width: 34px; height: 34px; flex: 0 0 34px; }
+@media (max-width: 640px) {
+    .card-row { padding: var(--s-3); }
+    .card-row__topline { flex-wrap: wrap; }
+    .card-row__side { width: 100%; justify-content: space-between; margin-left: 0; }
+    .card-row__actions { flex-wrap: wrap; justify-content: flex-end; }
+}
+/* Kanban board: stack columns vertically on narrow screens instead of X-scroll */
+@media (max-width: 900px) {
+    .kanban { grid-auto-flow: row; grid-auto-columns: unset; grid-template-columns: minmax(0, 1fr); overflow-x: visible; }
+}
+
+/* ================= BLOG STUDIO ================= */
+.blk-list { display: flex; flex-direction: column; gap: 8px; }
+.blk {
+    border: 1px solid var(--line-strong); border-radius: var(--r-sm);
+    background: var(--bg-raise, rgba(255, 255, 255, 0.02));
+}
+.blk__head {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 8px; border-bottom: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.02); border-radius: var(--r-sm) var(--r-sm) 0 0;
+}
+.blk__n { font-size: var(--t-xs); color: var(--text-dim); font-variant-numeric: tabular-nums; min-width: 22px; }
+.blk__type {
+    font-size: var(--t-xs); font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+    padding: 3px 6px; border-radius: 999px; border: 1px solid var(--line-strong);
+    background: transparent; color: var(--text-dim); cursor: pointer;
+}
+.blk__label { font-size: var(--t-xs); color: var(--text-mute, var(--text-dim)); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1 1 auto; min-width: 0; }
+.blk__tools { display: flex; gap: 2px; flex: 0 0 auto; }
+.blk__body { padding: 8px; display: flex; flex-direction: column; gap: 6px; }
+.blk__body .textarea { min-height: 54px; resize: vertical; }
+.blk__ai {
+    display: flex; gap: 6px; flex-wrap: wrap; padding: 0 8px 8px;
+}
+.blk-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+@media (max-width: 700px) { .blk-row { grid-template-columns: minmax(0, 1fr); } }
+.blk-add { width: 100%; justify-content: center; border-style: dashed; }
+.bl-preview { font-family: var(--font-body, 'Rajdhani', sans-serif); }
+.bl-preview .bp-cover { width: 100%; border-radius: var(--r-sm); display: block; margin-bottom: 12px; object-fit: cover; max-height: 180px; }
+.bl-preview .bp-h2 {
+    font-family: var(--font-display, 'Orbitron', sans-serif); font-size: .95rem; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--accent); margin: 14px 0 6px;
+}
+.bl-preview .bp-h3 { font-size: .9rem; font-weight: 700; margin: 10px 0 4px; }
+.bl-preview p { color: var(--text-dim); line-height: 1.6; font-size: .92rem; margin-bottom: 8px; }
+.bl-preview .bp-list { margin: 0 0 10px 1.1rem; color: var(--text-dim); line-height: 1.6; font-size: .92rem; }
+.bl-preview .bp-quote {
+    border-left: 3px solid var(--accent); padding: 6px 0 6px 12px; margin: 10px 0;
+    color: var(--text); font-style: italic;
+}
+.bl-preview .bp-fig { margin: 10px 0; }
+.bl-preview .bp-fig img { width: 100%; border-radius: var(--r-sm); }
+.bl-preview .bp-fig figcaption { font-size: var(--t-xs); color: var(--text-dim); margin-top: 4px; }
+.bl-preview .bp-cta {
+    border: 1px dashed var(--line-strong); border-radius: var(--r-sm); padding: 12px; text-align: center; margin: 12px 0;
+}
+.bl-preview .bp-cta__t { font-weight: 700; margin-bottom: 4px; }
+.bl-preview .bp-cta__x { font-size: var(--t-sm); color: var(--text-dim); margin-bottom: 8px; }
+.bl-preview .bp-cta__btn {
+    display: inline-block; padding: 6px 14px; border-radius: 999px;
+    background: linear-gradient(135deg, var(--accent), var(--ai)); color: #000; font-weight: 700; text-decoration: none; font-size: var(--t-sm);
+}
+.bl-preview .bp-prod {
+    display: flex; align-items: center; gap: 8px; border: 1px solid var(--line-strong);
+    border-radius: var(--r-sm); padding: 8px; margin: 8px 0; font-size: var(--t-sm);
+}
+.bl-preview .bp-prod--empty { color: var(--text-dim); border-style: dashed; }
+.bl-empty { text-align: center; color: var(--text-dim); font-size: var(--t-sm); padding: 18px 8px; border: 1px dashed var(--line-strong); border-radius: var(--r-sm); }
+.bl-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }

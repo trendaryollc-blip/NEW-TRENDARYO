@@ -331,7 +331,7 @@
     V.automations = {
         title: 'Automations',
         icon: 'zap',
-        sub: 'Rules that run the store for you - cancel, fulfil, flag and alert',
+        sub: 'Rules that run the store for you - cancel, fulfil, flag, notify and monitor',
         openAlerts: 0,
         render: function (root, ctx) {
             var App = ctx.App;

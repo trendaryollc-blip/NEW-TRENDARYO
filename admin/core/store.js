@@ -14,11 +14,12 @@
 (function () {
     'use strict';
 
-    var K = {
+var K = {
         settings: 'trendaryo_admin_settings',
         products: 'trendaryo_admin_products',
         customers: 'trendaryo_admin_customers',
         content: 'trendaryo_admin_content',
+        blog: 'trendaryo_admin_blog',
         ai: 'trendaryo_admin_ai',
         log: 'trendaryo_admin_log',
         creds: 'trendaryo_admin_creds',
@@ -538,13 +539,99 @@ S.deleteProduct = function (id) {
         return d;
     };
 
-    S.deleteDraft = function (id) {
+S.deleteDraft = function (id) {
         var list = S.drafts();
         var out = [], i;
         for (i = 0; i < list.length; i++) if (list[i].id !== id) out.push(list[i]);
         write(K.content, out);
         S.log('draft.deleted', String(id));
     };
+
+    /* ================= BLOG ================= */
+
+    S.blogPosts = function () { return read(K.blog, []); };
+
+    S.blogPost = function (id) {
+        var s = String(id);
+        var list = S.blogPosts();
+        for (var i = 0; i < list.length; i++) if (String(list[i].id) === s || String(list[i].slug) === s) return list[i];
+        return null;
+    };
+
+    S.saveBlogPost = function (id, patch) {
+        var list = S.blogPosts();
+        var sId = String(id);
+        var idx = -1, i;
+        for (i = 0; i < list.length; i++) if (String(list[i].id) === sId || String(list[i].slug) === sId) { idx = i; break; }
+        if (idx >= 0) {
+            for (var k in patch) list[idx][k] = patch[k];
+            list[idx].updatedAt = now();
+            write(K.blog, list);
+            S.log('blog.updated', '#' + id + ' (' + Object.keys(patch).join(', ') + ')');
+            return list[idx];
+        }
+        return null;
+    };
+
+    S.addBlogPost = function (p) {
+        var list = S.blogPosts();
+        var maxId = 0, i;
+        for (i = 0; i < list.length; i++) {
+            var n = parseInt(String(list[i].id).replace(/\D/g, ''), 10);
+            if (!isNaN(n) && n > maxId) maxId = n;
+        }
+        var id = 'b' + (maxId + 1);
+        var slug = p.slug || slugify(p.title || 'post');
+        var exists = true, counter = 1;
+        while (exists) {
+            exists = false;
+            for (i = 0; i < list.length; i++) if (list[i].slug === slug) { exists = true; slug = slug + '-' + counter++; break; }
+        }
+        p.id = id;
+        p.slug = slug;
+        p.views = p.views || 0;
+        p.createdAt = now();
+        p.updatedAt = p.createdAt;
+        p.publishedAt = p.status === 'published' ? p.createdAt : null;
+        list.unshift(p);
+        write(K.blog, list);
+        S.log('blog.added', '#' + id + ' ' + (p.title || ''));
+        return p;
+    };
+
+    S.deleteBlogPost = function (id) {
+        var list = S.blogPosts();
+        var sId = String(id);
+        var out = [], i;
+        for (i = 0; i < list.length; i++) if (String(list[i].id) !== sId && String(list[i].slug) !== sId) out.push(list[i]);
+        write(K.blog, out);
+        S.log('blog.deleted', '#' + id);
+    };
+
+    S.blogSeoState = function (p) {
+        var s = p && p.seo;
+        if (!s || (!s.metaTitle && !s.metaDescription)) return 'missing';
+        if (s.metaTitle && s.metaDescription && s.keywords && s.keywords.length) return 'full';
+        return 'partial';
+    };
+
+    S.applyBlogSeo = function (id, seo) {
+        return S.saveBlogPost(id, { seo: seo });
+    };
+
+    S.blogAudit = function () {
+        var all = S.blogPosts();
+        var full = 0, partial = 0, missing = 0, i;
+        for (i = 0; i < all.length; i++) {
+            var st = S.blogSeoState(all[i]);
+            if (st === 'full') full++; else if (st === 'partial') partial++; else missing++;
+        }
+        return { full: full, partial: partial, missing: missing, total: all.length };
+    };
+
+    function slugify(text) {
+        return String(text || '').toLowerCase().trim().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 80);
+    }
 
     /* ================= AI HISTORY ================= */
 
@@ -600,11 +687,12 @@ S.deleteProduct = function (id) {
 
     /* ================= DANGER ZONE ================= */
 
-    S.resetAll = function () {
+S.resetAll = function () {
         localStorage.removeItem(K.settings);
         localStorage.removeItem(K.products);
         localStorage.removeItem(K.customers);
         localStorage.removeItem(K.content);
+        localStorage.removeItem(K.blog);
         localStorage.removeItem(K.ai);
         localStorage.removeItem(K.log);
         localStorage.removeItem(K.creds);

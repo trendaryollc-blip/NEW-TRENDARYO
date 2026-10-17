@@ -32,6 +32,13 @@ module.exports = async function handler(req, res) {
         return res.status(400).json({ error: { message: 'Payment cannot be refunded' } });
       }
 
+      if (paymentData.orderId) {
+        const orderDoc = await db.collection('orders').doc(paymentData.orderId).get();
+        if (orderDoc.exists && orderDoc.data().riskLevel === 'disputed') {
+          return res.status(400).json({ error: { message: 'Order is under dispute - refunds are blocked' } });
+        }
+      }
+
       const stripe = getStripe();
       const refund = await stripe.refunds.create({
         payment_intent: paymentData.paymentIntentId,

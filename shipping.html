@@ -225,7 +225,7 @@
                             <li>Priority processing</li>
                             <li>Real-time tracking updates</li>
                             <li>Full insurance coverage</li>
-                            <li>Same-day dispatch before 3 PM</li>
+                            <li>Priority handling where available</li>
                         </ul>
                     </div>
                     <div class="ship-opt">
@@ -234,7 +234,7 @@
                         <div class="ship-opt-price">$29.99</div>
                         <div class="ship-opt-time">Next business day</div>
                         <ul class="ship-opt-list">
-                            <li>Same-day dispatch guaranteed</li>
+                            <li>Priority handling where the checkout offers it</li>
                             <li>Live tracking with SMS alerts</li>
                             <li>Premium insurance included</li>
                             <li>Signature on delivery</li>
@@ -320,10 +320,10 @@
                     <div class="ship-info-card">
                         <h3><span>??</span> Dispatch Times</h3>
                         <ul>
-                            <li>Orders placed before 3 PM ship same day</li>
-                            <li>Orders after 3 PM ship next business day</li>
-                            <li>Weekend orders ship Monday</li>
-                            <li>Express and overnight get priority packing</li>
+                            <li>Orders placed before 3 PM are processed the same business day</li>
+                            <li>Handover to the carrier within 1-3 business days</li>
+                            <li>Weekend orders are processed Monday</li>
+                            <li>Express orders get priority processing</li>
                         </ul>
                     </div>
                     <div class="ship-info-card">
@@ -379,7 +379,7 @@
 
             <!-- NOTE -->
             <div class="ship-note">
-                All delivery times are estimates and begin from the date of dispatch, not the date of order. Carrier delays outside our control may extend delivery windows. <a href="contact.html">Contact support</a> if your order is significantly late.
+                All delivery times are estimates, never guaranteed dates. Allow 1-3 business days of processing before the window starts - the window begins from dispatch, not from the date of order. Items in one order may arrive in separate parcels from different facilities. Carrier delays, customs clearance and remote postcodes can extend delivery windows. <a href="contact.html">Contact support</a> if your order is significantly late.
             </div>
 
             <!-- TRUST -->
@@ -442,8 +442,8 @@
             var howEl = document.getElementById('shipHow');
             if (howEl) {
                 howEl.innerHTML = '<div class="ship-section-head"><div class="ship-kicker">The process</div><h2 class="ship-title">How Shipping Works</h2></div>' + UI.steps([
-                    { title: 'You order', text: 'Place your order before 3 PM and it ships the same day. After 3 PM, it goes out the next business day.' },
-                    { title: 'We pack & dispatch', text: 'Every item is carefully packed and handed to the carrier. You get a tracking number by email the moment it leaves our warehouse.' },
+                    { title: 'You order', text: 'Place your order and it enters processing within 1 business day. Handover to the carrier follows within 1-3 business days.' },
+                    { title: 'We pack & dispatch', text: 'Every item is carefully packed - by us or a vetted partner facility - and handed to the carrier. Tracking activates when the carrier first scans the parcel, which can lag handover by 1-2 days.' },
                     { title: 'Track in real time', text: 'Follow your package from our door to yours. Use our Track Order page or the carrier\'s own tracking for live updates.' },
                     { title: 'It arrives', text: 'Standard and express require signature on orders over $200. If you are not home, the carrier leaves a retry notice.' }
                 ]);
@@ -455,7 +455,7 @@
             var faqEl = document.getElementById('shipFaq');
             if (faqEl) {
                 faqEl.innerHTML = '<h2>Frequently Asked Questions</h2>' + UI.faq([
-                    { q: 'When does my order ship?', a: 'Orders placed before 3 PM (your local time) ship the same business day. Orders after 3 PM ship the next business day. Weekend orders ship Monday.' },
+                    { q: 'When does my order ship?', a: 'Orders enter processing within 1 business day and are handed to the carrier within 1-3 business days. Weekend orders are processed Monday. Tracking activates at the first carrier scan, which can lag handover by 1-2 days.' },
                     { q: 'Is shipping ever free?', a: 'We keep product prices low instead of offering free shipping. US standard delivery is a flat $4.99, international rates are listed above, and the exact total is always shown at checkout before you pay.' },
                     { q: 'Do you ship internationally?', a: 'Yes. We ship to over 50 countries. International orders may incur customs duties and import taxes, which vary by country and are the buyer\'s responsibility.' },
                     { q: 'Can I change my shipping method after ordering?', a: 'If the order has not shipped yet, contact support within 2 hours and we will upgrade you (you pay the difference). Once shipped, the method cannot be changed.' },

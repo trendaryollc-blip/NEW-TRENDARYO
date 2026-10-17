@@ -114,9 +114,9 @@ var RAW2 = [
         },
 
         /**
-         * Local designed tile for products without a photo.
-         * A data-URI SVG gradient — never 404s, never shows a broken image,
-         * and reads as an intentional design choice rather than a missing asset.
+         * Design tile for products without a photo. A data-URI SVG gradient —
+         * never a broken image, and never an emoji, because an emoji is a
+         * text shortcut, not a photograph.
          */
         tile: function (p) {
             var hueA = ['%2300f0ff', '%23ff00aa', '%2300ff88', '%23ff00ff'];

@@ -1,0 +1,375 @@
+﻿/* ==========================================================================
+   TRENDARYO â€” 3D HERO (hanging product models)
+   ---------------------------------------------------------------------------
+   Everything is scoped under `.tr-hero` so nothing here can leak into the
+   rest of the site. Colour/spacing values reuse the site's own tokens from
+   index.html :root so the hero always matches "Midnight Luxury 2.0".
+
+   Layers: 0 canvas  Â·  1 scrim  Â·  2 copy  Â·  3 trust rail
+   ========================================================================== */
+
+/* â”€â”€ Hero shell â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* The hero is the first child of main.page-offset, whose top padding clears
+   the fixed header. That padding is breakpoint-specific (see
+   responsive-universal.css), so mirror it here via --tr-hero-offset and let
+   the hero fill exactly the space that is left. Keeping these two in sync is
+   what stops the hero's bottom edge from spilling past the fold. */
+/* The offset lives on :root, NOT on .tr-hero — hero-3d-scene.js measures the
+   real header and writes the value to documentElement.style, which a local
+   custom property on .tr-hero would shadow forever. Fallbacks here only
+   cover the pre-JS paint. */
+:root { --tr-hero-offset: 156px; }             /* 901px â€“ 1920px */
+.tr-hero {
+  position: relative;
+  width: 100%;
+  /* Above-the-fold guarantee: the hero is EXACTLY the space left under the
+     fixed header (the JS re-measures the real header into --tr-hero-offset),
+     so wordmark, products, headline, lede and CTAs all land inside the first
+     viewport with zero vertical overflow. min-height is only a floor for
+     extreme browser zoom so the copy can never be clipped. */
+  height: calc(100svh - var(--tr-hero-offset));
+  min-height: 520px;
+  overflow: hidden;
+  isolation: isolate;
+  /* Column flex: the 3D stage flex-grows into the leftover height and the
+     copy below takes only its natural height — no dead space anywhere. */
+  display: flex;
+  flex-direction: column;
+  /* Transparent â€” the site's main #three-canvas 3D bg is the single
+     background. No extra gradient layers on top of it. */
+  background: none;
+}
+@media (min-width: 1921px) { :root { --tr-hero-offset: 168px; } }
+@media (min-width: 481px) and (max-width: 900px) { :root { --tr-hero-offset: 108px; } }
+@media (max-width: 480px) { :root { --tr-hero-offset: 96px; } }
+
+/* â”€â”€ Canvas host (created by hero-3d-scene.js) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+   The 3D exhibition takes the TOP band of the hero (full width), sitting
+   just below the header. The copy column stacks underneath it. Height is
+   viewport-relative so it scales with any screen size / zoom level. */
+.tr-hero__scene {
+  position: relative;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* Flex-sized: the stage absorbs every pixel the copy block doesn't need,
+     so wordmark + shortened ropes + products always end above the copy.
+     The scene JS re-lays-out to whatever size this lands on (ResizeObserver). */
+  flex: 1 1 auto;
+  min-height: 0;
+  z-index: 0;
+  pointer-events: auto; /* the canvas owns drag/hover, not the page */
+}
+/* touch-action:none keeps a swipe inside the canvas from scrolling the page
+   (so products can be dragged on touch). The scene is a bounded band on
+   mobile, so a touch on the copy below it still scrolls normally. */
+.tr-hero__scene canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+
+/* Scrim removed â€” the main site 3D bg is the single background layer.
+   Copy readability comes from text-shadow on .tr-hero__title / .tr-hero__lede. */
+.tr-hero__scrim {
+  display: none;
+}
+
+/* â”€â”€ Copy block â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* Stacked below the 3D exhibition, full width of the hero. The scene is
+   absolute and takes the top band; this copy is in-flow so it paints
+   underneath, covering the whole hero width. No max-width â€” the text fills
+   the area dedicated to it. */
+.tr-hero__copy {
+  position: relative;
+  z-index: 2;
+  margin-left: 0;
+  /* Natural height only — the flex-grown scene above takes the rest. */
+  flex: 0 0 auto;
+  /* The scene band's lower frustum is empty (faint dust only), so the copy
+     rides UP into it: a fluid negative margin closes the dead gap between
+     the hanging products and the headline. The canvas below stays draggable
+     around the text (copy is pointer-events:none; only its buttons are live). */
+  margin-top: calc(-1 * clamp(48px, 13.5vh, 150px));
+  /* Tight conversion block: minimal air above the headline and below the
+     CTAs, all clamp()-fluid so tall and short screens both stay balanced. */
+  padding: clamp(6px, 1.2vh, 18px) 3vw clamp(14px, 2.4vh, 28px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: none;
+  width: 100%;
+  padding-left: 3vw;
+  padding-right: 3vw;
+  pointer-events: none; /* only the links/buttons re-enable it */
+}
+/* Short-viewport compaction lives in its own block AFTER the base
+   .tr-hero__title / lede / cta / btn / pills rules â€” see "Short viewports"
+   below the CTA styles. It was here (before those rules) where every rule in
+   it lost the cascade to the later equal-specificity base rules and silently
+   never applied. */
+.tr-hero__copy a,
+.tr-hero__copy button { pointer-events: auto; }
+
+.tr-hero__pills {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.tr-hero__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.tr-hero__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent-3);
+  box-shadow: 0 0 10px var(--accent-3);
+  animation: trHeroBlink 1.6s infinite;
+}
+@keyframes trHeroBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+.tr-hero__pill--sale {
+  color: #ffd7e6;
+  border-color: rgba(255, 61, 166, 0.4);
+  background: rgba(255, 61, 166, 0.14);
+}
+
+.tr-hero__title {
+  margin: 0;
+  font-family: var(--font-d);
+  font-size: clamp(2.6rem, 5.6vw, 4.7rem);
+  line-height: 1.03;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #fff;
+  text-shadow: 0 6px 40px rgba(0, 0, 0, 0.5);
+}
+/* Gradient word â€” cyan -> magenta, matching the site's accent pair */
+.tr-hero__title .grad {
+  background: linear-gradient(90deg, var(--accent), var(--accent-2) 55%, var(--accent-3));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.tr-hero__lede {
+  margin: clamp(6px, 1.2vh, 14px) 0 0;
+  font-size: clamp(1.1rem, 1.5vw, 1.45rem);
+  line-height: 1.5;
+  color: var(--muted);
+  max-width: 900px;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* â”€â”€ CTAs â€” reuse the hero look already established on the site â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* Headline â†’ description â†’ CTAs read as one tight conversion block. */
+.tr-hero__cta { display: flex; gap: 14px; flex-wrap: wrap; margin-top: clamp(10px, 1.8vh, 22px); }
+.tr-hero__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 30px;
+  border-radius: 999px;
+  font-family: var(--font-d);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: 0.22s var(--ease);
+}
+.tr-hero__btn--primary {
+  color: #231500;
+  background: var(--accent-4);
+  box-shadow: 0 14px 40px rgba(255, 209, 102, 0.28);
+}
+.tr-hero__btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 50px rgba(255, 209, 102, 0.38);
+}
+.tr-hero__btn--primary svg { transition: 0.22s; }
+.tr-hero__btn--primary:hover svg { transform: translateX(4px); }
+.tr-hero__btn--ghost {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--glass-border-2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.tr-hero__btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.13);
+  transform: translateY(-2px);
+}
+
+/* â”€â”€ Short viewports â€” compaction that ACTUALLY applies â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+   These blocks must stay AFTER the base .tr-hero__title / lede / cta / btn /
+   pills rules above: equal-specificity rules later in the source win, and
+   while they used to sit before those base rules (silently dead), the copy is
+   now in-flow â€” so a stack taller than the viewport would grow the hero past
+   the fold. Tightening the type keeps the whole hero on-screen on short
+   laptops, while the in-flow copy remains the hard no-overlap guarantee. */
+@media (max-height: 780px) {
+  .tr-hero__copy { padding-top: 4px; padding-bottom: 22px; }
+  .tr-hero__title { font-size: clamp(2rem, 4vw, 3rem); line-height: 1.0; }
+  .tr-hero__lede { font-size: clamp(0.95rem, 1.2vw, 1.1rem); max-width: 700px; margin-top: 6px; line-height: 1.38; }
+  .tr-hero__cta { margin-top: 12px; }
+  .tr-hero__btn { padding: 12px 24px; font-size: 15px; }
+  .tr-hero__pills { margin-bottom: 8px; }
+}
+/* Very short viewports (700â€“740px-tall browser): shrink the title a touch
+   and widen the lede (wider = fewer lines = shorter stack, and it fills more
+   of the left column) so the whole stack FITS â€” no overflow at all. */
+@media (max-height: 740px) {
+  .tr-hero__title { font-size: clamp(1.7rem, 3.2vw, 2.4rem); }
+  .tr-hero__lede { font-size: 0.95rem; line-height: 1.35; max-width: 720px; margin-top: 5px; }
+  .tr-hero__cta { margin-top: 10px; }
+  .tr-hero__btn { padding: 11px 22px; }
+  .tr-hero__pills { margin-bottom: 6px; }
+}
+/* Extremely short windows (split-screen, dev-tools docked, 150% zoom â€¦):
+   one more compact tier so the CTA still clears the bottom edge without
+   pushing the hero below the fold. */
+@media (max-height: 640px) {
+  .tr-hero__copy { padding-top: 0; padding-bottom: 16px; }
+  .tr-hero__title { font-size: clamp(1.5rem, 2.6vw, 2rem); line-height: 1.0; }
+  .tr-hero__lede { font-size: 0.88rem; line-height: 1.3; max-width: 760px; margin-top: 4px; }
+  .tr-hero__cta { margin-top: 8px; gap: 10px; }
+  .tr-hero__btn { padding: 10px 20px; font-size: 14px; }
+  .tr-hero__pills { margin-bottom: 5px; }
+  .tr-hero__pill { padding: 6px 12px; font-size: 11px; }
+}
+
+/* â”€â”€ Trust rail â€” real site figures, no invented numbers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.tr-hero__trust {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 34px;
+  font-size: 12.5px;
+  color: var(--muted-2);
+}
+.tr-hero__trust .item { display: inline-flex; align-items: center; gap: 8px; }
+.tr-hero__trust .div { width: 1px; height: 16px; background: rgba(255, 255, 255, 0.18); }
+.tr-hero__trust .stars { display: inline-flex; gap: 2px; color: var(--accent-4); }
+.tr-hero__trust strong { color: #fff; font-weight: 600; }
+
+/* â”€â”€ Fallback: shown while models load, or if WebGL/three.js is unavailable.
+      Styled to look deliberate so the hero never renders empty. â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.tr-hero__fallback {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  padding: 2rem;
+  opacity: 0.9;
+}
+.tr-hero__fallback img {
+  width: clamp(60px, 9vw, 110px);
+  height: auto;
+  filter: drop-shadow(0 12px 30px rgba(0, 0, 0, 0.55));
+  animation: trHeroFloat 6s ease-in-out infinite;
+}
+.tr-hero__fallback img:nth-child(2) { animation-delay: -1.5s; }
+.tr-hero__fallback img:nth-child(3) { animation-delay: -3s; }
+.tr-hero__fallback img:nth-child(4) { animation-delay: -4.5s; }
+.tr-hero__fallback img:nth-child(5) { animation-delay: -2s; }
+.tr-hero.is-fallback .tr-hero__fallback { display: flex; }
+@keyframes trHeroFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+/* â”€â”€ Responsive â€” fluid at every size, no hard breakpoints for the scene â”€ */
+@media (max-width: 900px) {
+  .tr-hero {
+    /* Small screens keep the natural stacked flow — the strict 100svh fit
+       only applies on desktop/laptop viewports. */
+    height: auto;
+    min-height: auto;
+    padding-bottom: 16px;
+  }
+  .tr-hero__copy {
+    position: relative;
+    left: auto;
+    right: auto;
+    max-width: none;
+    top: auto;
+    bottom: auto;
+    transform: none;
+    padding: 24px 18px 0;
+    margin-top: 4px;
+    /* Stack below the scene: no left inset, no grow â€” the scene band above
+       defines the hero height here, exactly as before. */
+    margin-left: 0;
+    flex: none;
+  }
+  /* Scene uses viewport-relative height — works on any phone/tablet. */
+  .tr-hero__scene {
+    position: relative;
+    flex: none;
+    height: clamp(400px, 60vh, 620px);
+  }
+  .tr-hero__pills {
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  .tr-hero__pill {
+    padding: 5px 10px;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+  }
+}
+@media (max-width: 560px) {
+  .tr-hero__scene {
+    height: clamp(350px, 55vh, 520px);
+  }
+  .tr-hero__pills {
+    flex-wrap: nowrap;
+    gap: 5px;
+  }
+  .tr-hero__pill {
+    padding: 5px 8px;
+    font-size: 9.5px;
+    letter-spacing: 0.04em;
+  }
+  .tr-hero__title {
+    font-size: clamp(1.5rem, 7vw, 2.2rem);
+  }
+  .tr-hero__lede {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    max-width: none;
+  }
+  .tr-hero__cta { flex-direction: column; align-items: stretch; gap: 10px; margin-top: 18px; }
+  .tr-hero__btn { justify-content: center; padding: 13px 22px; }
+}
+
+/* â”€â”€ Reduced motion: no animation loop, no blink, no float â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+@media (prefers-reduced-motion: reduce) {
+  .tr-hero__dot,
+  .tr-hero__fallback img { animation: none; }
+  .tr-hero__btn { transition: none; }
+}
+
+
+
+

@@ -92,8 +92,19 @@
     V.products = {
         title: 'Products',
         icon: 'package',
-        sub: 'The live shelf - edits here reach the storefront instantly',
+        sub: 'The live shelf - pricing, ops fields and the reorder report; edits reach the storefront instantly',
+        edit: function (id) {
+            /* Bridge for the Product Details page: open this module's editor
+               drawer for the given product id. */
+            var ctx = V.products._ctx || {
+                App: app(),
+                S: window.TrendaryoAdminStore,
+                AI: window.TrendaryoAdminAI
+            };
+            openEditor(ctx, id);
+        },
         render: function (root, ctx) {
+            V.products._ctx = ctx;
             var S = ctx.S, App = ctx.App;
             var cats = {};
             var all = S.products();
@@ -119,12 +130,14 @@
                 '<span class="filter-count" id="prCount"></span></div>' +
                 '<div id="prBulk" class="bulk-bar" style="display:none;"><span class="bulk-bar__count" id="prBulkN"></span><span class="t-dim">selected</span><span class="spacer"></span>' +
                 '<button class="btn btn--ai btn--sm" id="prBulkFill" type="button">' + A().icon('sparkles', 12) + 'AI SEO fill</button>' +
+                '<button class="btn btn--ai btn--sm" id="prBulkPack" type="button">' + A().icon('layers', 12) + 'AI content pack</button>' +
                 '<button class="btn btn--sm" id="prBulkHide" type="button">Hide</button>' +
                 '<button class="btn btn--danger btn--sm" id="prBulkDel" type="button">Delete</button></div>' +
-                '<div class="table-wrap" id="prTable"></div></div>';
+                '<div class="cards-wrap" id="prTable"></div></div>';
 
             bindToolbar(root, ctx);
             drawRows(root, ctx);
+            bindBulk(ctx, root);
             root.querySelector('#prAdd').addEventListener('click', function () { openEditor(ctx, null); });
             root.querySelector('#prExport').addEventListener('click', function () { exportCsv(ctx); });
             root.querySelector('#prReorder').addEventListener('click', function () { openReorderReport(ctx); });
@@ -199,28 +212,51 @@
             updateBulkBar(root, ctx);
             return;
         }
-        var h = '<table class="table table--compact"><thead><tr><th style="width:26px;"><label class="check"><input type="checkbox" id="prSelAll"></label></th><th>Product</th><th>Category</th><th class="num">Price</th><th>Rating</th><th>SEO</th><th class="num">Stock</th><th>Status</th><th></th></tr></thead><tbody>';
+        var h = '<div class="cards"><div class="cards__selectbar"><label class="check"><input type="checkbox" id="prSelAll"></label><span>Select all</span></div>';
+        /* Phase 22/23: how many blog articles reference each product. */
+        var posts = S.blogPosts();
+        var linkedN = {};
+        for (var pi = 0; pi < posts.length; pi++) {
+            var rel = posts[pi].relatedProductIds || [];
+            for (var ri = 0; ri < rel.length; ri++) {
+                var key = String(rel[ri]);
+                linkedN[key] = (linkedN[key] || 0) + 1;
+            }
+        }
         for (var i = 0; i < list.length; i++) {
             var p = list[i];
             var cat = P() && P().categoryOf ? P().categoryOf(p) : 'Other';
-            h += '<tr data-id="' + p.id + '">' +
-                '<td><label class="check"><input type="checkbox" data-sel="' + p.id + '"></label></td>' +
-                '<td><div class="table__user">' + (P() ? P().media(p, 'table__thumb') : '') + '<div style="min-width:0;"><div class="table__primary t-truncate" style="max-width:260px;">' + U.esc(p.name) + '</div>' +
-                    '<div class="table__secondary">#' + p.id + (p._overridden ? ' - edited' : '') + (p._added ? ' - added by admin' : '') + (p.badge ? ' - ' + U.esc(p.badge) : '') + '</div></div></div></td>' +
-                '<td class="fs-sm">' + U.esc(cat) + '</td>' +
-                '<td class="num"><span class="fw-600">' + U.money(p.price) + '</span>' + (p.oldPrice ? '<div class="fs-xs t-mute" style="text-decoration:line-through;">' + U.money(p.oldPrice) + '</div>' : '') + ((p.costPrice != null && p.price > 0) ? '<div class="fs-xs ' + (((p.price - p.costPrice) / p.price) < 0.2 ? 'text-danger' : 'text-ok') + '">' + Math.round(((p.price - p.costPrice) / p.price) * 100) + '% margin</div>' : '') + '</td>' +
-                '<td>' + (P() ? P().stars(p.rating) : '') + ' <span class="fs-xs t-dim">' + p.rating + '</span></td>' +
-                '<td>' + seoBadge(S.seoState(p)) + '</td>' +
-                '<td class="num"><span class="badge ' + (p._stock === 0 ? 'badge--danger' : (p._stock <= S.settings().lowStock ? 'badge--warn' : 'badge--neutral')) + '">' + p._stock + '</span></td>' +
-                '<td>' + (p.hidden ? '<span class="badge badge--neutral">Hidden</span>' : '<span class="badge badge--ok">Live</span>') + '</td>' +
-                '<td><div class="cell-actions">' +
-                    '<button class="icon-btn" data-ai="' + p.id + '" type="button" title="AI SEO package">' + A().icon('sparkles', 14) + '</button>' +
-                    '<button class="icon-btn" data-edit="' + p.id + '" type="button" title="Edit">' + A().icon('pencil', 14) + '</button>' +
-                    '<button class="icon-btn" data-hide="' + p.id + '" type="button" title="' + (p.hidden ? 'Show on shelf' : 'Hide from shelf') + '">' + A().icon(p.hidden ? 'eye' : 'eyeOff', 14) + '</button>' +
-                    '<button class="icon-btn" data-del="' + p.id + '" type="button" title="Delete">' + A().icon('trash', 14) + '</button>' +
-                '</div></td></tr>';
+            var stockCls = p._stock === 0 ? 'badge--danger' : (p._stock <= S.settings().lowStock ? 'badge--warn' : 'badge--neutral');
+            h += '<div class="card-row" data-id="' + p.id + '">' +
+                '<div class="card-row__check"><label class="check"><input type="checkbox" data-sel="' + p.id + '"></label></div>' +
+                '<div class="card-row__main">' +
+                    '<div class="card-row__topline">' +
+                        '<div class="card-row__identity">' + (P() ? P().media(p, 'table__thumb') : '') +
+                            '<div class="card-row__title"><div class="table__primary t-truncate">' + U.esc(p.name) + '</div>' +
+                            '<div class="table__secondary">#' + p.id + ' - ' + U.esc(cat) + (p._overridden ? ' - edited' : '') + (p._added ? ' - added by admin' : '') + (p.badge ? ' - ' + U.esc(p.badge) : '') + '</div></div>' +
+                        '</div>' +
+                        '<div class="card-row__side"><span class="card-row__price">' + U.money(p.price) + '</span>' +
+                        '<div class="card-row__actions">' +
+                            '<button class="icon-btn" data-details="' + p.id + '" type="button" title="View product details">' + A().icon('package', 14) + '</button>' +
+                            '<button class="icon-btn" data-blog="' + p.id + '" type="button" title="Create SEO blog">' + A().icon('layers', 14) + '</button>' +
+                            '<button class="icon-btn" data-linked="' + p.id + '" type="button" title="View linked blogs">' + A().icon('link', 14) + '</button>' +
+                            '<button class="icon-btn" data-ai="' + p.id + '" type="button" title="AI SEO package">' + A().icon('sparkles', 14) + '</button>' +
+                            '<button class="icon-btn" data-edit="' + p.id + '" type="button" title="Edit">' + A().icon('pencil', 14) + '</button>' +
+                            '<button class="icon-btn" data-hide="' + p.id + '" type="button" title="' + (p.hidden ? 'Show on shelf' : 'Hide from shelf') + '">' + A().icon(p.hidden ? 'eye' : 'eyeOff', 14) + '</button>' +
+                            '<button class="icon-btn" data-del="' + p.id + '" type="button" title="Delete">' + A().icon('trash', 14) + '</button>' +
+                        '</div></div>' +
+                    '</div>' +
+                    '<div class="card-row__meta">' +
+                        '<span class="fs-sm t-mute">' + (P() ? P().stars(p.rating) : '') + ' ' + p.rating + '</span>' +
+                        '<span>' + seoBadge(S.seoState(p)) + '</span>' +
+                        (linkedN[String(p.id)] ? '<span class="fs-xs t-mute">' + linkedN[String(p.id)] + ' linked article(s)</span>' : '') +
+                        '<span class="badge ' + stockCls + '">stock ' + p._stock + '</span>' +
+                        '<span>' + (p.hidden ? '<span class="badge badge--neutral">Hidden</span>' : '<span class="badge badge--ok">Live</span>') + '</span>' +
+                        (p.oldPrice ? '<span class="fs-xs t-mute" style="text-decoration:line-through;">was ' + U.money(p.oldPrice) + '</span>' : '') +
+                    '</div>' +
+                '</div></div>';
         }
-        h += '</tbody></table>';
+        h += '</div>';
         el.innerHTML = h;
 
         var selAll = el.querySelector('#prSelAll');
@@ -232,6 +268,9 @@
         el.addEventListener('change', function (e) { if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-sel')) updateBulkBar(root, ctx); });
         el.addEventListener('click', function (e) {
             var t;
+            if ((t = e.target.closest('[data-details]'))) { location.hash = '#/product-detail/' + encodeURIComponent(t.getAttribute('data-details')); return; }
+            if ((t = e.target.closest('[data-blog]'))) { location.hash = '#/blog/generate?product=' + encodeURIComponent(t.getAttribute('data-blog')); return; }
+            if ((t = e.target.closest('[data-linked]'))) { location.hash = '#/product-detail/' + encodeURIComponent(t.getAttribute('data-linked')); return; }
             if ((t = e.target.closest('[data-edit]'))) { openEditor(ctx, t.getAttribute('data-edit')); return; }
             if ((t = e.target.closest('[data-hide]'))) {
                 var hid = t.getAttribute('data-hide');
@@ -290,6 +329,243 @@
         var h = window.TrendaryoAdminStore.aiHistory();
         for (var i = 0; i < h.length; i++) if (String(h[i].refId) === String(pid) && h[i].task === 'seoPackage') return h[i].id;
         return null;
+    }
+
+    /* ---------- Phase 25: bulk content creation (all drafts, never published) ---------- */
+
+    function openBulkPack(ctx, items) {
+        var App = ctx.App;
+        App.drawer.open({
+            title: 'AI content pack',
+            sub: 'One content engine run per product - product page drafts, blog briefs, blog drafts. Everything lands as a draft.',
+            body: '<div class="field"><label class="field__label">Products</label><div class="fs-sm">' + items.map(function (it) { return U.esc(it.name); }).join(', ') + '</div></div>' +
+                '<label class="switch" style="margin-bottom:10px;"><input type="checkbox" id="bpContent" checked><span class="switch__track"></span><span class="switch__text">Product content drafts</span></label>' +
+                '<label class="switch" style="margin-bottom:10px;"><input type="checkbox" id="bpBrief" checked><span class="switch__track"></span><span class="switch__text">Blog briefs</span></label>' +
+                '<label class="switch" style="margin-bottom:10px;"><input type="checkbox" id="bpBlog"><span class="switch__track"></span><span class="switch__text">Blog drafts (one article per product)</span></label>' +
+                '<div class="field-row"><div class="field"><label class="field__label">Blog type</label><select class="select" id="bpType">' +
+                    '<option value="product-review" selected>Product review</option><option value="buying-guide">Buying guide</option><option value="comparison">Comparison</option><option value="best-products">Best products list</option><option value="faq-article">FAQ article</option><option value="problem-solution">Problem solution</option><option value="trend">Trend article</option><option value="seo-landing">SEO landing page</option></select></div>' +
+                '<div class="field"><label class="field__label">Length</label><select class="select" id="bpLength"><option value="short">Short</option><option value="medium" selected>Medium</option><option value="long">Long</option></select></div></div>' +
+                '<div class="field__hint">Runs sequentially with a progress bar - a shop of 10 products takes a few minutes. Nothing here publishes.</div>',
+            foot: '<span class="spacer"></span>' +
+                '<button class="btn" type="button" data-dc>Cancel</button>' +
+                '<button class="btn btn--ai" type="button" data-run>' + A().icon('sparkles', 13) + 'Run the pack</button>',
+            onMount: function (root) {
+                root.querySelector('[data-dc]').addEventListener('click', function () { App.drawer.close(); });
+                root.querySelector('[data-run]').addEventListener('click', function () {
+                    var opts = {
+                        content: root.querySelector('#bpContent').checked,
+                        brief: root.querySelector('#bpBrief').checked,
+                        blog: root.querySelector('#bpBlog').checked,
+                        blogType: root.querySelector('#bpType').value,
+                        length: root.querySelector('#bpLength').value
+                    };
+                    if (!opts.content && !opts.brief && !opts.blog) {
+                        App.toast('Pick at least one asset to generate', 'warn', 'AI content pack');
+                        return;
+                    }
+                    App.drawer.close();
+                    runBulkPack(ctx, items, opts);
+                });
+            }
+        });
+    }
+
+    function bulkContentFor(product) {
+        return {
+            title: product.name || '',
+            shortDescription: product.description || '',
+            longDescription: '',
+            features: [],
+            benefits: [],
+            useCases: [],
+            faqs: []
+        };
+    }
+
+    function runBulkPack(ctx, items, opts) {
+        var App = ctx.App, S = ctx.S;
+        var okN = 0, failN = 0;
+        var made = { content: 0, briefs: 0, blogs: 0 };
+        bulkRunner(items, function (it, next) {
+            var product = S.product(it.id);
+            if (!product) { failN++; return next(); }
+            var queue = [];
+            if (opts.content) queue.push('content');
+            if (opts.brief) queue.push('brief');
+            if (opts.blog) queue.push('blog');
+            var cache = {};
+
+            (function step() {
+                var job = queue.shift();
+                if (!job) { okN++; return next(); }
+                if (job === 'content') {
+                    ctx.AI.run('productPage', { product: product }, { refId: String(product.id) }).then(function (res) {
+                        cache.page = splitFaqs(res.data);
+                        return apiSave('/products/' + encodeURIComponent(String(product.id)) + '/content', {
+                            method: 'POST',
+                            body: { sections: cache.page.sections, faqs: cache.page.faqs }
+                        });
+                    }).then(function () { made.content++; step(); }, function () { step(); });
+                    return;
+                }
+                if (job === 'brief') {
+                    var briefInput = {
+                        product: product,
+                        content: contentOr(cache.page, product),
+                        seo: product.seo || {},
+                        blogType: opts.blogType
+                    };
+                    ctx.AI.run('blogBrief', briefInput, { refId: String(product.id) }).then(function (res) {
+                        var d = res.data || {};
+                        return apiSave('/blog/briefs', {
+                            method: 'POST',
+                            body: Object.assign({
+                                productId: String(product.id),
+                                productName: product.name || '',
+                                status: 'BRIEF_READY',
+                                blogType: opts.blogType,
+                                source: { contentTitle: (cache.page && cache.page.sections.title) || product.name || '', shortDescription: product.description || '', keywords: (product.seo && product.seo.keywords) || [], price: product.price || 0, category: product.category || '' }
+                            }, d)
+                        });
+                    }).then(function (saved) {
+                        cache.brief = (saved && saved.data) || null;
+                        made.briefs++;
+                        step();
+                    }, function () { step(); });
+                    return;
+                }
+                if (job === 'blog') {
+                    var briefBody = cache.brief || minimalBrief(product);
+                    var content = contentOr(cache.page, product);
+                    ctx.AI.run('blogArticle', {
+                        product: product,
+                        content: content,
+                        brief: briefBody,
+                        seo: product.seo || {},
+                        blogType: opts.blogType,
+                        length: opts.length,
+                        tone: 'professional',
+                        instructions: '',
+                        productUrl: 'product.html?id=' + encodeURIComponent(String(product.id)),
+                        existingArticles: []
+                    }, { refId: String(product.id) }).then(function (res) {
+                        var a = res.data;
+                        if (!a || !a.seoTitle) return step();
+                        return apiSave('/blog', {
+                            method: 'POST',
+                            body: articleToPost(a, product, opts)
+                        });
+                    }).then(function () { made.blogs++; step(); }, function () { step(); });
+                    return;
+                }
+                step();
+            })();
+        }, null, function () {
+            App.toast('Content pack finished: ' + made.content + ' page drafts, ' + made.briefs + ' briefs, ' + made.blogs + ' blog drafts' +
+                (failN ? ' - ' + failN + ' skipped (see AI history)' : '') + '. Everything is a draft - review before publishing.', okN ? 'ok' : 'warn', 'AI content pack');
+            app().badges();
+            if (app().current === 'products') App.route();
+        });
+    }
+
+    function splitFaqs(data) {
+        var d = Object.assign({}, data || {});
+        var faqs = d.faqs || [];
+        delete d.faqs;
+        return { sections: d, faqs: faqs };
+    }
+
+    function contentOr(page, product) {
+        if (page && page.sections && page.sections.title) return page.sections;
+        return bulkContentFor(product);
+    }
+
+    function minimalBrief(product) {
+        return {
+            primaryKeyword: String(product.name || '').toLowerCase(),
+            secondaryKeywords: ((product.seo && product.seo.keywords) || []).slice(0, 8),
+            longTailKeywords: [],
+            h2Suggestions: [],
+            faqs: []
+        };
+    }
+
+    function apiSave(endpoint, opts) {
+        if (window.API && typeof window.API.request === 'function') {
+            return window.API.request(endpoint, opts).then(function (res) { return res; }, function () { return null; });
+        }
+        return Promise.resolve(null);
+    }
+
+    function articleToPost(a, product, opts) {
+        var blocks = [];
+        if (a.introduction) blocks.push({ type: 'p', text: a.introduction });
+        var sections = a.sections || [];
+        for (var i = 0; i < sections.length; i++) {
+            var s = sections[i];
+            if (s.h2) blocks.push({ type: 'h2', text: s.h2 });
+            for (var j = 0; j < (s.paragraphs || []).length; j++) blocks.push({ type: 'p', text: s.paragraphs[j] });
+            for (var k = 0; k < (s.h3s || []).length; k++) {
+                if (s.h3s[k].h3) blocks.push({ type: 'h3', text: s.h3s[k].h3 });
+                for (var m = 0; m < (s.h3s[k].paragraphs || []).length; m++) blocks.push({ type: 'p', text: s.h3s[k].paragraphs[m] });
+            }
+        }
+        if ((a.faqs || []).length) {
+            blocks.push({ type: 'h2', text: 'Questions buyers ask' });
+            for (var f = 0; f < a.faqs.length; f++) {
+                blocks.push({ type: 'h3', text: a.faqs[f].q });
+                blocks.push({ type: 'p', text: a.faqs[f].a });
+            }
+        }
+        if (a.conclusion) {
+            blocks.push({ type: 'h2', text: 'Verdict' });
+            blocks.push({ type: 'p', text: a.conclusion });
+        }
+        var bb = window.BlogBlocks || { readMinutes: function () { return 5; } };
+        return {
+            title: a.seoTitle || (product.name + ' review'),
+            excerpt: a.excerpt || a.metaDescription || '',
+            category: a.category || 'guides',
+            tags: a.tags || [],
+            blocks: blocks,
+            status: 'draft',
+            readMinutes: bb.readMinutes(blocks, ''),
+            seo: {
+                metaTitle: a.metaTitle || '',
+                metaDescription: a.metaDescription || '',
+                keywords: (a.keywords || []).concat([]),
+                ogImage: product.image || '',
+                faqs: (a.faqs || []).map(function (q) { return { q: q.q, a: q.a }; }),
+                internalLinks: a.internalLinks || [],
+                blogType: opts.blogType
+            },
+            relatedProductIds: [String(product.id)]
+        };
+    }
+
+    /* ---------- Phase 4: new product -> AI content draft (never published) ---------- */
+
+    function autoDraft(ctx, product) {
+        var App = ctx.App, AI = ctx.AI;
+        if (!AI || !window.API) return;
+        App.toast('AI is drafting the product page for ' + (product.name || 'the new product') + '...', 'ai', 'AI content');
+        AI.run('productPage', { product: product }, { refId: String(product.id), silent: true }).then(function (res) {
+            var data = (res && res.data) || {};
+            var sections = Object.assign({}, data);
+            var faqs = sections.faqs || [];
+            delete sections.faqs;
+            if (!sections.title) { App.toast('AI could not draft the page - retry from Product Details', 'warn', 'AI content'); return; }
+            window.API.request('/products/' + encodeURIComponent(String(product.id)) + '/content', {
+                method: 'POST',
+                body: { sections: sections, faqs: faqs }
+            }).then(function () {
+                App.toast('AI content draft saved for ' + (product.name || 'the product') + ' - review it in Product Details', 'ai', 'AI content');
+            }, function () {
+                App.toast('AI drafted the page but saving failed - retry from Product Details', 'warn', 'AI content');
+            });
+        }, function () {
+            App.toast('AI could not draft the page - retry from Product Details', 'warn', 'AI content');
+        });
     }
 
     function updateBulkBar(root, ctx) {
@@ -353,6 +629,13 @@
             App.confirm({ title: 'AI SEO fill', message: '<p class="t-body">Generate and apply full SEO packages for <b>' + items.length + '</b> selected products. Drafts land in AI history before anything is applied.</p>', okText: 'Generate for ' + items.length }).then(function (ok) {
                 if (ok) runBulkSeo(ctx, items);
             });
+        });
+        bar.querySelector('#prBulkPack').addEventListener('click', function () {
+            var ids = bulkSelection(root);
+            if (!ids.length) return;
+            var items = [];
+            for (var i = 0; i < ids.length; i++) { var q = S.product(ids[i]); if (q) items.push({ id: q.id, name: q.name }); }
+            openBulkPack(ctx, items);
         });
         bar.querySelector('#prBulkHide').addEventListener('click', function () {
             var ids = bulkSelection(root);
@@ -466,7 +749,7 @@
                     var c = collect();
                     if (!c.name) { App.toast('Give the product a name first', 'warn', 'Catalog'); q('#edName').focus(); return; }
                     if (!(c.price > 0)) { App.toast('Price must be above zero', 'warn', 'Catalog'); q('#edPrice').focus(); return; }
-                    if (isNew) { S.addProduct(c); App.toast(c.name + ' added to the live shelf', 'ok', 'Catalog'); }
+                    if (isNew) { S.addProduct(c); App.toast(c.name + ' added to the live shelf', 'ok', 'Catalog'); autoDraft(ctx, c); }
                     else { S.saveProduct(p.id, c); App.toast(c.name + ' updated - the shelf reflects it now', 'ok', 'Catalog'); }
                     App.badges();
                     App.drawer.close();
@@ -599,7 +882,7 @@
                 U.kpi('users', '', 'Reviewers', String(new Set2(list).size), 'unique names on record') +
             '</div>' +
             '<div class="panel"><div class="panel__head"><div><div class="panel__title">Moderation queue</div><div class="panel__subtitle">Reply with AI, delete what breaks the shelf\'s honesty</div></div></div>' +
-                '<div class="table-wrap" id="rvTable"></div></div>';
+                '<div class="cards-wrap" id="rvTable"></div></div>';
 
             function Set2(arr) { var m = {}; var n = 0; for (var i = 0; i < arr.length; i++) { var v2 = String(rName(arr[i])).toLowerCase(); if (!m[v2]) { m[v2] = 1; n++; } } return { size: n }; }
 
@@ -607,22 +890,25 @@
             if (!list.length) {
                 el.innerHTML = U.empty('star', 'No reviews yet', 'Reviews appear the moment customers post them on product pages. Seed a few samples to see the workflow.');
             } else {
-                var h = '<table class="table table--compact"><thead><tr><th>Product</th><th>Reviewer</th><th>Rating</th><th>Comment</th><th class="num">Helpful</th><th>When</th><th></th></tr></thead><tbody>';
+                var h = '<div class="cards">';
                 for (var i = 0; i < list.length; i++) {
                     var r = list[i];
                     var p = S.product(r.productId);
-                    h += '<tr><td><div class="table__primary t-truncate" style="max-width:200px;">' + U.esc(p ? p.name : '#' + r.productId) + '</div></td>' +
-                        '<td>' + U.esc(rName(r)) + '</td>' +
-                        '<td>' + (P() ? P().stars(r.rating) : '') + ' <span class="fs-xs t-dim">' + (r.rating || '-') + '</span></td>' +
-                        '<td class="fs-sm t-dim" style="max-width:360px;"><div class="t-truncate" style="max-width:360px;">' + U.esc(rText(r) || '(no text)') + '</div></td>' +
-                        '<td class="num">' + (r.helpful || 0) + '</td>' +
-                        '<td class="fs-sm t-mute">' + (rDate(r) ? App.ago(rDate(r)) : '-') + '</td>' +
-                        '<td><div class="cell-actions">' +
-                            '<button class="icon-btn" data-ai="' + U.esc(r.id) + '" type="button" title="AI reply draft">' + A().icon('sparkles', 14) + '</button>' +
-                            '<button class="icon-btn" data-del="' + U.esc(r.id) + '" type="button" title="Delete review">' + A().icon('trash', 14) + '</button>' +
-                        '</div></td></tr>';
+                    h += '<div class="card-row">' +
+                        '<div class="card-row__main">' +
+                            '<div class="card-row__topline">' +
+                                '<div class="card-row__title"><div class="table__primary t-truncate">' + U.esc(p ? p.name : '#' + r.productId) + '</div>' +
+                                '<div class="table__secondary">' + U.esc(rName(r)) + ' - ' + (rDate(r) ? App.ago(rDate(r)) : '-') + ' - helpful ' + (r.helpful || 0) + '</div></div>' +
+                                '<div class="card-row__side"><span class="fs-sm">' + (P() ? P().stars(r.rating) : '') + ' ' + (r.rating || '-') + '</span>' +
+                                '<div class="card-row__actions">' +
+                                    '<button class="icon-btn" data-ai="' + U.esc(r.id) + '" type="button" title="AI reply draft">' + A().icon('sparkles', 14) + '</button>' +
+                                    '<button class="icon-btn" data-del="' + U.esc(r.id) + '" type="button" title="Delete review">' + A().icon('trash', 14) + '</button>' +
+                                '</div></div>' +
+                            '</div>' +
+                            '<div class="card-row__comment">' + U.esc(rText(r) || '(no text)') + '</div>' +
+                        '</div></div>';
                 }
-                el.innerHTML = h + '</tbody></table>';
+                el.innerHTML = h + '</div>';
             }
 
             el.addEventListener('click', function (e) {

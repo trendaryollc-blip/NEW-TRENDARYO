@@ -115,10 +115,48 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
-    /* ---------- newsletter ---------- */
+/* ---------- newsletter ---------- */
     match /newsletter/{entryId} {
       allow create: if true;
       allow read, update, delete: if isAdmin();
+    }
+
+    /* ---------- blog ---------- */
+    match /blog/{postId} {
+      allow read: if resource.data.status == 'published' || isAdmin();
+      allow create, update, delete: if isAdmin();
+    }
+
+    /* ---------- AI product content engine ----------
+       Written exclusively by the serverless API (Admin SDK bypasses these
+       rules); the storefront reads published snapshots through the same API,
+       so clients never touch these collections directly. */
+    match /product_content/{productId} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+    match /product_seo/{productId} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+    match /product_images/{productId} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+    match /product_faqs/{productId} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+
+    /* AI blog briefs + product<->blog relations: written by the serverless
+       API only; the dashboard reads them through admin-gated routes. */
+    match /blog_briefs/{briefId} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+    match /product_blog_relations/{relationId} {
+      allow read: if isAdmin();
+      allow write: if false;
     }
 
     /* ---------- contact messages ---------- */
@@ -173,6 +211,27 @@ service cloud.firestore {
     // Joined through /api/waitlist (Admin SDK); the restock rule emails and
     // expires rows. Clients never read emails of other customers.
     match /stock_waitlist/{entryId} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+
+    match /vitals/{id} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+    match /api_errors/{id} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+    match /cj_failures/{id} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+    match /reconciliation_reports/{id} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+    match /backups/{id} {
       allow read: if isAdmin();
       allow write: if false;
     }

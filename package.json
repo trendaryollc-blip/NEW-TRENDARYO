@@ -1,8 +1,9 @@
 {
   "scripts": {
-    "dev": "vercel dev",
+    "dev": "node scripts/dev-server.js",
+    "dev:vercel": "vercel dev",
     "build": "echo 'static'",
-    "test": "node --test tests/"
+    "test": "node --test \"tests/*.test.js\""
   },
   "dependencies": {
     "firebase-admin": "^13.0.0",

@@ -59,6 +59,10 @@ async function call(db, path, opts = {}) {
     return await request(path, { ...opts, token });
   } catch (err) {
     if (err.message && /token|unauthori[sz]ed|login/i.test(err.message)) {
+      try {
+        const { recordCjTokenFailure } = require('./health');
+        await recordCjTokenFailure(db, err.message);
+      } catch (ignored) { /* health must never mask the failure */ }
       const s = await getSettings(db);
       await saveSettings(db, { accessToken: null, tokenExpiry: null });
       const fresh = await getToken(db);

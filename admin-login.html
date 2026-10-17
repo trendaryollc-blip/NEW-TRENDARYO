@@ -69,6 +69,10 @@
         </div>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
     <script>
     (function () {
         /* Already signed in? straight to the deck. */
@@ -76,23 +80,6 @@
             location.replace('admin.html');
             return;
         }
-
-        /* Firebase SDK for admin login */
-        var firebaseScript1 = document.createElement('script');
-        firebaseScript1.src = 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js';
-        document.head.appendChild(firebaseScript1);
-
-        var firebaseScript2 = document.createElement('script');
-        firebaseScript2.src = 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js';
-        document.head.appendChild(firebaseScript2);
-
-        var firebaseScript3 = document.createElement('script');
-        firebaseScript3.src = 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js';
-        document.head.appendChild(firebaseScript3);
-
-        var firebaseScript4 = document.createElement('script');
-        firebaseScript4.src = 'firebase-config.js';
-        document.head.appendChild(firebaseScript4);
 
         var eye = document.getElementById('lgEye');
         eye.addEventListener('click', function () {

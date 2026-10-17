@@ -2,7 +2,7 @@ const { initFirebase } = require('../_lib/firebase');
 const { handleCors } = require('../_lib/cors');
 const { requireAdmin } = require('../_lib/auth');
 const { applyRateLimit } = require('../_lib/security');
-const { readAll, statusOf } = require('../_lib/health');
+const { readAll, statusOf, checkFirestoreQuota } = require('../_lib/health');
 
 /* Ops health detail for the admin System panel. Read-only. */
 module.exports = async function handler(req, res) {
@@ -32,11 +32,17 @@ module.exports = async function handler(req, res) {
     let openAlerts = 0;
     let failedWebhooks = 0;
     let attentionOrders = 0;
+    let api5xx = 0;
+    let cjFailures = 0;
+    let quota = { orders: 0, limit: 50000, usage: 0, status: 'unknown' };
     try {
-      const [a, w, o] = await Promise.all([
+      const [a, w, o, ae, cj, q] = await Promise.all([
         db.collection('automation_alerts').where('resolved', '==', false).limit(100).get(),
         db.collection('stripe_events').where('status', '==', 'failed').limit(100).get(),
         db.collection('orders').where('needsAttention', '==', true).limit(100).get(),
+        db.collection('api_errors').where('statusCode', '>=', 500).where('at', '>=', new Date(dayAgo).toISOString()).limit(100).get(),
+        db.collection('cj_failures').where('at', '>=', new Date(dayAgo).toISOString()).limit(100).get(),
+        checkFirestoreQuota(db),
       ]);
       openAlerts = a.size;
       failedWebhooks = w.docs.filter((d) => {
@@ -44,6 +50,9 @@ module.exports = async function handler(req, res) {
         return !at || at >= dayAgo;
       }).length;
       attentionOrders = o.size;
+      api5xx = ae.size;
+      cjFailures = cj.size;
+      quota = q;
     } catch (e) {
       console.error('[admin/health:counts]', e.message);
     }
@@ -59,7 +68,8 @@ module.exports = async function handler(req, res) {
         overall,
         staleMinutes,
         probes,
-        counts: { openAlerts, failedWebhooks, attentionOrders },
+        counts: { openAlerts, failedWebhooks, attentionOrders, api5xx, cjFailures },
+        quota,
         checkedAt: new Date().toISOString(),
       },
     });

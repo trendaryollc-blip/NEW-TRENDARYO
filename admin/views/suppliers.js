@@ -176,7 +176,7 @@
     V.suppliers = {
         title: 'Suppliers',
         icon: 'truck',
-        sub: 'CJ Dropshipping - import products, auto-fulfill orders, sync tracking',
+        sub: 'CJ Dropshipping - import, auto-fulfil, tracking sync and the supplier SLA scorecard',
         render: function (root, ctx) {
             root.innerHTML = U.head('Suppliers', 'CJ Dropshipping integration',
                 '<button class="btn btn--sm" id="cjSync" type="button">' + A().icon('refresh', 13) + 'Sync tracking</button>') +

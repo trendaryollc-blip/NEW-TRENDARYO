@@ -740,19 +740,12 @@
     /* ── Public API for page-level scripts (homepage add-to-cart feedback) ── */
     /* ─ Back button — anchored top-left, directly beneath the fixed header ──
        Standard, conventional placement — it used to float over the bottom-left
-       corner of the page, which read as illogical. History-aware: on the home
-       page it only appears after an internal navigation. */
+       corner of the page, which read as illogical.        The home page never shows it. */
     function initBackButton() {
         if (document.getElementById('tlBackBtn')) return;
         var path = location.pathname.split('/').pop().toLowerCase();
         var isHome = (!path || path === 'index.html');
-        var sameOriginRef = false;
-        try {
-            if (document.referrer) {
-                sameOriginRef = new URL(document.referrer).host === location.host;
-            }
-        } catch (e) { sameOriginRef = false; }
-        if (isHome && !sameOriginRef) return;
+        if (isHome) return;
 
         if (!document.getElementById('tlBackFabStyle')) {
             var styleEl = document.createElement('style');
@@ -777,7 +770,7 @@
         btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg><span>Back</span>';
 
         btn.addEventListener('click', function () {
-            if (sameOriginRef && window.history.length > 1) {
+            if (window.history.length > 1) {
                 window.history.back();
             } else {
                 window.location.href = 'index.html';

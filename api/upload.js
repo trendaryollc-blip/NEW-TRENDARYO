@@ -1,6 +1,6 @@
 const { configureCloudinary } = require('./_lib/cloudinary');
 const { handleCors } = require('./_lib/cors');
-const { requireAuth } = require('./_lib/auth');
+const { requireAdmin } = require('./_lib/auth');
 const { applyRateLimit, sanitizeError } = require('./_lib/security');
 
 module.exports = async function handler(req, res) {
@@ -12,7 +12,9 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const user = await requireAuth(req, res);
+    /* Uploads bill Cloudinary on the store's account and nothing in the UI
+       uses them for shoppers - admin only. */
+    const user = await requireAdmin(req, res);
     if (!user) return;
 
     const { file, folder, type } = req.body;

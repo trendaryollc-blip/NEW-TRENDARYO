@@ -15,7 +15,8 @@
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/index.js?__route=/$1" },
-    { "src": "/sitemap.xml", "headers": { "Cache-Control": "public, max-age=86400, s-maxage=86400" } },
+    { "src": "/sitemap.xml", "dest": "/api/index.js?__route=/sitemap.xml", "headers": { "Cache-Control": "public, max-age=86400, s-maxage=86400" } },
+    { "src": "/rss.xml", "dest": "/api/index.js?__route=/rss" },
     { "src": "/robots.txt", "headers": { "Cache-Control": "public, max-age=86400, s-maxage=86400" } },
     { "src": "/(.*\\.css)", "headers": { "Cache-Control": "public, max-age=300, must-revalidate" } },
     { "src": "/(.*\\.js)", "headers": { "Cache-Control": "public, max-age=0, must-revalidate" } },
@@ -73,7 +74,11 @@
   ],
   "crons": [
     { "path": "/api/cron/supplier-sync", "schedule": "0 */6 * * *" },
-    { "path": "/api/cron/automations", "schedule": "0 * * * *" }
+    { "path": "/api/cron/automations", "schedule": "0 * * * *" },
+    { "path": "/api/cron/reconciliation", "target": "0 3 * * *", "schedule": "0 3 * * *" },
+    { "path": "/api/cron/abandoned-checkout", "schedule": "0 */4 * * *" },
+    { "path": "/api/cron/backup", "schedule": "0 4 * * *" },
+    { "path": "/api/cron/publish-posts", "schedule": "*/15 * * * *" }
   ],
   "headers": [
     {

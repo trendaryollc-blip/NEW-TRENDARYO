@@ -106,6 +106,24 @@ async function handleEvent(db, event) {
     const pi = event.data.object.id;
     const ps = await db.collection('payments').where('paymentIntentId', '==', pi).limit(1).get();
     if (!ps.empty) await ps.docs[0].ref.set({ status: 'failed', failureReason: event.data.object.last_payment_error?.message || 'failed', updatedAt: nowIso() }, { merge: true });
+    const order = await getOrderByPaymentIntent(db, pi);
+    if (order) {
+      const email = (order.shippingAddress && order.shippingAddress.email) || order.email;
+      if (email) {
+        const retryLink = 'https://trendaryo.com/checkout.html?retry_intent=' + pi;
+        try {
+          const { send } = require('../_lib/mail');
+          await send({
+            to: String(email).trim(),
+            subject: 'Your Trendaryo payment failed - retry',
+            html: '<p>Your payment could not be processed. <a href="' + retryLink + '">Click here to retry</a>.</p>',
+            text: 'Your payment could not be processed. Retry here: ' + retryLink,
+          });
+        } catch (e) {
+          console.error('[wh:failed-payment-email]', e.message);
+        }
+      }
+    }
     return;
   }
   if (t === 'payment_intent.canceled') {

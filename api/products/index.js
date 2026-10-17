@@ -85,10 +85,25 @@ module.exports = async function handler(req, res) {
       const adminUser = await requireAdmin(req, res);
       if (!adminUser) return;
 
-      const { name, description, price, originalPrice, category, brand, stock, images, image, features, sku, status: prodStatus } = req.body;
+      const { name, description, price, originalPrice, category, brand, stock, images, image, features, sku, status: prodStatus, clientId } = req.body;
 
       if (!name || price === undefined) {
         return res.status(400).json({ error: { message: 'Name and price are required' } });
+      }
+
+      /* The admin dashboard passes its local product id so the row it just
+         created and this document share one identity - content, briefs and
+         relations keyed by that id then resolve without a mapping table. */
+      let requestedId = null;
+      if (clientId !== undefined && clientId !== null && String(clientId).trim() !== '') {
+        requestedId = String(clientId).trim().slice(0, 100);
+        if (!/^[A-Za-z0-9][A-Za-z0-9_-]*$/.test(requestedId)) {
+          return res.status(400).json({ error: { message: 'clientId must be alphanumeric (dashes and underscores allowed)' } });
+        }
+        const clash = await db.collection('products').doc(requestedId).get();
+        if (clash.exists) {
+          return res.status(409).json({ error: { message: 'A product with that id already exists - reload the catalog and retry' } });
+        }
       }
 
       const productData = {
@@ -116,7 +131,9 @@ module.exports = async function handler(req, res) {
       if (productData.reorderPoint === undefined) delete productData.reorderPoint;
       if (productData.leadTimeDays === undefined) delete productData.leadTimeDays;
 
-      const docRef = await db.collection('products').add(productData);
+      const docRef = requestedId
+        ? (await db.collection('products').doc(requestedId).set(productData), { id: requestedId })
+        : await db.collection('products').add(productData);
       return res.status(201).json({ data: { id: docRef.id, ...productData } });
     }
 

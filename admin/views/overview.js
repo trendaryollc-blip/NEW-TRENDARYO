@@ -63,6 +63,9 @@
                 U.kpi('warehouse', low.length ? 'stat__icon--danger' : 'stat__icon--ok', 'Low stock', String(low.length), 'at or below the threshold') +
             '</div>' +
 
+            '<div class="panel" style="margin-bottom:16px;"><div class="panel__head"><div><div class="panel__title">Production control</div><div class="panel__subtitle">Gates, holds and ops health - every tile jumps to where it is managed</div></div><div class="panel__actions"><a class="btn btn--sm" href="#/automations">' + A.icon('zap', 13) + 'Rules</a></div></div>' +
+                '<div class="panel__body" id="dashProd"><div class="row row--wrap" style="gap:10px;" id="dashProdRow"></div></div></div>' +
+
             '<div class="grid grid--split" style="margin-bottom:16px;">' +
                 '<div class="panel"><div class="panel__head"><div><div class="panel__title">Revenue - last 14 days</div><div class="panel__subtitle">From orders on this device, cancellations excluded</div></div></div>' +
                     '<div class="panel__body">' + App.bars(series) + '</div></div>' +
@@ -83,15 +86,71 @@
             '<div class="grid grid--split">' +
                 '<div class="panel"><div class="panel__head"><div><div class="panel__title">Recent orders</div></div><div class="panel__actions"><a class="btn btn--sm" href="#/orders">Open orders module</a></div></div>' +
                     '<div class="table-wrap" id="dashRecent"></div></div>' +
-                '<div class="panel"><div class="panel__head"><div><div class="panel__title">Low stock watchlist</div><div class="panel__subtitle">Threshold: ' + String(S.settings().lowStock) + ' units - one tap restocks</div></div></div>' +
+                '<div class="panel"><div class="panel__head"><div><div class="panel__title">Low stock watchlist</div><div class="panel__subtitle">Threshold: ' + String(S.settings().lowStock) + ' units - one tap restocks</div></div><div class="panel__actions"><a class="btn btn--sm" href="#/products">Reorder report</a></div></div>' +
                     '<div class="panel__body panel__body--flush" id="dashLow"></div></div>' +
             '</div>';
 
             root.innerHTML = html;
 
+            /* production control strip (F5/F6/F7/F9/F10) */
+            (function productionControl() {
+                var row = root.querySelector('#dashProdRow');
+                if (!row) return;
+                var s = S.settings();
+                var closed = s.checkoutEnabled === false;
+                var maint = s.maintenanceMode === true;
+                var orders = S.orders();
+                var riskHolds = 0, slaBreach = 0, i, o;
+                for (i = 0; i < orders.length; i++) {
+                    o = orders[i];
+                    if (o.status === 'cancelled' || o.status === 'refunded') continue;
+                    if (o.riskLevel === 'review' || o.riskLevel === 'disputed') riskHolds++;
+                    if (o.slaBreached) slaBreach++;
+                }
+                var reorder = 0;
+                var prods = S.products();
+                for (i = 0; i < prods.length; i++) {
+                    var p = prods[i];
+                    if (p.hidden) continue;
+                    var thr = (p.reorderPoint != null && p.reorderPoint > 0) ? p.reorderPoint : s.lowStock;
+                    if ((p._stock || 0) <= thr) reorder++;
+                }
+                function tile(href, label, badge, onclick) {
+                    return '<a href="' + href + '"' + (onclick ? ' onclick="' + onclick + '"' : '') + ' style="flex:1 1 170px;min-width:150px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;text-decoration:none;background:var(--surface-2);">' +
+                        '<div class="fs-xs t-mute" style="margin-bottom:6px;">' + label + '</div>' + badge + '</a>';
+                }
+                var preRisk = 'if(window.TrendaryoOrdersView)window.TrendaryoOrdersView.filter(\'held\');';
+                var tiles = '';
+                tiles += tile('#/settings', 'Store gate',
+                    maint ? '<span class="badge badge--danger">maintenance</span>'
+                        : (closed ? '<span class="badge badge--danger">checkout paused</span>' : '<span class="badge badge--ok">open</span>'));
+                tiles += tile('#/orders', 'Risk holds',
+                    riskHolds ? '<span class="badge badge--danger">' + riskHolds + ' held</span>' : '<span class="badge badge--ok">none</span>', preRisk);
+                tiles += tile('#/suppliers', 'Supplier SLA',
+                    slaBreach ? '<span class="badge badge--warn">' + slaBreach + ' breached</span>' : '<span class="badge badge--ok">on time</span>');
+                tiles += tile('#/products', 'Below reorder point',
+                    reorder ? '<span class="badge badge--warn">' + reorder + ' to order</span>' : '<span class="badge badge--ok">all stocked</span>');
+                tiles += tile('#/settings', 'Ops health',
+                    '<span class="badge badge--neutral" id="dashHealth">checking…</span>');
+                row.innerHTML = tiles;
+                if (window.API && typeof window.API.request === 'function') {
+                    window.API.request('/admin/health').then(function (res) {
+                        var d = res && res.data;
+                        var hEl = root.querySelector('#dashHealth');
+                        if (!d || !hEl) return;
+                        hEl.className = 'badge ' + (d.overall === 'ok' ? 'badge--ok' : (d.overall === 'degraded' ? 'badge--warn' : 'badge--danger'));
+                        var extra = (d.counts && d.counts.openAlerts) ? ' - ' + d.counts.openAlerts + ' alerts' : '';
+                        hEl.textContent = 'overall ' + d.overall + extra;
+                    }).catch(function () { /* tile stays on 'checking' */ });
+                } else {
+                    var hEl2 = root.querySelector('#dashHealth');
+                    if (hEl2) hEl2.textContent = 'server offline';
+                }
+            })();
+
             /* pipeline */
             var pipe = root.querySelector('#dashPipeline');
-            var stages = ['processing', 'packed', 'shipped', 'delivered'];
+            var stages = ['pending', 'confirmed', 'processing', 'packed', 'shipped', 'delivered'];
             var pipeHtml = '';
             for (var i = 0; i < stages.length; i++) {
                 var c = k.byStatus[stages[i]] || 0;
@@ -163,6 +222,24 @@
         }
         if (k.stuck.length) {
             items.push(note('var(--warn)', 'activity', '<b>' + k.stuck.length + ' order' + (k.stuck.length > 1 ? 's' : '') + ' stuck in Processing</b> for 3+ days. Advance them in the orders board before customers ask.'));
+        }
+        /* production control signals (F5/F6/F9) */
+        var s = S.settings();
+        if (s.maintenanceMode === true || s.checkoutEnabled === false) {
+            items.push(note('var(--danger)', 'alert', '<b>The store is not taking orders</b> (' + (s.maintenanceMode === true ? 'maintenance mode' : 'checkout disabled') + '). Flip it back in <a href="#/settings" style="color:inherit;text-decoration:underline;">Settings → Store control</a>.'));
+        }
+        var holds = 0, breaches = 0, allOrders = S.orders();
+        for (var oi = 0; oi < allOrders.length; oi++) {
+            var oo = allOrders[oi];
+            if (oo.status === 'cancelled' || oo.status === 'refunded') continue;
+            if (oo.riskLevel === 'review' || oo.riskLevel === 'disputed') holds++;
+            if (oo.slaBreached) breaches++;
+        }
+        if (holds) {
+            items.push(note('var(--danger)', 'shieldCheck', '<b>' + holds + ' order' + (holds > 1 ? 's are' : ' is') + ' held for risk review.</b> Release or cancel them in the <a href="#/orders" style="color:inherit;text-decoration:underline;">orders board</a>.'));
+        }
+        if (breaches) {
+            items.push(note('var(--warn)', 'truck', '<b>' + breaches + ' order' + (breaches > 1 ? 's' : '') + ' breached the supplier SLA.</b> See <a href="#/suppliers" style="color:inherit;text-decoration:underline;">Suppliers → SLA</a> for the per-supplier scorecard.'));
         }
         if (low.length) {
             items.push(note('var(--warn)', 'warehouse', '<b>' + low.length + ' product' + (low.length > 1 ? 's' : '') + ' at or below the stock threshold</b>. The dashboard watchlist restocks in one tap.'));

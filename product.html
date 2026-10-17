@@ -356,7 +356,17 @@
         .ov-points li { display: flex; gap: 0.6rem; color: var(--muted); line-height: 1.6; font-size: 0.94rem; }
         .ov-points li::before { content: '✓'; color: var(--accent-3); font-weight: 800; flex-shrink: 0; }
 
-        /* Specs table */
+        /* Related articles (Phase 23) */
+#relArtRail .rel-art{display:flex;flex-direction:column;gap:.45rem;min-width:250px;max-width:300px;border:1px solid rgba(255,255,255,.12);border-radius:14px;overflow:hidden;padding:0 0 .9rem;text-decoration:none;color:#fff;background:rgba(255,255,255,.03);transition:border-color .25s ease,transform .25s ease;}
+#relArtRail .rel-art:hover{border-color:var(--accent);transform:translateY(-3px);}
+#relArtRail .rel-art img{width:100%;height:140px;object-fit:cover;background:#111;}
+#relArtRail .rel-art__cat{align-self:flex-start;margin:.8rem .9rem 0;font-size:.68rem;letter-spacing:1px;text-transform:uppercase;color:var(--accent);}
+#relArtRail .rel-art__t{margin:0 .9rem;font-size:.95rem;line-height:1.35;}
+#relArtRail .rel-art__m{margin:0 .9rem;font-size:.75rem;color:rgba(255,255,255,.55);}
+.ov-approved{margin:0 0 .9rem 1.1rem;}
+.ov-approved li{margin-bottom:.4rem;}
+
+/* Specs table */
         .spec-table { width: 100%; border-collapse: collapse; }
         .spec-table tr { border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
         .spec-table tr:last-child { border-bottom: none; }
@@ -660,6 +670,18 @@
             </div>
         </section>
 
+        <!-- ═══════════ 3.5 · RELATED ARTICLES (AI content engine) ═══════════ -->
+        <section class="sec pdp-shell" id="relArticlesSection" aria-labelledby="relArtTitle" hidden>
+            <div class="rail-head">
+                <div class="sec-head-txt">
+                    <span class="sec-kicker">From the Trendaryo journal</span>
+                    <h2 class="sec-title" id="relArtTitle">Articles about this product</h2>
+                    <p class="sec-sub">Research-first guides written for this listing - reviews, comparisons, buying advice.</p>
+                </div>
+            </div>
+            <div class="rail" id="relArtRail"></div>
+        </section>
+
         <!-- ═══════════ 4 · RELATED RAIL ═══════════ -->
         <section class="sec pdp-shell" aria-labelledby="relTitle">
             <div class="rail-head">
@@ -709,7 +731,8 @@
     <!-- Toast -->
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-    <script src="products-data.js"></script>
+        <script src="products-data.js"></script>
+        <script src="product-schema.js"></script>
     <script src="backend-bridge.js"></script>
     <script src="page-helpers.js"></script>
     <script src="cart-manager.js"></script>
@@ -1421,10 +1444,117 @@
                 })
             };
 
-            var tag = document.createElement('script');
-            tag.type = 'application/ld+json';
-            tag.textContent = JSON.stringify([product, crumbs, faq]);
-            document.head.appendChild(tag);
+            function injectBaseSchema() {
+                var tag = document.createElement('script');
+                tag.type = 'application/ld+json';
+                tag.textContent = JSON.stringify([product, crumbs, faq]);
+                document.head.appendChild(tag);
+            }
+
+            /* ═══ Phase 10 · APPROVED CONTENT OVERRIDES ═══
+               A human has published AI content for this product: the approved
+               copy, FAQs, schema and SEO meta replace the generated defaults.
+               The storefront never reads drafts - only the frozen snapshot. */
+            function escH(v) {
+                return String(v == null ? '' : v)
+                    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+            }
+
+            fetch('/api/products/' + encodeURIComponent(String(p.id)) + '/content')
+                .then(function (r) { return r.ok ? r.json() : null; })
+                .then(function (res) {
+                    var d = res && res.data;
+                    if (!d || d.status !== 'published') { injectBaseSchema(); return; }
+                    var s = d.sections || {};
+                    var approvedSeo = d.seo || {};
+
+                    /* Schema from the publish API (Product/Offer/Breadcrumb). */
+                    if (approvedSeo.schema && window.TrendaryoProductSchema) {
+                        var tag = document.createElement('script');
+                        tag.type = 'application/ld+json';
+                        tag.textContent = window.TrendaryoProductSchema.safeJson(approvedSeo.schema);
+                        document.head.appendChild(tag);
+                    } else {
+                        injectBaseSchema();
+                    }
+
+                    /* Approved FAQs: schema + the accordion itself. */
+                    if (Array.isArray(d.faqs) && d.faqs.length) {
+                        var faqTag = document.createElement('script');
+                        faqTag.type = 'application/ld+json';
+                        faqTag.textContent = JSON.stringify({
+                            '@context': 'https://schema.org',
+                            '@type': 'FAQPage',
+                            mainEntity: d.faqs.map(function (f) {
+                                return { '@type': 'Question', name: escH(f.q), acceptedAnswer: { '@type': 'Answer', text: escH(f.a) } };
+                            })
+                        });
+                        document.head.appendChild(faqTag);
+                        var ship = $('shipFaq');
+                        if (ship) {
+                            ship.innerHTML = d.faqs.map(function (f, i) {
+                                return '<details class="acc"' + (i === 0 ? ' open' : '') + '><summary class="acc-q">' + escH(f.q) + '</summary><div class="acc-a">' + escH(f.a) + '</div></details>';
+                            }).join('');
+                        }
+                    }
+
+                    /* Approved long description leads the overview tab. */
+                    if (s.longDescription) {
+                        var ov = $('ovBody');
+                        if (ov) {
+                            var paras = String(s.longDescription).split(/\n{2,}/)
+                                .map(function (t) { return '<p>' + escH(t.replace(/^\s*#+\s*/, '')) + '</p>'; }).join('');
+                            var feats = (s.features || []).length
+                                ? '<h3>Key features</h3><ul class="ov-approved">' + s.features.map(function (f) { return '<li>' + escH(f) + '</li>'; }).join('') + '</ul>' : '';
+                            var bens = (s.benefits || []).length
+                                ? '<h3>What that means for you</h3><ul class="ov-approved">' + s.benefits.map(function (f) { return '<li>' + escH(f) + '</li>'; }).join('') + '</ul>';
+                            ov.innerHTML = '<div class="ov-editorial">' + paras + feats + bens + '</div>' + ov.innerHTML;
+                        }
+                    }
+
+                    /* Approved SEO meta wins over the generated defaults. */
+                    if (approvedSeo.metaTitle) document.title = approvedSeo.metaTitle;
+                    if (approvedSeo.metaDescription) setMeta('meta[name="description"]', approvedSeo.metaDescription);
+                    if (approvedSeo.ogTitle) setMeta('meta[property="og:title"]', approvedSeo.ogTitle);
+                    if (approvedSeo.ogDescription) setMeta('meta[property="og:description"]', approvedSeo.ogDescription);
+                    if (approvedSeo.canonicalUrl) {
+                        if (can) can.setAttribute('href', approvedSeo.canonicalUrl);
+                        setMeta('meta[property="og:url"]', approvedSeo.canonicalUrl);
+                    }
+                    var tw = approvedSeo.twitter || {};
+                    if (tw.title) setMeta('meta[name="twitter:title"]', tw.title);
+                    if (tw.description) setMeta('meta[name="twitter:description"]', tw.description);
+                })
+                .catch(function () { injectBaseSchema(); });
+        })();
+
+        /* ═══ Phase 23 · RELATED ARTICLES — guides written about this listing ═══ */
+        (function relatedArticles() {
+            var host = document.getElementById('relArticlesSection');
+            var rail = document.getElementById('relArtRail');
+            if (!host || !rail) return;
+            function escR(v) {
+                return String(v == null ? '' : v)
+                    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+            }
+            fetch('/api/blog?productId=' + encodeURIComponent(String(p.id)))
+                .then(function (r) { return r.ok ? r.json() : null; })
+                .then(function (res) {
+                    var list = (res && res.data) || [];
+                    if (!list.length) return;
+                    rail.innerHTML = list.slice(0, 6).map(function (a) {
+                        var href = 'blog-post.html?slug=' + encodeURIComponent(a.slug || a.id);
+                        return '<a class="rel-art" href="' + href + '">' +
+                            '<img src="' + escR(a.coverImage || 'assets/trendaryo-crown-star-logo.svg') + '" alt="' + escR(a.coverAlt || a.title || '') + '" loading="lazy" decoding="async">' +
+                            '<span class="rel-art__cat">' + escR(a.category || 'guides') + '</span>' +
+                            '<b class="rel-art__t">' + escR(a.title || 'Untitled') + '</b>' +
+                            '<span class="rel-art__m">' + escR((a.readMinutes || 5) + ' min read') + '</span></a>';
+                    }).join('');
+                    host.hidden = false;
+                })
+                .catch(function () { /* related articles are optional garnish */ });
         })();
 
         /* analytics */
@@ -1436,6 +1566,7 @@
         }
     })();
     </script>
+    <script src="js/vitals.js"></script>
 
 </body>
 </html>

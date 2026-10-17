@@ -26,7 +26,7 @@ function freshDb(seed = {}) {
 }
 
 async function seedHealthyProbes(db, now = Date.now()) {
-  for (const key of ['cron:automations', 'cron:supplier-sync', 'stripe-webhook']) {
+  for (const key of ['cron:automations', 'cron:supplier-sync', 'cron:reconciliation', 'cron:abandoned-checkout', 'cron:backup', 'stripe-webhook']) {
     await db.collection('system_health').doc(key).set({
       key,
       lastRunAt: new Date(now).toISOString(),

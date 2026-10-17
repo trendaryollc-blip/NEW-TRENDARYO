@@ -264,6 +264,9 @@ module.exports = async function handler(req, res) {
           total: pricing.total,
           isCod,
           now: nowIso,
+          cardCountry: body.cardCountry || null,
+          shippingCountry: (shippingAddress && shippingAddress.country) || null,
+          ip: req.headers['x-forwarded-for'] || null,
         });
       } catch (riskError) {
         console.error('[orders:risk]', riskError.message);
