@@ -1110,10 +1110,10 @@
         .intel-row { display: grid; grid-template-columns: 54px 1fr 50px; gap: 0.6rem; align-items: center; font-size: 0.74rem; color: var(--muted); }
         .intel-row i { display: block; height: 7px; border-radius: var(--r-pill); background: rgba(255, 255, 255, 0.1); overflow: hidden; }
         .intel-row i b { display: block; height: 100%; background: transparent; }
-        .intel-list { display: grid; gap: 0.55rem; }
+        .intel-list { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.55rem; min-width: 0; }
         .intel-item {
             display: flex; align-items: center; gap: 0.7rem; padding: 0.5rem;
-            border-radius: 12px; color: inherit; text-decoration: none;
+            min-width: 0; border-radius: 12px; color: inherit; text-decoration: none;
             background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border);
             transition: 0.22s ease;
         }
@@ -1125,9 +1125,16 @@
         }
         .intel-thumb img { width: 100%; height: 100%; object-fit: contain; padding: 3px; }
         .intel-txt { flex: 1 1 auto; min-width: 0; }
-        .intel-txt b { display: block; font-size: 0.84rem; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .intel-txt span { font-size: 0.72rem; color: var(--muted); }
-        .intel-metric { flex: 0 0 auto; font-family: var(--font-d); font-size: 0.78rem; color: var(--accent-3); }
+        .intel-txt b {
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+            font-size: 0.84rem; color: #fff; line-height: 1.25;
+            overflow: hidden; text-overflow: ellipsis; overflow-wrap: anywhere;
+        }
+        .intel-txt span {
+            display: block; font-size: 0.72rem; color: var(--muted);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .intel-metric { flex: 0 0 auto; margin-left: auto; font-family: var(--font-d); font-size: 0.78rem; color: var(--accent-3); }
         .intel-note { font-size: 0.72rem; color: var(--muted-2); margin-top: 0.7rem; line-height: 1.5; }
 
         /* ==================================================================

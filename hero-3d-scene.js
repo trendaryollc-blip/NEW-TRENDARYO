@@ -92,10 +92,13 @@ camera.position.set(0, 0.6, 11);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 renderer.setSize(w, h);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+/* Crispness: phones run DPR 2.6-3, and the old 1.5 cap upscaled the small
+   band ~1.8× — the wordmark read soft/low-res. 2.5 keeps it sharp; the
+   band is tiny (≤1100×500 physical) so the extra samples are cheap. */
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2.5));
 renderer.setClearColor(0x000000, 0);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.02;
+renderer.toneMappingExposure = 1.12;
 container.appendChild(renderer.domElement);
 
 /* The canvas is draggable everywhere. On touch devices `touch-action: none`
@@ -185,7 +188,7 @@ studioEnv();
    Toned down from the old "dark mids, bright edges" cinematic rig: the rim
    spots no longer carve harsh shadows or blow out the letter edges, and the
    higher ambient keeps the mids open so nothing reads as an abnormal shadow. */
-const key = new THREE.DirectionalLight(0xffffff, 1.1);
+const key = new THREE.DirectionalLight(0xffffff, 1.35);
 key.position.set(4.5, 7.5, 6);
 scene.add(key);
 
@@ -199,7 +202,7 @@ rimR.position.set(8, 3.5, -5);
 scene.add(rimR, rimR.target);
 
 /* Warm top kicker — a soft fill instead of a single hot specular streak */
-const kicker = new THREE.SpotLight(0xffe9c4, 14, 26, Math.PI / 6, 0.6, 1.25);
+const kicker = new THREE.SpotLight(0xffe9c4, 18, 26, Math.PI / 6, 0.6, 1.25);
 kicker.position.set(0.5, 9, 3.5);
 scene.add(kicker, kicker.target);
 
@@ -209,8 +212,14 @@ bounce.position.set(0, -3.5, 3.5);
 scene.add(bounce);
 
 /* Higher ambient — lifts the shadows so the scene reads clean, not dramatic */
-const ambient = new THREE.AmbientLight(0x2a3550, 0.85);
+const ambient = new THREE.AmbientLight(0x2a3550, 1.05);
 scene.add(ambient);
+
+/* Front fill from the viewer side — lifts the letter FACES (the rainbow
+   gradients read muddy on small screens without a camera-side source). */
+const frontFill = new THREE.DirectionalLight(0xe8f0ff, 0.45);
+frontFill.position.set(-1.5, 3.5, 9);
+scene.add(frontFill);
 
 /* ── Wordmark ─────────────────────────────────────────────────────────────
    Clean, solid finish: a smooth metallic surface tinted by the baked brand
@@ -219,7 +228,7 @@ scene.add(ambient);
    glowing, oil-slick collectible. */
 const faceMat = new THREE.MeshPhysicalMaterial({
   vertexColors: true, metalness: 0.9, roughness: 0.3,
-  envMapIntensity: 1.1
+  envMapIntensity: 1.3
 });
 const sideMat = new THREE.MeshPhysicalMaterial({
   /* White base — the per-letter hue (and its darker walls) now comes purely
@@ -334,17 +343,17 @@ const EXHIBITION = {
 };
 /* Phones: shorter ropes with the per-product variance compressed — the band
    is short, so the products hang in an even row under the wordmark and the
-   copy block gets the rest of the first viewport. The factor is 0.85 (was
-   0.40 → 0.55 → 0.68 → 0.85 as the cords were tuned to visibly hang): at
-   0.40 the products hugged the letter bases so tightly the cords barely
-   showed and the row read as glued-on props instead of hanging objects;
-   0.85 leaves a clear cord between letter bottom and product.
+   copy block gets the rest of the first viewport. The factor is 0.95 (was
+   0.40 → 0.55 → 0.68 → 0.85 → 0.95 as the cords were tuned to visibly
+   hang): at 0.40 the products hugged the letter bases so tightly the cords
+   barely showed and the row read as glued-on props instead of hanging
+   objects; 0.95 leaves a clear cord between letter bottom and product.
    Depth layering is also flattened: at the short camera distance the full
    desktop swings magnified some models ~2× and the row read as uneven
    specks. */
 if (MOBILE_STAGE) {
   const ropeMean = EXHIBITION.rope.reduce((a, b) => a + b, 0) / EXHIBITION.rope.length;
-  EXHIBITION.rope = EXHIBITION.rope.map(r => (ropeMean + (r - ropeMean) * 0.45) * 0.85);
+  EXHIBITION.rope = EXHIBITION.rope.map(r => (ropeMean + (r - ropeMean) * 0.45) * 0.95);
   EXHIBITION.depth = EXHIBITION.depth.map(d => d * 0.30);
 }
 const exh = (arr, i) => arr[i % arr.length];
@@ -481,14 +490,12 @@ function layoutStage() {
   const spreadPx = wordPx * 0.80 * RUN_MULT;
   const spread = spreadPx * worldPerPx;
 
-  /* Vertical: wordmark centre sits at 30% down the visible scene — higher
-     than the old 36%, so the whole composition rides up toward the header
-     and leaves more room for the products + copy below. The header is
-     measured by syncHeaderOffset, so the scene band always starts below the
-     real header and the letters keep a clear gap at every canvas height.
-     Phones sit at 32% (was 20%): at 20% the letter tops clipped against the
-     canvas edge / real header on tablet-width devices. */
-  const topWorld = 1.1 + (0.5 - (MOBILE_STAGE ? 0.32 : 0.30)) * vis.h;
+  /* Vertical: wordmark centre sits at 27% down the visible scene on phones
+     (was 32% — riders asked for the word closer to the header; the sway
+     budget shrank to 8% to match), 30% on desktop. The header is measured
+     by syncHeaderOffset, so the scene band always starts below the real
+     header and the letters keep a clear gap at every canvas height. */
+  const topWorld = 1.1 + (0.5 - (MOBILE_STAGE ? 0.27 : 0.30)) * vis.h;
 
   /* Measure real letter bottom after positioning. */
   titleGroup.scale.setScalar(scale);
@@ -508,17 +515,17 @@ function layoutStage() {
   /* Mobile guard: keep the letter tops clear of the canvas edge — and keep
      them clear while the wordmark BREATHES. The render loop sways the whole
      group (rotation.y ±0.045, rotation.x ±0.014, driftY ±0.075); on a word
-     18+ world units wide that pushes the projected letter tops ~10-20px
-     above their rest pose, which sliced the caps against the canvas edge at
-     tablet widths. The rest pose therefore reserves 14% of the band (~30px)
-     as the sway budget. The SAME nudge moves the rope anchors, so the cords
-     stay tied to the lowered letters. */
+     18+ world units wide that pushes the projected letter tops ~8-14px
+     above their rest pose, which slices the caps against the canvas edge.
+     The rest pose therefore reserves 8% of the band as the sway budget.
+     The SAME nudge moves the rope anchors, so the cords stay tied to the
+     lowered letters. */
   let topY = topWorld + lift;
   let anchorYOut = anchorY + lift;
   if (MOBILE_STAGE) {
     const topFrac = (vis.h / 2 - titleBox.max.y) / vis.h;
-    if (topFrac < 0.14) {
-      const nudge = (0.14 - topFrac) * vis.h;
+    if (topFrac < 0.08) {
+      const nudge = (0.08 - topFrac) * vis.h;
       topY -= nudge;
       anchorYOut -= nudge;
     }
@@ -1421,7 +1428,7 @@ function onResizeTick() {
   camera.updateProjectionMatrix();
   /* Match backing-store resolution to the current devicePixelRatio so the
      3D content stays crisp and correctly scaled at any browser zoom level. */
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2.5));
   renderer.setSize(w, h);
   /* Particle screen-size follows the backing-store ratio. */
   if (dustMesh) dustMesh.material.uniforms.uPix.value = renderer.getPixelRatio() * 0.5;
