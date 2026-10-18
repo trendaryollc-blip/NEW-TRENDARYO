@@ -438,7 +438,7 @@
 
     .hero-grid {
         grid-template-columns: 1.2fr 0.8fr;
-        gap: 2.5rem;
+        gap: 2rem;
     }
 
     .hero-left {
@@ -526,7 +526,7 @@
 
     .hero-grid {
         grid-template-columns: 1.2fr 0.8fr;
-        gap: 3rem;
+        gap: 2.5rem;
     }
 
     .hero-left {
@@ -615,7 +615,7 @@
 
     .hero-grid {
         grid-template-columns: 1.3fr 0.7fr;
-        gap: 3.5rem;
+        gap: 2.5rem;
     }
 
     .cs-grid {
@@ -831,13 +831,13 @@
         gap: 1rem !important;
     }
     .deck {
-        padding: 1.75rem 0 1.5rem !important;
+        padding: 1.4rem 0 1.15rem !important;
     }
     .deck-hint {
         display: none !important;
     }
     .sec {
-        margin: 2.75rem 0 !important;
+        margin: 2rem 0 !important;
     }
     .toolbar {
         align-items: flex-start !important;
@@ -932,7 +932,7 @@
         position: static !important;
     }
     .cart-particle-wrap {
-        min-height: 350px !important;
+        min-height: 180px !important;
     }
 }
 
@@ -944,7 +944,7 @@
         font-size: clamp(1.4rem, 6vw, 2.2rem) !important;
     }
     .cart-hero {
-        padding: 2rem 1rem 1.75rem !important;
+        padding: 1.5rem 1rem 1.25rem !important;
     }
     .cart-summary {
         padding: 1.25rem !important;
@@ -1216,7 +1216,7 @@
         grid-template-columns: 1fr !important;
     }
     .about-hero-3d {
-        padding: 2rem 1rem !important;
+        padding: 1.5rem 1rem !important;
     }
 }
 
@@ -1281,7 +1281,7 @@
         grid-template-columns: 1fr !important;
     }
     .ship-hero {
-        padding: 2rem 1rem 1.75rem !important;
+        padding: 1.5rem 1rem 1.25rem !important;
     }
 }
 
@@ -1318,7 +1318,7 @@
         text-align: center !important;
     }
     .track-hero {
-        padding: 2rem 1rem 1.75rem !important;
+        padding: 1.5rem 1rem 1.25rem !important;
     }
 }
 
@@ -1418,10 +1418,10 @@
         gap: 0.4rem !important;
     }
     .deck {
-        padding: 1.75rem 1.25rem 1.5rem !important;
+        padding: 1.4rem 1.25rem 1.15rem !important;
     }
     .sec {
-        margin: 2.75rem 0 !important;
+        margin: 2rem 0 !important;
     }
 }
 
@@ -1470,7 +1470,7 @@
 /* ── 404 PAGE MOBILE ── */
 @media (max-width: 600px) {
     .error-container, .error-content, .not-found-content {
-        padding: 2rem 1rem !important;
+        padding: 1.5rem 1rem !important;
     }
     .error-code, .not-found-code {
         font-size: 4rem !important;
@@ -1480,7 +1480,7 @@
 /* ── ORDER SUCCESS / THANK YOU MOBILE ── */
 @media (max-width: 600px) {
     .success-container, .thank-container, .order-success-wrap {
-        padding: 2rem 1rem !important;
+        padding: 1.5rem 1rem !important;
     }
     .success-card, .thank-card {
         padding: 1.5rem !important;
@@ -1498,7 +1498,7 @@
 /* ── REFUND PAGE MOBILE ── */
 @media (max-width: 768px) {
     .content-box {
-        padding: 2rem !important;
+        padding: 1.25rem 1rem !important;
     }
     .content-box h2 {
         font-size: 1.5rem !important;
@@ -1520,7 +1520,7 @@
 /* ── SHARED WISHLIST MOBILE ── */
 @media (max-width: 600px) {
     .sw-hero {
-        padding: 2rem 1rem 1.75rem !important;
+        padding: 1.5rem 1rem 1.25rem !important;
     }
 }
 
@@ -1612,7 +1612,7 @@
 /* ── HERO SECTIONS MOBILE ── */
 @media (max-width: 600px) {
     .cart-hero, .wish-hero, .cmp-hero, .ship-hero, .track-hero {
-        padding: 2rem 1rem 1.75rem !important;
+        padding: 1.5rem 1rem 1.25rem !important;
     }
     .cart-hero h1, .wish-hero h1, .cmp-hero h1, .ship-hero h1, .track-hero h1 {
         font-size: clamp(1.3rem, 6vw, 2rem) !important;
@@ -1636,7 +1636,7 @@
 /* ── FOOTER ENHANCED MOBILE ── */
 @media (max-width: 600px) {
     .footer-top {
-        padding: 2.5rem 1rem 1.5rem !important;
+        padding: 1.75rem 1rem 1.25rem !important;
         gap: 1.5rem !important;
     }
     .footer-bottom {
@@ -1688,8 +1688,8 @@
 /* ── CTA BAND MOBILE ── */
 @media (max-width: 600px) {
     .cta-band {
-        padding: 2rem 1rem !important;
-        margin: 2rem 0.5rem 0 !important;
+        padding: 1.5rem 1rem !important;
+        margin: 1.5rem 0.5rem 0 !important;
     }
     .cta-band h2 {
         font-size: 1.2rem !important;

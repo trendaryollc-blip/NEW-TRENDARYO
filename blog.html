@@ -47,15 +47,15 @@
         
         .blog-container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
         
-        .blog-header { text-align: center; margin-bottom: 3rem; padding: 2rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px; }
+        .blog-header { text-align: center; margin-bottom: 2rem; padding: 2rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px; }
         .blog-header h1 { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent-2)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; }
         .blog-header p { color: rgba(255,255,255,0.8); font-size: 1.2rem; line-height: 1.6; }
         
-        .blog-categories { display: flex; justify-content: center; gap: 1rem; margin-bottom: 3rem; flex-wrap: wrap; }
+        .blog-categories { display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
         .category-btn { padding: 0.75rem 1.5rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 25px; color: rgba(255,255,255,0.85); font-family: 'Rajdhani', sans-serif; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px; }
         .category-btn.active, .category-btn:hover { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #000; border-color: transparent; box-shadow: 0 5px 20px rgba(0,240,255,0.3); }
         
-        .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; margin-bottom: 3rem; }
+        .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; margin-bottom: 2rem; }
         
         .blog-card { background: transparent; border: 1px solid var(--glass-border); border-radius: 16px; overflow: hidden; transition: all 0.3s ease; }
         .blog-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,240,255,0.2); border-color: var(--accent); }
@@ -82,7 +82,7 @@
         .blog-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
         .blog-tag { background: rgba(0,240,255,0.1); border: 1px solid var(--accent); color: var(--accent); padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.8rem; font-weight: 500; }
         
-        .newsletter-section { background: transparent; border: 1px solid var(--glass-border); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 20px; padding: 3rem; text-align: center; margin-bottom: 3rem; }
+        .newsletter-section { background: transparent; border: 1px solid var(--glass-border); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 20px; padding: 2rem; text-align: center; margin-bottom: 2rem; }
         .newsletter-section h2 { font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 900; background: transparent; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; }
         .newsletter-section p { color: rgba(255,255,255,0.9); font-size: 1.1rem; margin-bottom: 2rem; }
         .newsletter-form { display: flex; gap: 1rem; max-width: 500px; margin: 0 auto; }
@@ -97,12 +97,12 @@
         .featured-post .blog-title { font-size: 1.5rem; }
         .featured-post .blog-excerpt { font-size: 1.1rem; }
 
-        .blog-controls { display: flex; flex-direction: column; gap: 1.25rem; align-items: center; margin-bottom: 3rem; }
+        .blog-controls { display: flex; flex-direction: column; gap: 1.25rem; align-items: center; margin-bottom: 2rem; }
         .blog-search { width: 100%; max-width: 480px; position: relative; }
         .blog-search input { width: 100%; padding: 0.85rem 1.25rem; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 25px; color: #fff; font-family: 'Rajdhani', sans-serif; font-size: 1rem; transition: border-color .3s ease; }
         .blog-search input:focus { outline: none; border-color: var(--accent); }
         .blog-search input::placeholder { color: rgba(255,255,255,0.5); }
-        .blog-loading { grid-column: 1/-1; text-align: center; padding: 4rem 1rem; color: rgba(255,255,255,0.7); }
+        .blog-loading { grid-column: 1/-1; text-align: center; padding: 3rem 1rem; color: rgba(255,255,255,0.7); }
         .blog-loading .spinner { width: 36px; height: 36px; border: 3px solid rgba(255,255,255,0.15); border-top-color: var(--accent); border-radius: 50%; display: inline-block; animation: blspin 0.9s linear infinite; }
         @keyframes blspin { to { transform: rotate(360deg); } }
         .blog-more { text-align: center; margin: 2rem 0; }

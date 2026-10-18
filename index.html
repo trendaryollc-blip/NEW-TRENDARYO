@@ -41,7 +41,15 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+    <!-- third-party CDNs used by the page: hints so the CPU/network budget
+         starts fetching as soon as parsing begins -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <!-- Non-blocking fonts: swap in after paint instead of holding first paint
+         hostage. The stylesheet loads behind the scenes; `display=swap` keeps
+         text visible with the fallback face meanwhile. -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet"></noscript>
     <link rel="stylesheet" href="home.css">
     <!-- ProductCard v2 — shared with shop.html so home cards === shop cards -->
     <link rel="stylesheet" href="product-card.css">
@@ -57,6 +65,11 @@
       }
     }
     </script>
+    <!-- Warm the module graph the hero scene needs — fetched at low priority
+         while the page paints, so the 3D hero starts instead of waiting on a
+         cold CDN chain. -->
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js">
+    <link rel="modulepreload" href="hero-3d-scene.js">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -377,25 +390,35 @@
         // Theme handling is centralized in components.js (5 curated themes).
     </script>
 
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="firebase-config.js"></script>
+    <!-- Firebase SDKs — deferred: auth/session state is never needed for first
+         paint or first interaction. Deferred scripts still execute in document
+         order before DOMContentLoaded, so firebase-config.js's auto-init and
+         backend-bridge/api-client (which guard on `typeof firebase`) keep
+         working exactly as before. -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js" defer></script>
+    <script src="firebase-config.js" defer></script>
     <script>
-      initFirebase().then(({ db, auth }) => {
-        console.log('✅ Firebase ready on homepage');
-      });
+        window.addEventListener('load', function () {
+            if (typeof initFirebase === 'function') {
+                initFirebase().then(function () { console.log('✅ Firebase ready on homepage'); });
+            }
+        });
     </script>
 
-    <!-- GSAP CDN — used only for homepage hero interactions -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- GSAP CDN — used only for homepage hero interactions. Deferred so the
+         page never waits on the CDN before becoming interactive; the inline
+         scripts below run at DOMContentLoaded, which always lands after every
+         deferred script, and they self-skip (static site) if gsap is blocked. -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" defer></script>
     <script>
     /* ═══════════════════════════════════════════
        COSMIC SECTIONS — GSAP interactions
     ═══════════════════════════════════════════ */
     (function () {
+        function initCosmicSections() {
         if (typeof gsap === 'undefined') return;
 
         gsap.registerPlugin(ScrollTrigger);
@@ -526,7 +549,7 @@
             duration: 0.5, stagger: 0.06, ease: 'power2.out', overwrite: 'auto'
         });
 
-        // Vortex cards slide up
+        // Product cards slide up (ProductCard v2 renders as .pc-card on home)
         gsap.from('.vortex-card, #vortex .pc-card', {
             scrollTrigger: { trigger: '#vortex', start: 'top 85%', once: true },
             opacity: 0, y: 32,
@@ -547,6 +570,9 @@
             scrollTrigger: { trigger: '#blackhole', start: 'top 85%', once: true },
             opacity: 0, y: 24, duration: 0.55, stagger: 0.08, ease: 'power2.out', overwrite: 'auto'
         });
+        }
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initCosmicSections);
+        else initCosmicSections();
     })();
     </script>
     <script>
@@ -555,6 +581,7 @@
        Scoped: only runs when #hero exists
     ═══════════════════════════════════════════ */
     (function () {
+        function initCosmicHero() {
         if (!document.getElementById('hero')) return;
         if (typeof gsap === 'undefined') return; // CDN blocked — hero still fully usable, just static
 
@@ -591,6 +618,9 @@
         /* ── Parallax — RETIRED: nebulas are display:none in Luxury 2.0, so this
            infinite rAF + gsap.set loop burned a frame budget doing nothing
            visible while users scrolled. bg.js camera drift continues alone. */
+        }
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initCosmicHero);
+        else initCosmicHero();
     })();
     </script>
 </body>

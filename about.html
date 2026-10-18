@@ -81,26 +81,26 @@
         @keyframes textGlow { from { text-shadow: 0 0 10px rgba(0,240,255,0.5); } to { text-shadow: 0 0 20px rgba(255,0,170,0.8), 0 0 30px rgba(0,240,255,0.5); } }
         @keyframes iconPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
         
-        .page-header-3d { padding: 6rem 2rem 3rem; text-align: center; }
+        .page-header-3d { padding: 3rem 2rem 2rem; text-align: center; }
         .page-title-3d { font-family: 'Orbitron', sans-serif; font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 900; background: linear-gradient(135deg, #fff, var(--accent)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; }
         
         .about-section-3d { padding: 2rem; max-width: 1200px; margin: 0 auto; }
         
-        .about-hero-3d { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; margin-bottom: 6rem; }
+        .about-hero-3d { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center; margin-bottom: 3rem; }
         .about-content-3d h2 { font-family: 'Orbitron', sans-serif; font-size: 2rem; margin-bottom: 1.5rem; }
         .about-content-3d p { color: #aaa; line-height: 1.8; margin-bottom: 1rem; font-size: 1.1rem; }
         .about-image-3d { position: relative; }
         .about-image-3d img { width: 100%; border-radius: 20px; border: 1px solid var(--glass-border); }
         .about-image-3d::before { content: ''; position: absolute; left: -20px; top: -20px; right: 20px; width: 100%; height: 100%; border: 2px solid var(--accent); border-radius: 20px; z-index: -1; }
         
-        .stats-row-3d { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-bottom: 6rem; }
+        .stats-row-3d { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-bottom: 3rem; }
         .stat-card-3d { background: transparent; border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; text-align: center; transition: all 0.3s; }
         .stat-card-3d:hover { transform: translateY(-5px); border-color: var(--accent); }
-        .stat-value-3d { font-family: 'Orbitron', sans-serif; font-size: 3rem; font-weight: 900; background: transparent; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .stat-value-3d { font-family: 'Orbitron', sans-serif; font-size: 3rem; font-weight: 900; background: linear-gradient(135deg, #fff, var(--accent)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .stat-label-3d { color: #888; font-size: 1rem; margin-top: 0.5rem; }
         
-        .team-section-3d { margin-bottom: 6rem; }
-        .section-title-3d { font-family: 'Orbitron', sans-serif; font-size: 2rem; text-align: center; margin-bottom: 3rem; }
+        .team-section-3d { margin-bottom: 3rem; }
+        .section-title-3d { font-family: 'Orbitron', sans-serif; font-size: 2rem; text-align: center; margin-bottom: 1.75rem; }
         
         .team-grid-3d { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
         .team-card-3d { background: transparent; border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; text-align: center; transition: all 0.3s; }
@@ -109,7 +109,7 @@
         .team-name-3d { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; margin-bottom: 0.25rem; }
         .team-role-3d { color: var(--accent); font-size: 0.9rem; }
         
-        .values-section-3d { margin-bottom: 4rem; }
+        .values-section-3d { margin-bottom: 2.5rem; }
         .values-grid-3d { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
         .value-card-3d { background: transparent; border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; text-align: center; transition: all 0.3s; }
         .value-card-3d:hover { border-color: var(--accent); }
@@ -120,7 +120,7 @@
         
         .preloader-3d { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 2rem; }
         .preloader-3d.hidden { opacity: 0; pointer-events: none; transition: opacity 0.5s; }
-        .preloader-logo-3d { font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 900; background: transparent; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .preloader-logo-3d { font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 900; background: linear-gradient(135deg, #fff, var(--accent)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .preloader-spinner-3d { width: 50px; height: 50px; border: 3px solid var(--glass-border); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
         
         @media(max-width:900px){
@@ -168,9 +168,9 @@
     
     <section class="about-section-3d">
         <!-- Company Information Section -->
-        <div style="background: transparent; border: 2px solid var(--glass-border); border-radius: 24px; padding: 3rem 2.5rem; margin-bottom: 4rem;">
+        <div style="background: transparent; border: 2px solid var(--glass-border); border-radius: 24px; padding: 2rem 2.5rem; margin-bottom: 2.5rem;">
             <h2 style="font-family: 'Orbitron', sans-serif; font-size: 2rem; margin-bottom: 2rem; color: var(--accent); text-align: center;">Company Information</h2>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center;">
                 <div>
                     <div style="background: transparent; border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem;">
                         <h3 style="font-family: 'Orbitron', sans-serif; font-size: 1.2rem; color: var(--accent-2); margin-bottom: 1rem;">Legal Entity</h3>
@@ -263,21 +263,21 @@
         </div>
 
         <!-- Journey Timeline -->
-        <div style="margin: 6rem 0;">
+        <div style="margin: 3rem 0;">
             <h2 class="section-title-3d">Our Journey</h2>
             <div style="max-width: 800px; margin: 0 auto;">
                 <div style="border-left: 2px solid var(--accent); padding-left: 2rem; position: relative;">
-                    <div style="margin-bottom: 3rem;">
+                    <div style="margin-bottom: 1.75rem;">
                         <div style="position: absolute; left: -9px; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 3px solid #0a0a2a;"></div>
                         <div style="font-family: 'Orbitron', sans-serif; color: var(--accent); font-size: 1.2rem; margin-bottom: 0.5rem;">2020 - The Beginning</div>
                         <p style="color: #aaa; line-height: 1.7;">Founded with a vision to revolutionize online shopping through immersive 3D experiences.</p>
                     </div>
-                    <div style="margin-bottom: 3rem;">
+                    <div style="margin-bottom: 1.75rem;">
                         <div style="position: absolute; left: -9px; width: 16px; height: 16px; border-radius: 50%; background: var(--accent-2); border: 3px solid #0a0a2a;"></div>
                         <div style="font-family: 'Orbitron', sans-serif; color: var(--accent-2); font-size: 1.2rem; margin-bottom: 0.5rem;">2021 - First 10K Customers</div>
                         <p style="color: #aaa; line-height: 1.7;">Reached our first major milestone with 10,000 happy customers across 50 countries.</p>
                     </div>
-                    <div style="margin-bottom: 3rem;">
+                    <div style="margin-bottom: 1.75rem;">
                         <div style="position: absolute; left: -9px; width: 16px; height: 16px; border-radius: 50%; background: var(--accent-3); border: 3px solid #0a0a2a;"></div>
                         <div style="font-family: 'Orbitron', sans-serif; color: var(--accent-3); font-size: 1.2rem; margin-bottom: 0.5rem;">2023 - Innovation Award</div>
                         <p style="color: #aaa; line-height: 1.7;">Recognized as "Most Innovative E-commerce Platform" by Tech Innovation Awards.</p>
@@ -292,7 +292,7 @@
         </div>
 
         <!-- Customer Success Stories -->
-        <div style="background: rgba(0,240,255,0.03); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); padding: 4rem 2rem; margin: 0 -2rem;">
+        <div style="background: rgba(0,240,255,0.03); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); padding: 2.5rem 2rem; margin: 0 -2rem;">
             <h2 class="section-title-3d">Customer Success Stories</h2>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto;">
                 <div style="background: var(--glass); border: 1px solid var(--glass-border); border-radius: 18px; padding: 2rem;">
@@ -332,7 +332,7 @@
         </div>
 
         <!-- Behind the Scenes -->
-        <div style="margin: 6rem 0;">
+        <div style="margin: 3rem 0;">
             <h2 class="section-title-3d">Behind the Scenes</h2>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
                 <div style="background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; text-align: center;">
@@ -359,9 +359,9 @@
         </div>
 
         <!-- Awards & Recognition -->
-        <div style="background: linear-gradient(135deg, rgba(0,240,255,0.08), rgba(255,0,170,0.08)); border: 2px solid var(--glass-border); border-radius: 24px; padding: 4rem 3rem; text-align: center; margin-bottom: 4rem;">
-            <h2 class="section-title-3d" style="margin-bottom: 3rem;">Awards & Recognition</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 3rem;">
+        <div style="background: linear-gradient(135deg, rgba(0,240,255,0.08), rgba(255,0,170,0.08)); border: 2px solid var(--glass-border); border-radius: 24px; padding: 2.5rem 3rem; text-align: center; margin-bottom: 2.5rem;">
+            <h2 class="section-title-3d" style="margin-bottom: 1.75rem;">Awards & Recognition</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
                 <div>
                     <div style="font-size: 4rem; margin-bottom: 1rem;">🏆</div>
                     <div style="font-family: 'Orbitron', sans-serif; font-size: 1.1rem; color: var(--accent); margin-bottom: 0.5rem;">Best E-commerce 2023</div>
@@ -381,7 +381,7 @@
         </div>
 
         <!-- Call to Action -->
-        <div style="text-align: center; padding: 3rem 0;">
+        <div style="text-align: center; padding: 2rem 0;">
             <h2 style="font-family: 'Orbitron', sans-serif; font-size: 2.5rem; margin-bottom: 1rem; background: linear-gradient(135deg, var(--accent), var(--accent-2)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Join Our Journey</h2>
             <p style="color: #aaa; font-size: 1.2rem; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">Be part of the future of shopping. Experience the difference today.</p>
             <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">

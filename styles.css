@@ -34,6 +34,28 @@
   --font-display: 'Sora', 'Space Grotesk', 'Rajdhani', system-ui, sans-serif;
   --font-body: 'Inter', 'Rajdhani', system-ui, sans-serif;
   --font-logo: 'Orbitron', sans-serif;
+
+  /* ── Spacing system (density scale) ──
+     Every vertical gap/padding should come from this scale.
+     xs 6 · sm 10 · md 16 · lg 24 · xl 32 · 2xl 44 · 3xl 56 px. */
+  --sp-xs: 0.375rem;
+  --sp-sm: 0.625rem;
+  --sp-md: 1rem;
+  --sp-lg: 1.5rem;
+  --sp-xl: 2rem;
+  --sp-2xl: 2.75rem;
+  --sp-3xl: 3.5rem;
+  /* Section rhythm: was 48–80px, now 36–56px desktop */
+  --section-y: clamp(2.25rem, 4.5vw, 3.5rem);
+  /* Gap between stacked blocks inside a section */
+  --block-gap: 1.5rem;
+}
+/* Mobile gets its own tighter rhythm — never reuse desktop values on phones */
+@media (max-width: 768px) {
+  :root {
+    --section-y: clamp(1.75rem, 5vw, 2.5rem);
+    --block-gap: 1.15rem;
+  }
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -89,7 +111,7 @@ p { color: var(--muted); }
   margin-inline: auto;
   padding-inline: 1.5rem;
 }
-.section-pad { padding: clamp(3rem, 6vw, 5rem) 1.5rem; }
+.section-pad { padding: var(--section-y) 1.5rem; }
 
 /* ── Buttons: clear hierarchy ── */
 .btn, .hero-cta, .bh-cta, .dl-cta, .vx-btn, .pm-add {

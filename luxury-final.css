@@ -11,8 +11,9 @@
 .hero-nebula, .bh-ring, .bh-core, .deck-neb, .media-skeleton { display: none !important; }
 #hero .hero-tagline, .sec-title, .bh-title { animation: none !important; filter: none !important; }
 
-/* Sections: calm rhythm */
-#constellations, #vortex, #deals, #testimonials { padding: clamp(3rem,6vw,5rem) 1.5rem !important; }
+/* Sections: calm rhythm — horizontal only; vertical rhythm comes from the
+   DENSITY PASS at the bottom of this file (clamp 2.25–3.25rem). */
+#constellations, #vortex, #deals, #testimonials { padding-left: 1.5rem !important; padding-right: 1.5rem !important; }
 #constellations .cs-inner, #vortex .vx-inner, #deals .dl-inner, #testimonials .tst-inner,
 .pipe-inner { max-width: 1280px !important; margin: 0 auto !important; }
 
@@ -75,7 +76,7 @@
 .stat-label { color: rgba(245,246,250,0.66) !important; }
 
 /* Blackhole CTA: calm centered band */
-#blackhole { padding: clamp(3.5rem,7vw,5.5rem) 1.5rem !important; }
+#blackhole { padding: clamp(2.5rem, 4.5vw, 3.5rem) 1.5rem !important; }
 .bh-title { font-family: 'Sora',sans-serif !important; color: #fff !important; background: none !important; -webkit-text-fill-color: #fff !important; }
 .bh-sub { color: rgba(245,246,250,0.7) !important; }
 
@@ -237,7 +238,7 @@ img { content-visibility: auto; }
    All controls reuse shop.js IDs + delegated [data-*] hooks — no JS changes. */
 
 /* Slim deck: title + search + stats, no essays */
-.deck { padding: 1.75rem 0 1.25rem !important; position: relative; overflow: hidden; }
+.deck { padding: 1.5rem 0 1rem !important; position: relative; overflow: hidden; }
 /* Shop hero: copy left, deal card right */
 .deck-hero { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 2.5rem; align-items: center; }
 .deck-copy { min-width: 0; }
@@ -354,8 +355,8 @@ img { content-visibility: auto; }
   transition: transform 0.2s ease, background 0.2s ease;
 }
 .pipe-punch-cta:hover { background: var(--accent, #00e5ff); border-color: var(--accent, #00e5ff); transform: translateY(-2px); }
-#drops { margin-top: 2.5rem !important; margin-bottom: 2.5rem !important; }
-#grid { margin-top: 2.5rem !important; }
+#drops { margin-top: 1.5rem !important; margin-bottom: 1.5rem !important; }
+#grid { margin-top: 1.5rem !important; }
 
 /* ═════════ CENTERED PAGE COLUMN — equal left/right on every section ═════════
    Root cause of the left-hug: `.sec { margin: 4rem 0 }` sits AFTER
@@ -380,13 +381,22 @@ main.page-offset { width: 100% !important; margin: 0 !important; }
    compaction rules (@media max-width:600px) keep winning on phones. */
 
 /* Global section rhythm: 48-80px -> 36-52px */
-#trending, #pipeline, #constellations, #vortex, #testimonials {
+#trending, #pipeline, #constellations, #vortex, #deals, #testimonials {
   padding-top: clamp(2.25rem, 4vw, 3.25rem) !important;
   padding-bottom: clamp(2.25rem, 4vw, 3.25rem) !important;
 }
-#trending { padding: 2.5rem 1.5rem 2rem !important; }
+#trending { padding-left: 1.5rem !important; padding-right: 1.5rem !important; padding-bottom: 2rem !important; }
 /* #pipeline had margin-top:4rem + padding-top:4.5rem stacked = 136px dead zone */
-#pipeline { margin-top: 1.5rem !important; padding: 2.5rem 1.5rem 0.5rem !important; }
+#pipeline { margin-top: 1.5rem !important; padding-left: 1.5rem !important; padding-right: 1.5rem !important; padding-bottom: 0.5rem !important; }
+/* Phones get their own rhythm — desktop floors are never reused on mobile */
+@media (max-width: 600px) {
+  #trending, #constellations, #vortex, #deals, #testimonials, #blackhole {
+    padding-top: clamp(1.75rem, 5vw, 2.25rem) !important;
+    padding-bottom: clamp(1.75rem, 5vw, 2.25rem) !important;
+  }
+  #pipeline { padding-top: clamp(1.75rem, 5vw, 2.25rem) !important; padding-bottom: 0.5rem !important; }
+  #trending { padding-bottom: 1.5rem !important; }
+}
 
 /* Section headers */
 .sec-head { margin-bottom: 1.25rem !important; }
@@ -402,13 +412,13 @@ main.page-offset { width: 100% !important; margin: 0 !important; }
 .cs-count { margin-top: 0.15rem !important; }
 
 /* Stats strip inside testimonials */
-.stats-grid { margin-top: 2rem !important; gap: 1.5rem !important; }
+.stats-grid { margin-top: 1.5rem !important; gap: 1.5rem !important; }
 
 /* Trust strip */
 .trust-item { padding: 0.9rem 1.1rem !important; }
 
 /* Newsletter band (had 72px of bottom padding alone) */
-.nl-band { padding: 0.5rem 1.25rem 3rem !important; }
+.nl-band { padding: 0.5rem 1.25rem 2.25rem !important; }
 .nl-card { padding: 2rem 1.75rem !important; }
 .nl-sub { margin-bottom: 1.1rem !important; }
 .nl-note { margin-top: 0.7rem !important; }

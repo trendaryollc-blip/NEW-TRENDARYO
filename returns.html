@@ -62,7 +62,7 @@
         
         #three-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
         .page-header-3d { padding: 2rem 2rem 3rem; text-align: center; }
-        .page-title-3d { font-family: 'Orbitron', sans-serif; font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 900; background: transparent; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .page-title-3d { font-family: 'Orbitron', sans-serif; font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 900; background: linear-gradient(135deg, #fff, var(--accent)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .content-section-3d { padding: 2rem; max-width: 1000px; margin: 0 auto; }
         .content-card-3d { background: transparent; border: 1px solid var(--glass-border); border-radius: 20px; padding: 2.5rem; margin-bottom: 2rem; backdrop-filter: blur(10px); }
         .content-card-3d h2 { font-family: 'Orbitron', sans-serif; font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--accent); }
@@ -123,8 +123,8 @@
     </section>
 
     <!-- Instant Return Portal -->
-    <section style="padding:4rem 2rem;max-width:1200px;margin:0 auto;position:relative;z-index:2;">
-        <div style="background:transparent;border:2px solid var(--glass-border);border-radius:30px;padding:4rem 3rem;text-align:center;position:relative;overflow:hidden;">
+    <section style="padding:2.5rem 2rem;max-width:1200px;margin:0 auto;position:relative;z-index:2;">
+        <div style="background:transparent;border:2px solid var(--glass-border);border-radius:30px;padding:2.5rem 2rem;text-align:center;position:relative;overflow:hidden;">
             <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;height:300px;background:radial-gradient(circle,rgba(0,240,255,0.3),transparent);border-radius:50%;animation:pulse-glow 3s ease-in-out infinite;"></div>
             <div style="position:relative;z-index:1;">
                 <div style="font-size:4rem;margin-bottom:1.5rem;animation:bounce-icon 2s ease-in-out infinite;">📦</div>
@@ -139,8 +139,8 @@
     </section>
 
     <!-- Return Request Form -->
-    <section id="return-form" style="padding:4rem 2rem;max-width:900px;margin:0 auto;position:relative;z-index:2;">
-        <div style="background:transparent;border:1px solid var(--glass-border);border-radius:25px;padding:3rem;">
+    <section id="return-form" style="padding:2.5rem 2rem;max-width:900px;margin:0 auto;position:relative;z-index:2;">
+        <div style="background:transparent;border:1px solid var(--glass-border);border-radius:25px;padding:2rem;">
             <h2 style="font-family:'Orbitron',sans-serif;font-size:2rem;margin-bottom:2rem;text-align:center;color:var(--accent);">Return Request Form</h2>
             
             <form id="return-request-form" style="display:grid;gap:2rem;">
@@ -255,8 +255,8 @@
     </section>
 
     <!-- Return Reasons Grid -->
-    <section style="padding:4rem 2rem;max-width:1200px;margin:0 auto;position:relative;z-index:2;">
-        <h2 style="font-family:'Orbitron',sans-serif;font-size:2rem;text-align:center;margin-bottom:3rem;color:var(--accent);">Common Return Reasons</h2>
+    <section style="padding:2.5rem 2rem;max-width:1200px;margin:0 auto;position:relative;z-index:2;">
+        <h2 style="font-family:'Orbitron',sans-serif;font-size:2rem;text-align:center;margin-bottom:1.75rem;color:var(--accent);">Common Return Reasons</h2>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem;">
             <div style="background:transparent;border:1px solid var(--glass-border);border-radius:20px;padding:2.5rem;text-align:center;transition:all 0.3s ease;cursor:pointer;" onmouseover="this.style.transform='translateY(-10px)';this.style.borderColor='rgba(0,240,255,0.5)';this.style.background='rgba(0,240,255,0.08)';" onmouseout="this.style.transform='';this.style.borderColor='var(--glass-border)';this.style.background='var(--glass)';">
                 <div style="font-size:3rem;margin-bottom:1rem;">📏</div>
@@ -282,15 +282,15 @@
     </section>
 
     <!-- Money-Back Guarantee -->
-    <section style="padding:4rem 2rem;max-width:900px;margin:0 auto;position:relative;z-index:2;">
-        <div style="background:linear-gradient(135deg,rgba(0,255,136,0.1),rgba(0,240,255,0.1));border:3px solid var(--accent-3);border-radius:25px;padding:3rem;text-align:center;position:relative;overflow:hidden;">
+    <section style="padding:2.5rem 2rem;max-width:900px;margin:0 auto;position:relative;z-index:2;">
+        <div style="background:linear-gradient(135deg,rgba(0,255,136,0.1),rgba(0,240,255,0.1));border:3px solid var(--accent-3);border-radius:25px;padding:2rem;text-align:center;position:relative;overflow:hidden;">
             <div style="position:absolute;top:-50px;right:-50px;width:200px;height:200px;background:radial-gradient(circle,rgba(0,255,136,0.2),transparent);border-radius:50%;"></div>
             <div style="position:absolute;bottom:-50px;left:-50px;width:200px;height:200px;background:radial-gradient(circle,rgba(0,240,255,0.2),transparent);border-radius:50%;"></div>
             <div style="position:relative;z-index:1;">
                 <div style="width:120px;height:120px;margin:0 auto 2rem;background:linear-gradient(135deg,var(--accent-3),var(--accent));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:4rem;box-shadow:0 20px 50px rgba(0,255,136,0.4);animation:rotate-badge 20s linear infinite;">✓</div>
                 <h2 style="font-family:'Orbitron',sans-serif;font-size:2.5rem;margin-bottom:1.5rem;color:#fff;">100% Money-Back Guarantee</h2>
                 <p style="color:rgba(255,255,255,0.9);font-size:1.2rem;line-height:1.8;max-width:600px;margin:0 auto 2rem;">If you're not completely satisfied with your purchase, we'll refund the item price. Change of mind included - the conditions on this page apply.</p>
-                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:3rem;">
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:2rem;">
                     <div><div style="font-size:2.5rem;font-weight:700;background:linear-gradient(135deg,var(--accent-3),var(--accent));background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:0.5rem;">30</div><div style="color:rgba(255,255,255,0.85);font-size:0.95rem;">Days Return</div></div>
                     <div><div style="font-size:2.5rem;font-weight:700;background:linear-gradient(135deg,var(--accent-3),var(--accent));background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:0.5rem;">TRACKED</div><div style="color:rgba(255,255,255,0.85);font-size:0.95rem;">Returns (you ship, except faulty)</div></div>
                     <div><div style="font-size:2.5rem;font-weight:700;background:linear-gradient(135deg,var(--accent-3),var(--accent));background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:0.5rem;">5-7</div><div style="color:rgba(255,255,255,0.85);font-size:0.95rem;">Days Refund</div></div>
@@ -300,9 +300,9 @@
     </section>
 
     <!-- Exchange Benefits -->
-    <section style="padding:4rem 2rem 6rem;max-width:1200px;margin:0 auto;position:relative;z-index:2;">
+    <section style="padding:2.5rem 2rem 4rem;max-width:1200px;margin:0 auto;position:relative;z-index:2;">
         <h2 style="font-family:'Orbitron',sans-serif;font-size:2rem;text-align:center;margin-bottom:1rem;color:var(--accent);">Why Exchange Instead?</h2>
-        <p style="text-align:center;color:rgba(255,255,255,0.85);margin-bottom:3rem;font-size:1.1rem;">Get your perfect item faster with instant exchanges</p>
+        <p style="text-align:center;color:rgba(255,255,255,0.85);margin-bottom:1.5rem;font-size:1.1rem;">Get your perfect item faster with instant exchanges</p>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:2rem;">
             <div style="background:transparent;border:1px solid var(--glass-border);border-radius:20px;padding:2rem;text-align:center;">
                 <div style="width:80px;height:80px;margin:0 auto 1.5rem;background:linear-gradient(135deg,rgba(0,240,255,0.2),rgba(255,0,170,0.2));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;">⚡</div>
@@ -552,7 +552,7 @@
             const modal = document.createElement('div');
             modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:100000;display:flex;align-items:center;justify-content:center;';
             modal.innerHTML = `
-                <div style="background:linear-gradient(135deg,#0a0a2a,#1a1a40);border:2px solid var(--accent);border-radius:20px;padding:3rem;max-width:500px;width:90%;max-height:90vh;overflow-y:auto;position:relative;">
+                <div style="background:linear-gradient(135deg,#0a0a2a,#1a1a40);border:2px solid var(--accent);border-radius:20px;padding:2rem;max-width:500px;width:90%;max-height:90vh;overflow-y:auto;position:relative;">
                     <button onclick="this.closest('div[style*=position]').remove()" style="position:absolute;top:1rem;right:1rem;background:none;border:none;color:#fff;font-size:2rem;cursor:pointer;">×</button>
                     
                     <div style="text-align:center;margin-bottom:2rem;">
