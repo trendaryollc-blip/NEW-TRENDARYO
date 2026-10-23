@@ -423,97 +423,6 @@
         });
     }
 
-    // Hidden Zone: Hover over specific area to reveal bonus content
-    function initHiddenZones() {
-        const heroSection = document.getElementById('hero');
-        if (!heroSection) return;
-
-        // Create invisible hover zone in top-right corner
-        const hiddenZone = document.createElement('div');
-        hiddenZone.style.cssText = `
-            position: fixed;
-            top: 140px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            cursor: pointer;
-            z-index: 9998;
-        `;
-
-        document.body.appendChild(hiddenZone);
-
-        let hoverCount = 0;
-        hiddenZone.addEventListener('mouseenter', () => {
-            hoverCount++;
-
-            if (hoverCount === 1) {
-                showEasterEggNotification(
-                    'HIDDEN ZONE FOUND!',
-                    'Keep hovering to unlock the secret... 👀',
-                    '🔍'
-                );
-            }
-
-            if (hoverCount === 5) {
-                triggerHiddenZoneEffect();
-                showEasterEggNotification(
-                    'ULTIMATE SECRET UNLOCKED!',
-                    'You found the hidden zone! 🌟',
-                    '⭐'
-                );
-                easterEggs.discovered.push('hiddenZone');
-                easterEggs.totalFound++;
-                hoverCount = 0;
-            }
-        });
-
-        hiddenZone.addEventListener('mouseleave', () => {
-            hoverCount = 0;
-        });
-    }
-
-    // Hidden zone effect: Cosmic burst
-    function triggerHiddenZoneEffect() {
-        if (!window.gsap) return;
-
-        const particleCount = 40;
-        const colors = ['#00f0ff', '#ff00aa', '#00ff88', '#ffaa00'];
-
-        for (let i = 0; i < particleCount; i++) {
-            const angle = (i / particleCount) * Math.PI * 2;
-            const distance = 200 + Math.random() * 100;
-            const vx = Math.cos(angle) * distance;
-            const vy = Math.sin(angle) * distance;
-
-            const particle = document.createElement('div');
-            const color = colors[Math.floor(Math.random() * colors.length)];
-            const size = 3 + Math.random() * 6;
-
-            particle.style.cssText = `
-                position: fixed;
-                left: window.innerWidth - 50px;
-                top: 170px;
-                width: ${size}px;
-                height: ${size}px;
-                border-radius: 50%;
-                background: ${color};
-                pointer-events: none;
-                z-index: 9999;
-                box-shadow: 0 0 ${size * 2}px ${color};
-            `;
-
-            document.body.appendChild(particle);
-
-            window.gsap.to(particle, {
-                x: vx,
-                y: vy,
-                opacity: 0,
-                duration: 1.5 + Math.random() * 0.5,
-                ease: 'power2.out',
-                onComplete: () => particle.remove()
-            });
-        }
-    }
 
     // Micro-interaction: Pod click ripple
     function initPodClickRipple() {
@@ -614,7 +523,6 @@
             initMouseCircleEgg();
             // initTaglineHoverEgg(); — DISABLED: Prevents "You Found Me!" text from appearing on hover
             initPodSequenceEgg();
-            initHiddenZones();
             initPodClickRipple();
             initAchievementSystem();
 
