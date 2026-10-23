@@ -733,82 +733,11 @@
         initPreloader();
         initNewsletter();
         initAnnouncement();
-        initBackButton();
+        
         initFavicon();
     }
 
     /* ── Public API for page-level scripts (homepage add-to-cart feedback) ── */
-    /* ─ Back button — anchored top-left, directly beneath the fixed header ──
-       Standard, conventional placement — it used to float over the bottom-left
-       corner of the page, which read as illogical.        The home page never shows it. */
-    function initBackButton() {
-        if (document.getElementById('tlBackBtn')) return;
-        var path = location.pathname.split('/').pop().toLowerCase();
-        var isHome = (!path || path === 'index.html');
-        if (isHome) return;
-
-        if (!document.getElementById('tlBackFabStyle')) {
-            var styleEl = document.createElement('style');
-            styleEl.id = 'tlBackFabStyle';
-            styleEl.textContent = '.tl-back-fab{position:fixed;top:130px;left:18px;z-index:9000;display:inline-flex;align-items:center;gap:6px;padding:5px 13px 5px 9px;line-height:1;border-radius:999px;background:rgba(10,10,26,0.8);border:1px solid rgba(255,255,255,0.18);color:#fff;font-family:Orbitron,sans-serif;font-size:0.6rem;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;cursor:pointer;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 8px 26px rgba(0,0,0,0.42);transition:transform 0.2s ease,border-color 0.2s ease,background 0.2s ease,box-shadow 0.2s ease;text-decoration:none;}'
-                + '.tl-back-fab:hover{transform:translateX(-2px);border-color:rgba(0,240,255,0.55);background:rgba(0,240,255,0.14);box-shadow:0 10px 30px rgba(0,240,255,0.22);}'
-                + '.tl-back-fab:active{transform:translateX(-1px) scale(0.98);}'
-                + '.tl-back-fab svg{width:14px;height:14px;color:#00f0ff;flex:0 0 14px;}'
-                + '.tl-back-fab:focus-visible{outline:2px solid #00f0ff;outline-offset:2px;}'
-                + '@media(max-width:640px){.tl-back-fab{padding:4px 11px 4px 8px;font-size:0.55rem;letter-spacing:1.2px;}.tl-back-fab svg{width:12px;height:12px;flex:0 0 12px;}}'
-                + '@media print{.tl-back-fab{display:none;}}'
-                + '@media(prefers-reduced-motion:reduce){.tl-back-fab{transition:none;}}';
-            document.head.appendChild(styleEl);
-        }
-
-        var btn = document.createElement('button');
-        btn.id = 'tlBackBtn';
-        btn.type = 'button';
-        btn.className = 'tl-back-fab';
-        btn.setAttribute('aria-label', 'Go back to the previous page');
-        btn.title = 'Back';
-        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg><span>Back</span>';
-
-        btn.addEventListener('click', function () {
-            if (window.history.length > 1) {
-                window.history.back();
-            } else {
-                window.location.href = 'index.html';
-            }
-        });
-
-        /* Keep the button tucked directly under the fixed header, aligned with
-           the header's left content edge so it reads as the page's back control. */
-        function anchorToHeader() {
-            var header = document.getElementById('store-header');
-            var top = 18, left = 18;
-            if (header) {
-                var hRect = header.getBoundingClientRect();
-                if (hRect.height) {
-                    top = Math.round(hRect.height + 5);
-                    var menuOpen = window.innerWidth <= 900 && header.classList.contains('is-open');
-                    btn.style.display = menuOpen ? 'none' : '';
-                    var inner = header.querySelector('.store-header-inner');
-                    if (inner) {
-                        var iRect = inner.getBoundingClientRect();
-                        var padLeft = parseFloat(window.getComputedStyle(inner).paddingLeft) || 0;
-                        if (iRect.width) left = Math.round(iRect.left + padLeft);
-                    }
-                }
-            }
-            btn.style.top = top + 'px';
-            btn.style.left = Math.max(12, left) + 'px';
-        }
-
-        document.body.appendChild(btn);
-        anchorToHeader();
-        window.addEventListener('resize', anchorToHeader);
-        window.addEventListener('load', anchorToHeader);
-        var backHeaderEl = document.getElementById('store-header');
-        if (backHeaderEl && window.ResizeObserver) {
-            try { new ResizeObserver(anchorToHeader).observe(backHeaderEl); } catch (err) { /* unsupported */ }
-        }
-    }
     window.trendaryoToast = showToast;
 
     if (document.readyState === 'loading') {
