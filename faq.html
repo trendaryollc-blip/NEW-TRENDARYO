@@ -27,7 +27,7 @@
     <link rel="stylesheet" href="shared.css">
     <link rel="stylesheet" href="styles.css">
     <script src="performance.js"></script>
-    <script src="bg.js"></script>
+    <script src="bg.js" defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root { --accent: #00f0ff; --accent-2: #ff00aa; --accent-3: #00ff88; --glass: rgba(255,255,255,0.05); --glass-border: rgba(255,255,255,0.1); }
@@ -106,7 +106,7 @@
   "url": "https://trendaryo.com/faq"
 }
 </script>
-<script src="bg.js"></script>
+<script src="bg.js" defer></script>
 </head>
 <body>
     <script src="components.js"></script>
@@ -236,8 +236,8 @@ window.onerror = function(msg, url, lineNo, columnNo, error) {
     <script>
         // Preloader: failsafe ensures it always hides
         function hidePreloader() { var p = document.getElementById('preloader'); if (p) p.classList.add('hidden'); }
-        if (document.readyState === 'complete') { setTimeout(hidePreloader, 800); }
-        else { window.addEventListener('load', function () { setTimeout(hidePreloader, 800); }); }
+        if (document.readyState === 'complete') { setTimeout(hidePreloader, 0); }
+        else { window.addEventListener('load', function () { setTimeout(hidePreloader, 0); }); }
         setTimeout(hidePreloader, 2000);
     </script>
 </body>

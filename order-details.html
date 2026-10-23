@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="shared.css">
     <link rel="stylesheet" href="styles.css">
     <script src="performance.js"></script>
-    <script src="bg.js"></script>
+    <script src="bg.js" defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -197,8 +197,8 @@
     </script>
     <script>
         function hidePreloader() { var p = document.getElementById('preloader'); if (p) p.classList.add('hidden'); }
-        if (document.readyState === 'complete') { setTimeout(hidePreloader, 600); } else { window.addEventListener('load', function () { setTimeout(hidePreloader, 600); }); }
-        setTimeout(hidePreloader, 1500);
+        if (document.readyState === 'complete') { setTimeout(hidePreloader, 0); } else { window.addEventListener('load', function () { setTimeout(hidePreloader, 0); }); }
+        setTimeout(hidePreloader, 0);
     </script>
 </body>
 </html>

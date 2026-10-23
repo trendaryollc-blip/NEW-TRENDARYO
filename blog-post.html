@@ -317,9 +317,9 @@ body{font-family:'Rajdhani',sans-serif;background:transparent;color:#fff;min-hei
 </script>
 <script>
     function hidePreloader() { var p = document.getElementById('preloader'); if (p) p.classList.add('hidden'); }
-    if (document.readyState === 'complete') { setTimeout(hidePreloader, 600); }
-    else { window.addEventListener('load', function () { setTimeout(hidePreloader, 600); }); }
-    setTimeout(hidePreloader, 1500);
+    if (document.readyState === 'complete') { setTimeout(hidePreloader, 0); }
+    else { window.addEventListener('load', function () { setTimeout(hidePreloader, 0); }); }
+    setTimeout(hidePreloader, 0);
 </script>
 </body>
 </html>

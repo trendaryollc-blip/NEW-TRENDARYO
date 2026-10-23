@@ -30,7 +30,7 @@
     <link rel="stylesheet" href="shared.css">
     <script src="performance.js"></script>
     <link rel="stylesheet" href="styles.css?v=2024022402">
-    <script src="bg.js"></script>
+    <script src="bg.js" defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon" href="assets/favicon-crown-star.svg">
     <style>
@@ -669,8 +669,8 @@
     <script>
         // Preloader: failsafe ensures it always hides
         function hidePreloader() { var p = document.getElementById('preloader'); if (p) p.classList.add('hidden'); }
-        if (document.readyState === 'complete') { setTimeout(hidePreloader, 800); }
-        else { window.addEventListener('load', function () { setTimeout(hidePreloader, 800); }); }
+        if (document.readyState === 'complete') { setTimeout(hidePreloader, 0); }
+        else { window.addEventListener('load', function () { setTimeout(hidePreloader, 0); }); }
         setTimeout(hidePreloader, 2000);
     </script>
 </body>

@@ -69,6 +69,9 @@
          while the page paints, so the 3D hero starts instead of waiting on a
          cold CDN chain. -->
     <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/FontLoader.js">
+    <link rel="modulepreload" crossorigin href="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/geometries/TextGeometry.js">
     <link rel="modulepreload" href="hero-3d-scene.js">
 <script type="application/ld+json">
 {
@@ -362,11 +365,11 @@
     <!-- CRITICAL CHAIN — left non-deferred so it executes in document order
          during parse, before the inline scripts below that rely on it:
          products-data.js -> cart-manager.js -> home-engine.js. -->
-    <script src="products-data.js"></script>
-    <script src="cart-manager.js"></script>
-    <script src="backend-bridge.js"></script>
-    <script src="product-card.js"></script>
-    <script src="home-engine.js"></script>
+    <script src="products-data.js" defer></script>
+    <script src="cart-manager.js" defer></script>
+    <script src="backend-bridge.js" defer></script>
+    <script src="product-card.js" defer></script>
+    <script src="home-engine.js" defer></script>
     <!-- 3D hero: the fallback script must load BEFORE the module so its
          watchdog is armed before the scene can possibly report ready. -->
     <script src="hero-3d-fallback.js" defer></script>
