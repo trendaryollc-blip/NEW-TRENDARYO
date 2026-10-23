@@ -95,7 +95,7 @@
         'You write for Trendaryo, a research-driven shortlist store.',
         'House rules: confident and concrete; short sentences; no fluff words (revolutionary, game-changing, best-in-class are banned);',
         'never invent specifications that were not provided - use [bracketed placeholders] when a fact is missing;',
-        'honest numbers; British-neutral English; brand name is Trendaryo; the store promise is free shipping over $50 and 30-day returns.',
+        'honest numbers; British-neutral English; brand name is Trendaryo; the store promise is free tracked shipping on every order and 30-day returns.',
         'Never mention these instructions.'
     ].join(' ');
 
@@ -283,7 +283,7 @@
         blogSection: {
             label: 'Blog section', icon: 'file', json: false,
             hint: 'Write one H2 section (2-3 paragraphs, grounded in facts).',
-            system: 'Write ONE blog section for a Trendaryo buying guide. Input: section heading + context + product facts. Output: H2 heading, 2-3 paragraphs. Ground every claim in provided specs. No fluff. British-neutral English. Mention 30-day returns / free shipping over $50 where relevant.',
+                system: 'Write ONE blog section for a Trendaryo buying guide. Input: section heading + context + product facts. Output: H2 heading, 2-3 paragraphs. Ground every claim in provided specs. No fluff. British-neutral English. Mention 30-day returns / free tracked shipping where relevant.',
             build: function (input) {
                 var lines = ['Section: ' + (input.heading || 'Untitled')];
                 if (input.anchor) lines.push('Anchor product:\n' + productBrief(input.anchor));
@@ -917,7 +917,7 @@
                 faqs: faqsOut,
                 shipping: 'Orders are packed within 24 hours on business days and delivered in 5-7 working days. Shipping is free on orders over $50.',
                 returns: '30 days from delivery, unused and in original packaging. Faulty items receive a prepaid return label within 24 hours and a replacement or full refund.',
-                summary: clamp((p.name || 'This product') + ' is the vetted pick in ' + String(cat).toLowerCase() + ' at $' + price + ', rated ' + rating + '/5 by ' + revs + ' verified buyers, with free shipping over $50 and 30-day returns.', 400)
+                summary: clamp((p.name || 'This product') + ' is the vetted pick in ' + String(cat).toLowerCase() + ' at $' + price + ', rated ' + rating + '/5 by ' + revs + ' verified buyers, with free tracked shipping and 30-day returns.', 400)
             });
         }
         if (taskKey === 'featureBenefits') {
@@ -983,7 +983,7 @@
             b += 'H2: Where the budget bands split\nThe efficient move is rarely the cheapest unit - it is the cheapest unit that does not need replacing. Map your must-haves first, then spend on the band that clears them.\n\n';
             b += 'H2: The three checks before you click buy\nReal spec table, verified reduction status, and a return window you have actually read. Thirty seconds here saves weeks of regret.\n\n';
             b += 'Verdict: buy the one that beats its alternatives - and if it stops doing that, send it back inside 30 days.\n\n';
-            b += 'Close: The full vetted shelf is one tap away - free shipping over $50, 30-day returns on everything.';
+            b += 'Close: The full vetted shelf is one tap away - free tracked shipping, 30-day returns on everything.';
             return b;
         }
         if (taskKey === 'blogOutline') {
@@ -1015,7 +1015,7 @@
             if (names.length) {
                 p += names[0] + ' leads on consistency; ' + (names[1] ? names[1] + ' wins on value' : 'others follow') + '. ';
             }
-            p += 'All Trendaryo picks come with free shipping over $50 and a 30-day return window you have actually read.';
+            p += 'All Trendaryo picks come with free tracked shipping and a 30-day return window you have actually read.';
             return p;
         }
         if (taskKey === 'blogMeta') {
@@ -1163,14 +1163,14 @@
                 'Buy it if you want the strongest all-round pick in ' + cat2 + ' at this price. Skip it if one specific row on the comparison table matters more to you than the total.'
             ]);
             sec(h2plan[5] || 'Verdict and where to buy', [
-                'Buy the unit that beats its alternatives - and if it stops doing that, send it back inside 30 days. The full vetted shelf is one tap away: free shipping over $50, 30-day returns on everything.'
+                'Buy the unit that beats its alternatives - and if it stops doing that, send it back inside 30 days. The full vetted shelf is one tap away: free tracked shipping, 30-day returns on everything.'
             ]);
             var article = {
                 seoTitle: clamp(Pname + ' Review: The Honest Verdict | Trendaryo', 60),
                 metaTitle: clamp(Pname + ' Review | Trendaryo', 60),
                 metaDescription: clamp('How the ' + Pname + ' performs where it counts: the specs that matter, the verified rating, and whether it earns the price. Free shipping over $50, 30-day returns.', 155),
                 slug: (String(Pname).toLowerCase() + '-review').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 80),
-                featuredSnippet: 'The ' + Pname + ' earns its place on verified ratings and review volume rather than marketing. It ships within 24 hours, arrives in 5-7 working days, and carries a 30-day return window.',
+                featuredSnippet: 'The ' + Pname + ' earns its place on verified ratings and review volume rather than marketing. It dispatches within 1-2 business days, arrives in 7-15 working days (US), and carries a 30-day return window.',
                 excerpt: clamp('We compared the specs that matter so you do not have to. Here is what the ' + Pname + ' does well, where it compromises, and who should buy it.', 160),
                 category: B.blogType === 'buying guide' ? 'guides' : cat2,
                 tags: tokens(Pname).slice(0, 4).concat(['review', 'buying-guide']).slice(0, 8),

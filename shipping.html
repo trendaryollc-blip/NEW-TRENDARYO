@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shipping Information - Trendaryo | Rates & Delivery Times</title>
-    <meta name="description" content="Flat-rate shipping on all orders. Fast delivery worldwide with real-time tracking. Learn about standard, express and overnight shipping options.">
-    <meta name="keywords" content="shipping, delivery, tracking, express shipping, international shipping">
+    <title>Shipping Information - Trendaryo | Free Worldwide Delivery</title>
+    <meta name="description" content="Free tracked shipping on every Trendaryo order. Arrives in 7–15 business days to the US and 10–20 business days worldwide. Real delivery windows, no hidden fees.">
+    <meta name="keywords" content="shipping, delivery, tracking, free shipping, international shipping, delivery times">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://trendaryo.com/shipping">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://trendaryo.com/shipping">
     <meta property="og:title" content="Shipping Information - Trendaryo">
-    <meta property="og:description" content="Flat-rate shipping, worldwide delivery, real-time tracking.">
+    <meta property="og:description" content="Free tracked shipping worldwide. Honest delivery windows: 7–15 days US, 10–20 days international.">
     <meta property="og:image" content="https://trendaryo.com/assets/trendaryo-crown-star-logo.svg">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Shipping Information - Trendaryo">
-    <meta name="twitter:description" content="Flat-rate shipping, worldwide delivery, real-time tracking.">
+    <meta name="twitter:description" content="Free tracked shipping worldwide. Honest delivery windows.">
     <link rel="icon" type="image/svg+xml" href="assets/favicon-crown-star.svg">
     <link rel="stylesheet" href="responsive-universal.css">
     <link rel="stylesheet" href="shared.css">
@@ -53,6 +53,7 @@
         .ship-hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.9rem; border-radius: var(--r-pill); background: rgba(0,255,136,0.08); border: 1px solid rgba(0,255,136,0.3); font-family: var(--font-d); font-size: 0.6rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-3); margin-bottom: 0.8rem; }
         .ship-hero h1 { font-family: var(--font-d); font-weight: 900; font-size: clamp(1.8rem, 4.5vw, 3.2rem); line-height: 1.05; margin: 0.6rem 0; background: linear-gradient(120deg, #fff 8%, var(--accent) 50%, var(--accent-3) 90%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
         .ship-hero p { color: var(--muted); font-size: 1.05rem; line-height: 1.65; max-width: 55ch; margin: 0 auto; }
+        .ship-hero-updated { margin-top: 1rem; font-size: 0.85rem; color: rgba(255,255,255,0.55); }
 
         /* -- Stats -- */
         .ship-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.85rem; margin-bottom: 2.5rem; }
@@ -60,58 +61,46 @@
         .ship-stat::after { content: ''; position: absolute; inset: 0 0 auto 0; height: 2px; background: transparent; }
         .ship-stat:nth-child(2n)::after { background: linear-gradient(90deg, var(--accent-2), rgba(255,0,170,0)); }
         .ship-stat:nth-child(3n)::after { background: linear-gradient(90deg, var(--accent-3), rgba(0,255,136,0)); }
-        .ship-stat-val { font-family: var(--font-d); font-size: 1.4rem; font-weight: 900; }
+        .ship-stat-val { font-family: var(--font-d); font-size: 1.4rem; font-weight: 900; color: var(--accent-3); }
         .ship-stat-lab { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1.4px; color: var(--muted-2); margin-top: 0.15rem; }
 
         /* -- Section Heads -- */
         .ship-section { margin: 2rem 0; }
         .ship-section-head { margin-bottom: 1.5rem; }
         .ship-kicker { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--font-d); font-size: 0.62rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 0.4rem; }
-        .ship-kicker::before { content: ''; width: 20px; height: 1px; background: transparent; }
         .ship-title { font-family: var(--font-d); font-size: clamp(1.2rem, 2.5vw, 1.7rem); font-weight: 900; background: linear-gradient(135deg, #fff 15%, var(--accent) 60%, var(--accent-2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
         .ship-sub { color: var(--muted); font-size: 0.97rem; line-height: 1.6; margin-top: 0.4rem; max-width: 60ch; }
 
-        /* -- Options Grid -- */
-        .ship-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
-        .ship-opt { position: relative; padding: 2rem 1.5rem; border-radius: var(--r-lg); background: var(--card-grad); border: 1px solid var(--glass-border); overflow: hidden; transition: transform 0.35s var(--ease), border-color 0.35s ease, box-shadow 0.35s ease; }
-        .ship-opt:hover { transform: translateY(-5px); border-color: rgba(0,240,255,0.4); box-shadow: 0 16px 40px rgba(0,0,0,0.35); }
-        .ship-opt-icon { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1rem; border: 2px solid var(--accent); background: linear-gradient(135deg, rgba(0,240,255,0.15), rgba(255,0,170,0.15)); }
-        .ship-opt-name { font-family: var(--font-d); font-size: 1.05rem; font-weight: 800; color: var(--accent); margin-bottom: 0.3rem; }
-        .ship-opt-price { font-family: var(--font-d); font-size: 1.8rem; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.2rem; }
-        .ship-opt-time { color: var(--muted); font-size: 0.95rem; margin-bottom: 1rem; }
-        .ship-opt-list { list-style: none; }
-        .ship-opt-list li { padding: 0.4rem 0; color: rgba(255,255,255,0.8); font-size: 0.92rem; position: relative; padding-left: 1.3rem; }
-        .ship-opt-list li::before { content: '?'; position: absolute; left: 0; color: var(--accent-3); font-weight: 700; }
-        .ship-opt-popular { position: absolute; top: 14px; right: 14px; padding: 0.25rem 0.6rem; border-radius: var(--r-pill); background: rgba(0,240,255,0.15); border: 1px solid rgba(0,240,255,0.3); font-family: var(--font-d); font-size: 0.55rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); }
+        /* -- Window Cards -- */
+        .ship-windows { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
+        .ship-win { position: relative; padding: 2rem 1.5rem; border-radius: var(--r-lg); background: var(--card-grad); border: 1px solid var(--glass-border); overflow: hidden; transition: transform 0.35s var(--ease), border-color 0.35s ease, box-shadow 0.35s ease; }
+        .ship-win:hover { transform: translateY(-5px); border-color: rgba(0,240,255,0.4); box-shadow: 0 16px 40px rgba(0,0,0,0.35); }
+        .ship-win-icon { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1rem; border: 2px solid var(--accent-3); background: linear-gradient(135deg, rgba(0,255,136,0.15), rgba(0,240,255,0.15)); }
+        .ship-win-name { font-family: var(--font-d); font-size: 1.05rem; font-weight: 800; color: var(--accent); margin-bottom: 0.3rem; }
+        .ship-win-price { font-family: var(--font-d); font-size: 1.8rem; font-weight: 900; background: linear-gradient(135deg, var(--accent-3), var(--accent)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.2rem; }
+        .ship-win-time { color: var(--muted); font-size: 0.95rem; margin-bottom: 1rem; }
+        .ship-win-list { list-style: none; }
+        .ship-win-list li { padding: 0.4rem 0; color: rgba(255,255,255,0.8); font-size: 0.92rem; position: relative; padding-left: 1.3rem; }
+        .ship-win-list li::before { content: '✓'; position: absolute; left: 0; color: var(--accent-3); font-weight: 700; }
 
-        /* -- Calculator -- */
-        .ship-calc { padding: 2rem; border-radius: var(--r-lg); background: var(--card-grad); border: 1px solid var(--glass-border); }
-        .ship-calc-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
-        .ship-calc-group { display: flex; flex-direction: column; gap: 0.4rem; }
-        .ship-calc-label { font-family: var(--font-d); font-size: 0.62rem; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--muted-2); }
-        .ship-calc-input, .ship-calc-select { padding: 0.75rem 0.9rem; border-radius: var(--r-md); border: 1px solid var(--glass-border-2); background: rgba(255,255,255,0.05); color: #fff; font-family: var(--font-b); font-size: 0.95rem; outline: none; transition: border-color 0.25s, box-shadow 0.25s; }
-        .ship-calc-input:focus, .ship-calc-select:focus { border-color: rgba(0,240,255,0.6); box-shadow: 0 0 18px rgba(0,240,255,0.12); }
-        .ship-calc-input::placeholder { color: var(--muted-2); }
-        .ship-calc-select option { background: #0a0a2a; color: #fff; }
-        .ship-calc-methods { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.2rem; }
-        .ship-calc-radio { display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem 1rem; border-radius: var(--r-md); border: 1px solid transparent; background: rgba(0,0,0,0.2); cursor: pointer; transition: all 0.22s ease; }
-        .ship-calc-radio:hover { background: rgba(0,240,255,0.04); border-color: rgba(0,240,255,0.15); }
-        .ship-calc-radio input[type="radio"] { accent-color: var(--accent); width: 16px; height: 16px; }
-        .ship-calc-radio-text { flex: 1; }
-        .ship-calc-radio-title { font-weight: 700; font-size: 0.92rem; }
-        .ship-calc-radio-sub { font-size: 0.8rem; color: var(--muted-2); }
-        .ship-calc-radio-price { font-family: var(--font-d); font-weight: 800; color: var(--accent); font-size: 0.85rem; }
-        .ship-calc-btn { width: 100%; padding: 0.85rem; border: 0; border-radius: var(--r-md); background: linear-gradient(135deg, var(--accent), var(--accent-3)); color: #00202a; font-family: var(--font-d); font-size: 0.72rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.25s ease; }
-        .ship-calc-btn:hover { box-shadow: 0 0 20px rgba(0,240,255,0.4); transform: translateY(-1px); }
-        .ship-calc-result { margin-top: 1.2rem; padding: 1.25rem; border-radius: var(--r-md); background: rgba(0,240,255,0.06); border: 1px solid rgba(0,240,255,0.2); display: none; }
-        .ship-calc-result.is-open { display: block; }
-        .ship-calc-result-row { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.92rem; }
-        .ship-calc-result-row:last-child { border-bottom: none; }
-        .ship-calc-result-label { color: var(--muted); }
-        .ship-calc-result-val { font-weight: 700; }
-        .ship-calc-result-val--accent { color: var(--accent); }
-        .ship-calc-result-val--green { color: var(--accent-3); }
-        .ship-calc-result-total { margin-top: 0.5rem; padding: 0.7rem 1rem; border-radius: var(--r-sm); background: rgba(0,255,136,0.1); display: flex; justify-content: space-between; font-weight: 700; }
+        /* -- Estimator -- */
+        .ship-est { padding: 2rem; border-radius: var(--r-lg); background: var(--card-grad); border: 1px solid var(--glass-border); }
+        .ship-est-row { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 1rem; }
+        .ship-est-group { display: flex; flex-direction: column; gap: 0.4rem; }
+        .ship-est-label { font-family: var(--font-d); font-size: 0.62rem; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--muted-2); }
+        .ship-est-select { padding: 0.75rem 0.9rem; border-radius: var(--r-md); border: 1px solid var(--glass-border-2); background: rgba(255,255,255,0.05); color: #fff; font-family: var(--font-b); font-size: 0.95rem; outline: none; transition: border-color 0.25s, box-shadow 0.25s; }
+        .ship-est-select:focus { border-color: rgba(0,240,255,0.6); box-shadow: 0 0 18px rgba(0,240,255,0.12); }
+        .ship-est-select option { background: #0a0a2a; color: #fff; }
+        .ship-est-btn { width: 100%; padding: 0.85rem; border: 0; border-radius: var(--r-md); background: linear-gradient(135deg, var(--accent), var(--accent-3)); color: #00202a; font-family: var(--font-d); font-size: 0.72rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.25s ease; }
+        .ship-est-btn:hover { box-shadow: 0 0 20px rgba(0,240,255,0.4); transform: translateY(-1px); }
+        .ship-est-result { margin-top: 1.2rem; padding: 1.25rem; border-radius: var(--r-md); background: rgba(0,255,136,0.06); border: 1px solid rgba(0,255,136,0.2); display: none; }
+        .ship-est-result.is-open { display: block; }
+        .ship-est-result-row { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.92rem; }
+        .ship-est-result-row:last-child { border-bottom: none; }
+        .ship-est-result-label { color: var(--muted); }
+        .ship-est-result-val { font-weight: 700; }
+        .ship-est-result-val--green { color: var(--accent-3); }
+        .ship-est-note { margin-top: 0.75rem; font-size: 0.82rem; color: var(--muted-2); line-height: 1.5; }
 
         /* -- Info Cards -- */
         .ship-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem; }
@@ -122,16 +111,8 @@
         .ship-info-card p, .ship-info-card li { color: var(--muted); font-size: 0.92rem; line-height: 1.65; }
         .ship-info-card ul { list-style: none; }
         .ship-info-card li { padding: 0.35rem 0; position: relative; padding-left: 1.2rem; }
-        .ship-info-card li::before { content: '?'; position: absolute; left: 0; color: var(--accent); }
+        .ship-info-card li::before { content: '✓'; position: absolute; left: 0; color: var(--accent); }
         .ship-info-card a { color: var(--accent); }
-
-        /* -- Zones Table -- */
-        .ship-zones { overflow-x: auto; border-radius: var(--r-lg); border: 1px solid var(--glass-border); background: var(--card-grad); }
-        .ship-zones table { width: 100%; border-collapse: collapse; min-width: 600px; }
-        .ship-zones th, .ship-zones td { padding: 0.8rem 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; }
-        .ship-zones th { background: rgba(255,255,255,0.04); font-family: var(--font-d); font-size: 0.65rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted-2); }
-        .ship-zones tr:hover td { background: rgba(0,240,255,0.02); }
-        .ship-zones .free { color: var(--accent-3); font-weight: 700; }
 
         /* -- Help Grid -- */
         .ship-help-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
@@ -144,7 +125,7 @@
 
         /* -- FAQ -- */
         .ship-faq { margin: 2rem 0; }
-        .ship-faq h2 { font-family: var(--font-d); font-size: 1.1rem; font-weight: 900; margin-bottom: 1.2rem; background: transparent; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .ship-faq h2 { font-family: var(--font-d); font-size: 1.1rem; font-weight: 900; margin-bottom: 1.2rem; }
 
         /* -- Note -- */
         .ship-note { margin-top: 2rem; padding: 1rem 1.25rem; border-radius: var(--r-md); border: 1px dashed rgba(0,240,255,0.3); background: rgba(0,240,255,0.03); color: rgba(255,255,255,0.8); font-size: 0.9rem; line-height: 1.6; }
@@ -155,12 +136,11 @@
             .page-offset { padding-top: 130px; }
             .ship-shell { padding: 0 1.5rem; }
             .ship-hero { padding: 2rem 1.25rem 1.75rem; }
-            .ship-calc-row { grid-template-columns: 1fr; }
         }
         @media (max-width: 600px) {
             .ship-shell { padding: 0 1rem; }
             .ship-stats { grid-template-columns: repeat(2, 1fr); }
-            .ship-options { grid-template-columns: 1fr; }
+            .ship-windows { grid-template-columns: 1fr; }
         }
         @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
         ::-webkit-scrollbar { width: 8px; }
@@ -180,133 +160,97 @@
                 <div class="ship-hero-neb ship-hero-neb-1"></div>
                 <div class="ship-hero-neb ship-hero-neb-2"></div>
                 <div class="ship-hero-inner">
-                    <div class="ship-hero-badge">?? Flat-rate shipping on every order</div>
-                    <h1>Fast & Reliable Delivery</h1>
-                    <p>Shop with confidence. Every order ships with tracking, insurance and a delivery estimate you can count on.</p>
-                    <p style="margin-top:1rem;font-size:0.85rem;color:rgba(255,255,255,0.55);">Last updated: 7 October 2026</p>
+                    <div class="ship-hero-badge">✓ Free tracked shipping on every order</div>
+                    <h1>Free Worldwide Shipping</h1>
+                    <p>No shipping fees, no surprises at checkout. Every order ships tracked and insured — you see the full price before you pay.</p>
+                    <p class="ship-hero-updated">Last updated: 18 October 2026</p>
                 </div>
             </section>
 
             <!-- STATS -->
             <div class="ship-stats">
-                <div class="ship-stat"><div class="ship-stat-val">$4.99</div><div class="ship-stat-lab">US standard shipping</div></div>
-                <div class="ship-stat"><div class="ship-stat-val">2�3 days</div><div class="ship-stat-lab">Express delivery</div></div>
-                <div class="ship-stat"><div class="ship-stat-val">50+</div><div class="ship-stat-lab">Countries served</div></div>
-                <div class="ship-stat"><div class="ship-stat-val">24h</div><div class="ship-stat-lab">Same-day dispatch</div></div>
+                <div class="ship-stat"><div class="ship-stat-val">FREE</div><div class="ship-stat-lab">Every order, every country</div></div>
+                <div class="ship-stat"><div class="ship-stat-val">7–15 days</div><div class="ship-stat-lab">To the United States</div></div>
+                <div class="ship-stat"><div class="ship-stat-val">10–20 days</div><div class="ship-stat-lab">Worldwide delivery</div></div>
+                <div class="ship-stat"><div class="ship-stat-val">24–48h</div><div class="ship-stat-lab">Order processing</div></div>
             </div>
 
-            <!-- SHIPPING OPTIONS -->
+            <!-- DELIVERY WINDOWS -->
             <section class="ship-section">
                 <div class="ship-section-head">
-                    <div class="ship-kicker">Choose your speed</div>
-                    <h2 class="ship-title">Shipping Options</h2>
-                    <p class="ship-sub">Pick the delivery window that fits your schedule. All options include tracking and insurance.</p>
+                    <div class="ship-kicker">Honest timeframes</div>
+                    <h2 class="ship-title">Delivery Windows</h2>
+                    <p class="ship-sub">We ship from international fulfillment partners. Transit times depend on destination — these are realistic windows, not marketing guesses.</p>
                 </div>
-                <div class="ship-options">
-                    <div class="ship-opt">
-                        <div class="ship-opt-icon">??</div>
-                        <div class="ship-opt-name">Standard</div>
-                        <div class="ship-opt-price">$4.99</div>
-                        <div class="ship-opt-time">5�7 business days</div>
-                        <ul class="ship-opt-list">
-                            <li>Flat rate, no minimum spend</li>
-                            <li>Tracking included</li>
-                            <li>Full insurance coverage</li>
-                            <li>Dispatch within 24 hours</li>
+                <div class="ship-windows">
+                    <div class="ship-win">
+                        <div class="ship-win-icon">🇺🇸</div>
+                        <div class="ship-win-name">United States</div>
+                        <div class="ship-win-price">FREE</div>
+                        <div class="ship-win-time">7–15 business days after dispatch</div>
+                        <ul class="ship-win-list">
+                            <li>Tracking on every parcel</li>
+                            <li>Insurance included at no extra cost</li>
+                            <li>Signature on orders over $200</li>
+                            <li>Processing in 24–48 business hours</li>
                         </ul>
                     </div>
-                    <div class="ship-opt" style="border-color:rgba(0,240,255,0.3);">
-                        <span class="ship-opt-popular">Most popular</span>
-                        <div class="ship-opt-icon">?</div>
-                        <div class="ship-opt-name">Express</div>
-                        <div class="ship-opt-price">$14.99</div>
-                        <div class="ship-opt-time">2�3 business days</div>
-                        <ul class="ship-opt-list">
-                            <li>Priority processing</li>
-                            <li>Real-time tracking updates</li>
-                            <li>Full insurance coverage</li>
-                            <li>Priority handling where available</li>
-                        </ul>
-                    </div>
-                    <div class="ship-opt">
-                        <div class="ship-opt-icon">??</div>
-                        <div class="ship-opt-name">Overnight</div>
-                        <div class="ship-opt-price">$29.99</div>
-                        <div class="ship-opt-time">Next business day</div>
-                        <ul class="ship-opt-list">
-                            <li>Priority handling where the checkout offers it</li>
-                            <li>Live tracking with SMS alerts</li>
-                            <li>Premium insurance included</li>
-                            <li>Signature on delivery</li>
+                    <div class="ship-win" style="border-color:rgba(0,255,136,0.3);">
+                        <div class="ship-win-icon">🌍</div>
+                        <div class="ship-win-name">International</div>
+                        <div class="ship-win-price">FREE</div>
+                        <div class="ship-win-time">10–20 business days after dispatch</div>
+                        <ul class="ship-win-list">
+                            <li>Ships to 50+ countries</li>
+                            <li>Full tracking until delivery</li>
+                            <li>Customs duties may apply (buyer's responsibility)</li>
+                            <li>Some orders arrive in separate parcels</li>
                         </ul>
                     </div>
                 </div>
             </section>
 
-            <!-- CALCULATOR -->
+            <!-- ESTIMATOR -->
             <section class="ship-section">
                 <div class="ship-section-head">
-                    <div class="ship-kicker">Get a quote</div>
-                    <h2 class="ship-title">Shipping Calculator</h2>
-                    <p class="ship-sub">Enter your location and order value for an instant estimate.</p>
+                    <div class="ship-kicker">Plan ahead</div>
+                    <h2 class="ship-title">Delivery Time Estimator</h2>
+                    <p class="ship-sub">Pick your country to see the expected delivery window. Shipping is always free — this only shows timing.</p>
                 </div>
-                <div class="ship-calc">
-                    <div class="ship-calc-row">
-                        <div class="ship-calc-group">
-                            <label class="ship-calc-label" for="shipCountry">Country</label>
-                            <select id="shipCountry" class="ship-calc-select">
+                <div class="ship-est">
+                    <div class="ship-est-row">
+                        <div class="ship-est-group">
+                            <label class="ship-est-label" for="shipCountry">Destination country</label>
+                            <select id="shipCountry" class="ship-est-select">
                                 <option value="US">United States</option>
                                 <option value="CA">Canada</option>
-                                <option value="UK">United Kingdom</option>
-                                <option value="AU">Australia</option>
+                                <option value="MX">Mexico</option>
+                                <option value="GB">United Kingdom</option>
                                 <option value="DE">Germany</option>
                                 <option value="FR">France</option>
+                                <option value="ES">Spain</option>
+                                <option value="IT">Italy</option>
+                                <option value="NL">Netherlands</option>
+                                <option value="AU">Australia</option>
+                                <option value="NZ">New Zealand</option>
                                 <option value="JP">Japan</option>
+                                <option value="SG">Singapore</option>
                                 <option value="AE">United Arab Emirates</option>
                                 <option value="SA">Saudi Arabia</option>
+                                <option value="QA">Qatar</option>
                                 <option value="OM">Oman</option>
-                                <option value="OTHER">Other</option>
+                                <option value="KW">Kuwait</option>
+                                <option value="IN">India</option>
+                                <option value="OTHER">Other / rest of world</option>
                             </select>
                         </div>
-                        <div class="ship-calc-group">
-                            <label class="ship-calc-label" for="shipValue">Order Value ($)</label>
-                            <input type="number" id="shipValue" class="ship-calc-input" placeholder="0.00" min="0" step="0.01">
-                        </div>
                     </div>
-                    <label class="ship-calc-label" style="margin-bottom:0.6rem;display:block;">Shipping Method</label>
-                    <div class="ship-calc-methods">
-                        <label class="ship-calc-radio"><input type="radio" name="shipMethod" value="standard" checked><div class="ship-calc-radio-text"><div class="ship-calc-radio-title">Standard Shipping</div><div class="ship-calc-radio-sub">5�7 business days</div></div><div class="ship-calc-radio-price">$4.99+</div></label>
-                        <label class="ship-calc-radio"><input type="radio" name="shipMethod" value="express"><div class="ship-calc-radio-text"><div class="ship-calc-radio-title">Express Shipping</div><div class="ship-calc-radio-sub">2�3 business days</div></div><div class="ship-calc-radio-price">$14.99</div></label>
-                        <label class="ship-calc-radio"><input type="radio" name="shipMethod" value="overnight"><div class="ship-calc-radio-text"><div class="ship-calc-radio-title">Overnight Shipping</div><div class="ship-calc-radio-sub">Next business day</div></div><div class="ship-calc-radio-price">$29.99</div></label>
-                    </div>
-                    <button type="button" class="ship-calc-btn" id="shipCalcBtn">Calculate Shipping</button>
-                    <div class="ship-calc-result" id="shipCalcResult"></div>
+                    <button type="button" class="ship-est-btn" id="shipEstBtn">Show Delivery Window</button>
+                    <div class="ship-est-result" id="shipEstResult"></div>
                 </div>
             </section>
 
-            <!-- ZONES TABLE -->
-            <section class="ship-section">
-                <div class="ship-section-head">
-                    <div class="ship-kicker">By region</div>
-                    <h2 class="ship-title">Shipping Zones & Rates</h2>
-                    <p class="ship-sub">Standard shipping costs by region. Express and overnight are flat-rate add-ons.</p>
-                </div>
-                <div class="ship-zones">
-                    <table>
-                        <thead><tr><th>Region</th><th>Countries</th><th>Standard</th><th>Express</th><th>Overnight</th></tr></thead>
-                        <tbody>
-                            <tr><td>Domestic</td><td>United States</td><td>$4.99</td><td>$14.99</td><td>$29.99</td></tr>
-                            <tr><td>North America</td><td>Canada, Mexico</td><td>$9.99</td><td>$24.99</td><td>$49.99</td></tr>
-                            <tr><td>Europe</td><td>UK, Germany, France, Spain, Italy�</td><td>$12.99</td><td>$34.99</td><td>$59.99</td></tr>
-                            <tr><td>Middle East</td><td>UAE, Saudi Arabia, Oman, Qatar�</td><td>$12.99</td><td>$29.99</td><td>$54.99</td></tr>
-                            <tr><td>Asia-Pacific</td><td>Japan, Australia, Singapore, India�</td><td>$14.99</td><td>$34.99</td><td>$59.99</td></tr>
-                            <tr><td>Rest of World</td><td>50+ other countries</td><td>$19.99</td><td>$39.99</td><td>Quote on request</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-            <!-- INFO CARDS -->
+            <!-- POLICIES -->
             <section class="ship-section">
                 <div class="ship-section-head">
                     <div class="ship-kicker">Know before you order</div>
@@ -314,29 +258,41 @@
                 </div>
                 <div class="ship-info-grid">
                     <div class="ship-info-card">
-                        <h3><span>??</span> International Shipping</h3>
-                        <p>We ship to over 50 countries worldwide. International orders may be subject to customs duties and taxes, which are the buyer's responsibility. Tracking is available for every international shipment.</p>
+                        <h3><span>📦</span> Free Shipping, Always</h3>
+                        <p>Shipping cost is included in every product price. What you see on the product page is what you pay (plus tax where applicable). No minimum spend, no promo code needed.</p>
                     </div>
                     <div class="ship-info-card">
-                        <h3><span>??</span> Dispatch Times</h3>
+                        <h3><span>⏱️</span> Processing Times</h3>
                         <ul>
-                            <li>Orders placed before 3 PM are processed the same business day</li>
-                            <li>Handover to the carrier within 1-3 business days</li>
-                            <li>Weekend orders are processed Monday</li>
-                            <li>Express orders get priority processing</li>
+                            <li>Orders are placed with our fulfillment partner within 24–48 business hours</li>
+                            <li>Weekend orders start processing Monday</li>
+                            <li>Tracking activates when the carrier first scans the parcel (can lag handover by 1–3 days)</li>
+                            <li>Items in one order may ship separately from different facilities</li>
                         </ul>
                     </div>
                     <div class="ship-info-card">
-                        <h3><span>??</span> Insurance & Signature</h3>
+                        <h3><span>🛡️</span> Insurance & Signature</h3>
                         <ul>
                             <li>Every shipment is insured at no extra cost</li>
-                            <li>Orders over $200 require signature on delivery</li>
-                            <li>Lost or damaged? We reship or refund within 48 hours</li>
+                            <li>Orders over $200 require a signature on delivery</li>
+                            <li>Lost or damaged? We reship or refund within 48 hours of confirmation</li>
                         </ul>
                     </div>
                     <div class="ship-info-card">
-                        <h3><span>??</span> Real-Time Tracking</h3>
-                        <p>You get a tracking number the moment your order ships. Use it on our <a href="track-order.html">Track Order page</a> or directly on the carrier's site for live updates.</p>
+                        <h3><span>🗺️</span> International Shipping</h3>
+                        <p>We ship to over 50 countries. International orders may be subject to customs duties and taxes set by your country — these are the buyer's responsibility and are not included in our prices. Tracking is available for every international shipment.</p>
+                    </div>
+                    <div class="ship-info-card">
+                        <h3><span>📍</span> Real-Time Tracking</h3>
+                        <p>You get a tracking number by email the moment your order ships. Use it on our <a href="track-order.html">Track Order page</a> or directly on the carrier's site for live updates.</p>
+                    </div>
+                    <div class="ship-info-card">
+                        <h3><span>📬</span> Delivery Addresses</h3>
+                        <ul>
+                            <li>We ship to the address you enter at checkout — double-check it before paying</li>
+                            <li>P.O. Box deliveries depend on the carrier; some lines require a street address</li>
+                            <li>If you are not home, the carrier leaves a retry notice or delivers to a local pickup point</li>
+                        </ul>
                     </div>
                 </div>
             </section>
@@ -352,22 +308,22 @@
                 </div>
                 <div class="ship-help-grid">
                     <div class="ship-help-card">
-                        <div class="ship-help-icon">??</div>
+                        <div class="ship-help-icon">📦</div>
                         <h3>Where is my order?</h3>
                         <p>Use the <a href="track-order.html">Track Order page</a> with your order number for real-time status updates.</p>
                     </div>
                     <div class="ship-help-card">
-                        <div class="ship-help-icon">??</div>
+                        <div class="ship-help-icon">↩️</div>
                         <h3>Need to return?</h3>
                         <p>You have 30 days from delivery. Start from the <a href="orders.html">Orders page</a> or read the <a href="returns.html">return policy</a>.</p>
                     </div>
                     <div class="ship-help-card">
-                        <div class="ship-help-icon">??</div>
+                        <div class="ship-help-icon">✉️</div>
                         <h3>Missing tracking email?</h3>
                         <p>Check your spam folder. If it is not there, <a href="contact.html">contact us</a> and we will resend it within 1 hour.</p>
                     </div>
                     <div class="ship-help-card">
-                        <div class="ship-help-icon">??</div>
+                        <div class="ship-help-icon">🏛️</div>
                         <h3>Customs & duties</h3>
                         <p>International orders may incur local customs charges. These are set by your country and are not included in our prices.</p>
                     </div>
@@ -379,7 +335,7 @@
 
             <!-- NOTE -->
             <div class="ship-note">
-                All delivery times are estimates, never guaranteed dates. Allow 1-3 business days of processing before the window starts - the window begins from dispatch, not from the date of order. Items in one order may arrive in separate parcels from different facilities. Carrier delays, customs clearance and remote postcodes can extend delivery windows. <a href="contact.html">Contact support</a> if your order is significantly late.
+                All delivery times are estimates, never guaranteed dates. Allow 24–48 business hours of processing before the window starts — the window begins from dispatch, not from the date of order. Items in one order may arrive in separate parcels from different facilities. Carrier delays, customs clearance and remote postcodes can extend delivery windows. <a href="contact.html">Contact support</a> if your order is significantly late.
             </div>
 
             <!-- TRUST -->
@@ -399,41 +355,44 @@
         'use strict';
         var UI = window.TrendaryoUI;
 
-        /* -- Calculator -- */
-        var calcBtn = document.getElementById('shipCalcBtn');
-        if (calcBtn) calcBtn.addEventListener('click', function () {
-            var country = document.getElementById('shipCountry').value;
-            var value = parseFloat(document.getElementById('shipValue').value) || 0;
-            var method = (document.querySelector('input[name="shipMethod"]:checked') || {}).value || 'standard';
+        /* -- Delivery estimator (timing only — shipping is always free) -- */
+        var WINDOWS = {
+            US: { days: '7–15 business days', region: 'United States' },
+            CA: { days: '10–20 business days', region: 'North America' },
+            MX: { days: '10–20 business days', region: 'North America' },
+            GB: { days: '10–20 business days', region: 'Europe' },
+            DE: { days: '10–20 business days', region: 'Europe' },
+            FR: { days: '10–20 business days', region: 'Europe' },
+            ES: { days: '10–20 business days', region: 'Europe' },
+            IT: { days: '10–20 business days', region: 'Europe' },
+            NL: { days: '10–20 business days', region: 'Europe' },
+            AU: { days: '10–20 business days', region: 'Asia-Pacific' },
+            NZ: { days: '10–20 business days', region: 'Asia-Pacific' },
+            JP: { days: '10–20 business days', region: 'Asia-Pacific' },
+            SG: { days: '10–20 business days', region: 'Asia-Pacific' },
+            IN: { days: '10–20 business days', region: 'Asia-Pacific' },
+            AE: { days: '10–15 business days', region: 'Middle East' },
+            SA: { days: '10–15 business days', region: 'Middle East' },
+            QA: { days: '10–15 business days', region: 'Middle East' },
+            OM: { days: '10–15 business days', region: 'Middle East' },
+            KW: { days: '10–15 business days', region: 'Middle East' },
+            OTHER: { days: '10–20 business days', region: 'Rest of world' }
+        };
 
-            var cost = 0, days = '';
-            if (method === 'standard') {
-                if (country === 'US') cost = 4.99;
-                else if (country === 'CA' || country === 'MX') cost = 9.99;
-                else if (['UK','DE','FR','ES','IT','AE','SA','OM'].indexOf(country) !== -1) cost = 12.99;
-                else cost = 19.99;
-                days = '5�7 business days';
-            } else if (method === 'express') {
-                cost = country === 'US' ? 14.99 : (['CA','MX'].indexOf(country) !== -1 ? 24.99 : 34.99);
-                days = '2�3 business days';
-            } else {
-                cost = country === 'US' ? 29.99 : 49.99;
-                days = 'Next business day';
-            }
-
-            var est = new Date();
-            est.setDate(est.getDate() + (method === 'overnight' ? 1 : method === 'express' ? 3 : 7));
-
-            var countryName = document.getElementById('shipCountry').options[document.getElementById('shipCountry').selectedIndex].text;
-            var result = document.getElementById('shipCalcResult');
+        var estBtn = document.getElementById('shipEstBtn');
+        if (estBtn) estBtn.addEventListener('click', function () {
+            var sel = document.getElementById('shipCountry');
+            var code = sel.value;
+            var w = WINDOWS[code] || WINDOWS.OTHER;
+            var countryName = sel.options[sel.selectedIndex].text;
+            var result = document.getElementById('shipEstResult');
             result.innerHTML =
-                '<div class="ship-calc-result-row"><span class="ship-calc-result-label">Country</span><span class="ship-calc-result-val">' + countryName + '</span></div>' +
-                '<div class="ship-calc-result-row"><span class="ship-calc-result-label">Order value</span><span class="ship-calc-result-val">$' + value.toFixed(2) + '</span></div>' +
-                '<div class="ship-calc-result-row"><span class="ship-calc-result-label">Method</span><span class="ship-calc-result-val">' + method.charAt(0).toUpperCase() + method.slice(1) + '</span></div>' +
-                '<div class="ship-calc-result-row"><span class="ship-calc-result-label">Shipping cost</span><span class="ship-calc-result-val ship-calc-result-val--accent">$' + cost.toFixed(2) + '</span></div>' +
-                '<div class="ship-calc-result-row"><span class="ship-calc-result-label">Delivery time</span><span class="ship-calc-result-val">' + days + '</span></div>' +
-                '<div class="ship-calc-result-row"><span class="ship-calc-result-label">Estimated arrival</span><span class="ship-calc-result-val">' + est.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' }) + '</span></div>' +
-                '<div class="ship-calc-result-total"><span>Total</span><span style="color:var(--accent-3);">$' + (value + cost).toFixed(2) + '</span></div>';
+                '<div class="ship-est-result-row"><span class="ship-est-result-label">Destination</span><span class="ship-est-result-val">' + countryName + '</span></div>' +
+                '<div class="ship-est-result-row"><span class="ship-est-result-label">Region</span><span class="ship-est-result-val">' + w.region + '</span></div>' +
+                '<div class="ship-est-result-row"><span class="ship-est-result-label">Shipping cost</span><span class="ship-est-result-val ship-est-result-val--green">FREE</span></div>' +
+                '<div class="ship-est-result-row"><span class="ship-est-result-label">Delivery window</span><span class="ship-est-result-val">' + w.days + ' after dispatch</span></div>' +
+                '<div class="ship-est-result-row"><span class="ship-est-result-label">Processing</span><span class="ship-est-result-val">24–48 business hours</span></div>' +
+                '<div class="ship-est-note">Window starts when the carrier scans your parcel, not when you place the order. Customs clearance can add a few extra days on international orders.</div>';
             result.classList.add('is-open');
         });
 
@@ -442,10 +401,10 @@
             var howEl = document.getElementById('shipHow');
             if (howEl) {
                 howEl.innerHTML = '<div class="ship-section-head"><div class="ship-kicker">The process</div><h2 class="ship-title">How Shipping Works</h2></div>' + UI.steps([
-                    { title: 'You order', text: 'Place your order and it enters processing within 1 business day. Handover to the carrier follows within 1-3 business days.' },
-                    { title: 'We pack & dispatch', text: 'Every item is carefully packed - by us or a vetted partner facility - and handed to the carrier. Tracking activates when the carrier first scans the parcel, which can lag handover by 1-2 days.' },
-                    { title: 'Track in real time', text: 'Follow your package from our door to yours. Use our Track Order page or the carrier\'s own tracking for live updates.' },
-                    { title: 'It arrives', text: 'Standard and express require signature on orders over $200. If you are not home, the carrier leaves a retry notice.' }
+                    { title: 'You order', text: 'Place your order and it enters processing within 24–48 business hours. Payment is captured securely at checkout.' },
+                    { title: 'We hand off to fulfillment', text: 'Your order is placed with our vetted fulfillment partner and packed for dispatch. Tracking activates when the carrier first scans the parcel, which can lag handover by 1–3 days.' },
+                    { title: 'Track in real time', text: 'Follow your package from our door to yours. Use our Track Order page or the carrier\'s own tracking for live updates — you get the number by email the moment it ships.' },
+                    { title: 'It arrives', text: 'Orders over $200 require a signature. If you are not home, the carrier leaves a retry notice or delivers to a local pickup point.' }
                 ]);
             }
         }
@@ -455,10 +414,12 @@
             var faqEl = document.getElementById('shipFaq');
             if (faqEl) {
                 faqEl.innerHTML = '<h2>Frequently Asked Questions</h2>' + UI.faq([
-                    { q: 'When does my order ship?', a: 'Orders enter processing within 1 business day and are handed to the carrier within 1-3 business days. Weekend orders are processed Monday. Tracking activates at the first carrier scan, which can lag handover by 1-2 days.' },
-                    { q: 'Is shipping ever free?', a: 'We keep product prices low instead of offering free shipping. US standard delivery is a flat $4.99, international rates are listed above, and the exact total is always shown at checkout before you pay.' },
+                    { q: 'Is shipping really free?', a: 'Yes — on every order, to every country we ship to. Shipping cost is included in our product prices. No minimum spend and no promo code required. The total you see at checkout is subtotal + tax only.' },
+                    { q: 'How long does delivery take?', a: 'Orders are processed within 24–48 business hours. After dispatch, US orders arrive in 7–15 business days and international orders in 10–20 business days (Middle East typically 10–15). These are realistic windows based on our fulfillment partners\' recent performance — we under-promise so you are rarely disappointed.' },
+                    { q: 'Do you offer express or overnight shipping?', a: 'Not at the moment. Every order ships our standard tracked line so we can keep prices low and shipping free. We are evaluating faster options and will add them here if they meet our reliability standards.' },
                     { q: 'Do you ship internationally?', a: 'Yes. We ship to over 50 countries. International orders may incur customs duties and import taxes, which vary by country and are the buyer\'s responsibility.' },
-                    { q: 'Can I change my shipping method after ordering?', a: 'If the order has not shipped yet, contact support within 2 hours and we will upgrade you (you pay the difference). Once shipped, the method cannot be changed.' },
+                    { q: 'When does my order ship?', a: 'Orders enter processing within 24–48 business hours. Weekend orders are processed Monday. Tracking activates at the first carrier scan, which can lag handover by 1–3 days.' },
+                    { q: 'Can I change my shipping address after ordering?', a: 'If the order has not been handed to fulfillment yet, contact support within 2 hours and we will update the address. Once the order is with the carrier, the address cannot be changed.' },
                     { q: 'What if my package is lost or damaged?', a: 'Every shipment is insured. If your package is lost or arrives damaged, contact support with your order number and photos (if damaged). We will reship or refund within 48 hours.' },
                     { q: 'How do I track my order?', a: 'You will receive a tracking number by email once your order ships. You can also enter your order number on our Track Order page for real-time status updates.' }
                 ], true);
@@ -471,7 +432,7 @@
         var ctaEl = document.getElementById('shipCta');
         if (ctaEl && UI && UI.ctaBand) ctaEl.innerHTML = UI.ctaBand({
             title: 'Ready to order?',
-            text: 'Browse the full catalogue with live prices, ratings and stock.',
+            text: 'Browse the full catalogue with live prices, ratings and stock. Free shipping on everything.',
             cta: 'Open the Shop',
             href: 'shop.html'
         });

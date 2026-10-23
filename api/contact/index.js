@@ -43,7 +43,7 @@ function chatReply(message) {
     return 'Paste your code in the promo field on the <a href="cart.html">cart page</a> and click Apply. First order? Try <strong>WELCOME10</strong> for 10% off. One code redeems per order.';
   }
   if (/\b(shipping|deliver|arrive\b|delivery time|international)\b/.test(text)) {
-    return 'Orders are packed within 24 business hours. Standard shipping is 5-7 business days (free over $50), express is 2-3. We ship worldwide — GCC in 3-5 days, worldwide in 7-14.';
+    return 'Shipping is free on every order. Orders are placed with our fulfillment partner within 24-48 business hours. After dispatch: US in 7-15 business days, Middle East in 10-15, worldwide in 10-20. Every parcel is tracked and insured.';
   }
   if (/\b(warranty|broken|broke|not working\b|faulty|defective|damaged|stock|genuine)\b/.test(text)) {
     return 'Every item includes a 12-month manufacturer warranty. Electronics carry the full manufacturer term. Keep your order number — it is all we need to process a claim or exchange.';

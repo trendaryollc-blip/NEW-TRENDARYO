@@ -211,122 +211,43 @@
     function wished(id) { if (!WISH_MAP) { WISH_MAP = toMap(idList(K_WISH)); } return !!WISH_MAP[idStr(id)]; }
     function compared(id) { if (!CMP_MAP) { CMP_MAP = toMap(idList(K_CMP)); } return !!CMP_MAP[idStr(id)]; }
 
-    /* ── Card markup — identical structure to shop.js cardMedia/cardBody ── */
+    /* ── Card markup — lean DTC card: large image + name + price + ATC/View ── */
     function cardMedia(p, opts) {
         var id = idStr(p.id);
         var d = discPct(p);
-        var saved = wished(id);
-        var hs = highlights(p, 3);
         var out = '<div class="pc-media">';
 
         out += '<a class="pc-stage" href="product.html?id=' + id + '" data-detail="' + id +
             '" aria-label="' + esc(p.name) + ' — full details and specifications">';
-        out += '<span class="pc-grid-tex" aria-hidden="true"></span>';
-        out += '<span class="pc-spot" aria-hidden="true"></span>';
         out += P.media(p, 'pc-img');
-        out += '<span class="pc-detail" aria-hidden="true" style="background-image:url(&quot;' +
-            detailFrame(p) + '&quot;)"></span>';
         out += '</a>';
-
-        out += '<span class="pc-shine" aria-hidden="true"></span>';
 
         out += '<div class="pc-flags">';
         if (opts.rank) { out += '<span class="pc-rank">#' + opts.rank + '</span>'; }
-        if (p.badge) { out += '<span class="pc-badge ' + esc(p.badge) + '">' + badgeName(p.badge) + '</span>'; }
-        if (d) { out += '<span class="pc-save">−' + d + '% · save ' + money(saveAmt(p)) + '</span>'; }
+        if (d) { out += '<span class="pc-save">−' + d + '%</span>'; }
         out += '</div>';
 
-        out += '<div class="pc-tools">';
-        out += '<button type="button" class="pc-tool pc-wish' + (saved ? ' is-on' : '') +
-            '" data-wish="' + id + '" aria-pressed="' + (saved ? 'true' : 'false') + '"' +
-            ' title="Wishlist" aria-label="' + (saved ? 'Remove from wishlist: ' : 'Save to wishlist: ') +
-            esc(p.name) + '">' + (saved ? ICON.heartFill : ICON.heart) + '</button>';
-        out += '<button type="button" class="pc-tool pc-cmp' + (compared(id) ? ' is-on' : '') +
-            '" data-cmp="' + id + '" aria-pressed="' + (compared(id) ? 'true' : 'false') + '"' +
-            ' title="Compare" aria-label="Add to compare: ' + esc(p.name) + '">' + ICON.cmp + '</button>';
-        out += '<button type="button" class="pc-tool pc-quick" data-quick="' + id +
-            '" title="Quick view" aria-label="Quick view: ' + esc(p.name) + '">' + ICON.eye + '</button>';
-        out += '</div>';
-
-        out += '<div class="pc-foot">';
-        out += '<span class="pc-chip pc-chip--cat">' + esc(catName(catOf(p))) + '</span>';
-        out += isLow(p)
-            ? '<span class="pc-chip pc-chip--low">Only a few left</span>'
-            : '<span class="pc-chip pc-chip--in">In stock · ' + stockQty(p) + '</span>';
-        if (num(p.price) < 400) { out += '<span class="pc-chip pc-chip--fast">Ships in 24h</span>'; }
-        out += '<span class="pc-zoomdot" aria-hidden="true"><i></i><i></i></span>';
-        out += '</div>';
-
-        if (hs.length) { out += '<div class="pc-specbar">' + esc(hs.join(' · ')) + '</div>'; }
         out += '</div>'; /* /pc-media */
         return out;
     }
 
     function cardBody(p) {
         var id = idStr(p.id);
-        var qty = cartQty(id);
         var d = discPct(p);
-        var hs = highlights(p, 2);
-        var pos = pricePosition(p);
-        var avgPos = avgPricePosition();
 
         var out = '<div class="pc-body">';
 
-        out += '<div class="pc-eyebrow">' +
-            '<span class="pc-cat">' + esc(facetName(facetOf(p))) + '</span>' +
-            '<span class="pc-sku">' + sku(p) + '</span>' +
-            '<span class="pc-rev">' + num(p.reviews) + ' reviews</span></div>';
-
         out += '<h3 class="pc-name"><a href="product.html?id=' + id + '">' + esc(p.name) + '</a></h3>';
-        out += '<p class="pc-desc">' + esc(p.description) + '</p>';
-
-        if (hs.length) {
-            out += '<ul class="pc-highs">';
-            for (var i = 0; i < hs.length; i++) { out += '<li class="pc-high">' + esc(hs[i]) + '</li>'; }
-            out += '</ul>';
-        }
 
         out += '<div class="pc-rating"><span class="pc-stars">' + P.stars(p.rating) + '</span>' +
             '<b>' + num(p.rating).toFixed(1) + '</b><span>(' + num(p.reviews) + ')</span></div>';
-        out += distInline(p);
 
         out += '<div class="pc-price"><span class="pc-now">' + money(p.price) + '</span>' +
-            (d ? '<span class="pc-old">' + money(p.oldPrice) + '</span>' +
-                 '<span class="pc-savechip">−' + d + '%</span>' : '') + '</div>';
-        out += '<div class="pc-inst">or 3 parts of ' + money(instalment(p)) + ' — illustrative, taxes included</div>';
-
-        out += '<div class="pc-meter" title="Price position between the catalogue floor ' + money(FLOOR) +
-            ' and ceiling ' + money(CEIL) + ' — catalogue average is ' + money(AVG_PRICE) + '">' +
-            '<div class="pc-meter-track"><i class="pc-meter-fill" style="width:' + pos + '%"></i>' +
-            '<i class="pc-meter-avg" style="left:' + avgPos + '%"></i></div>' +
-            '<div class="pc-meter-lab"><span>' + money(FLOOR) + ' floor</span>' +
-            '<span>' + pos + '% up the range</span><span>' + money(CEIL) + '</span></div></div>';
-
-        out += '<div class="pc-stockline' + (isLow(p) ? ' is-low' : '') + '">' +
-            (isLow(p) ? 'Low stock — only ' + stockQty(p) + ' left'
-                      : 'In stock — ships within 24 hours') + '</div>';
-
-        out += '<div class="pc-facts">' +
-            fact('Category', catName(catOf(p))) +
-            fact('Collection', p.badge ? badgeName(p.badge) : 'Core range') +
-            fact('SKU', sku(p)) +
-            fact('Rating', num(p.rating).toFixed(1) + ' / 5') +
-            fact('Reviews', String(num(p.reviews))) +
-            fact('Discount', d ? '−' + d + '% · save ' + money(saveAmt(p)) : 'No reduction') +
-            fact('Price band', bandNameOf(p)) +
-            fact('Dispatch', dispatchDays(p) + ' working days') +
-            fact('Warranty', warrantyOf(p)) +
-            '</div>';
+            (d ? '<span class="pc-old">' + money(p.oldPrice) + '</span>' : '') + '</div>';
 
         out += '<div class="pc-actions">' +
-            '<button type="button" class="pc-add' + (qty ? ' is-added' : '') + '" data-add="' + id + '">' +
-                (qty ? '✓ In cart · ' + qty : 'Add to Cart') + '</button>' +
-            '<div class="pc-qty" role="group" aria-label="Quantity for ' + esc(p.name) + '">' +
-                '<button type="button" data-step="-1" aria-label="Decrease quantity">−</button>' +
-                '<span data-qty>' + (qty || 1) + '</span>' +
-                '<button type="button" data-step="1" aria-label="Increase quantity">+</button>' +
-            '</div>' +
-            '<a class="pc-more" href="product.html?id=' + id + '">Details →</a>' +
+            '<button type="button" class="pc-add" data-add="' + id + '">Add to Cart</button>' +
+            '<a class="pc-more" href="product.html?id=' + id + '">View</a>' +
             '</div>';
 
         out += '</div>'; /* /pc-body */

@@ -184,7 +184,7 @@
         var lock = ic('<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>');
         var shield = ic('<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/>');
         return '<div class="trust-strip">' +
-            '<div class="trust-item">' + truck + '<div><b>Tracked Shipping</b><span>From $4.99, insured</span></div></div>' +
+            '<div class="trust-item">' + truck + '<div><b>Free Tracked Shipping</b><span>Every order, insured</span></div></div>' +
             '<div class="trust-item">' + rotate + '<div><b>30-Day Returns</b><span>Changed your mind? No problem</span></div></div>' +
             '<div class="trust-item">' + lock + '<div><b>Secure Checkout</b><span>256-bit SSL encryption</span></div></div>' +
             '<div class="trust-item">' + shield + '<div><b>Quality Guarantee</b><span>Vetted suppliers, as described</span></div></div>' +
@@ -234,7 +234,7 @@
         var low = h % 5 === 0;
         return low
             ? '<span class="stock-line low">Low stock — only a few left</span>'
-            : '<span class="stock-line in">In stock — ships within 24 hours</span>';
+            : '<span class="stock-line in">In stock — dispatches in 1–2 days</span>';
     };
 
     /* CTA band for the bottom of content pages */

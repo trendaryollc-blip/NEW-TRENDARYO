@@ -121,7 +121,7 @@ test('product-context: analyzeSeo scores a full package at 100 and a bare produc
         image: 'i.jpg', rating: 4, reviews: 5,
         seo: {
             metaTitle: 'Aurora ANC Headphones - Hybrid Noise Cancelling | Trendaryo',
-            metaDescription: 'Hybrid noise cancelling headphones with a 40-hour battery, Bluetooth 5.3 and free shipping over $50 at Trendaryo.',
+            metaDescription: 'Hybrid noise cancelling headphones with a 40-hour battery, Bluetooth 5.3 and free tracked shipping at Trendaryo.',
             keywords: ['anc headphones', 'noise cancelling', 'bluetooth headphones', 'over-ear headphones', 'trendaryo audio', 'best anc headphones']
         }
     });

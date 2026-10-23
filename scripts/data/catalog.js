@@ -261,19 +261,20 @@ const products = [
 const coupons = [
   { id: 'WELCOME10', code: 'WELCOME10', type: 'percent', value: 10, minSubtotal: 0, active: true, description: '10% off your first order', usageLimit: null, usedCount: 0, expiresAt: null },
   { id: 'SAVE20', code: 'SAVE20', type: 'percent', value: 20, minSubtotal: 100, active: true, description: '20% off orders over $100', usageLimit: null, usedCount: 0, expiresAt: null },
-  { id: 'FREESHIP', code: 'FREESHIP', type: 'fixed', value: 9.99, minSubtotal: 0, active: true, description: 'Free standard shipping', usageLimit: null, usedCount: 0, expiresAt: null },
   { id: 'VIP50', code: 'VIP50', type: 'fixed', value: 50, minSubtotal: 300, active: true, description: '$50 off orders over $300', usageLimit: 100, usedCount: 0, expiresAt: null },
 ];
 
+/* Model A: shipping is free on every order worldwide — cost is baked into product prices. */
 const settings = {
   storeName: 'Trendaryo',
   currency: 'usd',
   taxRate: 0.08,
-  shippingFlat: 9.99,
-  freeShippingThreshold: 50,
+  shippingFlat: 0,
+  freeShippingThreshold: 0,
+  shippingByCountry: {},
   codEnabled: true,
   lowStock: 8,
-  announcement: 'Free shipping on orders over $50 — use code WELCOME10 for 10% off',
+  announcement: 'Free tracked shipping on every order — use code WELCOME10 for 10% off',
   supportEmail: 'support@trendaryo.com',
   supportPhone: '+1 (555) 010-2030',
 };

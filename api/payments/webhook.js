@@ -6,6 +6,7 @@ const { FieldValue } = require('firebase-admin/firestore');
 const { restockForOrder } = require('../_lib/stock');
 const { canTransition } = require('../_lib/order-state');
 const { emitEvent } = require('../_lib/automations');
+const integrations = require('../_lib/integrations');
 
 function nowIso() {
   return new Date().toISOString();
@@ -97,6 +98,11 @@ async function handleEvent(db, event) {
         await db.collection('orders').doc(order.id).set({ paymentStatus: 'paid', paidAt: nowIso(), updatedAt: nowIso() }, { merge: true });
       }
       await emitEvent(db, 'order.paid', { orderId: order.id });
+      /* Fan out to any connected service's webhook (order.created). */
+      await integrations.notifyStoreEvent(db, {
+        ...order, status: canTransition(order.status || 'pending', 'confirmed', 'webhook') ? 'confirmed' : (order.status || 'pending'),
+        paymentStatus: 'paid', id: order.id,
+      }, 'order.created');
     }
     const ps = await db.collection('payments').where('paymentIntentId', '==', pi).limit(1).get();
     if (!ps.empty) await ps.docs[0].ref.set({ status: 'succeeded', updatedAt: nowIso() }, { merge: true });

@@ -274,6 +274,7 @@
         { id: 'blog', group: 'Growth' },
         { id: 'content', group: 'Growth' },
         { id: 'ai-studio', group: 'Intelligence' },
+        { id: 'integrations', group: 'System' },
         { id: 'settings', group: 'System' }
     ];
     App.ORDER = ORDER;

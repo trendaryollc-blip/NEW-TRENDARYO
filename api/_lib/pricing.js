@@ -8,11 +8,12 @@
  */
 const { initFirebase } = require('./firebase');
 
+/* Model A: shipping is free on every order — cost is baked into product prices. */
 const DEFAULT_SETTINGS = {
   currency: 'usd',
   taxRate: 0.08,
-  shippingFlat: 4.99,
-  freeShippingThreshold: 1000000000,
+  shippingFlat: 0,
+  freeShippingThreshold: 0,
 };
 
 const MAX_QTY_PER_ITEM = 99;

@@ -17,7 +17,7 @@
     const headerHTML = `
     <header class="store-header" id="store-header">
         <div class="announcement-bar">
-            <span id="announce-msg">Flat-rate shipping from $4.99 · 30-day returns · WELCOME10 for 10% off</span>
+            <span id="announce-msg">Free tracked shipping on every order · 30-day returns · WELCOME10 for 10% off</span>
             <span id="announce-countdown" class="announce-countdown" style="display:none;"></span>
         </div>
         <div class="store-header-inner">
@@ -654,7 +654,7 @@
             if (countdown) countdown.style.display = 'none';
             return;
         }        const messages = [
-            'FLAT-RATE SHIPPING FROM $4.99',
+            'FREE TRACKED SHIPPING ON EVERY ORDER',
             'USE CODE WELCOME10 FOR 10% OFF YOUR FIRST ORDER',
             'NEW ARRIVALS — FRESH DROPS EVERY WEEK',
         ];

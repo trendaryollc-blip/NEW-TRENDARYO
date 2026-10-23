@@ -1015,8 +1015,28 @@
     .intel-panel {
         padding: 1.25rem !important;
     }
+    .intel-tabs {
+        display: grid !important;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        overflow-x: visible !important;
+    }
     .intel-tab {
-        padding: 0.9rem 1rem !important;
+        flex: 1 1 0 !important;
+        min-width: 0;
+        padding: 0.85rem 0.15rem !important;
+        font-size: 0.5rem !important;
+        letter-spacing: 0.3px !important;
+        line-height: 1.2;
+        white-space: normal !important;
+    }
+    .intel-tab .tab-full { display: none !important; }
+    .intel-tab .tab-short { display: inline !important; }
+    .intel-tab .tab-n {
+        margin-left: 0 !important;
+        margin-top: 0.15rem;
+        display: block !important;
+        font-size: 0.5rem !important;
+        padding: 0.08rem 0.3rem !important;
     }
     .pd-gallery-thumbs {
         gap: 0.5rem !important;

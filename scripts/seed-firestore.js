@@ -60,7 +60,7 @@ const round2 = (n) => Math.round((Number(n) + Number.EPSILON) * 100) / 100;
 
 function computeTotals(lineItems) {
   const subtotal = round2(lineItems.reduce((s, i) => s + i.price * i.quantity, 0));
-  const shipping = subtotal >= settings.freeShippingThreshold ? 0 : settings.shippingFlat;
+  const shipping = 0; /* Model A: free shipping on every order */
   const tax = round2(subtotal * settings.taxRate);
   const total = round2(subtotal + shipping + tax);
   return { subtotal, shipping, tax, total };
@@ -466,7 +466,7 @@ async function main() {
   console.log('\nDone.');
   console.log('Catalogue: ' + productCount + ' products (25 curated + ' + MOCK_PRODUCT_COUNT + ' mock), ' +
     (users.length ? users.length + ' demo users' : 'users skipped') + '.');
-  console.log('Demo coupons: WELCOME10, SAVE20, FREESHIP, VIP50');
+  console.log('Demo coupons: WELCOME10, SAVE20, VIP50');
   if (!SKIP_USERS) {
     console.log('Demo customers: amelia@example.com / james@example.com / priya@example.com');
     console.log('Bulk dev users: user004@trendaryo.dev … (password Demo1234!)');

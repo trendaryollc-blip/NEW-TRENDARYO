@@ -78,7 +78,6 @@ const CATEGORY_META = {
 };
 
 const BADGES = ['hot', 'trending', 'new', 'premium'];
-const FREE_SHIPPING_THRESHOLD = settings.freeShippingThreshold || 50;
 
 function pick(rnd, arr) { return arr[Math.floor(rnd() * arr.length)]; }
 function between(rnd, lo, hi) { return lo + Math.floor(rnd() * (hi - lo + 1)); }
@@ -123,7 +122,7 @@ function generateMockProducts(targetCount) {
 
     const description = kind + ' by ' + brand + ' — ' + pick(rnd, ['engineered for daily use', 'a crowd favourite',
       'built to last', 'great value', 'premium finishing', 'purpose-built']) +
-      '. Free shipping over $' + FREE_SHIPPING_THRESHOLD + '. ' + meta.desc + '. Ships worldwide.';
+      '. Free tracked shipping worldwide. ' + meta.desc + '. Ships worldwide.';
 
     const specCount = between(rnd, 2, 4);
     const specs = [];
